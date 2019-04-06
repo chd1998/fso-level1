@@ -1,2 +1,2 @@
-# fso-level1
-python version of level1 program for fso with CUDA
+# python@fso
+python version of programs used for fso with CUDA
