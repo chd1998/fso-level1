@@ -34,14 +34,14 @@ videoname = 'test.avi'  # 默认输出的视频文件名，目录为当前目录
 displayimage = True  # 在配准中是否显示动态图像，缺省是TRUE
 createfile = False  # 是否产生配准后的fits 文件，如果产生，将在数据目录下产生一个sir文件夹。 缺省是False
 sys_sep = '\\' #默认windows系统
-debug = False #print debug info, default is 
+debug = False #打印debug信息, 缺省是False 
 
 def main(argv):
 	sx = 250
 	sy = 250
 	ex = 750
 	ey = 750
-	
+
 	try:
 		opts, args = getopt.getopt(argv,"hp:i:d:v:o:",["help","input_path=","input_file=","sx=","sy=","ex=","ey=","videofile=","output="])
 	except getopt.GetoptError:
@@ -50,7 +50,7 @@ def main(argv):
 	if(list.__len__(sys.argv) <= 1):
 		print ('python sir-fso.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
 		sys.exit(2)
-	#print(list.__len__(sys.argv))		
+	#print(list.__len__(sys.argv))
 	for opt, arg in opts:
 		if opt == '-h':
 			print ('python sir-fso.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
@@ -76,7 +76,7 @@ def main(argv):
 		else:
 			print ('python sir-fso.py -p <inputpath> -i <inputfile> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
 			sys.exit()
-			
+
 	sx = np.int32(sx)
 	sy = np.int32(sy)
 	ex = np.int32(ex)
@@ -86,7 +86,7 @@ def main(argv):
 	local_sys = platform.system()
 	if local_sys == 'Linux':
 	 	sys_sep = '/'
-	else: 
+	else:
 	 	sys_sep = '\\'
 	print ("input file :",input_file)
 	print ("input path :",input_path)
@@ -103,7 +103,7 @@ def main(argv):
 	plt.plot(dxy[:, 2])
 	plt.show()
 	sys.exit(0)
-	
+
 def sir_main(dirn, sys_sep, filen, left=[0, 0], right=[0, 0], disflag=True, fileflag=False, videoname=None):
 		plt.close('Sir 3.0 - with cuda')
 		plt.close('Subpix shift - with cuda')
@@ -267,7 +267,7 @@ def align_subpix(A, B, X, Y):
 				mi = np.empty(TT)
 				ni = np.empty(TT)
 				cor = np.empty(TT)
-				
+
 
 				for i in range(TT):
 						mi[i], ni[i], cor[i] = xcorrcenter(si[i], ci[i], R0, 0)
@@ -370,8 +370,8 @@ def xcorrcenter(standimage, compimage, R0, flag):
 		cor = im.max()
 		if cor == 0:
 			return 0, 0, 0
-		
-		
+
+
 		M0, N0 = np.where(im == cor)
 		m, n = M0[0], N0[0]
 
@@ -382,7 +382,7 @@ def xcorrcenter(standimage, compimage, R0, flag):
 			if np.mod(M, 2): m += 0.5
 			if np.mod(N, 2): n += 0.5
 			return m, n, cor
-		
+
 		# 求顶点周围区域的最小值
 		immin = im[(m - R0):(m + R0 + 1), (n - R0):(n + R0 + 1)].min()
 		# 减去最小值
@@ -479,7 +479,7 @@ def immove(image, dx, dy):
         offset_image = np.real(fft.ifft2(offset_image))
 
     return offset_image
-    
+
     return offset_image
 
 
@@ -503,7 +503,7 @@ def circshift(im, dx=0, dy=0):
     im1 = im.copy()
     if dx != 0:  im1 = np.roll(im1, dx, axis=0)
     if dy != 0:  im1 = np.roll(im1, dy, axis=1)
-  
+
     return im1
 
 
@@ -540,7 +540,7 @@ def cc1d(standspe,compspe):
     cor = im.max()
     M0 = np.where(im == cor)
     m=np.int(M0[0])
-    if m>M/2:m=m-M 
+    if m>M/2:m=m-M
             # 判断图像尺寸的奇偶
     return m,  cor
 
@@ -556,14 +556,14 @@ def alignspe_pix(A, B):
         i = i + 1
         if dx >=0 :
             standspe=A[ddx:]
-            compspe=B[ddx:] 
+            compspe=B[ddx:]
         else:
             standspe=A[:ddx-1]
-            compspe=B[:ddx-1] 
-        
+            compspe=B[:ddx-1]
+
         dx, cor = cc1d(standspe, compspe)
 
-      
+
         # 移动整数象元
 
         ddx += dx
@@ -580,4 +580,3 @@ def smallmatchlarge(im,im0):
 
 if __name__ == "__main__":
 	main(sys.argv[1:])
-	
