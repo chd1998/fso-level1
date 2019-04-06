@@ -28,13 +28,13 @@ from sys import argv
 #全局变量
 input_path = '.'  # 默认序列图像目录为当前
 input_file = '*.fits'  # 文件名，支持*通配符
-left = [250, 250]  # 选择配准区域的开始坐标，默认500,1250
-right = [750, 750]  # 配准区域的结束坐标,默认1000,1750  如果不输入这些坐标值，将自动选取整个图像的中心四分之一区域作为配准区域
+left = [250, 250]  # 选择配准区域的开始坐标，默认250,250
+right = [750, 750]  # 配准区域的结束坐标,默认750,750  如果不输入这些坐标值，将自动选取整个图像的中心四分之一区域作为配准区域
 videoname = 'test.avi'  # 默认输出的视频文件名，目录为当前目录，如果不输入，则不产生视频
 displayimage = True  # 在配准中是否显示动态图像，缺省是TRUE
 createfile = False  # 是否产生配准后的fits 文件，如果产生，将在数据目录下产生一个sir文件夹。 缺省是False
 sys_sep = '\\' #默认windows系统
-debug = False ##打印debug信息，默认是False 
+debug = False ##打印debug信息，默认是False
 
 def main(argv):
 	sx = 250
