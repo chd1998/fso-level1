@@ -5,7 +5,9 @@ Solar Image Registration （SIR）
 @author: jkf
 ***change log***
 2019/02/05:
-working with cupy(cuda) & modified by chen dong
+sir-fso-cuda-01.py:working with cupy(cuda) & modified by chen dong
+2019/02/08:
+sir-fso-01.py:working without cuda & modifiied by chen dong
 """
 
 import sys, getopt
@@ -31,7 +33,7 @@ videoname = 'test.avi'  # 默认输出的视频文件名，目录为当前目录
 displayimage = True  # 在配准中是否显示动态图像，缺省是TRUE
 createfile = False  # 是否产生配准后的fits 文件，如果产生，将在数据目录下产生一个sir文件夹。 缺省是False
 sys_sep = '\\' #默认windows系统
-debug = False #打印debug信息, 缺省是False 
+debug = False #打印debug信息，默认是False 
 
 def main(argv):
 	sx = 250
@@ -42,15 +44,15 @@ def main(argv):
 	try:
 		opts, args = getopt.getopt(argv,"hp:i:d:v:o:",["help","input_path=","input_file=","sx=","sy=","ex=","ey=","videofile=","output="])
 	except getopt.GetoptError:
-		print ('python sir-fso.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
+		print ('python sir-fso.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>')
 		sys.exit(2)
 	if(list.__len__(sys.argv) <= 1):
-		print ('python sir-fso.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
+		print ('python sir-fso.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>')
 		sys.exit(2)
 	#print(list.__len__(sys.argv))
 	for opt, arg in opts:
 		if opt == '-h':
-			print ('python sir-fso.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
+			print ('python sir-fso.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>')
 			sys.exit()
 		elif opt in ('-p'):
 			input_path = arg
@@ -346,19 +348,26 @@ def xcorrcenter(standimage, compimage, R0, flag):
 		#sc = s * c
 		#im = np.abs(fft.fftshift(fft.ifft2(sc)))  # /(M*N-1);%./(1+w1.^2);
 		#print("Using GPU")
+        #using GPU device 0
 		cp.cuda.Device(0).use()
 		with cp.cuda.Device(0):
+            #prepare 3 arrays on gpu
 			s_gpu = cp.ndarray((M,N),dtype=np.complex64)
 			c_gpu = cp.ndarray((M,N),dtype=np.complex64)
 			sc_gpu = cp.ndarray((M,N),dtype=np.complex64)
+            #copy images from host to gpu
 			s_gpu = cp.asarray(standimage)
 			c_gpu = cp.asarray(compimage)
+            #fft stand image, using ifft comp image for conjugate
 			s_gpu = cp.fft.fft2(s_gpu)
 			c_gpu = cp.fft.ifft2(c_gpu)
 		#print("calculating image for comparison...")
+            #multiply
 			sc_gpu = s_gpu * c_gpu
+            #inverse the upper result
 			sc_gpu = cp.fft.ifft2(sc_gpu)
 		#print("calculating product of 2 images...")
+            #shift the result
 			sc_gpu = cp.abs(cp.fft.fftshift(sc_gpu))
 		im = cp.asnumpy(sc_gpu)
 
@@ -453,6 +462,7 @@ def immove(image, dx, dy):
     if dx == 0 and dy == 0:
         offset_image = image
     else:
+        #image moves with gpu
         shift = (dx, dy)
         M, N = image.shape
         gpu_image = cp.ndarray((M,N),dtype=np.complex64)

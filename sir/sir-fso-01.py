@@ -4,8 +4,10 @@ Created on Sat Dec 15 22:08:54 2018
 Solar Image Registration （SIR）
 @author: jkf
 ***change log***
-2019/02/01:
-cuda & modified by chen dong
+2019/02/05:
+sir-fso-cuda-01.py:working with cupy(cuda) & modified by chen dong
+2019/02/08:
+sir-fso-01.py:working without cuda & modifiied by chen dong
 """
 
 import sys, getopt
@@ -19,38 +21,39 @@ import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 #import tools
 import platform
-import cupy as cp
+#import cupy as cp
+import scipy.fftpack as fft
 from sys import argv
 
 #全局变量
 input_path = '.'  # 默认序列图像目录为当前
 input_file = '*.fits'  # 文件名，支持*通配符
-left = [500, 500]  # 选择配准区域的开始坐标，默认500,1250
-right = [1000, 1000]  # 配准区域的结束坐标,默认1000,1750  如果不输入这些坐标值，将自动选取整个图像的中心四分之一区域作为配准区域
+left = [250, 250]  # 选择配准区域的开始坐标，默认500,1250
+right = [750, 750]  # 配准区域的结束坐标,默认1000,1750  如果不输入这些坐标值，将自动选取整个图像的中心四分之一区域作为配准区域
 videoname = 'test.avi'  # 默认输出的视频文件名，目录为当前目录，如果不输入，则不产生视频
 displayimage = True  # 在配准中是否显示动态图像，缺省是TRUE
 createfile = False  # 是否产生配准后的fits 文件，如果产生，将在数据目录下产生一个sir文件夹。 缺省是False
 sys_sep = '\\' #默认windows系统
-debug = False #打印debug信息, 缺省是False
+debug = False ##打印debug信息，默认是False 
 
 def main(argv):
-	sx = 500
-	sy = 500
-	ex = 1000
-	ey = 1000
+	sx = 250
+	sy = 250
+	ex = 750
+	ey = 750
 
 	try:
 		opts, args = getopt.getopt(argv,"hp:i:d:v:o:",["help","input_path=","input_file=","sx=","sy=","ex=","ey=","videofile=","output="])
 	except getopt.GetoptError:
-		print ('python sir-fso.py -p <inputpath> -i <inputfile> -d --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
+		print ('python sir-fso.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>')
 		sys.exit(2)
 	if(list.__len__(sys.argv) <= 1):
-		print ('python sir-fso.py -p <inputpath> -i <inputfile> -d --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
+		print ('python sir-fso.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>')
 		sys.exit(2)
 	#print(list.__len__(sys.argv))
 	for opt, arg in opts:
 		if opt == '-h':
-			print ('python sir-fso.py -p <inputpath> -i <inputfile> -d --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
+			print ('python sir-fso.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>')
 			sys.exit()
 		elif opt in ('-p'):
 			input_path = arg
@@ -91,12 +94,12 @@ def main(argv):
 	print ("end point :",right)
 	print ("video name :",videoname)
 	print ("create file :",createfile)
-	print("Using CUDA device: ",cp.cuda.Device().id)
+	#print("Using CUDA device: ",cp.cuda.Device().id)
 	dxy = sir_main(input_path + sys_sep, sys_sep, input_file, left,right,disflag=displayimage, fileflag=createfile, videoname=videoname)
-	plt.figure('Subpix shift - with cuda')
+	plt.figure('Subpix shift - without cuda')
 	plt.plot(dxy[:, 0])
 	plt.plot(dxy[:, 1])
-	plt.figure('Correlation - with cuda')
+	plt.figure('Correlation - without cuda')
 	plt.plot(dxy[:, 2])
 	plt.show()
 	sys.exit(0)
@@ -207,7 +210,7 @@ def sir_main(dirn, sys_sep, filen, left=[0, 0], right=[0, 0], disflag=True, file
 				video.release()
 
 		dxy = np.array(dxy)
-		print('Total time used with cuda device %d: %7.2f seconds...'%(cp.cuda.Device().id,total_time))
+		print('Total time used without cuda: %7.2f seconds...'%total_time)
 		return dxy
 
 def align_all(s_org, c_org, dis_s_pix, dis_s_subpix, X, Y):
@@ -341,11 +344,12 @@ def xcorrcenter(standimage, compimage, R0, flag):
 		standimage = zscore2(standimage)
 		compimage = zscore2(compimage)
 		im = np.ndarray((M,N),dtype=np.complex64)
-		#s = fft.fft2(standimage)
-		#c = np.fft.ifft2(compimage)
-		#sc = s * c
-		#im = np.abs(fft.fftshift(fft.ifft2(sc)))  # /(M*N-1);%./(1+w1.^2);
+		s = fft.fft2(standimage)
+		c = np.fft.ifft2(compimage)
+		sc = s * c
+		im = np.abs(fft.fftshift(fft.ifft2(sc)))  # /(M*N-1);%./(1+w1.^2);
 		#print("Using GPU")
+		'''
 		cp.cuda.Device(0).use()
 		with cp.cuda.Device(0):
 			s_gpu = cp.ndarray((M,N),dtype=np.complex64)
@@ -361,7 +365,7 @@ def xcorrcenter(standimage, compimage, R0, flag):
 		#print("calculating product of 2 images...")
 			sc_gpu = cp.abs(cp.fft.fftshift(sc_gpu))
 		im = cp.asnumpy(sc_gpu)
-
+		'''
 		#print("GPU ended!")
 		cor = im.max()
 		if cor == 0:
@@ -449,6 +453,7 @@ def immove(image, dx, dy):
     image shift by subpix
     """
     # The shift corresponds to the pixel offset relative to the reference image
+    """
     from scipy.ndimage import fourier_shift
     if dx == 0 and dy == 0:
         offset_image = image
@@ -464,6 +469,16 @@ def immove(image, dx, dy):
         gpu_image = cp.fft.ifft2(gpu_image)
         offset_image = cp.asnumpy(gpu_image)
         offset_image = np.real(offset_image)
+    """
+    from scipy.ndimage import fourier_shift
+    if dx == 0 and dy == 0:
+        offset_image = image
+    else:
+        shift = (dx, dy)
+        offset_image = fourier_shift(fft.fft2(image), shift)
+        offset_image = np.real(fft.ifft2(offset_image))
+
+    return offset_image
 
     return offset_image
 
@@ -510,38 +525,24 @@ def mkdir(path):
         os.makedirs(path)
         return True
 
-
+'''
 def cc1d(standspe,compspe):
-	import cupy as cp1
-	M = len(standspe)
+    M = len(standspe)
 
-	standspe = (standspe-standspe.mean())/standspe.std()
-	compspe = (compspe-compspe.mean())/compspe.std()
-	cp1.cuda.Device(0).use()
-	with cp1.cuda.Device(0):
-		s1_gpu = cp1.ndarray(M,dtype=np.complex64)
-		c1_gpu = cp1.ndarray(M,dtype=np.complex64)
-		sc1_gpu = cp1.ndarray(M,dtype=np.complex64)
-		s1_gpu = cp1.asarray(standspe)
-		c1_gpu = cp1.asarray(compspe)
-    #s = fft.fft(standspe)
-	   	s1_gpu = cp1.fft.fft(s1_gpu)
-	   	c1_gpu = cp1.fft.ifft(c1_gpu)
-    	sc1_gpu = s1_gpu * c1_gpu
-    	sc1_gpu = cp1.abs(cp1.fft.ifft(sc1_gpu))
-        im1 = sc1_gpu.asnumpy(sc1_gpu)
-    #c = fft.ifft(compspe)
+    standspe = (standspe-standspe.mean())/standspe.std()
+    s = fft.fft(standspe)
 
-    #sc = s * c
-    #im = np.abs(fft.ifft(sc))  # /(M*N-1);%./(1+w1.^2);
+    compspe = (compspe-compspe.mean())/compspe.std()
+    c = fft.ifft(compspe)
 
-	cor = im1.max()
-    M0 = np.where(im1 == cor)
+    sc = s * c
+    im = np.abs(fft.ifft(sc))  # /(M*N-1);%./(1+w1.^2);
+    cor = im.max()
+    M0 = np.where(im == cor)
     m=np.int(M0[0])
     if m>M/2:m=m-M
             # 判断图像尺寸的奇偶
     return m,  cor
-
 
 def alignspe_pix(A, B):
 
@@ -568,8 +569,7 @@ def alignspe_pix(A, B):
         ddx += dx
 
         B = circshift(B, dx)
-    return B,ddx, cor,i
-
+ '''
 def smallmatchlarge(im,im0):
     import cv2
     res = cv2.matchTemplate(im,im0,cv2.TM_CCOEFF_NORMED)
