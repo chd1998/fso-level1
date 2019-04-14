@@ -2,7 +2,9 @@
 '''
 @author: Chen Dong
 @institution: Yunnan Astronomical Observatory, CAS
-
+IMPORTANT：
+    1. works on windows platform only
+    2. install cygwin with rsync module and python before running
 2019/04/01 Revision 01
     Prototype version
 2019/04/13 Revision 02:
