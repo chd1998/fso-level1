@@ -48,7 +48,7 @@ try:
 except getopt.GetoptError:
     print ('python pyrsync -s <sourcepath> -d <destpath> ')
     sys.exit(2)
-if(list.__len__(sys.argv) <= 1):
+if(list.__len__(sys.argv) != 5):
     print ('python pyrsync -s <sourcepath> -d <destpath> ')
     sys.exit(2)
 #print(list.__len__(sys.argv))
