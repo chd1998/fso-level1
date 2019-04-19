@@ -49,11 +49,16 @@ if [ $procCmd -le 0 ];then
   else
     echo "$destdir already exist!"
   fi
-  echo "$today $ctime: Rsyncing from $srcdir to $destdir "
+  ctime=`date --date='0 days ago' +%H:%M:%S`
+  echo "$today $ctime: Rsyncing $datatype data@FSO..."
+  echo "From: $srcdir "
+  echo "To  : $destdir "
   echo "Please Waiting ... "
   rsync  --port=$rsyncPort --timeout=60 -auvgop --exclude="\$RECYCLE.BIN" --protocol=29  $srcdir $destdir
+  ctime1=`date --date='0 days ago' +%H:%M:%S`
   chmod 777 -R $destdir
-  echo "$today $ctime: Succeeded in Rsyncing $datatype data@FSO!"
+  echo "$today $ctime1: Succeeded in Rsyncing $datatype data@FSO!"
+  echo "Time used: $ctime to  $ctime1"
   rm -rf $lockfile
   exit 0
 else
