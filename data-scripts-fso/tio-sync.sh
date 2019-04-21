@@ -1,25 +1,22 @@
 #!/bin/bash
 #author: chen dong @fso
-#purposes: periodically rsync data from remoteip to local lustre storage
+#purposes: periodically syncing data from remoteip to local lustre storage via wget
 #usage:  run in crontab every 30 mins.  from 07:00-20:00
 #example: none
 #changlog: 
-#      	  20190415              first prototype release 0.1
-#      	  20190416              first working release 0.2
-#      	  20190417-20190418    	fix bugs,using pid as lock to prevent script from multiple starting, release 0.3-0.5
-#      	  20190419	        release	0.6
+#      	  20190420      first prototype release 0.1
+#      	  20190421    	fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
 
-procName="rsync"
+procName="wget"
 cyear=`date --date='0 days ago' +%Y`
 today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 syssep="/"
 destpre0="/lustre/data"
-srcpre0="192.168.111.120::"
-datatype="tio"
-rsyncPort="875"
+srcpre0="ftp://192.168.111.120"
+datatype="TIO"
+remotePort="21"
 lockfile=/home/chd/log/$(basename $0)_lockfile
-
 if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
   ps -p $mypid | grep $mypid &>/dev/null
@@ -27,39 +24,47 @@ if [ -f $lockfile ];then
     echo "$todday $ctime: $(basename $0) is running" && exit 1
   else
     echo $$>$lockfile
-  fi  
+  fi
 else
   echo $$>$lockfile
 fi
-#echo "Script is running!"
-#read
-#echo "Script stopped!"
-#rm -rf $lockfile
+
+echo " "
+echo "Welcome to Data Archiving System@FSO! "
+echo " "
 procCmd=`ps ef|grep -w $procName|grep -v grep|wc -l`
 pid=$(ps x|grep -w $procName|grep -v grep|awk '{print $1}')
 if [ $procCmd -le 0 ];then
-  #echo "$today"
-  #echo "$ctime"
   destpre=${destpre0}${syssep}${cyear}${syssep}
-  srcpre=${srcpre0}${datatype}
-  destdir=${destpre}${today}${syssep}
-  srcdir=${srcpre}${syssep}${today}${syssep}
+  destdir=${destpre}
+  srcdir=$srcpre0
+
   if [ ! -d "$destdir" ]; then
     mkdir $destdir
   else
     echo "$destdir already exist!"
   fi
   ctime=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctime: Rsyncing $datatype data@FSO..."
+  echo "$today $ctime: Syncing $datatype data@FSO..."
   echo "From: $srcdir "
   echo "To  : $destdir "
   echo "Please Waiting ... "
-  rsync  --port=$rsyncPort --timeout=60 -auvgop --exclude="\$RECYCLE.BIN" --protocol=29  $srcdir $destdir
+  #read
+  cd $destpre
+  wget --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir
   ctime1=`date --date='0 days ago' +%H:%M:%S`
-  chmod 777 -R $destdir
-  echo "$today $ctime1: Succeeded in Rsyncing $datatype data@FSO!"
+  if [ $? -ne 0 ];then
+    echo "$todday $ctime1: Syncing $datatype Data@FSO Failed!"
+    cd /home/chd/
+    exit 1
+  fi
+
+  ctime1=`date --date='0 days ago' +%H:%M:%S`
+  #chmod 777 -R $destdir
+  echo "$today $ctime1: Succeeded in Syncing $datatype data@FSO!"
   echo "Time used: $ctime to  $ctime1"
   rm -rf $lockfile
+  cd /home/chd/
   exit 0
 else
   echo "$today $ctime: $procName  is running..."

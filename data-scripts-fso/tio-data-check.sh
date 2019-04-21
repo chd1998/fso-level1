@@ -55,7 +55,7 @@ if [ $procCmd -le 0 ];then
   echo "From: $srcdir:
   echo "To  : $destdir @ $srcyear$srcday"
   echo "Please Waiting ... "
-  rsync  --port=$rsyncPort --timeout=60 -auqgop --exclude="\$RECYCLE.BIN" --protocol=29  $srcdir $destdir
+  rsync  --port=$rsyncPort --timeout=60 -avut --dry-run --numeric-ids --exclude="\$RECYCLE.BIN" --protocol=29  $srcdir $destdir
   chmod 777 -R $destdir
   ctime1=`date --date='0 days ago' +%H:%M:%S`
   echo "$today $ctime1: Succeeded in Rsyncing $datatype data@FSO!"
