@@ -4,9 +4,11 @@
 #Usage: ./hd2lustre.sh srcdir destdir year(in 4 digits)
 #Example: ./hd2lustre.sh  /data  /lustre/data 2019
 #Changelog:
-#         20190420 Version 0.1, first working script
-#         20190421 Version 0.2, fixed minor errors, and using cp instead of rsync
-
+#         20190420 release 0.1, first working script
+#         20190421 release 0.2, fixed minor errors, and using cp instead of rsync
+#         20190423 release 0.3, fixed error in reading parameters inputed
+#         20190423 release 0.4, judge the srcdir is empty or not
+#         20190424 release 0.5, fixed some error in copying 
 trap 'onCtrlC' INT
 function onCtrlC(){
     echo "Ctrl-C Captured! "
@@ -17,20 +19,41 @@ function onCtrlC(){
 
 
 echo " "
-echo "===== Welcome to HD data Archiving System @FSO ====="
+echo "===== Welcome to HD data Archiving System @FSO (Rev. 0.5 20190424 01:20) ====="
 echo " "
 
 cyear=`date --date='0 days ago' +%Y`
 today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 syssep="/"
+devpre="/dev/"
 
-if [[ -z $1 ]] || [[ -z $2 ]] ;then
-  echo "Usage: ./hdcopy.sh srcdir destdir year(in 4 digits)"
-  echo "Example: ./hdcopy.sh /data  /lustre/data 2019"
+#if [[ -z $1 ]] || [[ -z $2 ]] || [[ -z $3 ]] ;then
+if [ $# -ne 3 ];then
+  echo "Usage: ./hd2lustre.sh srcdir destdir year(in 4 digits)"
+  echo "Example: ./hd2lustre.sh /data  /lustre/data 2019"
   exit 1
 fi
 
+srcdir1=$1
+destdir1=$2
+ayear=$3
+srcdir=${srcdir1}${syssep}
+destdir=${destdir1}${syssep}${ayear}${syssep}
+
+# test the srcdir is empty or not
+# if empty, mount the device
+# else copy directly
+
+stat=`ls $srcdir1|wc -w`
+#stat less or equal 0 means srcdir is empty
+if [ $stat -gt 0 ];then
+  echo "$srcdir1 is not empty...."
+  echo "please choose another mount point other then $srcdir1!"
+  exit 1
+fi
+
+#searching for all available disk devices...
 out=$(lsblk -l|grep 'sd[b-z][1-9]' | awk '{print($1)}')
 OLD_IFS="$IFS"
 IFS=" "
@@ -66,19 +89,9 @@ do
   fi
   let s++
 done
+ctime=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime: $hdname selected"
 
-devpre="/dev/"
-srcdir1=$1
-destdir1=$2
-ayear=$3
-srcdir=${srcdir1}${syssep}
-destdir=${destdir1}${syssep}${ayear}${syssep}
-echo "destdir is $destdir"
-#echo "srcdir is $srcdir"
-#read
-#hdname=$(lsblk -l | grep sd|awk 'END{print $1}')
-#echo $hdname
 dev=${devpre}${hdname}
 #echo $dev
 mount -t ntfs-3g $dev $srcdir1
@@ -87,35 +100,63 @@ if [ $? -ne 0 ];then
   echo "                   please check!"
   exit 1
 fi
+#mount device ended,start copying then
 
+#dir=$(ls -l /data |awk '/^d/ {print $NF}')
+#for i in $dir
+#do
+#  if [ ! -d "${destdir}${ayear}${syssep}${i}" ];then
+#    mkdir ${destdir}${ayear}${syssep}${i}
+#  fi
+#done
 
 ctime=`date --date='0 days ago' +%H:%M:%S`
 echo " "
 echo "$today $ctime: Archiving data from HD to lustre....."
-echo "                   From: $srcdir @$dev"
+echo "                   From: $srcdir on $dev"
 echo "                   To  : $destdir"
-echo "                   Please Waiting..."
+echo "$today $ctime: Copying...."
+echo "                   Please Wait..."
 #read
-cd $srcdir1
-cp -r -u -v  * $destdir 
+
+#cd $srcdir1
+src=${srcdir}*
+#echo "src= $src"
+#read
+cp -rufv  $src $destdir 
 
 if [ $? -ne 0 ];then
-  echo "$today $ctime1: Archiving $dev to $srcdir failed!"
+  echo "$today $ctime1: Archiving $srcdir on $dev to $destdir failed!"
   echo "                   please check!"
   umount $dev
   exit 1
 fi
 
 ctime1=`date --date='0 days ago' +%H:%M:%S`
-chmod 777 -R $destdir
-if [ $? -ne 0 ];then
-  echo "$today $ctime1: chmod in $srcdir failed!"
-  echo "                   please check!"
-  umount $dev
-  exit 1
-fi
+echo "$today $ctime1: Copying Finished!....."
+echo "$today $ctime1: Changing Permissions of Data....."
+dir=$(ls -l /data |awk '/^d/ {print $NF}')
+for i in $dir
+do
+  chmod 777 -R ${destdir}${i}
+  
+  if [ $? -ne 0 ];then
+    echo "$today $ctime1: chmod in  ${destdir}${i}  failed!"
+    echo "                   please check!"
+    umount $dev
+    exit 1
+  fi
+done
+sleep 5s
 umount $dev
-echo "$today $ctime1: Succeeded in Archiving  data@FSO!"
+srcsize=`du -sh $srcdir`
+destsize=`du -sh $destdir`
+ctime1=`date --date='0 days ago' +%H:%M:%S`
+echo "$today $ctime1: Succeeded in Archiving Data:"
+echo "                   From: $srcdir on $dev"
+echo "                   To  : $destdir"
+echo "            Source Size: $srcsize"
+echo "              Dest Size: $destsize"
 echo "Time used: $ctime to  $ctime1"
 exit 0
 

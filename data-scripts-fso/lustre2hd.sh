@@ -25,9 +25,9 @@ today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 syssep="/"
 
-if [[ -z $1 ]] || [[ -z $2 ]] ;then
-  echo "Usage: ./hdcopy.sh srcdir destdir year(4 digits) monthday(4 digits)"
-  echo "Example: ./hdcopy.sh   /lustre/data /data 2019 0420"
+if [[ -z $1 ]] || [[ -z $2 ]] || [[ -z $3 ]] || [[ -z $4 ]] ;then
+  echo "Usage: ./lustre2hd.sh srcdir destdir year(4 digits) monthday(4 digits)"
+  echo "Example: ./lustre2hd.sh   /lustre/data /data 2019 0420"
   exit 1
 fi
 
@@ -110,6 +110,7 @@ echo "$today $ctime: Archiving data from lustre to HD....."
 echo "                   From: $srcdir"
 echo "                   To  : $destdir @$dev"
 echo "                   Please Waiting..."
+echo "                   Copying..."
 cp -r -u -v  $srcdir $destdir
 if [ $? -ne 0 ];then
   echo "$today $ctime1: Archiving $dev to $srcdir failed!"
@@ -119,15 +120,24 @@ if [ $? -ne 0 ];then
 fi
 
 ctime1=`date --date='0 days ago' +%H:%M:%S`
+echo "$today $ctime1: Changing Permissions of the DATA..."
 chmod 777 -R $destdir
+ctime1=`date --date='0 days ago' +%H:%M:%S`
 if [ $? -ne 0 ];then
-  echo "$today $ctime1: chmod in $srcdir failed!"
+  echo "$today $ctime1: changing permissions in $srcdir failed!"
   echo "                   please check!"
   umount $dev
   exit 1
 fi
 umount $dev
-echo "$today $ctime1: Succeeded in Archiving  data@FSO!"
+srcsize=`du -sh $srcdir`
+destsize=`du -sh $destdir`
+ctime1=`date --date='0 days ago' +%H:%M:%S`
+echo "$today $ctime1: Succeeded in Archiving:"  
+echo "                   From: $srcdir @$dev"
+echo "                   To  : $destdir"
+echo "            Source Size: $srcsize"
+echo "              Dest Size: $destsize"
 echo "Time used: $ctime to  $ctime1"
 exit 0
 
