@@ -1,14 +1,18 @@
 #!/bin/bash
 #author: chen dong @FSO
 #Purposes: mount HD to /data directory, copy HD to /lustre/data and safely unmount HD
-#Usage: ./hd2lustre.sh srcdir destdir year(in 4 digits)
-#Example: ./hd2lustre.sh  /data  /lustre/data 2019
+#Usage: ./hd2lustre.sh srcdir destdir year(in 4 digits) datatype(TIO or HA)
+#Example: ./hd2lustre.sh  /data  /lustre/data 2019 TIO
 #Changelog:
 #         20190420 release 0.1, first working script
 #         20190421 release 0.2, fixed minor errors, and using cp instead of rsync
 #         20190423 release 0.3, fixed error in reading parameters inputed
 #         20190423 release 0.4, judge the srcdir is empty or not
 #         20190424 release 0.5, fixed some error in copying 
+#         20190424 release 0.6, add datatype as input to improve speed for chmoding
+#         20190425 release 0.7, add more info for chmod
+#		   release 0.8, sum of the data copied in MB
+#                  Release 0.9, sum of file numbers both in src and dest
 trap 'onCtrlC' INT
 function onCtrlC(){
     echo "Ctrl-C Captured! "
@@ -19,7 +23,7 @@ function onCtrlC(){
 
 
 echo " "
-echo "===== Welcome to HD data Archiving System @FSO (Rev. 0.5 20190424 01:20) ====="
+echo "===== Welcome to HD-->Lustre data Archiving System @FSO (Rev. 0.9 20190426 22:10) ====="
 echo " "
 
 cyear=`date --date='0 days ago' +%Y`
@@ -29,15 +33,16 @@ syssep="/"
 devpre="/dev/"
 
 #if [[ -z $1 ]] || [[ -z $2 ]] || [[ -z $3 ]] ;then
-if [ $# -ne 3 ];then
-  echo "Usage: ./hd2lustre.sh srcdir destdir year(in 4 digits)"
-  echo "Example: ./hd2lustre.sh /data  /lustre/data 2019"
+if [ $# -ne 4 ];then
+  echo "Usage: ./hd2lustre.sh srcdir destdir year(in 4 digits) datatype(TIO or HA)"
+  echo "Example: ./hd2lustre.sh /data  /lustre/data 2019 TIO"
   exit 1
 fi
 
 srcdir1=$1
 destdir1=$2
 ayear=$3
+datatype=$4
 srcdir=${srcdir1}${syssep}
 destdir=${destdir1}${syssep}${ayear}${syssep}
 
@@ -109,6 +114,10 @@ fi
 #    mkdir ${destdir}${ayear}${syssep}${i}
 #  fi
 #done
+ctime=`date --date='0 days ago' +%H:%M:%S`
+echo "$today $ctime: Calculating size and file number in $srcdir..."
+srcsize=`du -sm $srcdir|awk '{print $1}'`
+srcfilenum=`ls -lR $srcdir| grep "^-" | wc -l`
 
 ctime=`date --date='0 days ago' +%H:%M:%S`
 echo " "
@@ -123,9 +132,11 @@ echo "                   Please Wait..."
 src=${srcdir}*
 #echo "src= $src"
 #read
-cp -rufv  $src $destdir 
+cp -ruf  $src $destdir 
+
 
 if [ $? -ne 0 ];then
+  ctime1=`date --date='0 days ago' +%H:%M:%S`
   echo "$today $ctime1: Archiving $srcdir on $dev to $destdir failed!"
   echo "                   please check!"
   umount $dev
@@ -134,31 +145,45 @@ fi
 
 ctime1=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime1: Copying Finished!....."
-echo "$today $ctime1: Changing Permissions of Data....."
-dir=$(ls -l /data |awk '/^d/ {print $NF}')
+#echo "$today $ctime1: Changing Permissions of Data....."
+echo "$today $ctime1: Waiting for checking..." 
+if [ -f sum.log ]; then
+  rm -f sum.log
+  touch sum.log
+else
+  touch sum.log
+fi
+ 
+if [ -f filesum.log ]; then
+  rm -f filesum.log
+  touch filesum.log
+else
+  touch filesum.log
+fi
+
+dir=$(ls -l $srcdir1 |awk '/^d/ {print $NF}')
 for i in $dir
 do
-  chmod 777 -R ${destdir}${i}
-  
-  if [ $? -ne 0 ];then
-    echo "$today $ctime1: chmod in  ${destdir}${i}  failed!"
-    echo "                   please check!"
-    umount $dev
-    exit 1
-  fi
+  echo "          Checking:  ${destdir}${i}${syssep}${datatype}..."
+  du -sm ${destdir}${i}${syssep}${datatype} >> sum.log
+  ls -lR ${destdir}${i}${syssep}${datatype} | grep "^-" | wc -l >> filesum.log 
 done
-sleep 5s
+sleep 2s
 umount $dev
-srcsize=`du -sh $srcdir`
-destsize=`du -sh $destdir`
+
+destsize=`cat sum.log | awk '{a+= $0}END{print a}'`
+destfilenum=`cat filesum.log | awk '{a+= $0}END{print a}'`
+#destsize=${destsize}MB
+#srcsize=${srcsize}MB
+rm -f sum.log
+rm -f filesum.log
 ctime1=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime1: Succeeded in Archiving Data:"
 echo "                   From: $srcdir on $dev"
 echo "                   To  : $destdir"
-echo "            Source Size: $srcsize"
-echo "              Dest Size: $destsize"
+echo "        Source File Num: $srcfilenum"
+echo "            Source Size: $srcsize MB"
+echo "          Dest File Num: $destfilenum"
+echo "              Dest Size: $destsize MB"
 echo "Time used: $ctime to  $ctime1"
 exit 0
-
-
-

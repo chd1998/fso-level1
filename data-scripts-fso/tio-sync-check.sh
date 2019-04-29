@@ -1,12 +1,11 @@
 #!/bin/bash
 #author: chen dong @fso
 #purposes: periodically syncing data from remoteip to local lustre storage via wget
-#usage:  run in crontab every 15 mins.  from 08:00-20:00
+#usage:  run in crontab every 30 mins.  from 07:00-20:00
 #example: none
 #changlog: 
-#      	20190420	release 0.1
-#      	20190421    	release 0.2	fix bugs,using pid as lock to prevent script from multiple starting
-#	20190427	release 0.3     sync only today's data
+#      	  20190420      first prototype release 0.1
+#      	  20190421    	fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
 
 procName="wget"
 cyear=`date --date='0 days ago' +%Y`
@@ -31,18 +30,14 @@ else
 fi
 
 echo " "
-echo "===== Welcome to Data Archiving System@FSO! ===== "
-echo "          (Release 0.3 20190427 10:09)            "
-echo "                $today $ctime                     "
+echo "Welcome to Data Archiving System@FSO! "
 echo " "
 procCmd=`ps ef|grep -w $procName|grep -v grep|wc -l`
 pid=$(ps x|grep -w $procName|grep -v grep|awk '{print $1}')
 if [ $procCmd -le 0 ];then
   destpre=${destpre0}${syssep}${cyear}${syssep}
-  destdir=${destpre}${today}${syssep}
-#  echo "$destdir"
-#  read
-  srcdir=${srcpre0}${syssep}${today}${syssep}
+  destdir=${destpre}
+  srcdir=$srcpre0
 
   if [ ! -d "$destdir" ]; then
     mkdir $destdir
@@ -56,23 +51,18 @@ if [ $procCmd -le 0 ];then
   echo "Please Waiting ... "
   #read
   cd $destpre
+  wget --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir
   ctime1=`date --date='0 days ago' +%H:%M:%S`
-  wget -o /home/chd/log/wget.log --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir
-  #ctime1=`date --date='0 days ago' +%H:%M:%S`
   if [ $? -ne 0 ];then
     echo "$todday $ctime1: Syncing $datatype Data@FSO Failed!"
     cd /home/chd/
     exit 1
   fi
-  targetdir=${destdir}${datatype}
-  filenumber=`ls -lR $targetdir | grep "^-" | wc -l`
+
   ctime1=`date --date='0 days ago' +%H:%M:%S`
-  #chmod 777 -R $targetdir
-  srcsize=`du -sh $targetdir`
+  #chmod 777 -R $destdir
   echo "$today $ctime1: Succeeded in Syncing $datatype data@FSO!"
-  echo " Synced file No. : $filenumber"
-  echo " Synced data size: $srcsize"
-  echo "        Time used: $ctime to  $ctime1"
+  echo "Time used: $ctime to  $ctime1"
   rm -rf $lockfile
   cd /home/chd/
   exit 0

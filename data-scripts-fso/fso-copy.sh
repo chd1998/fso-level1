@@ -9,7 +9,7 @@
 #        20190423      	Release 0.3	fix errors
 #	 20190426	Release 0.4	fix errors
 #        20190428       Release 0.5 	add monthday to the src dir
-
+#	                Release 0.6     datatype is an option now
 trap 'onCtrlC' INT
 function onCtrlC(){
     echo "Ctrl-C Captured! "
@@ -27,15 +27,18 @@ destpre0="/lustre/data"
 srcpre0="ftp://192.168.111.120"
 srcyear=$1
 srcmonthday=$2
+datatype=$3
+ftpuser=$(echo $datatype|tr '[A-Z]' '[a-z]')
 
-if [ $# -ne 2 ]  ;then
+if [ $# -ne 3 ]  ;then
   echo "Use this script to copy TIO data of year month day specified on remote host to /lustre/data mannually"
-  echo "Usage: ./tio-copy.sh year(4 digits)  monthday(4 digits)"
-  echo "Example: ./tio-copy.sh 2019 0427"
+  echo "Usage: ./tio-copy.sh year(4 digits)  monthday(4 digits) datatype(TIO/HA)"
+  echo "Example: ./tio-copy.sh 2019 0427 TIO"
   exit 1
 fi
-
-datatype="TIO"
+#echo "$ftpuser"
+#read
+#datatype="TIO"
 remotePort="21"
 lockfile=/home/chd/log/$(basename $0)_lockfile
 if [ -f $lockfile ];then
@@ -51,8 +54,8 @@ else
 fi
 
 echo " "
-echo "===== Welcome to TIO Data Copying System@FSO! ======0 "
-echo "          Relase 0.5     20190428 10:42     "
+echo "===== Welcome to FSO Data Copying System@FSO! ======0 "
+echo "          Relase 0.6     20190428 20:43               "
 echo " Copy the TiO data from remote SSD to lustre manually "
 echo " "
 procCmd=`ps ef|grep -w $procName|grep -v grep|wc -l`
@@ -73,14 +76,14 @@ if [ $procCmd -le 0 ];then
   echo "                   Please Waiting ... "
 #  read
   cd $destdir
-  wget --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir
+  wget --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=$ftpuser --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir
 
-   if [ $? -ne 0 ];then
-    ctime1=`date --date='0 days ago' +%H:%M:%S`
-    echo "$today $ctime1: Failed in Syncing Data from $srcdir to $destdir"
-    cd /home/chd
-    exit 1
-  fi
+    if [ $? -ne 0 ];then
+      ctime1=`date --date='0 days ago' +%H:%M:%S`
+      echo "$today $ctime1: Failed in Syncing Data from $srcdir to $destdir"
+      cd /home/chd
+      exit 1
+    fi
 
   targetdir=${destdir}${datatype}
   filenumber=`ls -lR $targetdir | grep "^-" | wc -l`
