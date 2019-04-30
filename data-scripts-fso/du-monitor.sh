@@ -19,7 +19,11 @@ fi
 
 cdir=$1
 
-
+if [ ! -d "$cdir" ];then
+  echo "Dest Dir: $cdir     doesn't exist...."
+  echo "Please check..."
+  exit 0
+fi
 
 #destdir=${cyear}/${cyear}${cmonthday}/${cdatatype}
 echo "Please wait..."

@@ -21,16 +21,22 @@ cyear=$1
 cmonthday=$2
 cdatatype=$3
 
+destpre="/lustre/data"
 
 
-destdir=${cyear}/${cyear}${cmonthday}/${cdatatype}
+destdir=${destpre}/${cyear}/${cyear}${cmonthday}/${cdatatype}
+if [ ! -d "$destdir" ];then
+  echo "Dest Dir: $destdir     doesn't exist...."
+  echo "Please check..."
+  exit 0
+fi
 echo "Please wait..."
 while true
 do 
   today=`date --date='0 days ago' +%Y%m%d`
   ctime=`date --date='0 days ago' +%H:%M:%S`
-  cursize=`du -sm /lustre/data/$destdir|awk '{print $1}'`
-  curdir=`du -sm /lustre/data/$destdir|awk '{print $2}'`
+  cursize=`du -sm $destdir|awk '{print $1}'`
+  curdir=`du -sm $destdir|awk '{print $2}'`
   echo "$today $ctime:"
   echo "$curdir --> $cursize MB"
   sleep 10

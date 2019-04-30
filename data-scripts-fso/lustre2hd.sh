@@ -4,10 +4,11 @@
 #Usage: ./lustre2hd.sh srcdir destdir year(4digits) monthday(4digits) datatype(TIO/HA)
 #Example: ./lustre2hd.sh /lustre/data  /data 2019 0420 TIO
 #Changelog:
-#         20190420 Release 0.1, first working script
-#         20190421 Release 0.2, fixed minor errors, and using cp instead of rsync
-#  	  20190426 Release 0.3, fixed minor display problems
-# 		   Release 0.4, sum the file num and size both in src and dest
+#         20190420 	Release 0.1	first working script
+#         20190421 	Release 0.2	fixed minor errors, and using cp instead of rsync
+#  	  20190426 	Release 0.3	fixed minor display problems
+# 		   	Release 0.4	sum the file num and size both in src and dest
+#         20190429 
 
 trap 'onCtrlC' INT
 function onCtrlC(){
@@ -19,7 +20,8 @@ function onCtrlC(){
 
 
 echo " "
-echo "===== Welcome to Lustre-->HD data Archiving System @FSO (Rev. 0.4 20190426 22:49) ====="
+echo "===== Welcome to Lustre-->HD data Archiving System @FSO ====="
+echo "                Release 0.4  20190429 18:54                  "
 echo " "
 
 cyear=`date --date='0 days ago' +%Y`
