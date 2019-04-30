@@ -33,7 +33,9 @@ do
   ctime=`date --date='0 days ago' +%H:%M:%S`
   cursize=`du -sm $cdir|awk '{print $1}'`
   curdir=`du -sm $cdir|awk '{print $2}'`
+  filenumber=`ls -lR $curdir | grep "^-" | wc -l`
   echo "$today $ctime:"
+  echo "$curdir --> $filenumber file(s)"
   echo "$curdir --> $cursize MB"
   sleep 10
 done
