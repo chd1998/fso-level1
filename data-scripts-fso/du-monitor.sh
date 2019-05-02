@@ -1,7 +1,7 @@
 #!/bin/bash
 #monitor the size of dest dir every 10 secs. 
-#usage: ./du-realtime.sh year monthday datatype
-#example: ./du-realtime.sh 2019 0426 TIO
+#usage: ./du-monitor.sh yourdir delaytime(in secs.)
+#example: ./du-monitor.sh /lustre/data/tmp 10
 #press ctrl-c to break the script
 
 trap 'onCtrlC' INT
@@ -10,14 +10,15 @@ function onCtrlC(){
     exit 1
 }
 
-if [ $# -ne 1 ];then
-  echo "usage: ./du-monitor.sh /youdirhere/"
-  echo "example: ./du-realtime.sh /lustre/data/tmp/"
+if [ $# -ne 2 ];then
+  echo "usage: ./du-monitor.sh /youdirhere/ delaytime(in secs.)"
+  echo "example: ./du-monitor.sh /lustre/data/tmp/ 0"
   echo "press ctrl-c to break!"
   exit 0
 fi
 
 cdir=$1
+delaytime=$2
 
 if [ ! -d "$cdir" ];then
   echo "Dest Dir: $cdir     doesn't exist...."
@@ -37,5 +38,5 @@ do
   echo "$today $ctime:"
   echo "$curdir --> $filenumber file(s)"
   echo "$curdir --> $cursize MB"
-  sleep 10
+  sleep $delaytime
 done

@@ -1,8 +1,8 @@
 #!/bin/bash
 #author: chen dong @fso
 #purposes: manually syncing TIO data in specified year(eg., 2019...) from remoteip to local lustre storage via wget over ftp
-#usage:  ./tio-copy.sh year(4 digits)
-#example: ./tio-copy.sh 2019
+#usage:  ./fso-copy.sh year(4 digits) monthday(4 digits) datatype(TIO/HA)
+#example: ./fso-copy.sh 2019 0428 HA
 #changlog: 
 #      	 20190420      	Release 0.1	first prototype release 0.1
 #      	 20190421	Release 0.2	fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
@@ -54,9 +54,10 @@ else
 fi
 
 echo " "
-echo "===== Welcome to FSO Data Copying System@FSO! ======0 "
-echo "          Relase 0.6     20190428 20:43               "
-echo " Copy the TiO data from remote SSD to lustre manually "
+echo "   ===== Welcome to FSO Data Copying System@FSO! =====  "
+echo "                      fso-copy.sh                       "  
+echo "             Relase 0.6     20190428 20:43              "
+echo " Copy the TiO/HA data from remote SSD to lustre manually "
 echo " "
 procCmd=`ps ef|grep -w $procName|grep -v grep|wc -l`
 pid=$(ps x|grep -w $procName|grep -v grep|awk '{print $1}')

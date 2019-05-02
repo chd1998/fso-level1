@@ -32,8 +32,11 @@ fi
 
 echo " "
 echo "===== Welcome to Data Archiving System@FSO! ===== "
+echo "                  tio-sync.sh                     "
 echo "          (Release 0.3 20190427 10:09)            "
+echo "                                                  "
 echo "                $today $ctime                     "
+echo "=================================================="
 echo " "
 procCmd=`ps ef|grep -w $procName|grep -v grep|wc -l`
 pid=$(ps x|grep -w $procName|grep -v grep|awk '{print $1}')

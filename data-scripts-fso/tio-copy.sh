@@ -51,9 +51,10 @@ else
 fi
 
 echo " "
-echo "===== Welcome to TIO Data Copying System@FSO! ======0 "
-echo "          Relase 0.5     20190428 10:42     "
-echo " Copy the TiO data from remote SSD to lustre manually "
+echo "  ===== Welcome to TIO Data Copying System@FSO! =====   "
+echo "                   tio-copy.sh                          "
+echo "          Relase 0.5     20190428 10:42                 "
+echo "  Copy the TiO data from remote SSD to lustre manually  "
 echo " "
 procCmd=`ps ef|grep -w $procName|grep -v grep|wc -l`
 pid=$(ps x|grep -w $procName|grep -v grep|awk '{print $1}')
