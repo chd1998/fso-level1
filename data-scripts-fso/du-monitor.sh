@@ -27,16 +27,28 @@ if [ ! -d "$cdir" ];then
 fi
 
 #destdir=${cyear}/${cyear}${cmonthday}/${cdatatype}
+echo " "
+echo "Calculating the file number & file size of the $cdir"
 echo "Please wait..."
+echo "Press ctrl-c to break! "
+echo " "
+sdata=`du -sm $cdir|awk '{print $1}'`
+
 while true
 do 
   today=`date --date='0 days ago' +%Y%m%d`
   ctime=`date --date='0 days ago' +%H:%M:%S`
   cursize=`du -sm $cdir|awk '{print $1}'`
   curdir=`du -sm $cdir|awk '{print $2}'`
+  edata=$cursize
+  speed=`echo "$sdata $edata $delaytime"|awk '{print(($2-$1)/$3)}'`
   filenumber=`ls -lR $curdir | grep "^-" | wc -l`
   echo "$today $ctime:"
   echo "$curdir --> $filenumber file(s)"
   echo "$curdir --> $cursize MB"
+  echo "speed   --> $speed MB/Sec."
+  echo "Press ctrl-c to break! "
+  echo " "
   sleep $delaytime
+  sdata=$edata
 done
