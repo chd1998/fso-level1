@@ -31,12 +31,12 @@ else
 fi
 
 echo " "
-echo "===== Welcome to Data Archiving System@FSO! ===== "
-echo "                  tio-sync.sh                     "
-echo "          (Release 0.3 20190427 10:09)            "
-echo "                                                  "
-echo "                $today $ctime                     "
-echo "=================================================="
+echo "===== Welcome to Data Archiving System @ FSO! ====="
+echo "                  tio-sync.sh                      "
+echo "          (Release 0.3 20190427 10:09)             "
+echo "                                                   "
+echo "                $today $ctime                      "
+echo "==================================================="
 echo " "
 procCmd=`ps ef|grep -w $procName|grep -v grep|wc -l`
 pid=$(ps x|grep -w $procName|grep -v grep|awk '{print $1}')
@@ -53,7 +53,7 @@ if [ $procCmd -le 0 ];then
     echo "$destdir already exist!"
   fi
   ctime=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctime: Syncing $datatype data@FSO..."
+  echo "$today $ctime: Syncing $datatype data @ FSO..."
   echo "From: $srcdir "
   echo "To  : $destdir "
   echo "Please Waiting ... "
@@ -63,7 +63,7 @@ if [ $procCmd -le 0 ];then
   wget -o /home/chd/log/wget.log --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir
   #ctime1=`date --date='0 days ago' +%H:%M:%S`
   if [ $? -ne 0 ];then
-    echo "$todday $ctime1: Syncing $datatype Data@FSO Failed!"
+    echo "$todday $ctime1: Syncing $datatype Data @ FSO Failed!"
     cd /home/chd/
     exit 1
   fi
@@ -72,7 +72,7 @@ if [ $procCmd -le 0 ];then
   ctime1=`date --date='0 days ago' +%H:%M:%S`
   #chmod 777 -R $targetdir
   srcsize=`du -sh $targetdir`
-  echo "$today $ctime1: Succeeded in Syncing $datatype data@FSO!"
+  echo "$today $ctime1: Succeeded in Syncing $datatype data @ FSO!"
   echo " Synced file No. : $filenumber"
   echo " Synced data size: $srcsize"
   echo "        Time used: $ctime to  $ctime1"
