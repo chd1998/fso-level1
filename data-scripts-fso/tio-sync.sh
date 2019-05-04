@@ -71,11 +71,12 @@ if [ $procCmd -le 0 ];then
   filenumber=`ls -lR $targetdir | grep "^-" | wc -l`
   ctime1=`date --date='0 days ago' +%H:%M:%S`
   #chmod 777 -R $targetdir
-  srcsize=`du -sh $targetdir`
+  targetsize=`du -sm $targetdir|awk '{print $1}'`
+  #cursize=`du -sm $cdir|awk '{print $1}'`
   echo "$today $ctime1: Succeeded in Syncing $datatype data @ FSO!"
-  echo " Synced file No. : $filenumber"
-  echo " Synced data size: $srcsize"
-  echo "        Time used: $ctime to  $ctime1"
+  echo " Synced file No. : $filenumber file(s)"
+  echo " Synced data size: $targetsize MB "
+  echo " Time used       : $ctime to  $ctime1"
   rm -rf $lockfile
   cd /home/chd/
   exit 0
