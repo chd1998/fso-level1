@@ -18,22 +18,24 @@ ctime=`date --date='0 days ago' +%H:%M:%S`
 p_name="tio-sync.sh"
 p_name1="wget"
 echo "Monitoring $p_name & $p_name1..."
-pid="$(pgrep -f $p_name| awk "{print $1}"|head -n1) "
-pid1="$(pgrep -f $p_name1)"
-if [[ -z $pid || -z $pid1 ]];then
-  echo "$p_name & $p_name1 process not found!"
-  exit 0
+pid="$(pidof $p_name)"
+pid1="$(pidof $p_name1)"
+runtime=0
+runtime1=0
+if [ -z $pid ];then
+  echo "$p_name  process not found!"
+  if [ -z $pid1 ];then
+    echo "$p_name1 process not found!"
+    exit 0
+  else
+    runtime1=`ps -p $pid1 -o etime=|/home/chd/gettime.awk`
+  fi
+else
+   runtime=`ps -p $pid -o etime=|/home/chd/gettime.awk`
 fi
-#echo "pid: $pid"
-#echo "pid1: $pid1"
+#echo "$runtime"
+#echo "$runtime1"
 #read
-ptime="$(ps -eo pid,etime|grep $pid|awk '{print $2}' |head -n1)"
-ptime1="$(ps -eo pid,etime|grep $pid1|awk '{print $2}' |head -n1)"
-#echo "running time: $ptime"
-#echo "running time: $ptime1"
-#read
-runtime=`echo $ptime|awk '{split($1,tab,/:/); print tab[3]+tab[2]*60+tab[1]*3600 }'`
-runtime1=`echo $ptime1|awk '{split($1,tab,/:/); print tab[3]+tab[2]*60+tab[1]*3600 }'`
 echo "$today $ctime: "
 echo "                   $p_name has run for $runtime secs..."
 echo "                   $p_name1 has run for $runtime1 secs..."
@@ -41,11 +43,15 @@ echo "                   $p_name1 has run for $runtime1 secs..."
 #if time > 14400s , kill it 
 today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
-if [ $runtime -ge "14400" ] || [ $runtime1 -ge "14400" ];then
+if [ $runtime -ge 14400 ];then
   kill $pid
-  kill $pid1
-  echo "$today $ctime: $p_name($pid) runs $ptime secs. "
+  echo "$today $ctime: $p_name($pid) runs $runtime secs. "
   echo "                   killing $p_name($pid)..."
   echo "                   kill $pname($pid) succeeded!"
 fi
-
+if [ $runtime1 -ge 14400 ];then
+  kill $pid1
+  echo "$today $ctime: $p_name1($pid1) runs $runtime1 secs. "
+  echo "                   killing $p_name1($pid1)..."
+  echo "                   kill $pname1($pid1) succeeded!"
+fi
