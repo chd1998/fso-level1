@@ -28,10 +28,10 @@ if [ -z $pid ];then
     echo "$p_name1 process not found!"
     exit 0
   else
-    runtime1=`ps -p $pid1 -o etime=|/home/chd/gettime.awk`
+    runtime1=`ps -p $pid1 -o etime= | tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
   fi
 else
-   runtime=`ps -p $pid -o etime=|/home/chd/gettime.awk`
+   runtime=`ps -p $pid -o etime= | tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 fi
 #echo "$runtime"
 #echo "$runtime1"
