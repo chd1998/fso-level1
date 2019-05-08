@@ -12,7 +12,7 @@ function onCtrlC(){
 
 if [ $# -ne 2 ];then
   echo "usage: ./du-monitor.sh /youdirhere/ delaytime(in secs.)"
-  echo "example: ./du-monitor.sh /lustre/data/tmp/ 0"
+  echo "example: ./du-monitor.sh /lustre/data/tmp/ 10"
   echo "press ctrl-c to break!"
   exit 0
 fi

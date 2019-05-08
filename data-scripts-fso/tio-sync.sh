@@ -60,7 +60,7 @@ if [ $procCmd -le 0 ];then
   #read
   cd $destpre
   ctime1=`date --date='0 days ago' +%H:%M:%S`
-  wget -o /home/chd/log/wget.log --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir
+  wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir
   #ctime1=`date --date='0 days ago' +%H:%M:%S`
   if [ $? -ne 0 ];then
     echo "$todday $ctime1: Syncing $datatype Data @ FSO Failed!"
