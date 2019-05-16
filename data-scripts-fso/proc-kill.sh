@@ -53,7 +53,7 @@ do
   #pid="$(ps x|grep longtimetest.sh|grep -v grep|awk '{print $1}')"
   #echo $pid
   #read 
-  if [  -z $pid ];then
+  if [ -z $pid ];then
     echo "$today $ctime: $p_name is not running ..."
     exit 1
   fi
@@ -66,6 +66,9 @@ do
   echo "$today $ctime: $p_name($pid) has run for $runtime secs. "
   #if time > timelimit , kill it 
   ctime=`date --date='0 days ago' +%H:%M:%S`
+  #echo $runtime
+  #echo $timelimit
+  #read
   if [ $runtime -ge $timelimit ];then
     kill  $pid
     if [ $? -ne 0 ];then
