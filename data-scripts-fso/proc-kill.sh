@@ -55,9 +55,11 @@ do
   #read 
   if [ -z $pid ];then
     echo "$today $ctime: $p_name is not running ..."
-    exit 1
+#    exit 1
+  else
+    runtime=`ps -p $pid -o etime= | tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
   fi
-  runtime=`ps -p $pid -o etime= | tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+
   if [ $? -ne 0 ];then
     echo "couldn't calculate runtime for $p_name..."
   fi
