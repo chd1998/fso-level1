@@ -45,7 +45,7 @@ if [ $procCmd -le 0 ];then
   if [ ! -d "$destpre" ]; then
     mkdir $destpre
   else
-    echo "$destpre already exist!"
+    echo "$today $ctime: $destpre exists!"
   fi
   destdir=${destpre}${today}${syssep}
 
@@ -54,7 +54,7 @@ if [ $procCmd -le 0 ];then
   if [ ! -d "$destdir" ]; then
     mkdir $destdir
   else
-    echo "$destdir already exist!"
+    echo "$today $ctime: $destdir exists!"
   fi
   ctime=`date --date='0 days ago' +%H:%M:%S`
   echo "$today $ctime: Syncing $datatype data @ FSO..."

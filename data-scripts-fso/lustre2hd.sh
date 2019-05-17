@@ -71,6 +71,7 @@ do
   fi
   let s++
 done
+ctime=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime: $hdname selected"
 
 devpre="/dev/"
@@ -121,26 +122,28 @@ echo "                   Please Waiting..."
 echo "                   Copying..."
 cp -ruvf  $srcdir $destdir
 if [ $? -ne 0 ];then
-  echo "$today $ctime1: Archiving $dev to $srcdir failed!"
+  echo "$today $ctime1: Archiving $datatype data to $dev from $srcdir failed!"
   echo "                   please check!"
   umount $dev
   exit 1
 fi
 
 ctime1=`date --date='0 days ago' +%H:%M:%S`
-echo "$today $ctime1: Changing Permissions of the DATA..."
-chmod 777 -R -cfv $destdir
-ctime1=`date --date='0 days ago' +%H:%M:%S`
-if [ $? -ne 0 ];then
-  echo "$today $ctime1: changing permissions in $srcdir failed!"
-  echo "                   please check!"
-  umount $dev
-  exit 1
-fi
+#echo "$today $ctime1: Changing Permissions of the DATA..."
+#chmod 777 -R -cfv $destdir
+#ctime1=`date --date='0 days ago' +%H:%M:%S`
+#if [ $? -ne 0 ];then
+#  echo "$today $ctime1: changing permissions in $srcdir failed!"
+#  echo "                   please check!"
+#  umount $dev
+#  exit 1
+#fi
+destfilenum=`ls -lR $destdir| grep "^-" | wc -l`
+destsize=`du -sm $destdir|awk '{print $1}'`
 umount $dev
 #srcsize=`du -sh $srcdir`
-destfilenum=`ls -lR $destdir| grep "^-" | wc -l`
-destsize=`du -sm $destdir`
+#destfilenum=`ls -lR $destdir| grep "^-" | wc -l`
+#destsize=`du -sm $destdir`
 ctime1=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime1: Succeeded in Archiving:"  
 echo "                   From: $srcdir"
