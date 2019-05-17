@@ -28,13 +28,13 @@ runtime=0
 runtime1=0
 
 if [ -z $pid ];then
-  echo "$p_name  process not found!"
+  echo "                   $p_name  process not found!"
 else
   runtime=`ps -p $pid -o etime= | tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 fi
 
 if [ -z $pid1 ];then
-  echo "$p_name1 process not found!"
+  echo "                   $p_name1 process not found!"
 else
   runtime1=`ps -p $pid1 -o etime= | tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++)  {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 fi
@@ -43,8 +43,8 @@ fi
 #echo "$runtime1"
 #read
 echo "$today $ctime: "
-echo "                   $p_name($pid) has run for $runtime secs..."
-echo "                   $p_name1($pid1) has run for $runtime1 secs..."
+echo "                   $p_name($pid) 	==> $runtime secs..."
+echo "                   $p_name1($pid1) 		==> $runtime1 secs..."
 #echo "runtime: $runtime"
 #when time > 14400s , kill it 
 today=`date --date='0 days ago' +%Y%m%d`

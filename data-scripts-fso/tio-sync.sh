@@ -42,9 +42,13 @@ procCmd=`ps ef|grep -w $procName|grep -v grep|wc -l`
 pid=$(ps x|grep -w $procName|grep -v grep|awk '{print $1}')
 if [ $procCmd -le 0 ];then
   destpre=${destpre0}${syssep}${cyear}${syssep}
+  if [ ! -d "$destpre" ]; then
+    mkdir $destpre
+  else
+    echo "$destpre already exist!"
+  fi
   destdir=${destpre}${today}${syssep}
-#  echo "$destdir"
-#  read
+
   srcdir=${srcpre0}${syssep}${today}${syssep}
 
   if [ ! -d "$destdir" ]; then
@@ -61,7 +65,7 @@ if [ $procCmd -le 0 ];then
   cd $destpre
   ctime1=`date --date='0 days ago' +%H:%M:%S`
   wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir
-  #ctime1=`date --date='0 days ago' +%H:%M:%S`
+  ctime1=`date --date='0 days ago' +%H:%M:%S`
   if [ $? -ne 0 ];then
     echo "$todday $ctime1: Syncing $datatype Data @ FSO Failed!"
     cd /home/chd/
