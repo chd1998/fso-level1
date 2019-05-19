@@ -41,6 +41,7 @@ fi
 p_name=$1
 timelimit=$2
 delaytime=$3
+runtime=0
 
 echo "$today $ctime: Monitoring $p_name ..."
 
@@ -55,6 +56,7 @@ do
   #read 
   if [ -z $pid ];then
     echo "$today $ctime: $p_name is not running ..."
+    runtime=0
 #    exit 1
   else
     runtime=`ps -p $pid -o etime= | tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`

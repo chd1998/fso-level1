@@ -35,7 +35,8 @@ echo "           tio-sync-kill.sh Release 0.4           "
 echo " "
 p_name="tio-sync.sh"
 p_name1="wget"
-
+runtime=0
+runtime1=0
 while true
 do 
   echo "$today $ctime: Monitoring $p_name & $p_name1..."
