@@ -1,12 +1,15 @@
 #!/bin/bash
 #author: chen dong @fso
-#purposes: manually syncing TIO/HA data in specified date(eg., 2019 0519...) from remoteip to local lustre storage via lftp
-#usage:  ./fso-data-check.sh year(4 digits)  monthday(4 digits) TIO/HA user password
-#example: ./fso-data-check.sh 2019 0519 TIO tio ynao246135
+#purposes: manually syncing TIO/HA data in specified year month day(eg., 2019 0519...) from remoteip to local lustre storage via lftp
+#usage:  ./fso-data-copy.sh year(4 digits)  monthday(4 digits) TIO/HA user password
+#example: ./fso-data-copy.sh 2019 0519 TIO tio ynao246135
 #changlog: 
 #      	 20190420      	Release 0.1	first prototype release 0.1
 #      	 20190421	Release 0.2	fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
-#        20190423      	Release 0.3	using lftp instead of rsync
+#        20190423      	Release 0.3	fix errors
+#	 20190426	Release 0.4	fix errors
+#        20190428       Release 0.5 	add monthday to the src dir
+#	 20190519 	Release 0.6     using lftp instead of wget
 
 trap 'onCtrlC' INT
 function onCtrlC(){
@@ -24,6 +27,7 @@ syssep="/"
 destpre0="/lustre/data"
 srcpre0="ftp://192.168.111.120"
 remoteport="21"
+filenumber=0
 
 
 srcyear=$1
@@ -54,9 +58,9 @@ fi
 
 echo " "
 echo "  ===== Welcome to FSO Data Archiving System@FSO! =====   "
-echo "                   fso-data-check.sh                          "
-echo "          Relase 0.3     20190519 07:25                 "
-echo "  check the  data from remote ip to lustre manually  "
+echo "                   fso-data-copy.sh                          "
+echo "          Relase 0.6     20190519 07:01                 "
+echo "  Copy the  data from remote ip to lustre manually  "
 echo " "
 procCmd=`ps ef|grep -w $procName|grep -v grep|wc -l`
 pid=$(ps x|grep -w $procName|grep -v grep|awk '{print $1}')
@@ -70,13 +74,13 @@ if [ $procCmd -le 0 ];then
     echo "$destdir already exist!"
   fi
   ctime=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctime: Checking $datatype data@FSO..."
+  echo "$today $ctime: Copying $datatype data@FSO..."
   echo "                   From: $srcdir "
   echo "                   To  : $destdir "
   echo "                   Please Wait ... "
 #  read
   cd $destdir
-  lftp -u $user,$password -e "mirror --ignore-time --no-perms --continue --just-print --exclude /\$RECYCLE.BIN/$   --parallel=20  / . ;quit" $srcdir
+  lftp -u $user,$password -e "mirror --ignore-time --no-perms --continue --exclude /\$RECYCLE.BIN/$  --parallel=30  / . ;quit" $srcdir
   #wget --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir
 
    if [ $? -ne 0 ];then
@@ -86,15 +90,15 @@ if [ $procCmd -le 0 ];then
     exit 1
   fi
 
-  targetdir=${destdir}${srcyear}${srcmonthday}${syssep}${datatype}
+  targetdir=${destdir}${datatype}
   filenumber=`ls -lR $targetdir | grep "^-" | wc -l`
-  srcsize=`du -sm $targetdir | awk '{print $1}'`
+  srcsize=`du -sm $targetdir|awk'{print $1}'`
   ctime1=`date --date='0 days ago' +%H:%M:%S`
   #chmod 777 -R $destdir
 
-  echo "$today $ctime1: Succeeded in Checking $datatype data@FSO!"
-  echo "           Checked: $filenumber file(s)"
-  echo "           Checked: $srcsize MB"
+  echo "$today $ctime1: Succeeded in Copying $datatype data@FSO!"
+  echo "           Copied: $filenumber file(s)"
+  echo "           Copied: $srcsize MB"
   echo "        Time used: $ctime to  $ctime1"
 
   rm -rf $lockfile

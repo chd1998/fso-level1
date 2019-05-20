@@ -33,7 +33,7 @@ echo "Please wait..."
 echo "Press ctrl-c to break! "
 echo " "
 sdata=`du -sm $cdir|awk '{print $1}'`
-
+sleep $delaytime
 while true
 do 
   today=`date --date='0 days ago' +%Y%m%d`
