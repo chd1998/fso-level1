@@ -34,7 +34,7 @@ echo "===== Welcome to Data Archiving System @FSO! ====="
 echo "           tio-sync-kill.sh Release 0.4           "
 echo " "
 p_name="tio-sync.sh"
-p_name1="wget"
+p_name1="lftp"
 runtime=0
 runtime1=0
 while true

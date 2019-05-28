@@ -10,6 +10,7 @@ trap 'onCtrlC' INT
 function onCtrlC(){
     echo "Ctrl-C Captured! "
     echo "Breaking..."
+    sleep 5
     umount $dev
     exit 1
 }
@@ -25,7 +26,7 @@ destdir1=$2
 echo " "
 echo "===== Welcome to data Archiving System @FSO ====="
 echo "                data-copy.sh                     "
-echo "          Release 0.4  20190429 18:54            "
+echo "          Release 0.1  20190519 16:45            "
 echo " "
 
 if [ $# -ne 2 ];then
@@ -141,7 +142,6 @@ echo "                   From: $srcdir"
 echo "                   To  : $destdir @ $dev"
 echo "                   Please Waiting..."
 echo "                   Copying..."
-read
 cp -ruvf  $srcdir $destdir
 if [ $? -ne 0 ];then
   echo "$today $ctime1: Archiving $datatype data to $dev from $srcdir failed!"

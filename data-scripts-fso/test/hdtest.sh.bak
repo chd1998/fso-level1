@@ -1,0 +1,37 @@
+#!/bin/bash
+out=$(lsblk -l|grep 'sd[b-z][1-9]' | awk '{print($1)}')
+#echo "$out"
+#hdlist=`echo $out|awk '{split($0,out," ")}'`
+OLD_IFS="$IFS"
+IFS=" "
+hdlist=($out)
+IFS="$OLD_IFS"
+#s=0
+len1=0
+echo "please select target drive to archiving..."
+for i in ${hdlist[@]}
+do 
+  echo "$s: $i"
+  let len1++
+done
+echo "pls input:"
+read  uchoice
+#echo "$uchoice"
+index=$(($uchoice+0))
+#echo $index
+#echo $len1
+if [[ "$index" -lt 0 ]] || [[ "$index">"$len1" ]];then
+  echo "input error, pls try again!"
+  exit 1
+fi 
+s=0
+for i in ${hdlist[@]}
+do
+  if [ "$s" -eq "$index" ];then 
+    dev=$i
+    break
+  fi
+  let s++
+done
+echo "$dev"
+#echo "${hdlist[$index]}"
