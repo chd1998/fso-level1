@@ -1,0 +1,131 @@
+1. pid数字作为lock,防止脚步多次运行：
+
+#建立脚本文件名称的lockfile
+lockfile=/home/chd/log/$(basename $0)_lockfile
+#检查是否存在lockfile
+if [ -f $lockfile ];then
+#如果有lockfile,获取lockfile中的pid
+  mypid=$(cat $lockfile)
+#以pid为参数，查看内存中是否存在pid值的进程
+  ps -p $mypid | grep $mypid &>/dev/null
+# 如果有
+  if [ $? -eq 0 ];then
+# 打印已经运行并退出
+    echo "$todday $ctime: $(basename $0) is running" && exit 1
+  else
+# 如果没有，将当前脚本pid值$$写入lockfile
+    echo $$>$lockfile
+  fi
+else
+# 如果不存在lockfil, 将当前脚本pid值写入lockfile
+  echo $$>$lockfile
+fi
+
+2.脚本截获ctrl-c中断
+trap 'onCtrlC' INT
+function onCtrlC(){
+    echo "Ctrl-C Captured! "
+    echo "Breaking..."
+    umount $dev
+    exit 1
+}
+
+3.列出除 /dev/sda外所有硬盘
+#$IFS是shell的字符分隔符，默认是空格、tab、换行符. $IFS变量通常用于read命令（可以用作不同变量的分割符）, 
+#$IFS变量还可以用于字符串分割并储存到数组变量
+
+#searching for all available disk devices...
+out=$(lsblk -l|grep 'sd[b-z][1-9]' | awk '{print($1)}')
+OLD_IFS="$IFS"
+IFS=" "
+hdlist=($out)
+IFS="$OLD_IFS"
+len1=0
+echo "$today $ctime: Please select target drive to archiving..."
+echo "Available devices:"
+for i in ${hdlist[@]}
+do
+  echo "$len1: $i"
+  let len1++
+done
+
+if [ $len1 -le 0 ];then
+  echo "No devices available..."
+  exit 1
+fi
+
+#!/bin/bash
+a='1|2|3|4'
+OLD_IFS="$IFS"
+IFS="|"
+arr=($a)
+IFS="$OLD_IFS"
+for s in ${arr[@]}
+do
+    echo "$s" 
+done
+
+4. 获取当天时间，年份，年月日
+cyear=`date --date='0 days ago' +%Y`
+today=`date --date='0 days ago' +%Y%m%d`
+ctime=`date --date='0 days ago' +%H:%M:%S`
+
+5.获取多个文件大小的总和
+#!/bin/bash
+du -sm /home/chd| awk '{print $1}' > sum.log
+du -sm /home/qy| awk '{print $1}' >> sum.log
+cat sum.log | awk '{a+= $0}END{print a}'
+
+6.获取某个目录下所有文件个数（含子目录）
+#!/bin/bash
+#count the number of files under a directory including subdir
+ls -lR /lustre/data/2019/20190426/TIO | grep "^-" | wc -l
+
+	统计当前目录下文件的个数（不包括目录）
+	$ ls -l | grep "^-" | wc -l
+	1
+	统计当前目录下文件的个数（包括子目录）
+	$ ls -lR| grep "^-" | wc -l
+	1
+	查看某目录下文件夹(目录)的个数（包括子目录）
+	$ ls -lR | grep "^d" | wc -l
+
+7. 使用wget over ftp同步目录
+wget --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir
+
+8. 计算某个进程运行的时间
+8.1 使用bash
+#!/bin/bash
+#计算$pid进程已经运行的时间（转换到秒），例如：3-23:17:46, 3天23小时17分46秒
+runtime=`ps -p $pid -o etime= | tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'
+
+8.2 使用awk
+ps -p $pid -o etime=|/home/chd/gettime.awk
+
+
+gettime.awk:
+#!/usr/bin/awk -f  
+BEGIN { FS = ":" }
+{
+  if (NF == 2) 
+  {
+    print $1*60 + $2
+  } 
+  else if (NF == 3) 
+  {
+    split($1, a, "-");
+    if (a[1] != "" && a[2] != "" ) 
+    {
+      print ((a[1]*24+a[2])*60 + $2) * 60 + $3;
+    } 
+    else 
+    {
+      print ($1*60 + $2) * 60 + $3;
+    }
+  }
+}
+
+
+9. shell中进行算术运算
+
+ speed=`echo "$sdata $edata $delaytime"|awk '{print(($2-$1)/$3)}'`

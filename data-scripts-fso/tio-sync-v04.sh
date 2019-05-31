@@ -72,8 +72,8 @@ if [ $procCmd -le 0 ];then
   echo "Please Wait ... "
   cd $destpre
   ctime1=`date --date='0 days ago' +%H:%M:%S`
-  #lftp -e "mirror --ignore-time --no-perms --continue --exclude /\$RECYCLE.BIN/$ --exclude /System Volume Information/$  --parallel=30  / .; quit" ftp://tio:ynao246135@192.168.111.120:21/
-  lftp -u $user,$password -e "set net:max-retries 5;set net:reconnect-interval-base 5;set net:reconnect-interval-multiplier 1 ;mirror --ignore-time --no-perms --continue --exclude /\$RECYCLE.BIN/$  --parallel=33  / .; quit" $srcdir1 
+  #lftp -e "mirror --ignore-time --no-perms --continue --no-umask --exclude /\$RECYCLE.BIN/$ --exclude /System Volume Information/$  --parallel=30  / .; quit" ftp://tio:ynao246135@192.168.111.120:21/
+  lftp -u $user,$password -e "mirror --ignore-time --no-perms --continue --exclude /\$RECYCLE.BIN/$  --parallel=33  / .; quit" $srcdir1 
   #wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir
   ctime2=`date --date='0 days ago' +%H:%M:%S`
   if [ $? -ne 0 ];then
