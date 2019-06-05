@@ -1,15 +1,15 @@
 #!/bin/bash
 #author: chen dong @fso
-#purposes: manually syncing TIO data in specified year(eg., 2019...) from remoteip to local lustre storage via wget over ftp
-#usage:  ./tio-copy.sh year(4 digits)
-#example: ./tio-copy.sh 2019
+#purposes: manually syncing TIO data in specified year(eg., 2019...) from remoteip to local lustre storage via lftp
+#usage:  ./tio-copy.sh year(4 digits) monthday(4 digits)
+#example: ./tio-copy.sh 2019 0603
 #changlog: 
 #      	 20190420      	Release 0.1	first prototype release 0.1
 #      	 20190421	Release 0.2	fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
 #        20190423      	Release 0.3	fix errors
 #	 20190426	Release 0.4	fix errors
 #        20190428       Release 0.5 	add monthday to the src dir
-
+# 	 20190603	Release 0.6     using lftp instead of wget
 trap 'onCtrlC' INT
 function onCtrlC(){
     echo "Ctrl-C Captured! "
@@ -53,7 +53,7 @@ fi
 echo " "
 echo "  ===== Welcome to TIO Data Copying System@FSO! =====   "
 echo "                   tio-copy.sh                          "
-echo "          Relase 0.5     20190428 10:42                 "
+echo "          Relase 0.6     20190603 11:36                 "
 echo "  Copy the TiO data from remote SSD to lustre manually  "
 echo " "
 procCmd=`ps ef|grep -w $procName|grep -v grep|wc -l`
@@ -74,9 +74,9 @@ if [ $procCmd -le 0 ];then
   echo "                   Please Waiting ... "
 #  read
   cd $destdir
-  wget --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir
-
-   if [ $? -ne 0 ];then
+  #wget --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir
+  lftp -u $user,$password -e "mirror --ignore-time --allow-suid --continue --exclude /\$RECYCLE.BIN/$ --exclude /System Volume Information/$ --parallel=33  / .; quit" $srcdir 
+  if [ $? -ne 0 ];then
     ctime1=`date --date='0 days ago' +%H:%M:%S`
     echo "$today $ctime1: Failed in Syncing Data from $srcdir to $destdir"
     cd /home/chd

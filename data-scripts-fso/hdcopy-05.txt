@@ -1,0 +1,81 @@
+﻿1. 远程拷贝ftp数据至lustre:
+		Release 0.6： 
+		cd /home/chd
+		./tio-copy.sh 2019 0427 TIO
+		
+		含义：从ftp server端copy 20190427的TIO数据至/lustre，2019 0427 TIO可以根据实际情况更改
+ 
+2. 拷贝硬盘数据文件到lustre:
+
+
+		Release 0.8： 改进chmod的速度,并自动统计源数据和目标数据大小
+		Release 0.9:  bug fixed
+		
+		cd /home/chd
+		./hd2lustre.sh /data1 /lustre/data 2019 TIO
+
+		注意： 第二条命令的含义是 硬盘拷贝到lustre  插入的硬盘将挂在/data1目录下  lustre的文件位于/lustre/data目录下  拷贝的文件是2019年的 数据类型是TIO(或者HA)
+
+		       上述参数均可根据实际情况修改
+
+
+
+3. 拷贝lustre数据到硬盘：
+
+
+		cd /home/chd
+
+		./lustre2hd.sh /lustre/data /data 2019 0420 TIO
+
+		注意： 第二条命令的含义是 lustre文件拷贝到硬盘  lustre的文件位于/lustre/data目录下 插入的硬盘将挂在/data目录下    拷贝的文件是2019年 0420 TIO数据
+
+		上述参数均可根据实际情况修改
+
+
+		注意：
+		上述脚本会检查挂载硬盘的目录（如/data)，是否为空，如果不为空，会提示用户换个挂载目录(如/data不为空，可以考虑/data1,/data2)
+		目前系统已经建好 /data /data1 /data2三个目录供用户使用
+
+
+		上述脚本运行后，脚本自动扫描系统除系统硬盘sda外的所有硬盘并获取硬盘设备名称如下所示(示例，实际可能只有1个或多个)：
+		0. /dev/sdb1
+		1. /dev/sdc1
+		2. /dev/sdd1
+		3. /dev/sde1
+		新插入的硬盘一般是最后一个，故根据提示选最后一个设备对应的数字即可；
+
+
+4. 拷贝lustre/data/下面任意目录到硬盘：
+		cd /home/chd
+  		./data-copy.sh /lustre/data/2019/20190518/TIO/12741/050530/ /data
+
+		/lustre/data/2019/20190518/TIO/12741/050530/ 是源数据目录，结尾带/
+                /data是目标目录，结尾不带/
+  		
+		注意：
+		上述脚本会检查挂载硬盘的目录（如/data)，是否为空，如果不为空，会提示用户换个挂载目录(如/data不为空，可以考虑/data1,/data2)
+		目前系统已经建好 /data /data1 /data2三个目录供用户使用
+
+
+		上述脚本运行后，脚本自动扫描系统除系统硬盘sda外的所有硬盘并获取硬盘设备名称如下所示(示例，实际可能只有1个或多个)：
+		0. /dev/sdb1
+		1. /dev/sdc1
+		2. /dev/sdd1
+		3. /dev/sde1
+		新插入的硬盘一般是最后一个，故根据提示选最后一个设备对应的数字即可
+5. 注意事项：
+		上述脚本可以并行运行，但是需要注意：
+		1） 硬盘必须挂载在不同的目录下；
+		2）在选择硬盘设备名称时候，注意选择对应的数字，如0/1等即可；
+
+		遇到手动无法umount（如umount  /data 显示错误或者设备忙），请如下处理（示例）：
+		输入：fuser /data/
+		显示：/data/:              22267c
+		输入： kill -9 22267
+		然后再尝试umount /data
+
+		遇到现实 ntfs filesytem has benn exclusively opened, 无法挂载，也无法卸载，上一个方法无效，请尝试：
+		假设设备是/dev/sdb1, 挂在于/data
+		fusermount -uz /data
+		mount -t ntfs-3g /dev/sdb1 /data
+		umount /data

@@ -1,6 +1,6 @@
 #!/bin/bash
 #author: chen dong @fso
-#purposes: manually syncing TIO data in specified year(eg., 2019...) from remoteip to local lustre storage via wget over ftp
+#purposes: manually syncing TIO/HA data in specified year(eg., 2019...) from remoteip to local lustre storage via lftp
 #usage:  ./fso-copy.sh year(4 digits) monthday(4 digits) datatype(TIO/HA)
 #example: ./fso-copy.sh 2019 0428 HA
 #changlog: 
@@ -10,6 +10,8 @@
 #	 20190426	Release 0.4	fix errors
 #        20190428       Release 0.5 	add monthday to the src dir
 #	                Release 0.6     datatype is an option now
+#	 20190603	Release 0.7	using lftp instead of wget
+
 trap 'onCtrlC' INT
 function onCtrlC(){
     echo "Ctrl-C Captured! "
@@ -54,9 +56,9 @@ else
 fi
 
 echo " "
-echo "   ===== Welcome to FSO Data Copying System@FSO! =====  "
+echo "   ====== Welcome to FSO Data Copying System@FSO! ======  "
 echo "                      fso-copy.sh                       "  
-echo "             Relase 0.6     20190428 20:43              "
+echo "             Relase 0.7     20190603  11:43              "
 echo " Copy the TiO/HA data from remote SSD to lustre manually "
 echo " "
 procCmd=`ps ef|grep -w $procName|grep -v grep|wc -l`
@@ -77,10 +79,11 @@ if [ $procCmd -le 0 ];then
   echo "                   Please Waiting ... "
 #  read
   cd $destdir
-  wget --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=$ftpuser --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir
-
+  ctime=`date --date='0 days ago' +%H:%M:%S`
+  #wget --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=$ftpuser --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir
+  lftp -u $user,$password -e "mirror --ignore-time --allow-suid --continue --exclude /\$RECYCLE.BIN/$ --exclude /System Volume Information/$ --parallel=33  / .; quit" $srcdir
+  ctime1=`date --date='0 days ago' +%H:%M:%S`
     if [ $? -ne 0 ];then
-      ctime1=`date --date='0 days ago' +%H:%M:%S`
       echo "$today $ctime1: Failed in Syncing Data from $srcdir to $destdir"
       cd /home/chd
       exit 1
@@ -88,13 +91,13 @@ if [ $procCmd -le 0 ];then
 
   targetdir=${destdir}${datatype}
   filenumber=`ls -lR $targetdir | grep "^-" | wc -l`
-  srcsize=`du -sh $targetdir`
-  ctime1=`date --date='0 days ago' +%H:%M:%S`
+  syncsize=`du -sh $targetdir`
+  #ctime1=`date --date='0 days ago' +%H:%M:%S`
   #chmod 777 -R $destdir
 
   echo "$today $ctime1: Succeeded in Syncing $datatype data@FSO!"
   echo " Synced file No. : $filenumber"
-  echo " Synced data size: $srcsize"
+  echo " Synced data size: $syncsize"
   echo "        Time used: $ctime to  $ctime1"
 
   rm -rf $lockfile
