@@ -113,7 +113,7 @@ pid=$(ps x|grep -w $procName|grep -v grep|awk '{print $1}')
 if [ $procCmd -le 0 ];then
   destdir=${destpre0}${syssep}${cyear}${syssep}${today}${syssep}
   if [ ! -d "$destdir" ]; then
-    mkdir -m 777 -p $destdir
+    mkdir -p $destdir
   else
     echo "$today $ctime: $destdir exists!"
   fi
@@ -154,7 +154,6 @@ if [ $procCmd -le 0 ];then
   chmod 766 -R $targetdir &
   waiting "$!" "Permission Changing" "Changing Permission"
   if [ $? -ne 0 ];then
-    ctime3=`date --date='0 days ago' +%H:%M:%S`
     echo "$today $ctime3: Changing Permission of $datatype Failed!"
     cd /home/chd/
     exit 1
@@ -167,7 +166,6 @@ if [ $procCmd -le 0 ];then
   ls -lR $targetdir | grep "^-" | wc -l > $filenumber1 &
   waiting "$!" "File Number Sumerizing" "Sumerizing File Number"
   if [ $? -ne 0 ];then
-    ctime3=`date --date='0 days ago' +%H:%M:%S`
     echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
     cd /home/chd/
     exit 1
@@ -176,7 +174,6 @@ if [ $procCmd -le 0 ];then
   du -sm $targetdir|awk '{print $1}' > $filesize1 &
   waiting "$!" "File Size Summerizing" "Sumerizing File Size"
   if [ $? -ne 0 ];then
-    ctime3=`date --date='0 days ago' +%H:%M:%S`
     echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
     cd /home/chd/
     exit 1

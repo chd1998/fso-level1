@@ -1,7 +1,7 @@
 #!/bin/bash
 #author: chen dong @fso
 #purposes: periodically syncing data from remoteip to local lustre storage via lftp
-#usage:  run in crontab every 1 min.  from 08:00-20:00
+#usage:  run in crontab every 1 min.  from 08:00-23:00
 #example: none
 #changlog: 
 #      	20190420	release 0.1
@@ -14,7 +14,6 @@
 #	20190607	release 0.8	test new feature
 #			release 0.9	test new feature
 #	20190608	release 1.0	revised lftp performance
-#     	            	release 1.1	revised display info
 
 #waiting pid taskname prompt
 waiting() {
@@ -69,22 +68,12 @@ password="ynao246135"
 
 filenumber=/home/chd/log/$(basename $0)-number.dat
 filesize=/home/chd/log/$(basename $0)-size.dat
-filenumber1=/home/chd/log/$(basename $0)-number1.dat
-filesize1=/home/chd/log/$(basename $0)-size1.dat
-
 lockfile=/home/chd/log/$(basename $0).lock
-
 if [ ! -f $filenumber ];then
   echo "0">$filenumber
 fi
 if [ ! -f $filesize ];then 
   echo "0">$filesize
-fi
-if [ ! -f $filenumber1 ];then
-  echo "0">$filenumber1
-fi
-if [ ! -f $filesize1 ];then
-  echo "0">$filesize1
 fi
 
 if [ -f $lockfile ];then
@@ -103,7 +92,7 @@ fi
 echo " "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
 echo "                  tio-sync.sh                          "
-echo "          (Release 1.1 20190608 21:43)                 "
+echo "          (Release 1.0 20190608 15:25)                 "
 echo "                                                       "
 echo "                $today $ctime                          "
 echo "======================================================="
@@ -113,7 +102,7 @@ pid=$(ps x|grep -w $procName|grep -v grep|awk '{print $1}')
 if [ $procCmd -le 0 ];then
   destdir=${destpre0}${syssep}${cyear}${syssep}${today}${syssep}
   if [ ! -d "$destdir" ]; then
-    mkdir -m 777 -p $destdir
+    mkdir -p $destdir
   else
     echo "$today $ctime: $destdir exists!"
   fi
@@ -154,36 +143,14 @@ if [ $procCmd -le 0 ];then
   chmod 766 -R $targetdir &
   waiting "$!" "Permission Changing" "Changing Permission"
   if [ $? -ne 0 ];then
-    ctime3=`date --date='0 days ago' +%H:%M:%S`
     echo "$today $ctime3: Changing Permission of $datatype Failed!"
     cd /home/chd/
     exit 1
   fi
   ctime2=`date --date='0 days ago' +%H:%M:%S`
   echo "$today $ctime2: Summerizing File Numbers & Size..."
-  #n2=`ls -lR $targetdir | grep "^-" | wc -l` 
-  #s2=`du -sm $targetdir|awk '{print $1}'` 
-
-  ls -lR $targetdir | grep "^-" | wc -l > $filenumber1 &
-  waiting "$!" "File Number Sumerizing" "Sumerizing File Number"
-  if [ $? -ne 0 ];then
-    ctime3=`date --date='0 days ago' +%H:%M:%S`
-    echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
-    cd /home/chd/
-    exit 1
-  fi
-
-  du -sm $targetdir|awk '{print $1}' > $filesize1 &
-  waiting "$!" "File Size Summerizing" "Sumerizing File Size"
-  if [ $? -ne 0 ];then
-    ctime3=`date --date='0 days ago' +%H:%M:%S`
-    echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
-    cd /home/chd/
-    exit 1
-  fi
-
-  n2=$(cat $filenumber1)
-  s2=$(cat $filesize1)
+  n2=`ls -lR $targetdir | grep "^-" | wc -l` 
+  s2=`du -sm $targetdir|awk '{print $1}'` 
 
   sn=`echo "$n1 $n2"|awk '{print($2-$1)}'`
   ss=`echo "$s1 $s2"|awk '{print($2-$1)}'`
