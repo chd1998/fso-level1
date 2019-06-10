@@ -1,7 +1,7 @@
 #!/bin/bash
 #author: chen dong @fso
 #purposes: periodically syncing data from remoteip to local lustre storage via lftp
-#usage:  run in crontab every 1 min.  from 08:00-20:00
+#usage:  run in crontab every 1 min.  from 08:00-23:00
 #example: none
 #changlog: 
 #      	20190420	release 0.1
@@ -14,7 +14,6 @@
 #	20190607	release 0.8	test new feature
 #			release 0.9	test new feature
 #	20190608	release 1.0	revised lftp performance
-#     	            	release 1.1	revised display info
 
 #waiting pid taskname prompt
 waiting() {
@@ -69,22 +68,12 @@ password="ynao246135"
 
 filenumber=/home/chd/log/$(basename $0)-number.dat
 filesize=/home/chd/log/$(basename $0)-size.dat
-filenumber1=/home/chd/log/$(basename $0)-number1.dat
-filesize1=/home/chd/log/$(basename $0)-size1.dat
-
 lockfile=/home/chd/log/$(basename $0).lock
-
 if [ ! -f $filenumber ];then
   echo "0">$filenumber
 fi
 if [ ! -f $filesize ];then 
   echo "0">$filesize
-fi
-if [ ! -f $filenumber1 ];then
-  echo "0">$filenumber1
-fi
-if [ ! -f $filesize1 ];then
-  echo "0">$filesize1
 fi
 
 if [ -f $lockfile ];then
@@ -103,7 +92,7 @@ fi
 echo " "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
 echo "                  tio-sync.sh                          "
-echo "          (Release 1.1 20190608 21:43)                 "
+echo "          (Release 1.0 20190608 15:25)                 "
 echo "                                                       "
 echo "                $today $ctime                          "
 echo "======================================================="
@@ -113,7 +102,7 @@ pid=$(ps x|grep -w $procName|grep -v grep|awk '{print $1}')
 if [ $procCmd -le 0 ];then
   destdir=${destpre0}${syssep}${cyear}${syssep}${today}${syssep}
   if [ ! -d "$destdir" ]; then
-    mkdir -m 777 -p $destdir
+    mkdir -p $destdir
   else
     echo "$today $ctime: $destdir exists!"
   fi
@@ -138,8 +127,8 @@ if [ $procCmd -le 0 ];then
   cd $destdir
   ctime1=`date --date='0 days ago' +%H:%M:%S`
   mytime1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-  #lftp -e "mirror --ignore-time --no-perms --continue --no-umask --allow-chown --exclude '[RECYCLE]' --exclude System\ Volume\ Information/ --parallel=30  / .; quit" ftp://tio:ynao246135@192.168.111.120:21/
-  lftp -u $user,$password -e "mirror --ignore-time --continue --no-perms --no-umask --allow-chown --allow-suid --parallel=33  . .; quit" $srcdir1 >/dev/null 2>&1 &
+  #lftp -e "mirror --ignore-time --no-perms --continue --no-umask --exclude '[RECYCLE]' --exclude System\ Volume\ Information/ --parallel=30  / .; quit" ftp://tio:ynao246135@192.168.111.120:21/
+  lftp -u $user,$password -e "mirror --ignore-time --continue   --parallel=33  . .; quit" $srcdir1 >/dev/null 2>&1 &
   waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
   #wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir
   ctime3=`date --date='0 days ago' +%H:%M:%S`
@@ -151,39 +140,17 @@ if [ $procCmd -le 0 ];then
   ctime2=`date --date='0 days ago' +%H:%M:%S`
   mytime2=`echo $ctime3|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
   
-  chmod 777 -R $targetdir &
+  chmod 766 -R $targetdir &
   waiting "$!" "Permission Changing" "Changing Permission"
   if [ $? -ne 0 ];then
-    ctime3=`date --date='0 days ago' +%H:%M:%S`
     echo "$today $ctime3: Changing Permission of $datatype Failed!"
     cd /home/chd/
     exit 1
   fi
   ctime2=`date --date='0 days ago' +%H:%M:%S`
   echo "$today $ctime2: Summerizing File Numbers & Size..."
-  #n2=`ls -lR $targetdir | grep "^-" | wc -l` 
-  #s2=`du -sm $targetdir|awk '{print $1}'` 
-
-  ls -lR $targetdir | grep "^-" | wc -l > $filenumber1 &
-  waiting "$!" "File Number Sumerizing" "Sumerizing File Number"
-  if [ $? -ne 0 ];then
-    ctime3=`date --date='0 days ago' +%H:%M:%S`
-    echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
-    cd /home/chd/
-    exit 1
-  fi
-
-  du -sm $targetdir|awk '{print $1}' > $filesize1 &
-  waiting "$!" "File Size Summerizing" "Sumerizing File Size"
-  if [ $? -ne 0 ];then
-    ctime3=`date --date='0 days ago' +%H:%M:%S`
-    echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
-    cd /home/chd/
-    exit 1
-  fi
-
-  n2=$(cat $filenumber1)
-  s2=$(cat $filesize1)
+  n2=`ls -lR $targetdir | grep "^-" | wc -l` 
+  s2=`du -sm $targetdir|awk '{print $1}'` 
 
   sn=`echo "$n1 $n2"|awk '{print($2-$1)}'`
   ss=`echo "$s1 $s2"|awk '{print($2-$1)}'`

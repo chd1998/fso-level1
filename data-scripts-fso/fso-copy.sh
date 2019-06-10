@@ -11,6 +11,42 @@
 #        20190428       Release 0.5 	add monthday to the src dir
 #	                Release 0.6     datatype is an option now
 #	 20190603	Release 0.7	using lftp instead of wget
+#	 20190604	Release 0.8	add progress bar to lftp
+#	 20190608	Release 0.9	fixed error in directory
+#	 		Release 1.0     improve display info
+
+#waiting pid taskname prompt
+waiting() {
+        local pid="$1"
+        taskname="$2"
+        procing "$3" &
+        local tmppid="$!"
+        wait $pid
+        tput rc
+        tput ed
+	ctime=`date --date='0 days ago' +%H:%M:%S`
+	today=`date --date='0 days ago' +%Y%m%d`
+        echo "$today $ctime: $2 Task Has Done!"
+#        echo "                   Finishing..."
+        kill -6 $tmppid >/dev/null 1>&2
+}
+
+procing() {
+        trap 'exit 0;' 6
+        tput ed
+        while [ 1 ]
+        do
+            for j in '-' '\\' '|' '/'
+            do
+                tput sc
+                today=`date --date='0 days ago' +%Y%m%d`
+                ctime=`date --date='0 days ago' +%H:%M:%S`
+                echo -ne  "$today $ctime: $1...   $j"
+                sleep 1
+                tput rc
+          done
+        done
+}
 
 trap 'onCtrlC' INT
 function onCtrlC(){
@@ -20,28 +56,28 @@ function onCtrlC(){
     exit 1
 }
 
-procName="wget"
 cyear=`date --date='0 days ago' +%Y`
 today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
+
+if [ $# -ne 3 ]  ;then
+  echo "Copy specified date TIO/HA data on remote host to /lustre/data mannually"
+  echo "Usage: ./fso-copy.sh year(4 digits)  monthday(4 digits) datatype(TIO/HA)"
+  echo "Example: ./fso-copy.sh 2019 0427 TIO"
+  exit 1
+fi
+
+procName="lftp"
 syssep="/"
 destpre0="/lustre/data"
-srcpre0="ftp://192.168.111.120"
+ftpserver="ftp://192.168.111.120"
+remoteport="21"
 srcyear=$1
 srcmonthday=$2
 datatype=$3
 ftpuser=$(echo $datatype|tr '[A-Z]' '[a-z]')
+password="ynao246135"
 
-if [ $# -ne 3 ]  ;then
-  echo "Use this script to copy TIO data of year month day specified on remote host to /lustre/data mannually"
-  echo "Usage: ./tio-copy.sh year(4 digits)  monthday(4 digits) datatype(TIO/HA)"
-  echo "Example: ./tio-copy.sh 2019 0427 TIO"
-  exit 1
-fi
-#echo "$ftpuser"
-#read
-#datatype="TIO"
-remotePort="21"
 lockfile=/home/chd/log/$(basename $0)_lockfile
 if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
@@ -56,49 +92,87 @@ else
 fi
 
 echo " "
-echo "   ====== Welcome to FSO Data Copying System@FSO! ======  "
-echo "                      fso-copy.sh                       "  
-echo "             Relase 0.7     20190603  11:43              "
+echo "======== Welcome to FSO Data Copying System@FSO! ========"
+echo "                                                         "
+echo "                      fso-copy.sh                        "  
+echo "                                                         "
+echo "             Relase 1.0     20190608  23:33              "
 echo " Copy the TiO/HA data from remote SSD to lustre manually "
+echo "                                                         "
+echo "========================================================="
 echo " "
 procCmd=`ps ef|grep -w $procName|grep -v grep|wc -l`
 pid=$(ps x|grep -w $procName|grep -v grep|awk '{print $1}')
 if [ $procCmd -le 0 ];then
-  destdir=${destpre0}${syssep}${srcyear}${syssep}
-  srcdir=${srcpre0}${syssep}${srcyear}${srcmonthday}${syssep}
+  destdir=${destpre0}${syssep}${srcyear}${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
+  #remotesrcdir=${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
+  ftpserver1=${ftpserver}:${remoteport}
+  srcdir=${ftpserver1}${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
+  srcdir1=${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
 
   if [ ! -d "$destdir" ]; then
-    mkdir $destdir
+    mkdir -p -m 777 $destdir
   else
     echo "$destdir already exist!"
   fi
   ctime=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctime: Copying $datatype data@FSO..."
+  echo "$today $ctime: Syncing $datatype data @ FSO..."
   echo "                   From: $srcdir "
   echo "                   To  : $destdir "
-  echo "                   Please Waiting ... "
+#  echo ""
 #  read
   cd $destdir
-  ctime=`date --date='0 days ago' +%H:%M:%S`
+  ctimes=`date --date='0 days ago' +%H:%M:%S`
   #wget --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=$ftpuser --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir
-  lftp -u $user,$password -e "mirror --ignore-time --allow-suid --continue --exclude /\$RECYCLE.BIN/$ --exclude /System Volume Information/$ --parallel=33  / .; quit" $srcdir
+  #lftp -u $ftpuser,$password -e "mirror  --no-perms --only-missing --parallel=33 . $destdir; quit" $srcdir
+  lftp -u $ftpuser,$password -e "mirror  --no-perms --no-umask --allow-chown --allow-suid --only-missing --parallel=33 .  $destdir; quit" $srcdir >/dev/null 2>&1 &
+  waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
+  #echo "Please Wait..."
   ctime1=`date --date='0 days ago' +%H:%M:%S`
     if [ $? -ne 0 ];then
-      echo "$today $ctime1: Failed in Syncing Data from $srcdir to $destdir"
+      echo "$today $ctime1: Failed in Syncing $datatype Data from $srcdir to $destdir"
       cd /home/chd
       exit 1
     fi
 
-  targetdir=${destdir}${datatype}
-  filenumber=`ls -lR $targetdir | grep "^-" | wc -l`
-  syncsize=`du -sh $targetdir`
-  #ctime1=`date --date='0 days ago' +%H:%M:%S`
-  #chmod 777 -R $destdir
+  targetdir=${destdir}
 
-  echo "$today $ctime1: Succeeded in Syncing $datatype data@FSO!"
-  echo " Synced file No. : $filenumber"
-  echo " Synced data size: $syncsize"
-  echo "        Time used: $ctime to  $ctime1"
+  ls -lR $targetdir | grep "^-" | wc -l > tmpfn.dat &
+  waiting "$!" "File Number Sumerizing" "Sumerizing File Number"
+  if [ $? -ne 0 ];then
+    ctime3=`date --date='0 days ago' +%H:%M:%S`
+    echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
+    cd /home/chd/
+    exit 1
+  fi
+  filenumber=$(cat tmpfn.dat)
+
+  du -sh $targetdir > tmpfs.dat &
+  waiting "$!" "File Size Summerizing" "Sumerizing File Size"
+  if [ $? -ne 0 ];then
+    ctime3=`date --date='0 days ago' +%H:%M:%S`
+    echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
+    cd /home/chd/
+    exit 1
+  fi  
+  filesize=$(cat tmpfs.dat)
+
+  chmod 777 -R $destdir &
+  waiting "$!" "Permission Changing" "Changing Permission"
+  if [ $? -ne 0 ];then
+    ctime3=`date --date='0 days ago' +%H:%M:%S`
+    echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
+    cd /home/chd/
+    exit 1
+  fi
+
+  ctime2=`date --date='0 days ago' +%H:%M:%S`
+  #chmod 777 -R $destdir
+  echo " " 
+  echo "$today $ctime2: Succeeded in Syncing $datatype data@FSO!"
+  echo "Synced file No.  : $filenumber"
+  echo "Synced data size : $filesize"
+  echo "       Time used : $ctimes to  $ctime2"
 
   rm -rf $lockfile
   cd /home/chd/

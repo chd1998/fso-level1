@@ -158,8 +158,8 @@ def sir_main(dirn, sys_sep, filen, left=[0, 0], right=[0, 0], disflag=True, file
 
 				c_subpix, dis_s_subpix, dis_s_pix, sub, cor = align_all(im0, im, dis_s_pix, dis_s_subpix, X, Y)
 
-				if cor > 0.7:
-						im0 = im
+				#if cor > 0.7:
+				#		im0 = im
 
 				dxy.append(list(np.hstack((dis_s_subpix, cor))))
 
@@ -230,7 +230,7 @@ def align_all(s_org, c_org, dis_s_pix, dis_s_subpix, X, Y):
 		#print("here")
 		c_subpix = np.array([sub_x, sub_y]) + dis_c_pix
 		#print("here")
-		dis_c_subpix = c_subpix + dis_s_subpix
+		dis_c_subpix = c_subpix #+ dis_s_subpix
 		#print(dis_c_subpix[0], dis_c_subpix[1])
 		c_subpix = immove(c_org, dis_c_subpix[0], dis_c_subpix[1]).astype('float32')
 		#print("here")
@@ -248,7 +248,7 @@ def align_subpix(A, B, X, Y):
 				standimage = imgcut(A, X, Y)
 				compimage = imgcut(B, X, Y)
 				M, N = standimage.shape
-				L = np.array([256, M, N]).min()
+				L = np.array([600, M, N]).min()
 
 				T1, T2 = M // L, N // L
 
