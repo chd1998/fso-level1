@@ -3,6 +3,12 @@
 Created on Sat Dec 15 22:08:54 2018
 Solar Image Registration （SIR）
 @author: jkf
+
+Usage:
+python sir-fso-01.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>
+Example:
+Python sir-fso-01.py -p d:\data\  -i *.fits -d True --sx 250 --sy 250 --ex 750 --ey 750 -v test.avi -o True
+
 ***change log***
 2019/02/05:
 sir-fso-cuda-01.py:working with cupy(cuda) & modified by chen dong
