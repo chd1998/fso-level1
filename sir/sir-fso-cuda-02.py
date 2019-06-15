@@ -373,7 +373,8 @@ def xcorrcenter(standimage, compimage, R0, flag):
 			c_gpu = cp.fft.ifft2(c_gpu)
 		#print("calculating image for comparison...")
             #multiply
-			sc_gpu = s_gpu * c_gpu
+			#sc_gpu = s_gpu * c_gpu
+			sc_gpu = cp.multiply(s_gpu,c_gpu)
             #inverse the upper result
 			sc_gpu = cp.fft.ifft2(sc_gpu)
 		#print("calculating product of 2 images...")

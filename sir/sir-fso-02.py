@@ -116,7 +116,7 @@ def main(argv):
 	sys.exit(0)
 
 def sir_main(dirn, sys_sep, filen, left=[0, 0], right=[0, 0], disflag=True, fileflag=False, videoname=None):
-		plt.close('Sir 3.0 - with cuda')
+		plt.close('Sir 3.0 - without cuda')
 		plt.close('Subpix shift - with cuda')
 		plt.close('Correlation - with cuda')
 		total_time = 0.0
