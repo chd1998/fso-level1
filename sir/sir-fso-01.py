@@ -80,7 +80,8 @@ def main(argv):
 		elif opt in ('-o'):
 			createfile = arg
 		else:
-			print ('python sir-fso.py -p <inputpath> -i <inputfile> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
+			print ('Usage: python sir-fso-01.py -p <inputpath> -i <inputfile> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
+			print ('Example: python sir-fso-01.py -p d:\\fso-test -i *.fits -d False --sx 200 --sy 200 --ex 700 --ey 700  -v test.avi -o True')
 			sys.exit()
 
 	sx = np.int32(sx)
@@ -111,9 +112,9 @@ def main(argv):
 	sys.exit(0)
 
 def sir_main(dirn, sys_sep, filen, left=[0, 0], right=[0, 0], disflag=True, fileflag=False, videoname=None):
-		plt.close('Sir 3.0 - with cuda')
-		plt.close('Subpix shift - with cuda')
-		plt.close('Correlation - with cuda')
+		plt.close('Sir 3.0 - without cuda')
+		plt.close('Subpix shift - without cuda')
+		plt.close('Correlation - without cuda')
 		total_time = 0.0
 
 		filename = glob.glob(dirn + sys_sep + filen)

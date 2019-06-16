@@ -79,7 +79,8 @@ def main(argv):
 		elif opt in ('-o'):
 			createfile = arg
 		else:
-			print ('python sir-fso.py -p <inputpath> -i <inputfile> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
+			print ('Usage: python sir-fso-cuda-01.py -p <inputpath> -i <inputfile> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
+			print ('Example: python sir-fso-cuda-01.py -p d:\\fso-test -i *.fits -d False --sx 200 --sy 200 --ex 700 --ey 700  -v test.avi -o True')
 			sys.exit()
 
 	sx = np.int32(sx)

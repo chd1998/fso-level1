@@ -138,8 +138,8 @@ if [ $procCmd -le 0 ];then
   cd $destdir
   ctime1=`date --date='0 days ago' +%H:%M:%S`
   mytime1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-  #lftp -e "mirror --ignore-time --no-perms --continue --no-umask --exclude '[RECYCLE]' --exclude System\ Volume\ Information/ --parallel=30  / .; quit" ftp://tio:ynao246135@192.168.111.120:21/
-  lftp -u $user,$password -e "mirror --ignore-time --continue   --parallel=33  . .; quit" $srcdir1 >/dev/null 2>&1 &
+  #lftp -e "mirror --ignore-time --no-perms --continue --no-umask --allow-chown --exclude '[RECYCLE]' --exclude System\ Volume\ Information/ --parallel=30  / .; quit" ftp://tio:ynao246135@192.168.111.120:21/
+  lftp -u $user,$password -e "mirror --ignore-time --continue --no-perms --no-umask --allow-chown --allow-suid --parallel=40  . .; quit" $srcdir1 >/dev/null 2>&1 &
   waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
   #wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir
   ctime3=`date --date='0 days ago' +%H:%M:%S`
@@ -151,7 +151,7 @@ if [ $procCmd -le 0 ];then
   ctime2=`date --date='0 days ago' +%H:%M:%S`
   mytime2=`echo $ctime3|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
   
-  chmod 766 -R $targetdir &
+  chmod 777 -R $targetdir &
   waiting "$!" "Permission Changing" "Changing Permission"
   if [ $? -ne 0 ];then
     ctime3=`date --date='0 days ago' +%H:%M:%S`
