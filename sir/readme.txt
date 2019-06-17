@@ -8,8 +8,8 @@ Solar Image Registration(sir) for FSO
 Windows: 7以上
 Linux
 发布版本：
-	Sir-fso-01: 普通Python版本，需要安装Python，并安装numpy, scipy, astropy, matplotlib等包
-	Sir-fso-cuda-01:gpu加速Python版本，需要安装python,并安装numpy,scipy,astropy,cudatoolkit,cupy等包
+	Sir-fso-xx: 普通Python版本，需要安装Python，并安装numpy, scipy, astropy, matplotlib等包
+	Sir-fso-cuda-xx:gpu加速Python版本，需要安装python,并安装numpy,scipy,astropy,cudatoolkit,cupy等包
 版本历史：
 2018/12/15: 季凯帆，原型版本
 2019/02/05: 陈东，cuda(cupy)加速版本01，仅支持nvidia系列gpu
@@ -37,7 +37,7 @@ Linux
 	进入程序目录，执行：
 	python sir-fso-cuda-01.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>
 例：
-Python sir-fso-cuda-01.py -p d:\data\  -i *.fits -d True --sx 250 --sy 250 --ex 750 --ey 750 -v test.avi -o True
+Python sir-fso-cuda-01.py -p /home/chd/data/  -i *.fits -d True --sx 250 --sy 250 --ex 750 --ey 750 -v test.avi -o True
 
 参数说明：
 -p  	数据文件目录, 默认当前目录

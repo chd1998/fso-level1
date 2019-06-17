@@ -5,15 +5,20 @@ Solar Image Registration （SIR）
 @author: jkf
 
 Usage:
-python sir-fso-01.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>
+python sir-fso-02.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>
 Example:
-Python sir-fso-01.py -p d:\data\  -i *.fits -d True --sx 250 --sy 250 --ex 750 --ey 750 -v test.avi -o True
+Python sir-fso-02.py -p d:\data\  -i *.fits -d True --sx 250 --sy 250 --ex 750 --ey 750 -v test.avi -o True
+
 
 ***change log***
 2019/02/05:
 sir-fso-cuda-01.py:working with cupy(cuda) & modified by chen dong
 2019/02/08:
 sir-fso-01.py:working without cuda & modifiied by chen dong
+2019/06/14:
+2019/06/14
+sir-fso-02.py: revised
+sir-fso-cuda-02.py:revised
 """
 
 import sys, getopt
@@ -80,8 +85,8 @@ def main(argv):
 		elif opt in ('-o'):
 			createfile = arg
 		else:
-			print ('Usage: python sir-fso-01.py -p <inputpath> -i <inputfile> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
-			print ('Example: python sir-fso-01.py -p d:\\fso-test -i *.fits -d False --sx 200 --sy 200 --ex 700 --ey 700  -v test.avi -o True')
+			print ('Usage: python sir-fso-02.py -p <inputpath> -i <inputfile> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
+			print ('Example: python sir-fso-02.py -p d:\\fso-test -i *.fits -d False --sx 200 --sy 200 --ex 700 --ey 700  -v test.avi -o True')
 			sys.exit()
 
 	sx = np.int32(sx)
