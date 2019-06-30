@@ -125,7 +125,7 @@ if [ $procCmd -le 0 ];then
   ctimes=`date --date='0 days ago' +%H:%M:%S`
   #wget --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=$ftpuser --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir
   #lftp -u $ftpuser,$password -e "mirror  --no-perms --only-missing --parallel=33 . $destdir; quit" $srcdir
-  lftp -u $ftpuser,$password -e "mirror  --no-perms --only-missing --parallel=33 .  $destdir; quit" $srcdir >/dev/null 2>&1 &
+  lftp -u $ftpuser,$password -e "mirror  --no-perms --no-umask --allow-chown --allow-suid --only-missing --parallel=33 .  $destdir; quit" $srcdir >/dev/null 2>&1 &
   waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
   #echo "Please Wait..."
   ctime1=`date --date='0 days ago' +%H:%M:%S`
@@ -134,6 +134,10 @@ if [ $procCmd -le 0 ];then
       cd /home/chd
       exit 1
     fi
+
+  t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+  t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+
 
   targetdir=${destdir}
 
@@ -165,14 +169,24 @@ if [ $procCmd -le 0 ];then
     cd /home/chd/
     exit 1
   fi
+  
+  timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
+  if [ $timediff -eq 0 ]; then
+    speed=0
+  else
+    speed=`echo "$filesize $timediff"|awk '{print($1/$2)}'`
+  fi  
 
   ctime2=`date --date='0 days ago' +%H:%M:%S`
   #chmod 777 -R $destdir
   echo " " 
-  echo "$today $ctime2: Succeeded in Syncing $datatype data@FSO!"
+  echo "$today $ctime2: Succeeded in Syncing $datatype data @ FSO!"
   echo "Synced file No.  : $filenumber"
   echo "Synced data size : $filesize"
-  echo "       Time used : $ctimes to  $ctime2"
+  echo "           Speed : $speed MB/s"
+  echo "       Time Used : $timediff secs."
+  echo "       Time From : $ctimes "
+  echo "              To : $ctime2 "
 
   rm -rf $lockfile
   cd /home/chd/

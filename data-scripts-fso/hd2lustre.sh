@@ -13,6 +13,8 @@
 #         20190425 release 0.7, add more info for chmod
 #		   release 0.8, sum of the data copied in MB
 #                  Release 0.9, sum of file numbers both in src and dest
+#	  20190625 Release 1.0, add speed info 
+
 trap 'onCtrlC' INT
 function onCtrlC(){
     echo "Ctrl-C Captured! "
@@ -23,7 +25,13 @@ function onCtrlC(){
 
 
 echo " "
-echo "===== Welcome to HD-->Lustre data Archiving System @FSO (Rev. 0.9 20190426 22:10) ====="
+echo " "
+echo "====== Welcome to HD-->Lustre data Archiving System @FSO ======"
+echo "                 Release 1.0 20190625 21:10)                   "
+echo "                                                               "
+echo "              Syncing data from local HD to Lustre             "
+echo "                                                               "
+echo "==============================================================="
 echo " "
 
 cyear=`date --date='0 days ago' +%Y`
@@ -121,11 +129,13 @@ srcfilenum=`ls -lR $srcdir| grep "^-" | wc -l`
 
 ctime=`date --date='0 days ago' +%H:%M:%S`
 echo " "
+echo "==============================================================="
 echo "$today $ctime: Archiving data from HD to lustre....."
 echo "                   From: $srcdir on $dev"
 echo "                   To  : $destdir"
 echo "$today $ctime: Copying...."
 echo "                   Please Wait..."
+echo "==============================================================="
 #read
 
 #cd $srcdir1
@@ -144,6 +154,10 @@ if [ $? -ne 0 ];then
 fi
 
 ctime1=`date --date='0 days ago' +%H:%M:%S`
+
+t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+
 echo "$today $ctime1: Copying Finished!....."
 #echo "$today $ctime1: Changing Permissions of Data....."
 echo "$today $ctime1: Waiting for checking..." 
@@ -173,11 +187,20 @@ umount $dev
 
 destsize=`cat sum.log | awk '{a+= $0}END{print a}'`
 destfilenum=`cat filesum.log | awk '{a+= $0}END{print a}'`
+
+timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
+if [ $timediff -eq 0 ]; then
+  speed=0
+else
+  speed=`echo "$destsize $timediff"|awk '{print($1/$2)}'`
+fi
+
 #destsize=${destsize}MB
 #srcsize=${srcsize}MB
 rm -f sum.log
 rm -f filesum.log
 ctime1=`date --date='0 days ago' +%H:%M:%S`
+echo "==============================================================="
 echo "$today $ctime1: Succeeded in Archiving Data:"
 echo "                   From: $srcdir on $dev"
 echo "                   To  : $destdir"
@@ -185,5 +208,9 @@ echo "        Source File Num: $srcfilenum"
 echo "            Source Size: $srcsize MB"
 echo "          Dest File Num: $destfilenum"
 echo "              Dest Size: $destsize MB"
-echo "Time used: $ctime to  $ctime1"
+echo "                  Speed: $speed MB/s"
+echo "              Time Used: $timediff secs."
+echo "              Time From: $ctime "
+echo "			   To: $ctime1"
+echo "==============================================================="
 exit 0

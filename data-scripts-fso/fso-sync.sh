@@ -4,17 +4,8 @@
 #usage:  run in crontab every 1 min.  from 08:00-20:00
 #example: none
 #changlog: 
-#      	20190420	release 0.1
-#      	20190421    	release 0.2	fix bugs,using pid as lock to prevent script from multiple starting
-#	20190427	release 0.3     sync only today's data
-#	20190519        release 0.4     using lftp instead of wget
-#    	20190530	release 0.5  	adding more info
-#	20190604	release 0.6	add progress bar to lftp
-#	20190605	release 0.7	revised for crontab task
-#	20190607	release 0.8	test new feature
-#			release 0.9	test new feature
-#	20190608	release 1.0	revised lftp performance
-#     	            	release 1.1	revised display info
+#      	20190603	release 0.1     first version for tio-sync.sh
+#	20190625	release 0.2	revised lftp performance & multi-thread 
 
 #waiting pid taskname prompt
 waiting() {
@@ -57,22 +48,27 @@ today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 syssep="/"
 
-destpre0="/lustre/data"
-#srcpre0="ftp://tio:ynao246135@192.168.111.120"
-srcpre0="ftp://192.168.111.120"
-datatype="TIO"
+if [ $# -ne 5 ];then
+  echo "Usage: ./fso-sync.sh srcip destdir user password datatype(TIO or HA)"
+  echo "Example: ./fso-sync.sh  ftp://192.168.111.120 /lustre/data tio ynao246135 TIO"
+  exit 1
+fi
+
+srcpre0=$1
+destpre0=$2
+user=$3
+pasword=$4
+datatype=$5
 remoteport="21"
-user="tio"
-password="ynao246135"
 
 #umask 0000
 
-filenumber=/home/chd/log/$(basename $0)-number.dat
-filesize=/home/chd/log/$(basename $0)-size.dat
-filenumber1=/home/chd/log/$(basename $0)-number1.dat
-filesize1=/home/chd/log/$(basename $0)-size1.dat
+filenumber=/home/chd/log/$(basename $0)-$datatype-number.dat
+filesize=/home/chd/log/$(basename $0)-$datatype-size.dat
+filenumber1=/home/chd/log/$(basename $0)-$datatype-number-1.dat
+filesize1=/home/chd/log/$(basename $0)-$datatype-size-1.dat
 
-lockfile=/home/chd/log/$(basename $0).lock
+lockfile=/home/chd/log/$(basename $0)-$datatype.lock
 
 if [ ! -f $filenumber ];then
   echo "0">$filenumber
@@ -102,11 +98,11 @@ fi
 
 echo " "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
-echo "                  tio-sync.sh                          "
-echo "          (Release 1.1 20190625 22:08)                 "
+echo "                  fso-sync.sh                          "
+echo "          (Release 0.2 20190625 21:51)                 "
 echo "                                                       "
-echo "    Sync $datatype data from remote host to $destpre0  "
-echo "                                                       "
+echo "         sync $datatype data to $destpre0              "
+echo " "
 echo "                $today $ctime                          "
 echo "======================================================="
 echo " "
@@ -182,6 +178,9 @@ if [ $? -ne 0 ];then
   echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
   cd /home/chd/
   exit 1
+fi
+if [ ! -d "$targetdir" ]; then
+  echo "0" > $filesize1
 fi
 
 n2=$(cat $filenumber1)
