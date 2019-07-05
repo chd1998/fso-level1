@@ -61,11 +61,11 @@ do
   echo "          file size : $cursize MB"
   echo "             Synced : $dfile file(s)"
   echo "             Synced : $ddata MB"
-  echo "               From : $ctime "
-  echo "                 To : $ctime1"
   echo "          Time Used : $dtime secs."
   echo "            @ speed : $speed MB/sec"
-  echo "                   Press ctrl-c to break! "
+  echo "               From : $ctime "
+  echo "                 To : $ctime1"
+  echo "            Press ctrl-c to break! "
   echo "  "
   filenumber=$filenumber1
   sdata=$edata 

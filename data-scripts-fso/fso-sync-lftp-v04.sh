@@ -61,7 +61,7 @@ server=$1
 port=$2
 destpre0=$3
 user=$4
-pasword=$5
+password=$5
 datatype=$6
 
 server=${server}:${port}
@@ -135,7 +135,7 @@ echo "$today $ctime: Sync Task Started, Please Wait ... "
 #cd $destdir
 ctime1=`date --date='0 days ago' +%H:%M:%S`
 mytime1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-server=ftp://$user:$pasword@$server
+server=ftp://$user:$password@$server
 lftp  $server -e "mirror --only-missing --continue  --parallel=40  $srcdir $targetdir; quit">/dev/null 2>&1 &
 #lftp -p 2121 -u tio,ynao246135 -e "mirror --only-missing --continue  --parallel=40  /20190704/TIO /lustre/data/2019/20190704/TIO; quit" ftp://192.168.111.120 >/dev/null 2>&1 &
 #wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir1
@@ -202,16 +202,16 @@ speed=`echo "$ss $timediff"|awk '{print($1/$2)}'`
 echo $n2>$filenumber
 echo $s2>$filesize
 
-ctime2=`date --date='0 days ago' +%H:%M:%S`
+ctime4=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime2: Succeeded in Syncing $datatype data @ FSO!"
 echo "          Synced : $sn file(s)"
 echo "          Synced : $ss MB "
-echo "       Time used : $timediff secs."
-echo "           Speed : $speed MB/s"
-echo "      Total file : $n2 file(s)"
-echo "      Total size : $s2 MB"
-echo "       Time from : $ctime1"
-echo "              to : $ctime3"
+echo "  Sync Time Used : $timediff secs."
+echo "        @  Speed : $speed MB/s"
+echo "      Total File : $n2 file(s)"
+echo "      Total Size : $s2 MB"
+echo "       Time From : $ctime1"
+echo "              To : $ctime4"
 echo "======================================================="
 rm -rf $lockfile
 cd /home/chd/
