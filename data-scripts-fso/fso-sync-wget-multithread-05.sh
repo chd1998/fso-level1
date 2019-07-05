@@ -116,24 +116,18 @@ echo " "
 #if [ $procCmd -le 0 ];then
 destdir=${destpre0}${syssep}${cyear}${syssep}${today}${syssep}
 destdir1=${destpre0}${syssep}${cyear}${syssep}
-if [ ! -d "$destdir" ]; then
-  mkdir -m 777 -p $destdir
+targetdir=${destdir}${datatype}
+if [ ! -d "$targetdir" ]; then
+  mkdir -m 777 -p $targetdir
 else
   echo "$today $ctime: $destdir exists!"
 fi
-#destdir=${destpre}${today}${syssep}
-targetdir=${destdir}${datatype}
-#srcdir=${srcpre0}${syssep}${today}${syssep}
-srcdir1=${srcpre0}:${remoteport}${syssep}${today}${syssep}
+srcdir=${srcpre0}${syssep}${today}${syssep}
+srcdir1=${srcpre0}:${remoteport}${syssep}${today}${syssep}${datatype}
 
 n1=$(cat $filenumber)
 s1=$(cat $filesize)
 
-#if [ ! -d "$destdir" ]; then
-#  mkdir -p $destdir
-#else
-#  echo "$today $ctime: $destdir exists!"
-#fi
 ctime=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime: Syncing $datatype data @ FSO..."
 echo "             From: $srcdir1 "
@@ -146,14 +140,16 @@ mytime1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF
 #lftp -u $user,$password -e "mirror --ignore-time --continue --no-perms --no-umask --allow-chown --allow-suid --parallel=40  . .; quit" $srcdir1 >/dev/null 2>&1 &
 #waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 itmp=$threadnumber
-while  [ $itmp -gt 0 ] 
+while  [ $itmp -gt 0 ]
 do
-  echo "Starting wget Thread: #$itmp..."
-  wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir1  >/dev/null 2>&1 &
+  #echo "Starting wget Thread: #$itmp..."
+  wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=$user --ftp-password=$password --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir  >/dev/null 2>&1 &
   itmp=$((itmp-1))
   #echo $itmp
-  sleep 2
+  #sleep 0.5
 done
+ctimethread=`date --date='0 days ago' +%H:%M:%S`
+echo  "$today $ctimethread: $threadnumber wget threads started..."
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data with MultiThread wget"
 
 ctime3=`date --date='0 days ago' +%H:%M:%S`

@@ -112,15 +112,16 @@ echo " "
 #if [ $procCmd -le 0 ];then
 destdir=${destpre0}${syssep}${cyear}${syssep}${today}${syssep}
 destdir1=${destpre0}${syssep}${cyear}${syssep}
-if [ ! -d "$destdir" ]; then
-  mkdir -m 777 -p $destdir
+targetdir=${destdir}${datatype}
+if [ ! -d "$targetdir" ]; then
+  mkdir -m 777 -p $targetdir
 else
-  echo "$today $ctime: $destdir exists!"
+  echo "$today $ctime: $targetdir exists!"
 fi
 #destdir=${destpre}${today}${syssep}
 targetdir=${destdir}${datatype}
 #srcdir=${srcpre0}${syssep}${today}${syssep}
-srcdir1=${srcpre0}:${remoteport}${syssep}${today}${syssep}
+srcdir1=${srcpre0}:${remoteport}${syssep}${today}${syssep}${datatype}
 
 n1=$(cat $filenumber)
 s1=$(cat $filesize)
@@ -133,9 +134,9 @@ s1=$(cat $filesize)
 ctime=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime: Syncing $datatype data @ FSO..."
 echo "             From: $srcdir1 "
-echo "             To  : $destdir "
+echo "             To  : $targetdir "
 echo "$today $ctime: Sync Task Started, Please Wait ... "
-cd $destdir1
+cd $targetdir
 ctime1=`date --date='0 days ago' +%H:%M:%S`
 mytime1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 #lftp -e "mirror --ignore-time --no-perms --continue --no-umask --allow-chown --exclude '[RECYCLE]' --exclude System\ Volume\ Information/ --parallel=30  / .; quit" ftp://tio:ynao246135@192.168.111.120:21/

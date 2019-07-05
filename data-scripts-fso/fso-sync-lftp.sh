@@ -50,17 +50,18 @@ ctime=`date --date='0 days ago' +%H:%M:%S`
 syssep="/"
 
 if [ $# -ne 6 ];then
-  echo "Usage: ./fso-sync.sh srcip port  destdir user password datatype(TIO or HA)"
-  echo "Example: ./fso-sync.sh  ftp://192.168.111.120 21 /lustre/data tio ynao246135 TIO"
+  echo "Usage: ./fso-sync-lftp.sh ip port  destdir user password datatype(TIO or HA)"
+  echo "Example: ./fso-sync-lftp.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO"
   exit 1
 fi
-
-srcpre0=$1
-remoteport=$2
+server=$1
+port=$2
 destpre0=$3
-ftpuser=$4
-ftppassword=$5
+user=$4
+pasword=$5
 datatype=$6
+
+server=${server}:${port}
 
 #umask 0000
 
@@ -99,7 +100,7 @@ fi
 
 echo "                                                       "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
-echo "                  fso-sync.sh                          "
+echo "                fso-sync-lftp.sh                       "
 echo "          (Release 0.3 20190703 21:51)                 "
 echo "                                                       "
 echo "         sync $datatype data to $destpre0              "
@@ -125,19 +126,17 @@ s1=$(cat $filesize)
 
 ctime=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime: Syncing $datatype data @ FSO..."
-echo "             From: $srcdir1$srcdir "
+echo "             From: $server$srcdir "
 echo "             To  : $targetdir "
 echo "$today $ctime: Sync Task Started, Please Wait ... "
 #cd $destdir
-comma=","
-userp=$ftpuser,$ftppassword
-#echo "$userp"
-#read
 ctime1=`date --date='0 days ago' +%H:%M:%S`
 mytime1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-#lftp -e "mirror --ignore-time --no-perms --continue --no-umask --allow-chown --exclude '[RECYCLE]' --exclude System\ Volume\ Information/ --parallel=30  / .; quit" ftp://tio:ynao246135@192.168.111.120:21/
-lftp -p $remoteport -u $userp -e "mirror --only-missing --continue  --parallel=40  $srcdir $targetdir; quit" $srcdir1 >/dev/null 2>&1 &
+server=ftp://$user:$pasword@$server
+lftp  $server -e "mirror --only-missing --continue  --parallel=40  $srcdir $targetdir; quit">/dev/null 2>&1 &
+#lftp -p 2121 -u tio,ynao246135 -e "mirror --only-missing --continue  --parallel=40  /20190704/TIO /lustre/data/2019/20190704/TIO; quit" ftp://192.168.111.120 >/dev/null 2>&1 &
 #wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir1
+
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 ctime3=`date --date='0 days ago' +%H:%M:%S`
 if [ $? -ne 0 ];then
