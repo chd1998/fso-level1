@@ -183,7 +183,7 @@ def sir_main(dirn, sys_sep, filen, left=[0, 0], right=[0, 0], disflag=True, file
 						fits.writeto(outfile, c_subpix, header, output_verify='fix', overwrite=True, checksum=False)
 
 				if disflag:
-						plt.figure('Sir 3.0 - with cuda')
+						plt.figure('Sir 3.0 - without cuda')
 
 						if K == 0:
 								dis = plt.imshow(c_subpix, vmin=mi, vmax=mx, cmap='gray')
@@ -226,7 +226,7 @@ def sir_main(dirn, sys_sep, filen, left=[0, 0], right=[0, 0], disflag=True, file
 				video.release()
 
 		dxy = np.array(dxy)
-		print('Total time used without cuda: %7.2f seconds...'%total_time)
+		print('Total time used without cuda: %d ms...'%total_time)
 		return dxy
 
 def align_all(s_org, c_org, dis_s_pix, dis_s_subpix, X, Y):
