@@ -30,21 +30,23 @@ def create_thumbnail(filename):
     base, fname = os.path.split(filename)
     fname = fname+".jpg"
     save_path = os.path.join(base, SAVE_DIRECTORY, fname)
+    print("converting %s" %(fname))
     im.save(save_path)
 
 if __name__ == '__main__':
     folder = os.path.realpath(
-        'D:\\fso-data\\fso-test-data')
+        'D:\\fso-imag\\fso-test')
     if not os.path.isdir(os.path.join(folder, SAVE_DIRECTORY)):
         os.makedirs(os.path.join(folder, SAVE_DIRECTORY))
 
     images = get_image_paths(folder)
     a = datetime.datetime.now()
-    pool = Pool(processes=2)
+    pool = Pool(processes=5)
     print ("Converting...")
     pool.map(create_thumbnail, images)
     pool.close()
     pool.join()
     b = datetime.datetime.now()
     delta = b - a
+
     print ("Time Used: %d ms" %(int(delta.total_seconds() * 1000)))

@@ -33,20 +33,20 @@ def create_thumbnail(filename):
 
 if __name__ == '__main__':
     folder = os.path.realpath(
-        'D:\\fso-data\\fso-test-data')
+        'D:\\fso-imag\\fso-test')
     if not os.path.isdir(os.path.join(folder, SAVE_DIRECTORY)):
         os.makedirs(os.path.join(folder, SAVE_DIRECTORY))
 
     images = get_image_paths(folder)
     a = datetime.datetime.now()
-    
+
     print ("Converting...")
     tmpnum=1
     for image in images:
         print ('%4d : %s' %(tmpnum,image))
         create_thumbnail(image)
         tmpnum +=1
-    
+
     b = datetime.datetime.now()
     delta = b - a
     print ("Time Used: %d ms" %(int(delta.total_seconds() * 1000)))
