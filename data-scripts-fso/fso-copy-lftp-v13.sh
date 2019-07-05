@@ -15,8 +15,8 @@
 #        20190608       Release 0.9 fixed error in directory
 #                       Release 1.0 improve display info
 #        20190702       Release 1.1 revise some logical relations
-#        20190704       Release 1.2 using lftp
-
+#        20190704       Release 1.2 using lftp & add input args
+#
 #waiting pid taskname prompt
 waiting() {
         local pid="$1"
@@ -62,23 +62,29 @@ cyear=`date --date='0 days ago' +%Y`
 today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 
-if [ $# -ne 6 ]  ;then
+if [ $# -ne 8 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to /lustre/data mannually"
-  echo "Usage: ./fso-copy.sh srcip port  dest year(4 digits) monthday(4 digits) datatype(TIO/HA)"
-  echo "Example: ./fso-copy.sh ftp://192.168.111.120 21 /lustre/data 2019 0427 TIO"
+  echo "Usage: ./fso-copy-lftp.sh srcip port  dest year(4 digits) monthday(4 digits) user password datatype(TIO/HA)"
+  echo "Example: ./fso-copy-lftp.sh 192.168.111.120 21 /lustre/data 2019 0427 tio ynao246135 TIO"
   exit 1
 fi
 
 #procName="lftp"
+
 syssep="/"
-destpre0=$3
 ftpserver=$1
 remoteport=$2
+destpre0=$3
 srcyear=$4
 srcmonthday=$5
-datatype=$6
-ftpuser=$(echo $datatype|tr '[A-Z]' '[a-z]')
-password="ynao246135"
+ftpuser=$6
+password=$7
+datatype=$8
+#ftpuser=$(echo $datatype|tr '[A-Z]' '[a-z]')
+
+ftpserver=ftp://$ftpuser:$password@$ftpserver:$remoteport
+#echo "$ftpserver"
+#read
 
 lockfile=/home/chd/log/$(basename $0)_lockfile
 if [ -f $lockfile ];then
@@ -96,10 +102,10 @@ fi
 echo " "
 echo "======== Welcome to FSO Data Copying System@FSO! ========"
 echo "                                                         "
-echo "                      fso-copy.sh                        "  
+echo "                 fso-copy-lftp.sh                        "  
 echo "                                                         "
 echo "             Relase 1.2     20190704  16:21              "
-echo " Copy the TiO/HA data from remote SSD to lustre manually "
+echo " Copy the $datatype data from remote ftp site to lustre  "
 echo "                                                         "
 echo "                $today    $ctime                         "
 echo "                                                         "
@@ -110,7 +116,6 @@ echo " "
 #if [ $procCmd -le 0 ];then
 destdir=${destpre0}${syssep}${srcyear}${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
 #remotesrcdir=${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
-ftpserver1=${ftpserver}:${remoteport}
 srcdir=${ftpserver1}${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
 srcdir1=${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
 
@@ -126,10 +131,10 @@ echo "                   From: $srcdir "
 echo "                   To  : $destdir "
 #  echo ""
 #  read
-cd $destdir
+#cd $destdir
 #wget --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=$ftpuser --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir
 #lftp -u $ftpuser,$password -e "mirror  --no-perms --only-missing --parallel=33 . $destdir; quit" $srcdir
-lftp -p $remoteport -u $ftpuser,$password -e "mirror  --only-missing --parallel=33 $srcdir  $destdir; quit" $ftpserver >/dev/null 2>&1 &
+lftp $ftpserver -e "mirror  --only-missing --continue --parallel=33 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 #echo "Please Wait..."
 ctime1=`date --date='0 days ago' +%H:%M:%S`

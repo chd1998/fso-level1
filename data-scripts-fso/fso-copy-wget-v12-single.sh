@@ -15,7 +15,7 @@
 #        20190608       Release 0.9 fixed error in directory
 #                       Release 1.0 improve display info
 #        20190702       Release 1.1 revise some logical relations
-#        20190704       Release 1.2 using lftp
+#        20190703       Release 1.2 using wget in case of lftp failure
 
 #waiting pid taskname prompt
 waiting() {
@@ -62,21 +62,21 @@ cyear=`date --date='0 days ago' +%Y`
 today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 
-if [ $# -ne 6 ]  ;then
+if [ $# -ne 5 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to /lustre/data mannually"
-  echo "Usage: ./fso-copy.sh srcip port  dest year(4 digits) monthday(4 digits) datatype(TIO/HA)"
-  echo "Example: ./fso-copy.sh ftp://192.168.111.120 21 /lustre/data 2019 0427 TIO"
+  echo "Usage: ./fso-copy-wget.sh srcip dest year(4 digits)  monthday(4 digits) datatype(TIO/HA)"
+  echo "Example: ./fso-copy-wget.sh ftp://192.168.111.120 /lustre/data 2019 0703 TIO"
   exit 1
 fi
 
 #procName="lftp"
 syssep="/"
-destpre0=$3
+destpre0=$2
 ftpserver=$1
-remoteport=$2
-srcyear=$4
-srcmonthday=$5
-datatype=$6
+remoteport="21"
+srcyear=$3
+srcmonthday=$4
+datatype=$5
 ftpuser=$(echo $datatype|tr '[A-Z]' '[a-z]')
 password="ynao246135"
 
@@ -96,9 +96,9 @@ fi
 echo " "
 echo "======== Welcome to FSO Data Copying System@FSO! ========"
 echo "                                                         "
-echo "                      fso-copy.sh                        "  
+echo "                 fso-copy-wget.sh                        "  
 echo "                                                         "
-echo "             Relase 1.2     20190704  16:21              "
+echo "             Relase 1.2     20190703  09:37              "
 echo " Copy the TiO/HA data from remote SSD to lustre manually "
 echo "                                                         "
 echo "                $today    $ctime                         "
@@ -108,12 +108,16 @@ echo " "
 #procCmd=`ps ef|grep -w $procName|grep -v grep|wc -l`
 #pid=$(ps x|grep -w $procName|grep -v grep|awk '{print $1}')
 #if [ $procCmd -le 0 ];then
-destdir=${destpre0}${syssep}${srcyear}${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
+#destdir1 for wget
+destdir1=${destpre0}${syssep}${srcyear}${syssep}
+#destdir for lftp
+destdir=${destpre0}${syssep}${srcyear}${syssep}${srcyear}${srcmonthday}${syssep}${datatype}
 #remotesrcdir=${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
 ftpserver1=${ftpserver}:${remoteport}
-srcdir=${ftpserver1}${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
+srcdir=${ftpserver1}${syssep}${srcyear}${srcmonthday}${syssep}${datatype}
 srcdir1=${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
-
+#srcdir2 for wget
+srcdir2=${ftpserver1}${syssep}${srcyear}${srcmonthday}${syssep}
 if [ ! -d "$destdir" ]; then
   mkdir -p -m 777 $destdir
 else
@@ -124,12 +128,10 @@ ctime=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime: Syncing $datatype data @ FSO..."
 echo "                   From: $srcdir "
 echo "                   To  : $destdir "
-#  echo ""
-#  read
-cd $destdir
-#wget --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=$ftpuser --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir
+cd $destdir1
+wget --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=$ftpuser --ftp-password=$password --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir2  >/dev/null 2>&1 &
 #lftp -u $ftpuser,$password -e "mirror  --no-perms --only-missing --parallel=33 . $destdir; quit" $srcdir
-lftp -p $remoteport -u $ftpuser,$password -e "mirror  --only-missing --parallel=33 $srcdir  $destdir; quit" $ftpserver >/dev/null 2>&1 &
+#lftp -u $ftpuser,$password -e "mirror  --no-perms --no-umask --allow-chown --allow-suid --only-missing --parallel=33 .  $destdir; quit" $srcdir >/dev/null 2>&1 &
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 #echo "Please Wait..."
 ctime1=`date --date='0 days ago' +%H:%M:%S`
@@ -141,7 +143,6 @@ fi
 
 t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-
 
 
 targetdir=${destdir}

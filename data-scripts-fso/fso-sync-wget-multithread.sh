@@ -1,11 +1,13 @@
 #!/bin/bash
-#author: chen dong @fso
-#purposes: periodically syncing data from remoteip to local lustre storage via lftp
+#author: chen dong @ fso
+#purposes: periodically syncing data from remoteip to local lustre storage via wget
 #usage:  run in crontab every 1 min.  from 08:00-20:00
 #example: none
-#changlog: 
-#      	20190603	release 0.1     first version for tio-sync.sh
-#	20190625	release 0.2	revised lftp performance & multi-thread 
+#changlog:
+#      	20190603	Release 0.1     first version for tio-sync.sh
+#	      20190625	Release 0.2	    revised lftp performance & multi-thread
+#       20190702  Release 0.3     back to use wget in case of lftp failure
+#                 Release 0.4     multithread with wget
 
 #waiting pid taskname prompt
 waiting() {
@@ -21,7 +23,7 @@ waiting() {
 #        tput ed
 	ctime=`date --date='0 days ago' +%H:%M:%S`
 	today=`date --date='0 days ago' +%Y%m%d`
-               
+
         echo "$today $ctime: $2 Task Has Done!"
         echo "                   Finishing...."
 #        msg "done" $boldblue
@@ -48,27 +50,32 @@ today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 syssep="/"
 
-destpre0="/lustre/data"
-#srcpre0="ftp://tio:ynao246135@192.168.111.120"
-srcpre0="ftp://192.168.111.120"
-datatype="HA"
+if [ $# -ne 5 ];then
+  echo "Usage: ./fso-sync-wget-multithread.sh srcip destdir user password datatype(TIO or HA)"
+  echo "Example: ./fso-sync-wget-multithread.sh  ftp://192.168.111.120 /lustre/data tio ynao246135 TIO"
+  exit 1
+fi
+
+srcpre0=$1
+destpre0=$2
+user=$3
+pasword=$4
+datatype=$5
 remoteport="21"
-user="ha"
-password="ynao246135"
 
 #umask 0000
 
-filenumber=/home/chd/log/$(basename $0)-number.dat
-filesize=/home/chd/log/$(basename $0)-size.dat
-filenumber1=/home/chd/log/$(basename $0)-number1.dat
-filesize1=/home/chd/log/$(basename $0)-size1.dat
+filenumber=/home/chd/log/$(basename $0)-$datatype-number.dat
+filesize=/home/chd/log/$(basename $0)-$datatype-size.dat
+filenumber1=/home/chd/log/$(basename $0)-$datatype-number-1.dat
+filesize1=/home/chd/log/$(basename $0)-$datatype-size-1.dat
 
-lockfile=/home/chd/log/$(basename $0).lock
+lockfile=/home/chd/log/$(basename $0)-$datatype.lock
 
 if [ ! -f $filenumber ];then
   echo "0">$filenumber
 fi
-if [ ! -f $filesize ];then 
+if [ ! -f $filesize ];then
   echo "0">$filesize
 fi
 if [ ! -f $filenumber1 ];then
@@ -82,7 +89,7 @@ if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
   ps -p $mypid | grep $mypid &>/dev/null
   if [ $? -eq 0 ];then
-    echo "$today $ctime: $(basename $0) is running" 
+    echo "$today $ctime: $(basename $0) is running"
     exit 1
   else
     echo $$>$lockfile
@@ -93,11 +100,11 @@ fi
 
 echo " "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
-echo "                  ha-sync.sh                           "
-echo "          (Release 0.2 20190625 21:39)                 "
+echo "           fso-sync-wget-multithread.sh                "
+echo "          (Release 0.4 20190702 13:46)                 "
 echo "                                                       "
-echo "      Sync $datatype data from remote to $destpre0     "
-echo "                                                       "
+echo "         sync $datatype data to $destpre0              "
+echo " "
 echo "                $today $ctime                          "
 echo "======================================================="
 echo " "
@@ -105,6 +112,7 @@ echo " "
 #pid=$(ps x|grep -w $procName|grep -v grep|awk '{print $1}')
 #if [ $procCmd -le 0 ];then
 destdir=${destpre0}${syssep}${cyear}${syssep}${today}${syssep}
+destdir1=${destpre0}${syssep}${cyear}${syssep}
 if [ ! -d "$destdir" ]; then
   mkdir -m 777 -p $destdir
 else
@@ -128,13 +136,24 @@ echo "$today $ctime: Syncing $datatype data @ FSO..."
 echo "             From: $srcdir1 "
 echo "             To  : $destdir "
 echo "$today $ctime: Sync Task Started, Please Wait ... "
-cd $destdir
+cd $destdir1
 ctime1=`date --date='0 days ago' +%H:%M:%S`
 mytime1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 #lftp -e "mirror --ignore-time --no-perms --continue --no-umask --allow-chown --exclude '[RECYCLE]' --exclude System\ Volume\ Information/ --parallel=30  / .; quit" ftp://tio:ynao246135@192.168.111.120:21/
-lftp -u $user,$password -e "mirror --ignore-time --continue --no-perms --no-umask --allow-chown --allow-suid --parallel=40  . .; quit" $srcdir1 >/dev/null 2>&1 &
-waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
-#wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir
+#lftp -u $user,$password -e "mirror --ignore-time --continue --no-perms --no-umask --allow-chown --allow-suid --parallel=40  . .; quit" $srcdir1 >/dev/null 2>&1 &
+#waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
+wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir1  >/dev/null 2>&1 &
+#waiting "$!" "$datatype Syncing" "Syncing $datatype Data with Thread1" &
+wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir1  >/dev/null 2>&1 &
+#waiting "$!" "$datatype Syncing" "Syncing $datatype Data with Thread2" &
+wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir1  >/dev/null 2>&1 &
+#waiting "$!" "$datatype Syncing" "Syncing $datatype Data with Thread3" &
+wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir1  >/dev/null 2>&1 &
+#waiting "$!" "$datatype Syncing" "Syncing $datatype Data with Thread4" &
+wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir1  >/dev/null 2>&1 &
+#waiting "$!" "$datatype Syncing" "Syncing $datatype Data with Thread5"
+waiting "$!" "$datatype Syncing" "Syncing $datatype Data with MultiThread wget"
+
 ctime3=`date --date='0 days ago' +%H:%M:%S`
 if [ $? -ne 0 ];then
   echo "$today $ctime3: Syncing $datatype Data @ FSO Failed!"
@@ -154,8 +173,8 @@ if [ $? -ne 0 ];then
 fi
 ctime2=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime2: Summerizing File Numbers & Size..."
-#n2=`ls -lR $targetdir | grep "^-" | wc -l` 
-#s2=`du -sm $targetdir|awk '{print $1}'` 
+#n2=`ls -lR $targetdir | grep "^-" | wc -l`
+#s2=`du -sm $targetdir|awk '{print $1}'`
 
 ls -lR $targetdir | grep "^-" | wc -l > $filenumber1 &
 waiting "$!" "File Number Sumerizing" "Sumerizing File Number"
@@ -212,4 +231,3 @@ exit 0
 #  echo "              PID: $pid                    "
 #  exit 0
 #fi
-

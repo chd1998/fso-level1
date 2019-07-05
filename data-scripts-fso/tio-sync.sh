@@ -51,7 +51,7 @@ procing() {
         done
 }
 
-procName="lftp"
+#procName="lftp"
 cyear=`date --date='0 days ago' +%Y`
 today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
@@ -61,7 +61,7 @@ destpre0="/lustre/data"
 #srcpre0="ftp://tio:ynao246135@192.168.111.120"
 srcpre0="ftp://192.168.111.120"
 datatype="TIO"
-remoteport="21"
+remoteport="2121"
 user="tio"
 password="ynao246135"
 
@@ -141,7 +141,7 @@ cd $destdir
 ctime1=`date --date='0 days ago' +%H:%M:%S`
 mytime1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 #lftp -e "mirror --ignore-time --no-perms --continue --no-umask --allow-chown --exclude '[RECYCLE]' --exclude System\ Volume\ Information/ --parallel=30  / .; quit" ftp://tio:ynao246135@192.168.111.120:21/
-lftp -u $user,$password -e "mirror --ignore-time --continue --no-perms --no-umask --allow-chown --allow-suid --parallel=40  . .; quit" $srcdir1 >/dev/null 2>&1 &
+lftp -u $user,$password -e "mirror --ignore-time --continue --parallel=40  . .; quit" $srcdir1 >/dev/null 2>&1 &
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 #wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir
 ctime3=`date --date='0 days ago' +%H:%M:%S`
@@ -183,7 +183,9 @@ if [ $? -ne 0 ];then
   cd /home/chd/
   exit 1
 fi
-
+if [ ! -d "$targetdir" ]; then
+  echo "0" > $filesize1
+fi
 n2=$(cat $filenumber1)
 s2=$(cat $filesize1)
 

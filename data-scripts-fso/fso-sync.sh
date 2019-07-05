@@ -4,8 +4,9 @@
 #usage:  run in crontab every 1 min.  from 08:00-20:00
 #example: none
 #changlog: 
-#      	20190603	release 0.1     first version for tio-sync.sh
-#	20190625	release 0.2	revised lftp performance & multi-thread 
+#       20190603    Release 0.1     first version for tio-sync.sh
+#       20190625    Release 0.2     revised lftp performance & multi-thread
+#       20190703    Release 0.3     fix some errors 
 
 #waiting pid taskname prompt
 waiting() {
@@ -31,35 +32,35 @@ waiting() {
     #   输出进度条, 小棍型
 procing() {
         trap 'exit 0;' 6
- 	      tput ed
+        tput ed
         while [ 1 ]
         do
-		sleep 1
-                today=`date --date='0 days ago' +%Y%m%d`
-                ctime=`date --date='0 days ago' +%H:%M:%S`
-                echo "$today $ctime: $1, Please Wait...   "
-                #sleep 10
+        sleep 1
+             today=`date --date='0 days ago' +%Y%m%d`
+             ctime=`date --date='0 days ago' +%H:%M:%S`
+             echo "$today $ctime: $1, Please Wait...   "
+             #sleep 10
         done
 }
 
-procName="lftp"
+#procName="lftp"
 cyear=`date --date='0 days ago' +%Y`
 today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 syssep="/"
 
-if [ $# -ne 5 ];then
-  echo "Usage: ./fso-sync.sh srcip destdir user password datatype(TIO or HA)"
-  echo "Example: ./fso-sync.sh  ftp://192.168.111.120 /lustre/data tio ynao246135 TIO"
+if [ $# -ne 6 ];then
+  echo "Usage: ./fso-sync.sh srcip port  destdir user password datatype(TIO or HA)"
+  echo "Example: ./fso-sync.sh  ftp://192.168.111.120 21 /lustre/data tio ynao246135 TIO"
   exit 1
 fi
 
 srcpre0=$1
-destpre0=$2
-user=$3
-pasword=$4
-datatype=$5
-remoteport="21"
+remoteport=$2
+destpre0=$3
+ftpuser=$4
+ftppassword=$5
+datatype=$6
 
 #umask 0000
 
@@ -96,13 +97,13 @@ else
   echo $$>$lockfile
 fi
 
-echo " "
+echo "                                                       "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
 echo "                  fso-sync.sh                          "
-echo "          (Release 0.2 20190625 21:51)                 "
+echo "          (Release 0.3 20190703 21:51)                 "
 echo "                                                       "
 echo "         sync $datatype data to $destpre0              "
-echo " "
+echo "                                                       "
 echo "                $today $ctime                          "
 echo "======================================================="
 echo " "
@@ -110,36 +111,34 @@ echo " "
 #pid=$(ps x|grep -w $procName|grep -v grep|awk '{print $1}')
 #if [ $procCmd -le 0 ];then
 destdir=${destpre0}${syssep}${cyear}${syssep}${today}${syssep}
-if [ ! -d "$destdir" ]; then
-  mkdir -m 777 -p $destdir
-else
-  echo "$today $ctime: $destdir exists!"
-fi
-#destdir=${destpre}${today}${syssep}
 targetdir=${destdir}${datatype}
-#srcdir=${srcpre0}${syssep}${today}${syssep}
-srcdir1=${srcpre0}:${remoteport}${syssep}${today}${syssep}
+if [ ! -d "$targetdir" ]; then
+  mkdir -m 777 -p $targetdir
+else
+  echo "$today $ctime: $targetdir exists!"
+fi
+srcdir=${syssep}${today}${syssep}${datatype}
+srcdir1=${srcpre0}
 
 n1=$(cat $filenumber)
 s1=$(cat $filesize)
 
-#if [ ! -d "$destdir" ]; then
-#  mkdir -p $destdir
-#else
-#  echo "$today $ctime: $destdir exists!"
-#fi
 ctime=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime: Syncing $datatype data @ FSO..."
-echo "             From: $srcdir1 "
-echo "             To  : $destdir "
+echo "             From: $srcdir1$srcdir "
+echo "             To  : $targetdir "
 echo "$today $ctime: Sync Task Started, Please Wait ... "
-cd $destdir
+#cd $destdir
+comma=","
+userp=$ftpuser,$ftppassword
+#echo "$userp"
+#read
 ctime1=`date --date='0 days ago' +%H:%M:%S`
 mytime1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 #lftp -e "mirror --ignore-time --no-perms --continue --no-umask --allow-chown --exclude '[RECYCLE]' --exclude System\ Volume\ Information/ --parallel=30  / .; quit" ftp://tio:ynao246135@192.168.111.120:21/
-lftp -u $user,$password -e "mirror --ignore-time --continue --no-perms --no-umask --allow-chown --allow-suid --parallel=40  . .; quit" $srcdir1 >/dev/null 2>&1 &
+lftp -p $remoteport -u $userp -e "mirror --only-missing --continue  --parallel=40  $srcdir $targetdir; quit" $srcdir1 >/dev/null 2>&1 &
+#wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir1
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
-#wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir
 ctime3=`date --date='0 days ago' +%H:%M:%S`
 if [ $? -ne 0 ];then
   echo "$today $ctime3: Syncing $datatype Data @ FSO Failed!"
@@ -159,6 +158,7 @@ if [ $? -ne 0 ];then
 fi
 ctime2=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime2: Summerizing File Numbers & Size..."
+
 #n2=`ls -lR $targetdir | grep "^-" | wc -l` 
 #s2=`du -sm $targetdir|awk '{print $1}'` 
 
@@ -191,10 +191,10 @@ ss=`echo "$s1 $s2"|awk '{print($2-$1)}'`
 
 timediff=`echo "$mytime1 $mytime2"|awk '{print($2-$1)}'`
 if [ $timediff -eq 0 ]; then
-	speed=0
-else
-	speed=`echo "$ss $timediff"|awk '{print($1/$2)}'`
+	timediff=1
 fi
+speed=`echo "$ss $timediff"|awk '{print($1/$2)}'`
+
 echo $n2>$filenumber
 echo $s2>$filesize
 
