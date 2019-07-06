@@ -29,7 +29,6 @@ def create_thumbnail(filename):
 	base, fname = os.path.split(filename)
 	fname = fname+".jpg"
 	save_path = os.path.join(base, SAVE_DIRECTORY, fname)
-	print ("Converting %s" %fname)
 	im.save(save_path)
 
 if __name__ == '__main__':
