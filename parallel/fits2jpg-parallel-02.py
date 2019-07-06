@@ -48,7 +48,7 @@ def main(argv):
 		elif opt in ('-p'):
 			T_DIR = arg
 		elif opt in ('--tn'):
-			tn = 10
+			tn = int(arg)
 		elif opt in ('--sx'):
 			sx = arg
 		elif opt in ('--sy'):
