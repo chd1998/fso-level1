@@ -101,6 +101,7 @@ else
   echo $$>$lockfile
 fi
 
+st1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 echo "                                                       "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
 echo "                fso-sync-lftp.sh                       "
@@ -203,14 +204,18 @@ echo $n2>$filenumber
 echo $s2>$filesize
 
 ctime4=`date --date='0 days ago' +%H:%M:%S`
-echo "$today $ctime2: Succeeded in Syncing $datatype data @ FSO!"
+st2=`echo $ctime4|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+stdiff=`echo "$st1 $st2"|awk '{print($2-$1)}'`
+
+echo "$today $ctime4: Succeeded in Syncing $datatype data @ FSO!"
 echo "          Synced : $sn file(s)"
 echo "          Synced : $ss MB "
 echo "  Sync Time Used : $timediff secs."
 echo "        @  Speed : $speed MB/s"
 echo "      Total File : $n2 file(s)"
 echo "      Total Size : $s2 MB"
-echo "       Time From : $ctime1"
+echo " Total Time Used : $stdiff secs."
+echo " Total Time From : $ctime1"
 echo "              To : $ctime4"
 echo "======================================================="
 rm -rf $lockfile
