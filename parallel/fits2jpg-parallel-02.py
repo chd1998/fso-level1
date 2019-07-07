@@ -1,3 +1,19 @@
+'''
+fits2jpg
+
+@author: chen dong @ fso
+purposes: generating the jpeg thumbnails of fits files in source SAVE_DIRECTORY
+Note: single --- using 1 thread; parallel --- using specific number of threads via input
+
+Usage: python fits2jpg-xx.py -p <inputpath> --sx <num1> --sy <num2>
+Example: python fits2jpg-xx.py -p d:\\fso-test --sx 200 --sy 200
+
+Changlog:
+20190701	Release 0.1		prototype version both in single & parallel version
+20190705	Release 0.2     revised, add input argvs
+
+'''
+
 import os
 import PIL
 import datetime
