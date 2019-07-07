@@ -1,49 +1,49 @@
 #!/bin/bash
 #author: chen dong @fso
 #purposes: periodically syncing data from remoteip to local lustre storage via lftp
-#usage:  run in crontab every 1 min.  from 08:00-20:00
+#usage:  run in crontab every 1 min.  08:00-20:00 everyday
 #example: none
-#changlog: 
+#changlog:
 #       20190603    Release 0.1     first version for tio-sync.sh
 #       20190625    Release 0.2     revised lftp performance & multi-thread
-#       20190703    Release 0.3     fix some errors 
+#       20190703    Release 0.3     fix some errors
 #       20190705    Release 0.4     timing logic revised
 
 #waiting pid taskname prompt
 waiting() {
-        local pid="$1"
-        taskname="$2"
+				local pid="$1"
+				taskname="$2"
 #        msg "$2... ..." '' -n
 #        echo "$2..."
-        procing "$3" &
-        local tmppid="$!"
-        wait $pid
-        #恢复光标到最后保存的位置
+				procing "$3" &
+				local tmppid="$!"
+				wait $pid
+				#恢复光标到最后保存的位置
 #        tput rc
 #        tput ed
 	wctime=`date --date='0 days ago' +%H:%M:%S`
 	wtoday=`date --date='0 days ago' +%Y%m%d`
-               
-        echo "$wtoday $wctime: $2 Task Has Done!"
-        dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-        echo "                   Finishing...."
+
+				echo "$wtoday $wctime: $2 Task Has Done!"
+				dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+				echo "                   Finishing...."
 #        msg "done" $boldblue
-        kill -6 $tmppid >/dev/null 1>&2
-        echo "$dt1" > /home/chd/log/sdtmp
+				kill -6 $tmppid >/dev/null 1>&2
+				echo "$dt1" > /home/chd/log/sdtmp
 }
 
-    #   输出进度条, 小棍型
+		#   输出进度条, 小棍型
 procing() {
-        trap 'exit 0;' 6
-        tput ed
-        while [ 1 ]
-        do
-             sleep 1
-             ptoday=`date --date='0 days ago' +%Y%m%d`
-             pctime=`date --date='0 days ago' +%H:%M:%S`
-             echo "$ptoday $pctime: $1, Please Wait...   "
-             #sleep 10
-        done
+				trap 'exit 0;' 6
+				tput ed
+				while [ 1 ]
+				do
+						 sleep 1
+						 ptoday=`date --date='0 days ago' +%Y%m%d`
+						 pctime=`date --date='0 days ago' +%H:%M:%S`
+						 echo "$ptoday $pctime: $1, Please Wait...   "
+						 #sleep 10
+				done
 }
 
 #procName="lftp"
@@ -53,9 +53,9 @@ ctime=`date --date='0 days ago' +%H:%M:%S`
 syssep="/"
 
 if [ $# -ne 6 ];then
-  echo "Usage: ./fso-sync-lftp.sh ip port  destdir user password datatype(TIO or HA)"
-  echo "Example: ./fso-sync-lftp.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO"
-  exit 1
+	echo "Usage: ./fso-sync-lftp.sh ip port  destdir user password datatype(TIO or HA)"
+	echo "Example: ./fso-sync-lftp.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO"
+	exit 1
 fi
 server=$1
 port=$2
@@ -76,29 +76,29 @@ filesize1=/home/chd/log/$(basename $0)-$datatype-size-1.dat
 lockfile=/home/chd/log/$(basename $0)-$datatype.lock
 
 if [ ! -f $filenumber ];then
-  echo "0">$filenumber
+	echo "0">$filenumber
 fi
-if [ ! -f $filesize ];then 
-  echo "0">$filesize
+if [ ! -f $filesize ];then
+	echo "0">$filesize
 fi
 if [ ! -f $filenumber1 ];then
-  echo "0">$filenumber1
+	echo "0">$filenumber1
 fi
 if [ ! -f $filesize1 ];then
-  echo "0">$filesize1
+	echo "0">$filesize1
 fi
 
 if [ -f $lockfile ];then
-  mypid=$(cat $lockfile)
-  ps -p $mypid | grep $mypid &>/dev/null
-  if [ $? -eq 0 ];then
-    echo "$today $ctime: $(basename $0) is running" 
-    exit 1
-  else
-    echo $$>$lockfile
-  fi
+	mypid=$(cat $lockfile)
+	ps -p $mypid | grep $mypid &>/dev/null
+	if [ $? -eq 0 ];then
+		echo "$today $ctime: $(basename $0) is running"
+		exit 1
+	else
+		echo $$>$lockfile
+	fi
 else
-  echo $$>$lockfile
+	echo $$>$lockfile
 fi
 
 st1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
@@ -118,9 +118,9 @@ echo " "
 destdir=${destpre0}${syssep}${cyear}${syssep}${today}${syssep}
 targetdir=${destdir}${datatype}
 if [ ! -d "$targetdir" ]; then
-  mkdir -m 777 -p $targetdir
+	mkdir -m 777 -p $targetdir
 else
-  echo "$today $ctime: $targetdir exists!"
+	echo "$today $ctime: $targetdir exists!"
 fi
 srcdir=${syssep}${today}${syssep}${datatype}
 srcdir1=${srcpre0}
@@ -144,9 +144,9 @@ lftp  $server -e "mirror --only-missing --continue  --parallel=40  $srcdir $targ
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 ctime3=`date --date='0 days ago' +%H:%M:%S`
 if [ $? -ne 0 ];then
-  echo "$today $ctime3: Syncing $datatype Data @ FSO Failed!"
-  cd /home/chd/
-  exit 1
+	echo "$today $ctime3: Syncing $datatype Data @ FSO Failed!"
+	cd /home/chd/
+	exit 1
 fi
 ctime2=`date --date='0 days ago' +%H:%M:%S`
 
@@ -156,36 +156,36 @@ mytime2=$(cat /home/chd/log/sdtmp)
 chmod 777 -R $targetdir &
 waiting "$!" "Permission Changing" "Changing Permission"
 if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctime3: Changing Permission of $datatype Failed!"
-  cd /home/chd/
-  exit 1
+	ctime3=`date --date='0 days ago' +%H:%M:%S`
+	echo "$today $ctime3: Changing Permission of $datatype Failed!"
+	cd /home/chd/
+	exit 1
 fi
 ctime2=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime2: Summerizing File Numbers & Size..."
 
-#n2=`ls -lR $targetdir | grep "^-" | wc -l` 
-#s2=`du -sm $targetdir|awk '{print $1}'` 
+#n2=`ls -lR $targetdir | grep "^-" | wc -l`
+#s2=`du -sm $targetdir|awk '{print $1}'`
 
 ls -lR $targetdir | grep "^-" | wc -l > $filenumber1 &
 waiting "$!" "File Number Sumerizing" "Sumerizing File Number"
 if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
-  cd /home/chd/
-  exit 1
+	ctime3=`date --date='0 days ago' +%H:%M:%S`
+	echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
+	cd /home/chd/
+	exit 1
 fi
 
 du -sm $targetdir|awk '{print $1}' > $filesize1 &
 waiting "$!" "File Size Summerizing" "Sumerizing File Size"
 if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
-  cd /home/chd/
-  exit 1
+	ctime3=`date --date='0 days ago' +%H:%M:%S`
+	echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
+	cd /home/chd/
+	exit 1
 fi
 if [ ! -d "$targetdir" ]; then
-  echo "0" > $filesize1
+	echo "0" > $filesize1
 fi
 
 n2=$(cat $filenumber1)
@@ -226,4 +226,3 @@ exit 0
 #  echo "              PID: $pid                    "
 #  exit 0
 #fi
-
