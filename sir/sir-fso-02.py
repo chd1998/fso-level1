@@ -56,15 +56,27 @@ def main(argv):
 	try:
 		opts, args = getopt.getopt(argv,"hp:i:d:v:o:",["help","input_path=","input_file=","sx=","sy=","ex=","ey=","videofile=","output="])
 	except getopt.GetoptError:
-		print ('python sir-fso.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>')
+		print ('Usage: python sir-fso-xx.py -p <inputpath> -i <inputfile> -d --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
+		print ('Example: python sir-fso-xx.py -p d:\\fso-test -i *.fits -d False --sx 200 --sy 200 --ex 700 --ey 700  -v test.avi -o True')
 		sys.exit(2)
 	if(list.__len__(sys.argv) <= 1):
-		print ('python sir-fso.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>')
+		print ('Usage: python sir-fso-xx.py -p <inputpath> -i <inputfile> -d --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
+		print ('Example: python sir-fso-xx.py -p d:\\fso-test -i *.fits -d False --sx 200 --sy 200 --ex 700 --ey 700  -v test.avi -o True')
 		sys.exit(2)
 	#print(list.__len__(sys.argv))
+	numtmp = 0
+	for opt, arg in opts:
+		numtmp = numtmp + 1
+	print (numtmp)
+	if(numtmp != 9):
+		print ('Usage: python sir-fso-xx.py -p <inputpath> -i <inputfile> -d --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
+		print ('Example: python sir-fso-xx.py -p d:\\fso-test -i *.fits -d False --sx 200 --sy 200 --ex 700 --ey 700  -v test.avi -o True')
+		sys.exit(2)
+
 	for opt, arg in opts:
 		if opt == '-h':
-			print ('python sir-fso.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>')
+			print ('Usage: python sir-fso-xx.py -p <inputpath> -i <inputfile> -d --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
+			print ('Example: python sir-fso-xx.py -p d:\\fso-test -i *.fits -d False --sx 200 --sy 200 --ex 700 --ey 700  -v test.avi -o True')
 			sys.exit()
 		elif opt in ('-p'):
 			input_path = arg
@@ -85,8 +97,8 @@ def main(argv):
 		elif opt in ('-o'):
 			createfile = arg
 		else:
-			print ('Usage: python sir-fso-02.py -p <inputpath> -i <inputfile> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
-			print ('Example: python sir-fso-02.py -p d:\\fso-test -i *.fits -d False --sx 200 --sy 200 --ex 700 --ey 700  -v test.avi -o True')
+			print ('Usage: python sir-fso-xx.py -p <inputpath> -i <inputfile> -d --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
+			print ('Example: python sir-fso-xx.py -p d:\\fso-test -i *.fits -d False --sx 200 --sy 200 --ex 700 --ey 700  -v test.avi -o True')
 			sys.exit()
 
 	sx = np.int32(sx)
@@ -97,9 +109,9 @@ def main(argv):
 	right = [ex,ey]
 	local_sys = platform.system()
 	if local_sys == 'Linux':
-	 	sys_sep = '/'
+		 sys_sep = '/'
 	else:
-	 	sys_sep = '\\'
+		 sys_sep = '\\'
 	print ("input file :",input_file)
 	print ("input path :",input_path)
 	print ("start point :",left)
@@ -416,178 +428,178 @@ def xcorrcenter(standimage, compimage, R0, flag):
 	return m, n, cor
 #
 def imnorm(im, mx=0, mi=0):
-    #   图像最大最小归一化 0-1
-    if mx != 0 and mi != 0:
-        pass
-    else:
-        mi, mx = np.min(im), np.max(im)
+	#   图像最大最小归一化 0-1
+	if mx != 0 and mi != 0:
+		pass
+	else:
+		mi, mx = np.min(im), np.max(im)
 
-    im2 = removenan((im - mi) / (mx - mi))
+	im2 = removenan((im - mi) / (mx - mi))
 
-    arr1 = (im2 > 1)
-    im2[arr1] = 1
-    arr0 = (im2 < 0)
-    im2[arr0] = 0
+	arr1 = (im2 > 1)
+	im2[arr1] = 1
+	arr0 = (im2 < 0)
+	im2[arr0] = 0
 
-    return im2
+	return im2
 
 
 def imgcut(A, X, Y):
-    """
-    get subimage
-    A: image narray
-    X,Y: narray [2,3,4,5,.....100]
-    """
-    try:
-        B = A[X[0]:X[-1], Y[0]:Y[-1]]
-    except:
-        B = A
-        print('Warning:ROI is out of Image range. Whole image is selected as ROI')
+	"""
+	get subimage
+	A: image narray
+	X,Y: narray [2,3,4,5,.....100]
+	"""
+	try:
+		B = A[X[0]:X[-1], Y[0]:Y[-1]]
+	except:
+		B = A
+		print('Warning:ROI is out of Image range. Whole image is selected as ROI')
 
-    return B
+	return B
 
 
 def zscore2(im):
-    """
-    归一化：均值为0，方差为1
-    """
-    st = im.std()
-    if st > 0:
-        im = removenan((im - im.mean()) / im.std())
-    else:
-        im = removenan(im - im.mean())
+	"""
+	归一化：均值为0，方差为1
+	"""
+	st = im.std()
+	if st > 0:
+		im = removenan((im - im.mean()) / im.std())
+	else:
+		im = removenan(im - im.mean())
 
-    return im
+	return im
 
 
 def immove(image, dx, dy):
-    """
-    image shift by subpix
-    """
-    # The shift corresponds to the pixel offset relative to the reference image
-    """
-    from scipy.ndimage import fourier_shift
-    if dx == 0 and dy == 0:
-        offset_image = image
-    else:
-        shift = (dx, dy)
-        M, N = image.shape
-        gpu_image = cp.ndarray((M,N),dtype=np.complex64)
-        gpu_image = cp.asarray(image)
-        gpu_image = cp.fft.fft2(gpu_image)
-        fft_image = cp.asnumpy(gpu_image)
-        tmp_image = fourier_shift(fft_image, shift)
-        gpu_image = cp.asarray(tmp_image)
-        gpu_image = cp.fft.ifft2(gpu_image)
-        offset_image = cp.asnumpy(gpu_image)
-        offset_image = np.real(offset_image)
-    """
-    from scipy.ndimage import fourier_shift
-    if dx == 0 and dy == 0:
-        offset_image = image
-    else:
-        shift = (dx, dy)
-        offset_image = fourier_shift(fft.fft2(image), shift)
-        offset_image = np.real(fft.ifft2(offset_image))
+	"""
+	image shift by subpix
+	"""
+	# The shift corresponds to the pixel offset relative to the reference image
+	"""
+	from scipy.ndimage import fourier_shift
+	if dx == 0 and dy == 0:
+		offset_image = image
+	else:
+		shift = (dx, dy)
+		M, N = image.shape
+		gpu_image = cp.ndarray((M,N),dtype=np.complex64)
+		gpu_image = cp.asarray(image)
+		gpu_image = cp.fft.fft2(gpu_image)
+		fft_image = cp.asnumpy(gpu_image)
+		tmp_image = fourier_shift(fft_image, shift)
+		gpu_image = cp.asarray(tmp_image)
+		gpu_image = cp.fft.ifft2(gpu_image)
+		offset_image = cp.asnumpy(gpu_image)
+		offset_image = np.real(offset_image)
+	"""
+	from scipy.ndimage import fourier_shift
+	if dx == 0 and dy == 0:
+		offset_image = image
+	else:
+		shift = (dx, dy)
+		offset_image = fourier_shift(fft.fft2(image), shift)
+		offset_image = np.real(fft.ifft2(offset_image))
 
-    return offset_image
+	return offset_image
 
-    return offset_image
+	return offset_image
 
 
 def removenan(im, key=0):
-    """
-    remove NAN and INF in an image
-    """
-    im2 = np.copy(im)
-    arr = np.isnan(im2)
-    im2[arr] = key
-    arr2 = np.isinf(im2)
-    im2[arr2] = key
+	"""
+	remove NAN and INF in an image
+	"""
+	im2 = np.copy(im)
+	arr = np.isnan(im2)
+	im2[arr] = key
+	arr2 = np.isinf(im2)
+	im2[arr2] = key
 
-    return im2
+	return im2
 
 
 def circshift(im, dx=0, dy=0):
-    """
-    shift an image by pixels
-    """
-    im1 = im.copy()
-    if dx != 0:  im1 = np.roll(im1, dx, axis=0)
-    if dy != 0:  im1 = np.roll(im1, dy, axis=1)
+	"""
+	shift an image by pixels
+	"""
+	im1 = im.copy()
+	if dx != 0:  im1 = np.roll(im1, dx, axis=0)
+	if dy != 0:  im1 = np.roll(im1, dy, axis=1)
 
-    return im1
+	return im1
 
 
 def mkdir(path):
-    # 引入模块
-    import os
+	# 引入模块
+	import os
 
-    path = path.strip()
-    # 去除尾部 \ 符号
-    path = path.rstrip(sys_sep)
+	path = path.strip()
+	# 去除尾部 \ 符号
+	path = path.rstrip(sys_sep)
 
-    # 判断路径是否存在
-    isExists = os.path.exists(path)
+	# 判断路径是否存在
+	isExists = os.path.exists(path)
 
-    # 判断结果
-    if isExists:
-        return False
-    else:
-        os.makedirs(path)
-        return True
+	# 判断结果
+	if isExists:
+		return False
+	else:
+		os.makedirs(path)
+		return True
 
 '''
 def cc1d(standspe,compspe):
-    M = len(standspe)
+	M = len(standspe)
 
-    standspe = (standspe-standspe.mean())/standspe.std()
-    s = fft.fft(standspe)
+	standspe = (standspe-standspe.mean())/standspe.std()
+	s = fft.fft(standspe)
 
-    compspe = (compspe-compspe.mean())/compspe.std()
-    c = fft.ifft(compspe)
+	compspe = (compspe-compspe.mean())/compspe.std()
+	c = fft.ifft(compspe)
 
-    sc = s * c
-    im = np.abs(fft.ifft(sc))  # /(M*N-1);%./(1+w1.^2);
-    cor = im.max()
-    M0 = np.where(im == cor)
-    m=np.int(M0[0])
-    if m>M/2:m=m-M
-            # 判断图像尺寸的奇偶
-    return m,  cor
+	sc = s * c
+	im = np.abs(fft.ifft(sc))  # /(M*N-1);%./(1+w1.^2);
+	cor = im.max()
+	M0 = np.where(im == cor)
+	m=np.int(M0[0])
+	if m>M/2:m=m-M
+			# 判断图像尺寸的奇偶
+	return m,  cor
 
 def alignspe_pix(A, B):
 
 
-    standspe = np.copy(A)
-    compspe = np.copy(B)
+	standspe = np.copy(A)
+	compspe = np.copy(B)
 
-    dx,ddx,i = 1,0,0
+	dx,ddx,i = 1,0,0
 
-    while (abs(dx) > 0  and (i <= 20)):  # 迭代
-        i = i + 1
-        if dx >=0 :
-            standspe=A[ddx:]
-            compspe=B[ddx:]
-        else:
-            standspe=A[:ddx-1]
-            compspe=B[:ddx-1]
+	while (abs(dx) > 0  and (i <= 20)):  # 迭代
+		i = i + 1
+		if dx >=0 :
+			standspe=A[ddx:]
+			compspe=B[ddx:]
+		else:
+			standspe=A[:ddx-1]
+			compspe=B[:ddx-1]
 
-        dx, cor = cc1d(standspe, compspe)
+		dx, cor = cc1d(standspe, compspe)
 
 
-        # 移动整数象元
+		# 移动整数象元
 
-        ddx += dx
+		ddx += dx
 
-        B = circshift(B, dx)
+		B = circshift(B, dx)
  '''
 def smallmatchlarge(im,im0):
-    import cv2
-    res = cv2.matchTemplate(im,im0,cv2.TM_CCOEFF_NORMED)
-    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
-    left = max_loc
-    return left,max_val
+	import cv2
+	res = cv2.matchTemplate(im,im0,cv2.TM_CCOEFF_NORMED)
+	min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+	left = max_loc
+	return left,max_val
 
 
 if __name__ == "__main__":
