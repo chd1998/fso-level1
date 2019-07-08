@@ -7,6 +7,7 @@
 #       20190603    Release 0.1     first version for tio-sync.sh
 #       20190625    Release 0.2     revised lftp performance & multi-thread
 #       20190703    Release 0.3     fix some errors 
+#       20190705    Release 0.4     timing logic revised
 
 #waiting pid taskname prompt
 waiting() {
@@ -20,13 +21,15 @@ waiting() {
         #恢复光标到最后保存的位置
 #        tput rc
 #        tput ed
-	ctime=`date --date='0 days ago' +%H:%M:%S`
-	today=`date --date='0 days ago' +%Y%m%d`
+	wctime=`date --date='0 days ago' +%H:%M:%S`
+	wtoday=`date --date='0 days ago' +%Y%m%d`
                
-        echo "$today $ctime: $2 Task Has Done!"
+        echo "$wtoday $wctime: $2 Task Has Done!"
+        dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
         echo "                   Finishing...."
 #        msg "done" $boldblue
         kill -6 $tmppid >/dev/null 1>&2
+        echo "$dt1" > /home/chd/log/sdtmp
 }
 
     #   输出进度条, 小棍型
@@ -35,10 +38,10 @@ procing() {
         tput ed
         while [ 1 ]
         do
-        sleep 1
-             today=`date --date='0 days ago' +%Y%m%d`
-             ctime=`date --date='0 days ago' +%H:%M:%S`
-             echo "$today $ctime: $1, Please Wait...   "
+             sleep 1
+             ptoday=`date --date='0 days ago' +%Y%m%d`
+             pctime=`date --date='0 days ago' +%H:%M:%S`
+             echo "$ptoday $pctime: $1, Please Wait...   "
              #sleep 10
         done
 }
@@ -101,7 +104,7 @@ fi
 echo "                                                       "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
 echo "                fso-sync-lftp.sh                       "
-echo "          (Release 0.3 20190703 21:51)                 "
+echo "          (Release 0.4 20190703 21:14)                 "
 echo "                                                       "
 echo "         sync $datatype data to $destpre0              "
 echo "                                                       "
@@ -145,7 +148,9 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 ctime2=`date --date='0 days ago' +%H:%M:%S`
-mytime2=`echo $ctime3|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+
+mytime2=$(cat /home/chd/log/sdtmp)
+#mytime2=`echo $ttmp|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
 chmod 777 -R $targetdir &
 waiting "$!" "Permission Changing" "Changing Permission"
@@ -197,16 +202,16 @@ speed=`echo "$ss $timediff"|awk '{print($1/$2)}'`
 echo $n2>$filenumber
 echo $s2>$filesize
 
-ctime2=`date --date='0 days ago' +%H:%M:%S`
+ctime4=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime2: Succeeded in Syncing $datatype data @ FSO!"
 echo "          Synced : $sn file(s)"
 echo "          Synced : $ss MB "
-echo "       Time used : $timediff secs."
-echo "           Speed : $speed MB/s"
+echo "  Sync Time Used : $timediff secs."
+echo "       @   Speed : $speed MB/s"
 echo "      Total file : $n2 file(s)"
 echo "      Total size : $s2 MB"
 echo "       Time from : $ctime1"
-echo "              to : $ctime3"
+echo "              to : $ctime4"
 echo "======================================================="
 rm -rf $lockfile
 cd /home/chd/

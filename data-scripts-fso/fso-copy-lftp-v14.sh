@@ -17,6 +17,7 @@
 #        20190702       Release 1.1 revise some logical relations
 #        20190704       Release 1.2 using lftp & add input args
 #        20190705       Release 1.3 logics revised
+#                       Release 1.4 revise timing logics
 #
 #waiting pid taskname prompt
 waiting() {
@@ -27,10 +28,10 @@ waiting() {
         wait $pid
         tput rc
         tput ed
-	ctime=`date --date='0 days ago' +%H:%M:%S`
-	today=`date --date='0 days ago' +%Y%m%d`
-        echo "$today $ctime: $2 Task Has Done!"
-        dt1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+	wctime=`date --date='0 days ago' +%H:%M:%S`
+	wtoday=`date --date='0 days ago' +%Y%m%d`
+        echo "$wtoday $wctime: $2 Task Has Done!"
+        dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 #        echo "                   Finishing..."
         kill -6 $tmppid >/dev/null 1>&2
         echo "$dt1" > /home/chd/log/dtmp
@@ -106,7 +107,7 @@ echo "======== Welcome to FSO Data Copying System@FSO! ========"
 echo "                                                         "
 echo "                 fso-copy-lftp.sh                        "  
 echo "                                                         "
-echo "             Relase 1.3     20190705  17:21              "
+echo "             Relase 1.4     20190705  17:21              "
 echo " Copy the $datatype data from remote ftp site to lustre  "
 echo "                                                         "
 echo "                $today    $ctime                         "
@@ -132,9 +133,11 @@ echo "$today $ctime: Syncing $datatype data @ FSO..."
 echo "                   From: $srcdir "
 echo "                   To  : $destdir "
 echo "                   Please Wait..."
-ls -lR $destdir | grep "^-" | wc -l > /home/chd/log/tmpfn1.dat
-du -sm $targetdir|awk '{print $1}' > /home/chd/log/tmpfs1.dat
+
+fn1=`ls -lR $destdir | grep "^-" | wc -l`
+fs1=`du -sm $destdir | awk '{print $1}'`
 ctime=`date --date='0 days ago' +%H:%M:%S`
+
 lftp $ftpserver -e "mirror  --only-missing --continue --parallel=40 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 if [ $? -ne 0 ];then
@@ -145,11 +148,10 @@ if [ $? -ne 0 ];then
 fi
 
 ttmp=$(cat /home/chd/log/dtmp)
+
 ctime1=`date --date='0 days ago' +%H:%M:%S`
 t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 #t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-
-
 
 targetdir=${destdir}
 ls -lR $targetdir | grep "^-" | wc -l > /home/chd/log/tmpfn2.dat &
@@ -160,7 +162,8 @@ if [ $? -ne 0 ];then
   cd /home/chd/
   exit 1
 fi
-fn1=$(cat /home/chd/log/tmpfn1.dat)
+
+#fn1=$(cat /home/chd/log/tmpfn1.dat)
 fn2=$(cat /home/chd/log/tmpfn2.dat)
 
 
@@ -176,7 +179,7 @@ if [ ! -d "$targetdir" ]; then
   echo "0" > /home/chd/log/tmpfs.dat
 fi  
 
-fs1=$(cat /home/chd/log/tmpfs1.dat)
+#fs1=$(cat /home/chd/log/tmpfs1.dat)
 fs2=$(cat /home/chd/log/tmpfs2.dat)
 
 chmod 777 -R $destdir &
@@ -188,7 +191,9 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 
-filenumber=$(($fn2-$fn1))
+filenumber=`echo "$fn1 $fn2"|awk '{print($2-$1)}'`
+#echo "$fn2, $fn1, $filenumber"
+#read
 filesize=$(($fs2-$fs1))
 timediff=$(($ttmp-$t1))
 #timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
