@@ -1,19 +1,19 @@
 #!/bin/bash
 #author: chen dong @FSO
 #Purposes: mount HD to /data directory, copy HD to /lustre/data and safely unmount HD
-#Usage: ./hd2lustre.sh srcdir destdir year(in 4 digits) datatype(TIO or HA)
-#Example: ./hd2lustre.sh  /data  /lustre/data 2019 TIO
+#Usage: ./hd2lustre-all-v11.sh srcdir destdir year(in 4 digits) datatype(TIO or HA)
+#Example: ./hd2lustre-all-v11.sh  /data  /lustre/data 2019 TIO
 #Changelog:
-#         20190420 release 0.1, first working script
-#         20190421 release 0.2, fixed minor errors, and using cp instead of rsync
-#         20190423 release 0.3, fixed error in reading parameters inputed
-#         20190423 release 0.4, judge the srcdir is empty or not
-#         20190424 release 0.5, fixed some error in copying 
-#         20190424 release 0.6, add datatype as input to improve speed for chmoding
-#         20190425 release 0.7, add more info for chmod
-#		   release 0.8, sum of the data copied in MB
+#         20190420 Release 0.1, first working script
+#         20190421 Release 0.2, fixed minor errors, and using cp instead of rsync
+#         20190423 Release 0.3, fixed error in reading parameters inputed
+#         20190423 Release 0.4, judge the srcdir is empty or not
+#         20190424 Release 0.5, fixed some error in copying 
+#         20190424 Release 0.6, add datatype as input to improve speed for chmoding
+#         20190425 Release 0.7, add more info for chmod
+#		               Release 0.8, sum of the data copied in MB
 #                  Release 0.9, sum of file numbers both in src and dest
-#	  20190625 Release 1.0, add speed info 
+#	        20190625 Release 1.0, add speed info 
 #         20190708 Release 1.1, add checking dest dir in year specified
 #                               add datatype to destdir if missing in src
 #
@@ -34,9 +34,9 @@ devpre="/dev/"
 echo " "
 echo " "
 echo "====== Welcome to HD-->Lustre data Archiving System @FSO ======"
-echo "                 Release 1.1 20190625 21:10)                   "
+echo "                 (Release 1.1 20190625 21:10)                  "
 echo "                                                               "
-echo "              Syncing data from local HD to Lustre             "
+echo "       Syncing $datatype data from local HD to Lustre          "
 echo "                                                               "
 echo "                     $today   $ctime                           "
 echo "                                                               " 
@@ -45,8 +45,8 @@ echo " "
 
 #if [[ -z $1 ]] || [[ -z $2 ]] || [[ -z $3 ]] ;then
 if [ $# -ne 4 ];then
-  echo "Usage: ./hd2lustre.sh srcdir destdir year(in 4 digits) datatype(TIO or HA)"
-  echo "Example: ./hd2lustre.sh /data  /lustre/data 2019 TIO"
+  echo "Usage: ./hd2lustre-all-v11.sh srcdir destdir year(4 digits) datatype(TIO or HA)"
+  echo "Example: ./hd2lustre-all-v11.sh /data  /lustre/data 2019 TIO"
   exit 1
 fi
 

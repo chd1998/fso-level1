@@ -1,21 +1,22 @@
 #!/bin/bash
 #author: chen dong @FSO
 #Purposes: mount HD to /data directory, copy HD to /lustre/data and safely unmount HD
-#Usage: ./hd2lustre.sh srcdir destdir year(in 4 digits) datatype(TIO or HA)
-#Example: ./hd2lustre.sh  /data  /lustre/data 2019 TIO
+#Usage: ./hd2lustre-single-v12.sh srcdir destdir year(4 digits) monthday(4 digits) datatype(TIO or HA)
+#Example: ./hd2lustre-single-v12.sh  /data  /lustre/data 2019 0707 TIO
 #Changelog:
-#         20190420 release 0.1, first working script
-#         20190421 release 0.2, fixed minor errors, and using cp instead of rsync
-#         20190423 release 0.3, fixed error in reading parameters inputed
-#         20190423 release 0.4, judge the srcdir is empty or not
-#         20190424 release 0.5, fixed some error in copying 
-#         20190424 release 0.6, add datatype as input to improve speed for chmoding
-#         20190425 release 0.7, add more info for chmod
-#		   release 0.8, sum of the data copied in MB
+#         20190420 Release 0.1, first working script
+#         20190421 Release 0.2, fixed minor errors, and using cp instead of rsync
+#         20190423 Release 0.3, fixed error in reading parameters inputed
+#         20190423 Release 0.4, judge the srcdir is empty or not
+#         20190424 Release 0.5, fixed some error in copying 
+#         20190424 Release 0.6, add datatype as input to improve speed for chmoding
+#         20190425 Release 0.7, add more info for chmod
+#		               Release 0.8, sum of the data copied in MB
 #                  Release 0.9, sum of file numbers both in src and dest
-#	  20190625 Release 1.0, add speed info 
+#	        20190625 Release 1.0, add speed info 
 #         20190708 Release 1.1, add checking dest dir in year specified
 #                               add datatype to destdir if missing in src
+#                  Release 1.2, copy data of single day only
 #
 trap 'onCtrlC' INT
 function onCtrlC(){
@@ -44,16 +45,17 @@ echo "==============================================================="
 echo " "
 
 #if [[ -z $1 ]] || [[ -z $2 ]] || [[ -z $3 ]] ;then
-if [ $# -ne 4 ];then
-  echo "Usage: ./hd2lustre.sh srcdir destdir year(in 4 digits) datatype(TIO or HA)"
-  echo "Example: ./hd2lustre.sh /data  /lustre/data 2019 TIO"
+if [ $# -ne 5 ];then
+  echo "Usage: ./hd2lustre-single.sh srcdir destdir year(4 digits) monthday(4 digits) datatype(TIO or HA)"
+  echo "Example: ./hd2lustre-single.sh /data  /lustre/data 2019 0707 TIO"
   exit 1
 fi
 
 srcdir1=$1
 destdir1=$2
 ayear=$3
-datatype=$4
+amonthday=$4
+datatype=$5
 srcdir=${srcdir1}${syssep}
 destdir=${destdir1}${syssep}${ayear}${syssep}
 
@@ -120,10 +122,7 @@ echo "$today $ctime: Calculating size and file number in $src..."
 srcsize=`du -sm $src|awk '{print $1}'`
 srcfilenum=`ls -lR $src| grep "^-" | wc -l`
 #mount device ended,start copying then
-#create dir in year specified if not exist
-#if [ ! -d "${destdir}${ayear}${syssep}${datatype}" ];then
-#  mkdir -p -m 777 ${destdir}${ayear}${syssep}${datatype}
-#fi
+
 destsizetmp=0
 destfilenumtmp=0
 destsizetotal=0
@@ -132,60 +131,49 @@ timetotal=0
 ctime=`date --date='0 days ago' +%H:%M:%S`
 t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
-dir=$(ls -l $srcdir1 |awk '/^d/ {print $NF}')
-for i in $dir
-do
-  if [ ! -d "${destdir}${i}" ];then
-    mkdir -p -m 777 ${destdir}${i}${syssep}${datatype}
-  fi
-  dest=${destdir}${i}${syssep}${datatype}
-  src=${srcdir}${i}
+#create destdir with datatype is missing
+if [ ! -d "${destdir}${ayear}${amonthday}${syssep}${datatype}" ];then
+  mkdir -p -m 777 ${destdir}${i}${syssep}${datatype}
+fi
+dest=${destdir}${ayear}${amonthday}${syssep}${datatype}
+src=${srcdir}${ayear}${amonthday}
 
+ctime1=`date --date='0 days ago' +%H:%M:%S`
+echo " "
+echo "==============================================================="
+echo "$today $ctime1: Archiving @datatype data from HD to lustre....."
+echo "                   From: $src on $dev"
+echo "                   To  : $dest"
+echo "$today $ctime1: Copying...."
+echo "                   Please Wait..."
+echo "==============================================================="
+
+cd $src
+cp -ruf  . $dest
+
+if [ $? -ne 0 ];then
   ctime1=`date --date='0 days ago' +%H:%M:%S`
-  echo " "
-  echo "==============================================================="
-  echo "$today $ctime1: Archiving @datatype data from HD to lustre....."
-  echo "                   From: $src on $dev"
-  echo "                   To  : $dest"
-  echo "$today $ctime1: Copying...."
-  echo "                   Please Wait..."
-  echo "==============================================================="
-#read
+  echo "$today $ctime1: Archiving $src on $dev to $dest failed!"
+  echo "                   please check!"
+  umount $dev
+  exit 1
+fi
 
-#cd $srcdir1
-#src=${srcdir}
-#destdir=${destdir}${
-#echo "src= $src"
-#read
-  cd $src
-  cp -ruf  . $dest
+ctime1=`date --date='0 days ago' +%H:%M:%S`
+t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
-  if [ $? -ne 0 ];then
-    ctime1=`date --date='0 days ago' +%H:%M:%S`
-    echo "$today $ctime1: Archiving $src on $dev to $dest failed!"
-    echo "                   please check!"
-    umount $dev
-    exit 1
-  fi
-
-  ctime1=`date --date='0 days ago' +%H:%M:%S`
-
-  
-  t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-  destsizetmp=`du -sm $dest|awk '{print $1}'`
-  destfilenumtmp=`ls -lR $dest| grep "^-" | wc -l`
-  destsizetotal=`echo "$destsizetotal $destsizetmp"|awk '{print($2+$1)}'`
-  destfilenumtotal=`echo "$destfilenumtotal $destfilenumtmp"|awk '{print($2+$1)}'`
-  timetotal=`echo "$timetotal $t1 $t2"|awk '{print($1+($3-$2))}'`
-  echo "$today $ctime1: Copying From $src To $dest Finished!....."
-done
+destsize=`du -sm $dest|awk '{print $1}'`
+destfilenum=`ls -lR $dest| grep "^-" | wc -l`
+timetotal=`echo "$t1 $t2"|awk '{print($2-$1)}'`
+echo "$today $ctime1: Copying From $src To $dest Finished!....."
   
 #speed of copy 
 ctime2=`date --date='0 days ago' +%H:%M:%S`
+
 if [ $timetotal -eq 0 ]; then
 	speed=0
 fi
-speed=`echo "$destsizetotal $timetotal"|awk '{print($1/$2)}'`
+speed=`echo "$destsize $timetotal"|awk '{print($1/$2)}'`
 
 echo "==============================================================="
 echo "$today $ctime1: Succeeded in Archiving Data:"
@@ -193,8 +181,8 @@ echo "                   From: $srcdir on $dev"
 echo "                   To  : $destdir"
 echo "        Source File Num: $srcfilenum"
 echo "            Source Size: $srcsize MB"
-echo "          Dest File Num: $destfilenumtotal"
-echo "              Dest Size: $destsizetotal MB"
+echo "          Dest File Num: $destfilenum"
+echo "              Dest Size: $destsize MB"
 echo "                  Speed: $speed MB/s"
 echo "              Time Used: $timetotal secs."
 echo "              Time From: $ctime "
