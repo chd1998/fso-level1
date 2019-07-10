@@ -7,9 +7,9 @@
 #Changelog:
 #         20190420 	Release 0.1	first working script
 #         20190421 	Release 0.2	fixed minor errors, and using cp instead of rsync
-#  	  20190426 	Release 0.3	fixed minor display problems
-# 		   	Release 0.4	sum the file num and size both in src and dest
-#         20190625      Release 0.5     calculate speed of copying 
+#  	      20190426 	Release 0.3	fixed minor display problems
+# 		   	          Release 0.4	sum the file num and size both in src and dest
+#         20190625  Release 0.5     calculate speed of copying 
 
 trap 'onCtrlC' INT
 function onCtrlC(){
