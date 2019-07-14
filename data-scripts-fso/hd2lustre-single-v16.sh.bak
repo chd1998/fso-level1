@@ -170,7 +170,7 @@ t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++)
 if [ ! -d "${destdir}${ayear}${amonthday}${syssep}${datatype}" ];then
   mkdir -p -m 777 ${destdir}${i}${syssep}${datatype}
 fi
-dest=${destdir}${ayear}${amonthday}${syssep}${datatype}
+dest=${destdir}${ayear}${amonthday}
 src=${srcdir}${ayear}${amonthday}
 
 ctime1=`date --date='0 days ago' +%H:%M:%S`
@@ -183,8 +183,9 @@ echo "$today $ctime1: Copying...."
 echo "                   Please Wait..."
 echo "==============================================================="
 
-cd $src
-cp -ruf  . $dest >/dev/null 2>&1 &
+#cd $src
+#cp -ruf  . $dest >/dev/null 2>&1 &
+tar cf - . | pv -s $(du -sb "$src" | cut -f1) | tar xf - -C "$dest"
 waiting "$!" "$datatype Data Copying" "Copying $datatype Data"
 
 if [ $? -ne 0 ];then

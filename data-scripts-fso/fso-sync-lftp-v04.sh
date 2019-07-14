@@ -150,7 +150,7 @@ mytime2=$(cat /home/chd/log/$(basename $0)-$datatype-sdtmp.dat)
 #mytime2=`echo $ttmp|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
 chmod 777 -R $targetdir &
-waiting "$!" "Permission Changing" "Changing Permission"
+waiting "$!" "$datatype Files Permission Changing" "Changing $datatype Files Permission"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
   echo "$today $ctime3: Changing Permission of $datatype Failed!"
@@ -158,13 +158,13 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 ctime2=`date --date='0 days ago' +%H:%M:%S`
-echo "$today $ctime2: Summerizing File Numbers & Size..."
+echo "$today $ctime2: Summerizing $datatype File Numbers & Size..."
 
 #n2=`ls -lR $targetdir | grep "^-" | wc -l` 
 #s2=`du -sm $targetdir|awk '{print $1}'` 
 
 ls -lR $targetdir | grep "^-" | wc -l > $filenumber1 &
-waiting "$!" "File Number Sumerizing" "Sumerizing File Number"
+waiting "$!" "$datatype File Number Sumerizing" "Sumerizing $datatype File Number"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
   echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
@@ -173,7 +173,7 @@ if [ $? -ne 0 ];then
 fi
 
 du -sm $targetdir|awk '{print $1}' > $filesize1 &
-waiting "$!" "File Size Summerizing" "Sumerizing File Size"
+waiting "$!" "$datatype File Size Summerizing" "Sumerizing @datatype File Size"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
   echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"

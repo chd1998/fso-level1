@@ -92,7 +92,7 @@ if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
   ps -p $mypid | grep $mypid &>/dev/null
   if [ $? -eq 0 ];then
-    echo "$todday $ctime: $(basename $0) is running" && exit 1
+    echo "$todday $ctime: $(basename $0) is running for syncing $datatype" && exit 1
   else
     echo $$>$lockfile
   fi
@@ -103,7 +103,7 @@ fi
 echo " "
 echo "======== Welcome to FSO Data Copying System@FSO! ========"
 echo "                                                         "
-echo "                 fso-copy-lftp-cyg.sh                        "  
+echo "                 fso-copy-lftp-cyg.sh                    "  
 echo "                                                         "
 echo "             Relase 1.5     20190713  08:28              "
 echo " Copy the $datatype data from remote ftp site to lustre  "
@@ -134,15 +134,17 @@ echo "                   Please Wait..."
 
 #count existed file number
 if [ ! -f "./log/$(basename $0)_${datatype}_tmpfn2.dat" ]; then
-  ls -lR $destdir | grep "^-" | wc -l > ./log/$(basename $0)_${datatype}_tmpfn2.dat  & 
-  waiting "$!" "Existed Dest File Number Counting" "Counting Dest Existed File Number"
+  #ls -lR $destdir | grep "^-" | wc -l > ./log/$(basename $0)_${datatype}_tmpfn2.dat  & 
+  #waiting "$!" "Existed $datatype File Number @ Dest Counting" "Counting Existed $datatype File Number @ Dest"
+  echo "0" > ./log/$(basename $0)_${datatype}_tmpfn2.dat
 fi
 fn1=$(cat ./log/$(basename $0)_${datatype}_tmpfn2.dat)
 
 #count existed file size  
 if [ ! -f "./log/$(basename $0)_${datatype}_tmpfs2.dat" ]; then
-  fs1=`du -sm $destdir | awk '{print $1}'` > ./log/$(basename $0)_${datatype}_tmpfs2.dat &
-  waiting "$!" "Existed Dest File Size Counting" "Counting Existed Dest File Size"
+  #fs1=`du -sm $destdir | awk '{print $1}'` > ./log/$(basename $0)_${datatype}_tmpfs2.dat &
+  #waiting "$!" "Existed $datatype File Size @ Dest Counting" "Counting Existed $datatype Dest File Size"
+  echo "0">./log/$(basename $0)_${datatype}_tmpfs2.dat
 fi
 fs1=$(cat ./log/$(basename $0)_${datatype}_tmpfs2.dat)
 
@@ -165,8 +167,9 @@ t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++)
 #t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
 targetdir=${destdir}
+
 ls -lR $targetdir | grep "^-" | wc -l > ./log/$(basename $0)_${datatype}_tmpfn2.dat &
-waiting "$!" "File Number Sumerizing" "Sumerizing File Number"
+waiting "$!" "File Number Sumerizing for Synced $datatype Data" "Sumerizing File Number for Synced $datatype Data"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
   echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
@@ -179,7 +182,7 @@ fn2=$(cat ./log/$(basename $0)_${datatype}_tmpfn2.dat)
 
 
 du -sm $targetdir|awk '{print $1}' > ./log/$(basename $0)_${datatype}_tmpfs2.dat &
-waiting "$!" "File Size Summerizing" "Sumerizing File Size"
+waiting "$!" "File Size Summerizing for Synced $datatype Data" "Sumerizing File Size for Synced $datatype Data"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
   echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
@@ -223,10 +226,12 @@ timediff1=`echo "$t1 $t4"|awk '{print($2-$1)}'`
 
 echo " " 
 echo "$today $ctime3: Succeeded in Syncing $datatype data @ FSO!"
-echo "Synced file No.  : $filenumber file(s)"
+echo " Synced file No. : $filenumber file(s)"
 echo "Synced data size : $filesize MB"
 echo "    Sync @ Speed : $speed MB/s"
 echo "  Sync Time Used : $timediff secs."
+echo "  Total File No. : $fn2 file(s)"
+echo " Total File Size : $fs2 MB"
 echo " Total Time Used : $timediff1 secs."
 echo " Total Time From : $ctime0 "
 echo "              To : $ctime3 "

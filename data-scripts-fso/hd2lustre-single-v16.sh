@@ -18,6 +18,7 @@
 #                               add datatype to destdir if missing in src
 #                  Release 1.2, copy data of single day only
 #         20190710 Release 1.4, copy process indicator added
+#         20190714 Release 1.6, using tar & pv instead of cp
 #
 
 waiting() {
