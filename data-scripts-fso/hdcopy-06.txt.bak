@@ -1,13 +1,4 @@
-﻿1. 异步同步说明：
-  所有源数据位于数据采集机器的本地固态硬盘，通过ftp方式异步同步至超算lustre高速缓存以及3楼数据处理机暂存硬盘，目前支持HA/TIO数据异步同步
-  1.1 同步至lustre：
-    每天0800-2000，同步脚本（位于超算传输机）自动后台进行，频率每分钟1次，无需人工干预
-  1.2 同步至数据处理机：
-    
-
-
-
-2. 远程拷贝ftp数据至lustre:
+﻿1. 远程拷贝ftp数据至lustre:
     如果因为特殊情况，每天自动同步没有完成，需要远程手动拷贝数据至lustre时使用本脚本：
     
 #        20190420       Release 0.1 first prototype release 0.1
@@ -29,7 +20,7 @@
 		
 		含义：使用用户tio,密码ynao246135, 从ftp server192.168.111.120 端口21  拷贝20190427的TIO数据至/lustre，192.168.111.120，21, /lustre/data,2019 0427 TIO等参数可以根据实际情况更改
  
-3. 拷贝硬盘数据文件到lustre:
+2. 拷贝硬盘数据文件到lustre:
 
 
 #         20190420 Release 0.1, first working script
@@ -63,7 +54,7 @@
 
 
 
-4. 拷贝lustre数据到硬盘：
+3. 拷贝lustre数据到硬盘：
 #         20190420 	Release 0.1	first working script
 #         20190421 	Release 0.2	fixed minor errors, and using cp instead of rsync
 #  	      20190426 	Release 0.3	fixed minor display problems
@@ -92,7 +83,7 @@
 		新插入的硬盘一般是最后一个，故根据提示选最后一个设备对应的数字即可；
 
 
-5. 拷贝lustre/data/下面任意目录到硬盘：
+4. 拷贝lustre/data/下面任意目录到硬盘：
 		
   	/home/chd/data-copy.sh /lustre/data/2019/20190518/TIO/12741/050530/ /data
 
@@ -111,7 +102,7 @@
 		3. /dev/sde1
 		新插入的硬盘一般是最后一个，故根据提示选最后一个设备对应的数字即可
 		
-6. 注意事项：
+5. 注意事项：
 		上述脚本可以并行运行，但是需要注意：
 		1） 硬盘必须挂载在不同的目录下；
 		2） 在选择硬盘设备名称时候，注意选择对应的数字，如0/1等即可；

@@ -146,7 +146,7 @@ if [ $? -ne 0 ];then
 fi
 ctime2=`date --date='0 days ago' +%H:%M:%S`
 
-mytime2=$(cat /home/chd/log/$(basename $0)-$datatype-sdtmp.dat)
+mytime2=$(cat /home/chd/log/sdtmp)
 #mytime2=`echo $ttmp|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
 chmod 777 -R $targetdir &
