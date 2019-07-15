@@ -1,8 +1,8 @@
 #!/bin/bash
 #author: chen dong @FSO
 #Purposes: mount HD to /data directory, copy HD to /lustre/data and safely unmount HD
-#Usage: ./hd2lustre-all-v11.sh srcdir destdir year(in 4 digits) datatype(TIO or HA)
-#Example: ./hd2lustre-all-v11.sh  /data  /lustre/data 2019 TIO
+#Usage: ./hd2lustre-all-v15.sh srcdir destdir year(in 4 digits) datatype(TIO or HA)
+#Example: ./hd2lustre-all-v15.sh  /data  /lustre/data 2019 TIO
 #Changelog:
 #         20190420 Release 0.1, first working script
 #         20190421 Release 0.2, fixed minor errors, and using cp instead of rsync
@@ -11,9 +11,9 @@
 #         20190424 Release 0.5, fixed some error in copying 
 #         20190424 Release 0.6, add datatype as input to improve speed for chmoding
 #         20190425 Release 0.7, add more info for chmod
-#		               Release 0.8, sum of the data copied in MB
+#                  Release 0.8, sum of the data copied in MB
 #                  Release 0.9, sum of file numbers both in src and dest
-#	        20190625 Release 1.0, add speed info 
+#         20190625 Release 1.0, add speed info 
 #         20190708 Release 1.1, add checking dest dir in year specified
 #                               add datatype to destdir if missing in src
 #         20190710 Release 1.3, add multithreading to copy process
