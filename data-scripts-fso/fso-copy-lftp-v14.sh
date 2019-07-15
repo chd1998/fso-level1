@@ -182,7 +182,8 @@ fi
 #fs1=$(cat /home/chd/log/tmpfs1.dat)
 fs2=$(cat /home/chd/log/tmpfs2.dat)
 
-chmod 777 -R $destdir &
+#chmod 777 -R $destdir &
+find $targetdir ! -perm 777 -type f -exec chmod 777 {} \; &
 waiting "$!" "Permission Changing" "Changing Permission"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`

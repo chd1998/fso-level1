@@ -88,7 +88,7 @@ if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
   ps -p $mypid | grep $mypid &>/dev/null
   if [ $? -eq 0 ];then
-    echo "$today $ctime: $(basename $0) is running" 
+    echo "$today $ctime: $(basename $0) is running for syncing $datatype data..." 
     exit 1
   else
     echo $$>$lockfile
@@ -149,7 +149,8 @@ ctime2=`date --date='0 days ago' +%H:%M:%S`
 mytime2=$(cat /home/chd/log/$(basename $0)-$datatype-sdtmp.dat)
 #mytime2=`echo $ttmp|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
-chmod 777 -R $targetdir &
+#chmod 777 -R $targetdir &
+find $targetdir ! -perm 777 -type f -exec chmod 777 {} \; &
 waiting "$!" "$datatype Files Permission Changing" "Changing $datatype Files Permission"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
@@ -173,7 +174,7 @@ if [ $? -ne 0 ];then
 fi
 
 du -sm $targetdir|awk '{print $1}' > $filesize1 &
-waiting "$!" "$datatype File Size Summerizing" "Sumerizing @datatype File Size"
+waiting "$!" "$datatype File Size Summerizing" "Sumerizing $datatype File Size"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
   echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
