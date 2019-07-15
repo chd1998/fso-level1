@@ -5,33 +5,33 @@ lockfile=/home/chd/log/$(basename $0)_lockfile
 #检查是否存在lockfile
 if [ -f $lockfile ];then
 #如果有lockfile,获取lockfile中的pid
-  mypid=$(cat $lockfile)
+	mypid=$(cat $lockfile)
 #以pid为参数，查看内存中是否存在pid值的进程
-  ps -p $mypid | grep $mypid &>/dev/null
+	ps -p $mypid | grep $mypid &>/dev/null
 # 如果有
-  if [ $? -eq 0 ];then
+	if [ $? -eq 0 ];then
 # 打印已经运行并退出
-    echo "$todday $ctime: $(basename $0) is running" && exit 1
-  else
+		echo "$todday $ctime: $(basename $0) is running" && exit 1
+	else
 # 如果没有，将当前脚本pid值$$写入lockfile
-    echo $$>$lockfile
-  fi
+		echo $$>$lockfile
+	fi
 else
 # 如果不存在lockfil, 将当前脚本pid值写入lockfile
-  echo $$>$lockfile
+	echo $$>$lockfile
 fi
 
 2.脚本截获ctrl-c中断
 trap 'onCtrlC' INT
 function onCtrlC(){
-    echo "Ctrl-C Captured! "
-    echo "Breaking..."
-    umount $dev
-    exit 1
+		echo "Ctrl-C Captured! "
+		echo "Breaking..."
+		umount $dev
+		exit 1
 }
 
 3.列出除 /dev/sda外所有硬盘
-#$IFS是shell的字符分隔符，默认是空格、tab、换行符. $IFS变量通常用于read命令（可以用作不同变量的分割符）, 
+#$IFS是shell的字符分隔符，默认是空格、tab、换行符. $IFS变量通常用于read命令（可以用作不同变量的分割符）,
 #$IFS变量还可以用于字符串分割并储存到数组变量
 
 #searching for all available disk devices...
@@ -45,13 +45,13 @@ echo "$today $ctime: Please select target drive to archiving..."
 echo "Available devices:"
 for i in ${hdlist[@]}
 do
-  echo "$len1: $i"
-  let len1++
+	echo "$len1: $i"
+	let len1++
 done
 
 if [ $len1 -le 0 ];then
-  echo "No devices available..."
-  exit 1
+	echo "No devices available..."
+	exit 1
 fi
 
 #!/bin/bash
@@ -62,7 +62,7 @@ arr=($a)
 IFS="$OLD_IFS"
 for s in ${arr[@]}
 do
-    echo "$s" 
+		echo "$s"
 done
 
 4. 获取当天时间，年份，年月日
@@ -104,28 +104,31 @@ ps -p $pid -o etime=|/home/chd/gettime.awk
 
 
 gettime.awk:
-#!/usr/bin/awk -f  
+#!/usr/bin/awk -f
 BEGIN { FS = ":" }
 {
-  if (NF == 2) 
-  {
-    print $1*60 + $2
-  } 
-  else if (NF == 3) 
-  {
-    split($1, a, "-");
-    if (a[1] != "" && a[2] != "" ) 
-    {
-      print ((a[1]*24+a[2])*60 + $2) * 60 + $3;
-    } 
-    else 
-    {
-      print ($1*60 + $2) * 60 + $3;
-    }
-  }
+	if (NF == 2)
+	{
+		print $1*60 + $2
+	}
+	else if (NF == 3)
+	{
+		split($1, a, "-");
+		if (a[1] != "" && a[2] != "" )
+		{
+			print ((a[1]*24+a[2])*60 + $2) * 60 + $3;
+		}
+		else
+		{
+			print ($1*60 + $2) * 60 + $3;
+		}
+	}
 }
 
 
 9. shell中进行算术运算
 
  speed=`echo "$sdata $edata $delaytime"|awk '{print(($2-$1)/$3)}'`
+
+ 10. 一个目录下所有不是777权限的文件改为权限777
+ find $targetdir ! -perm 777 -type f -exec chmod 777 {} \; 
