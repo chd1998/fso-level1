@@ -65,6 +65,7 @@ ctime=`date --date='0 days ago' +%H:%M:%S`
 ctime0=`date --date='0 days ago' +%H:%M:%S`
 if [ $# -ne 8 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to local HD under cygwin"
+  echo "Usage: ./fso-copy.sh srcip port dest year(4 digits)  monthday(4 digits) user password datatype(TIO/HA)"
   echo "Example: ./fso-copy-lftp-cyg.sh 192.168.111.120 21 f 2019 0713 tio ynao246135 TIO"
   exit 1
 fi
@@ -92,7 +93,7 @@ if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
   ps -p $mypid | grep $mypid &>/dev/null
   if [ $? -eq 0 ];then
-    echo "$todday $ctime: $(basename $0) is running for syncing $datatype" && exit 1
+    echo "$today $ctime: $(basename $0) is running for syncing $datatype" && exit 1
   else
     echo $$>$lockfile
   fi
@@ -226,12 +227,11 @@ timediff1=`echo "$t1 $t4"|awk '{print($2-$1)}'`
 
 echo " " 
 echo "$today $ctime3: Succeeded in Syncing $datatype data @ FSO!"
-echo " Synced file No. : $filenumber file(s)"
+echo "Synced file No.  : $filenumber file(s)"
 echo "Synced data size : $filesize MB"
 echo "    Sync @ Speed : $speed MB/s"
 echo "  Sync Time Used : $timediff secs."
-echo "  Total File No. : $fn2 file(s)"
-echo " Total File Size : $fs2 MB"
+echo "  Total File No. : $"
 echo " Total Time Used : $timediff1 secs."
 echo " Total Time From : $ctime0 "
 echo "              To : $ctime3 "

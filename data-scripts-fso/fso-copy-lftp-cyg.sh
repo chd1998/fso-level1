@@ -74,6 +74,7 @@ ctime=`date --date='0 days ago' +%H:%M:%S`
 ctime0=`date --date='0 days ago' +%H:%M:%S`
 if [ $# -ne 8 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to local HD under cygwin"
+  echo "Usage: ./fso-copy.sh srcip port dest year(4 digits)  monthday(4 digits) user password datatype(TIO/HA)"
   echo "Example: ./fso-copy-lftp-cyg.sh 192.168.111.120 21 f 2019 0713 tio ynao246135 TIO"
   exit 1
 fi
@@ -101,7 +102,7 @@ if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
   ps -p $mypid | grep $mypid &>/dev/null
   if [ $? -eq 0 ];then
-    echo "$todday $ctime: $(basename $0) is running for syncing $datatype " && exit 1
+    echo "$today $ctime: $(basename $0) is running for syncing $datatype " && exit 1
   else
     echo $$>$lockfile
   fi
