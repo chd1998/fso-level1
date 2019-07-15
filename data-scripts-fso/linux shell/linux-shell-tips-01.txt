@@ -131,4 +131,4 @@ BEGIN { FS = ":" }
  speed=`echo "$sdata $edata $delaytime"|awk '{print(($2-$1)/$3)}'`
 
  10. 一个目录下所有不是777权限的文件改为权限777
- find $targetdir ! -perm 777 -type f -exec chmod 777 {} \; 
+ find $targetdir ! -perm 777 -type f -exec chmod 777 {} \;
