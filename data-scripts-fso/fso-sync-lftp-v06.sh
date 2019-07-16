@@ -8,7 +8,9 @@
 #       20190625    Release 0.2     revised lftp performance & multi-thread
 #       20190703    Release 0.3     fix some errors 
 #       20190705    Release 0.4     timing logic revised
-
+#       20190715    Release 0.5     reduce time of changing permission
+#       20190716    Release 0.6     add parallel permission changing
+# 
 #waiting pid taskname prompt
 waiting() {
   local pid="$1"
@@ -101,7 +103,7 @@ st1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++
 echo "                                                       "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
 echo "                fso-sync-lftp.sh                       "
-echo "          (Release 0.4 20190703 21:14)                 "
+echo "          (Release 0.6 20190716 10:22)                 "
 echo "                                                       "
 echo "         sync $datatype data to $destpre0              "
 echo "                                                       "
@@ -149,20 +151,20 @@ ctime2=`date --date='0 days ago' +%H:%M:%S`
 mytime2=$(cat /home/chd/log/$(basename $0)-$datatype-sdtmp.dat)
 #mytime2=`echo $ttmp|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
-curhm=`date  +%H%M`
-if [ $curhm -ge 1501 ]; then
+#curhm=`date  +%H%M`
+#if [ $curhm -ge 1501 ]; then
 #chmod 777 -R $targetdir &
-  find $targetdir ! -perm 777 -type f -exec chmod 777 {} \; &
-  waiting "$!" "$datatype Files Permission Changing" "Changing $datatype Files Permission"
-  if [ $? -ne 0 ];then
-    ctime3=`date --date='0 days ago' +%H:%M:%S`
-    echo "$today $ctime3: Changing Permission of $datatype Failed!"
-    cd /home/chd/
-    exit 1
-  fi
-fi
-ctime2=`date --date='0 days ago' +%H:%M:%S`
+find $targetdir ! -perm 777 -type f -exec chmod 777 {} \; &
+#  waiting "$!" "$datatype Files Permission Changing" "Changing $datatype Files Permission"
+#  if [ $? -ne 0 ];then
+#    ctime3=`date --date='0 days ago' +%H:%M:%S`
+#    echo "$today $ctime3: Changing Permission of $datatype Failed!"
+#    cd /home/chd/
+#    exit 1
+#  fi
+#fi
 
+ctime2=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime2: Summerizing $datatype File Numbers & Size..."
 
 #n2=`ls -lR $targetdir | grep "^-" | wc -l` 
