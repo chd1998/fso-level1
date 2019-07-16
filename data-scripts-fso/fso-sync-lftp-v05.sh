@@ -8,6 +8,7 @@
 #       20190625    Release 0.2     revised lftp performance & multi-thread
 #       20190703    Release 0.3     fix some errors 
 #       20190705    Release 0.4     timing logic revised
+#       20190715    Release 0.5     reduce time of changing permission
 
 #waiting pid taskname prompt
 waiting() {
@@ -101,7 +102,7 @@ st1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++
 echo "                                                       "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
 echo "                fso-sync-lftp.sh                       "
-echo "          (Release 0.4 20190703 21:14)                 "
+echo "          (Release 0.5 20190715 22:22)                 "
 echo "                                                       "
 echo "         sync $datatype data to $destpre0              "
 echo "                                                       "
@@ -161,8 +162,8 @@ if [ $curhm -ge 1501 ]; then
     exit 1
   fi
 fi
-ctime2=`date --date='0 days ago' +%H:%M:%S`
 
+ctime2=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime2: Summerizing $datatype File Numbers & Size..."
 
 #n2=`ls -lR $targetdir | grep "^-" | wc -l` 
