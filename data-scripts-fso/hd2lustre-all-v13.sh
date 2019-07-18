@@ -195,7 +195,8 @@ do
     umount $dev
     exit 1
   fi
-
+  find $dest ! -perm 777 -type f -exec chmod 777 {} \; & 
+  find $dest ! -perm 777 -type d -exec chmod 777 {} \; &
   ctime1=`date --date='0 days ago' +%H:%M:%S`
 
   

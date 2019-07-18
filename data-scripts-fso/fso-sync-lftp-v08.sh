@@ -11,6 +11,7 @@
 #       20190715    Release 0.5     reduce time of changing permission
 #       20190716    Release 0.6     add parallel permission changing
 #                   Release 0.7     input parallel lftp thread number
+#       20190718    Release 0.8     add remote data info 
 # 
 #waiting pid taskname prompt
 waiting() {
@@ -56,7 +57,7 @@ if [ $# -ne 7 ];then
   echo "Example: ./fso-sync-lftp.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40"
   exit 1
 fi
-server=$1
+server1=$1
 port=$2
 destpre0=$3
 user=$4
@@ -64,7 +65,7 @@ password=$5
 datatype=$6
 pnum=$7
 
-server=${server}:${port}
+server=${server1}:${port}
 
 #umask 0000
 
@@ -72,6 +73,9 @@ filenumber=/home/chd/log/$(basename $0)-$datatype-number.dat
 filesize=/home/chd/log/$(basename $0)-$datatype-size.dat
 filenumber1=/home/chd/log/$(basename $0)-$datatype-number-1.dat
 filesize1=/home/chd/log/$(basename $0)-$datatype-size-1.dat
+
+srcsize=/home/chd/log/$datatype-$today-$server1-filesize.dat
+srcnumber=/home/chd/log/$datatype-$today-$server1-filenumber.dat
 
 lockfile=/home/chd/log/$(basename $0)-$datatype.lock
 
@@ -105,7 +109,7 @@ st1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++
 echo "                                                       "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
 echo "                fso-sync-lftp.sh                       "
-echo "          (Release 0.7 20190716 11:55)                 "
+echo "          (Release 0.8 20190718 17:51)                 "
 echo "                                                       "
 echo "         sync $datatype data to $destpre0              "
 echo "                                                       "
@@ -209,17 +213,45 @@ speed=`echo "$ss $timediff"|awk '{print($1/$2)}'`
 echo $n2>$filenumber
 echo $s2>$filesize
 
+if [ -f $srcsize ]; then 
+  srcs=$(cat $srcsize|awk '{print $3}')
+  srcday=$(cat $srcsize|awk '{print $1}')
+  srctime=$(cat $srcsize|awk '{print $2}')
+else
+  srcs=0
+  srcday=$today
+  srctime=$ctime2
+fi
+
+if [ -f $srcnumber ]; then
+  srcn=$(cat $srcnumber|awk '{print $3}')
+#  srcday=$(cat $srcnumber|awk '{print $1}')
+#  srctime=$(cat $srcnumber|awk '{print $2}')
+else
+  srcn=0
+  srcday=$today
+  srctime=$ctime2
+fi
+
 ctime4=`date --date='0 days ago' +%H:%M:%S`
 st2=`echo $ctime4|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 stdiff=`echo "$st1 $st2"|awk '{print($2-$1)}'`
 
 echo "$today $ctime4: Succeeded in Syncing $datatype data @ FSO!"
+echo "======================================================="
+echo "        $srcday $srctime @ $server1             "
+echo " "
+echo "     Source Data : $srcs MB "
+echo "   Source Number : $srcn file(s)"
+echo "*******************************************************"
+echo "         $today $ctime4 @ $targetdir          "
+echo " "
 echo "          Synced : $sn file(s)"
 echo "          Synced : $ss MB "
 echo "  Sync Time Used : $timediff secs."
 echo "        @  Speed : $speed MB/s"
-echo "      Total File : $n2 file(s)"
-echo "      Total Size : $s2 MB"
+echo "    Total Synced : $n2 file(s)"
+echo "    Total Synced : $s2 MB"
 echo " Total Time Used : $stdiff secs."
 echo " Total Time From : $ctime1"
 echo "              To : $ctime4"

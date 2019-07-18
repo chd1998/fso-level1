@@ -170,14 +170,8 @@ fi
 
 filesize=$(cat /home/chd/log/tmpfs.dat)
 
-chmod 777 -R $destdir &
-waiting "$!" "Permission Changing" "Changing Permission"
-if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
-  cd /home/chd/
-  exit 1
-fi
+find $targetdir ! -perm 777 -type f -exec chmod 777 {} \; &
+find $targetdir ! -perm 777 -type d -exec chmod 777 {} \; &
 
 timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
 if [ $timediff -eq 0 ]; then

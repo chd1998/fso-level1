@@ -1,8 +1,8 @@
 #!/bin/bash
 #author: chen dong @fso
 #purposes: manually syncing TIO/HA data in specified year(eg., 2019...) from remoteip to local lustre storage via lftp
-#Usage: ./fso-copy.sh srcip port dest year(4 digits)  monthday(4 digits) user password datatype(TIO/HA)
-#Example: ./fso-copy-lftp-cyg.sh 192.168.111.120 21 f 2019 0713 tio ynao246135 TIO
+#Usage: ./fso-copy-lftp-cyg-xx.sh srcip port dest year(4 digits)  monthday(4 digits) user password datatype(TIO/HA)
+#Example: ./fso-copy-lftp-cyg-xx.sh 192.168.111.120 21 f 2019 0713 tio ynao246135 TIO
 #changlog: 
 #        20190420       Release 0.1 first prototype release 0.1
 #        20190421       Release 0.2 fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
@@ -65,8 +65,8 @@ ctime=`date --date='0 days ago' +%H:%M:%S`
 ctime0=`date --date='0 days ago' +%H:%M:%S`
 if [ $# -ne 8 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to local HD under cygwin"
-  echo "Usage: ./fso-copy.sh srcip port dest year(4 digits)  monthday(4 digits) user password datatype(TIO/HA)"
-  echo "Example: ./fso-copy-lftp-cyg.sh 192.168.111.120 21 f 2019 0713 tio ynao246135 TIO"
+  echo "Usage: ./fso-copy-lftp-cyg-xx.sh srcip port dest year(4 digits)  monthday(4 digits) user password datatype(TIO/HA)"
+  echo "Example: ./fso-copy-lftp-cyg-xx.sh 192.168.111.120 21 f 2019 0713 tio ynao246135 TIO"
   exit 1
 fi
 
@@ -101,18 +101,7 @@ else
   echo $$>$lockfile
 fi
 
-echo " "
-echo "======== Welcome to FSO Data Copying System@FSO! ========"
-echo "                                                         "
-echo "                 fso-copy-lftp-cyg.sh                    "  
-echo "                                                         "
-echo "             Relase 1.5     20190713  08:28              "
-echo " Copy the $datatype data from remote ftp site to lustre  "
-echo "                                                         "
-echo "                $today    $ctime                         "
-echo "                                                         "
-echo "========================================================="
-echo " "
+
 #procCmd=`ps ef|grep -w $procName|grep -v grep|wc -l`
 #pid=$(ps x|grep -w $procName|grep -v grep|awk '{print $1}')
 #if [ $procCmd -le 0 ];then
@@ -121,6 +110,19 @@ destdir=${destpre}${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
 srcdir=${ftpserver1}${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
 srcdir1=${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
 
+echo " "
+echo "======== Welcome to FSO Data Copying System@FSO! ========"
+echo "                                                         "
+echo "                 fso-copy-lftp-cyg.sh                    "  
+echo "                                                         "
+echo "             Relase 1.5     20190713  08:28              "
+echo "                                                         "
+echo "                                                         "
+echo "                $today    $ctime                         "
+echo "                                                         "
+echo "========================================================="
+echo " "
+
 if [ ! -d "$destdir" ]; then
   mkdir -p $destdir
 else
@@ -128,7 +130,7 @@ else
 fi
 
 ctime=`date --date='0 days ago' +%H:%M:%S`
-echo "$today $ctime: Syncing $datatype data @ FSO..."
+echo "$today $ctime: Copying $datatype data @ FSO..."
 echo "                   From: $srcdir "
 echo "                   To  : $destdir "
 echo "                   Please Wait..."
@@ -191,7 +193,7 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 if [ ! -d "$targetdir" ]; then
-  echo "0" > ./log/$(basename $0)_${datatype}_tmpfs.dat
+  echo "0" > ./log/$(basename $0)_${datatype}_tmpfn2.dat
   echo "0" > ./log/$(basename $0)_${datatype}_tmpfs2.dat
 fi  
 
@@ -208,9 +210,12 @@ fs2=$(cat ./log/$(basename $0)_${datatype}_tmpfs2.dat)
 #fi
 
 filenumber=`echo "$fn1 $fn2"|awk '{print($2-$1)}'`
-#echo "$fn2, $fn1, $filenumber"
-#read
+
 filesize=$(($fs2-$fs1))
+if [ $filesize -lt 0 ]; then
+  filesize=0
+fi
+
 timediff=$(($ttmp-$t1))
 #timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
 if [ $timediff -le 0 ]; then
@@ -227,14 +232,14 @@ timediff1=`echo "$t1 $t4"|awk '{print($2-$1)}'`
 
 echo " " 
 echo "$today $ctime3: Succeeded in Syncing $datatype data @ FSO!"
-echo "Synced file No.  : $filenumber file(s)"
+echo " Synced file No. : $filenumber file(s)"
 echo "Synced data size : $filesize MB"
 echo "    Sync @ Speed : $speed MB/s"
 echo "  Sync Time Used : $timediff secs."
-echo "  Total File No. : $fn2 file(s)"
-echo " Total File Size : $fs2 MB"
+echo "    Total Synced : $fn2 file(s)"
+echo "    Total Synced : $fs2 MB"
 echo " Total Time Used : $timediff1 secs."
-echo " Total Time From : $ctime0 "
+echo "       Time From : $ctime0 "
 echo "              To : $ctime3 "
 #rm -rf ./log/$lockfile
 #rm -rf ./log/$(basename $0)_${datatype}_*.dat

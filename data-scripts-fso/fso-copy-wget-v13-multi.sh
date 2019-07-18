@@ -132,11 +132,15 @@ t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++)
 itmp=$threadnumber
 while [ $itmp -gt 0 ]
 do 
-  wget --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=$ftpuser --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir  >/dev/null 2>&1 &
- #lftp -u $ftpuser,$password -e "mirror  --no-perms --only-missing --parallel=33 . $destdir; quit" $srcdir
- #lftp -u $ftpuser,$password -e "mirror  --no-perms --no-umask --allow-chown --allow-suid --only-missing --parallel=33 .  $destdir; quit" $srcdir >/dev/null 2>&1 &
+  wget -q --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=$ftpuser --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir  >> $datatype.lock &
+  ctimet=`date --date='0 days ago' +%H:%M:%S`
+  echo "$today $ctimet: Start thread  $itmp for Syncing $datatype @ $srcdir1"
   itmp=$((itmp-1))
 done
+
+ctimethread=`date --date='0 days ago' +%H:%M:%S`
+echo  "$today $ctimethread: $threadnumber wget threads started..."
+
 ctime1=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime1: $threadnumber wget threads started!..."
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
@@ -177,14 +181,8 @@ fi
 
 filesize=$(cat /home/chd/log/tmpfs.dat)
 
-chmod 777 -R $destdir &
-waiting "$!" "Permission Changing" "Changing Permission"
-if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
-  cd /home/chd/
-  exit 1
-fi
+find $targetdir ! -perm 777 -type f -exec chmod 777 {} \; &
+find $targetdir ! -perm 777 -type d -exec chmod 777 {} \; &
 
 timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
 if [ $timediff -eq 0 ]; then
