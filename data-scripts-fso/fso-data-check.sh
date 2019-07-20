@@ -5,7 +5,7 @@
 #example: ./fso-data-check.sh 2019 0519 TIO tio ynao246135
 #changlog: 
 #      	 20190420      	Release 0.1	first prototype release 0.1
-#      	 20190421	Release 0.2	fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
+#      	 20190421	      Release 0.2	fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
 #        20190423      	Release 0.3	using lftp instead of rsync
 
 trap 'onCtrlC' INT
@@ -26,11 +26,7 @@ srcpre0="ftp://192.168.111.120"
 remoteport="21"
 
 
-srcyear=$1
-srcmonthday=$2
-datatype=$3
-user=$4
-password=$5
+
 
 if [ $# -ne 5 ]  ;then
   echo "Use this script to copy TIO data of year month day specified on remote host to /lustre/data mannually"
@@ -38,6 +34,11 @@ if [ $# -ne 5 ]  ;then
   echo "Example: ./tio-copy.sh 2019 0427 TIO tio ynao246135"
   exit 1
 fi
+srcyear=$1
+srcmonthday=$2
+datatype=$3
+user=$4
+password=$5
 
 lockfile=/home/chd/log/$(basename $0)_lockfile
 if [ -f $lockfile ];then

@@ -158,3 +158,37 @@ while [ $j -lt $jobnumber ]; do
   ((j++))
 done
 echo "$jobnumber processes done"
+
+11. shell与awk相互传递参数
+
+1） shell -> awk
+
+stdsize=11062080;cat test.list| awk '{if ($2!='''$stdsize''') {print $1"  "$2}}'
+
+2) awk -> shell
+eval $(awk 'BEGIN{print "var1='test'"}');echo $var1
+
+12. 比较2个W文本文件输出差异
+
+grep -vwf list1 list2
+
+输出list1中有，list2中无的内容
+
+如： 
+a.txt  b.txt
+a      a
+b      b
+c
+d
+
+grep -vwf a.txt b.txt 
+
+输出： 
+c
+d
+
+13. 获取文件的绝对路径名称以及大小
+
+find /home/chd/ -type f -name '*.fits' -printf "%h/%f %s\n"
+
+注：目录一定要是绝对路径，以/结束

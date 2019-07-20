@@ -141,3 +141,48 @@ for i in {1..15}; do
   wait %$i
   echo $?
 done
+
+获取等待的jobs数目：
+#!/bin/sh
+for i in {1..15}; do
+  (echo "$i";sleep 10; exit $RANDOM) &
+done
+
+jobnumber=$(jobs -p | wc -l)
+echo "$jobnumber processes started!"
+
+j=1
+while [ $j -lt $jobnumber ]; do
+  wait %$j
+  echo $?
+  ((j++))
+done
+echo "$jobnumber processes done"
+
+11. shell与awk相互传递参数
+
+1） shell -> awk
+
+stdsize=11062080;cat test.list| awk '{if ($2!='''$stdsize''') {print $1"  "$2}}'
+
+2) awk -> shell
+eval $(awk 'BEGIN{print "var1='test'"}');echo $var1
+
+12. 比较2个W文本文件输出差异
+
+grep -vwf list1 list2
+
+输出list1中有，list2中无的内容
+
+如： 
+a.txt  b.txt
+a      a
+b      b
+c
+d
+
+grep -vwf a.txt b.txt 
+
+输出： 
+c
+d

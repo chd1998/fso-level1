@@ -42,23 +42,38 @@ procing() {
         done
 }
 
-if [ $# -ne 3 ];then
-  echo "usage: ./fso-data-check-xx.sh /youdirhere/ fileformat standardsize(in bytes)"
-  echo "example: ./fso-data-check-xx.sh /lustre/data/tmp/ fits 11062080"
-  echo "example: ./fso-data-check-xx.sh /lustre/data/tmp/ fits 2111040"
+if [ $# -ne 4 ];then
+  echo "usage: ./fso-data-check-xx.sh /youdirhere/ datatype fileformat standardsize(in bytes)"
+  echo "example: ./fso-data-check-xx.sh /lustre/data/tmp/ TIO fits 11062080"
+  echo "example: ./fso-data-check-xx.sh /lustre/data/tmp/ HA fits 2111040"
   exit 0
 fi
 
 today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 cdir=$1
-fileformat=$2
-stdsize=$3
+datatype=$2
+fileformat=$3
+stdsize=$4
 
 syssep="/"
-list=/home/chd/log/$fileformat-$today-$ctime.list
-fn=/home/chd/log/$fileformat-$today-$ctime-number.dat
-errorlist=/home/chd/log/$fileformat-of-wrong-size-$today-$ctime.list
+logpath=$PWD/log
+
+list=$logpath/$datatype-$fileformat-$today.list
+listtmp=$logpath/$datatype-$fileformat-$today-tmp.list
+difflist=$logpath/$datatype-$fileformat-$today-diff.list
+fn=$logpath/$datatype-$fileformat-$today-number.dat
+curerrorlist=$logpath/cur-$datatype-$fileformat-of-wrong-size-$today.list
+totalerrorlist=$logpath/total-$datatype-$fileformat-of-wrong-size-$today.list
+
+
+if [ ! -d "$logpath" ];then
+  mkdir -p $logpath
+fi
+
+if [ ! -f "$list" ];then
+  touch $list
+fi
 
 if [ ! -d "$cdir" ];then
   echo "Dest Dir: $cdir doesn't exist...."
@@ -78,13 +93,24 @@ echo " "
 echo "================================================================================"
 echo " "
 cd $cdir
-ls -lR . | grep $fileformat | wc -l > $fn &
-waiting "$!" "$fileformat file(s) number getting" "Getting $fileformat file(s) number"
-find  $PWD | xargs ls -ld| grep $fileformat | awk '{print $9"  "$5}' > $list &
-waiting "$!" "$fileformat file(s) info getting" "Getting $fileformat file(s) info"
-cat $list |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $errorlist &
-waiting "$!" "Wrong $fileformat file(s) checking" "Checking wrong $fileformat file(s)"
-errorline=`cat $errorlist|wc -l`
+#getting file number
+find . -type f -name '*.fits'  |wc -l > $fn &
+waiting "$!" "$datatype $fileformat file(s) number getting" "Getting $datatype $fileformat file(s) number"
+#getting file name & size
+find $cdir/ -type f -name '*.fits' -printf "%h/%f %s\n" > $listtmp &
+waiting "$!" "$datatype $fileformat file(s) info getting" "Getting $datatype $fileformat file(s) info"
+#remove checked files
+grep -vwf $list $listtmp > $difflist &
+waiting "$!" "new $datatype $fileformat file(s) getting" "Getting  new $datatype $fileformat file(s) "
+#count error number for this round
+cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $curerrorlist &
+waiting "$!" "Wrong $datatype $fileformat file(s) checking round #1" "Checking wrong $datatype $fileformat file(s) for round #1"
+curerror=`cat $curerrorlist|wc -l`
+#check new files
+cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' >> $totalerrorlist &
+waiting "$!" "Wrong $datatype $fileformat file(s) checking round #2" "Checking wrong $datatype $fileformat file(s) for round #2"
+totalerror=`cat $totalerrorlist|wc -l`
+mv -f $listtmp $list
 curnum=$(cat $fn)
 today=`date --date='0 days ago' +%Y%m%d`
 ctime1=`date --date='0 days ago' +%H:%M:%S`
@@ -93,10 +119,11 @@ timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
 if [ $timediff -lt 0 ]; then
   timediff=0
 fi
-echo "$today $ctime1: For $fileformat Data File(s) @ $cdir "
+echo "$today $ctime1: For $datatype $fileformat Data File(s) @ $cdir "
 echo "     File Checked: $curnum file(s)" 
-echo "            Found: $errorline file(s) in wrong size"
+echo " This Round Found: $curerror file(s) in wrong size"
+echo "      Total Found: $totalerror file(s) in wrong size"
 echo "        Time Used: $timediff secs."
-echo "  Error File List: $errorlist"
+echo "  Error File List: $totalerrorlist"
 echo " "
 echo "================================================================================"

@@ -138,7 +138,7 @@ fn1=`ls -lR $destdir | grep "^-" | wc -l`
 fs1=`du -sm $destdir | awk '{print $1}'`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 
-lftp $ftpserver -e "mirror  --only-missing --continue --parallel=40 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
+lftp $ftpserver -e "mirror --parallel=40 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 if [ $? -ne 0 ];then
   ctime1=`date --date='0 days ago' +%H:%M:%S`
@@ -184,13 +184,7 @@ fs2=$(cat /home/chd/log/tmpfs2.dat)
 
 #chmod 777 -R $destdir &
 find $targetdir ! -perm 777 -type f -exec chmod 777 {} \; &
-waiting "$!" "Permission Changing" "Changing Permission"
-if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
-  cd /home/chd/
-  exit 1
-fi
+find $targetdir ! -perm 777 -type d -exec chmod 777 {} \; &
 
 filenumber=`echo "$fn1 $fn2"|awk '{print($2-$1)}'`
 #echo "$fn2, $fn1, $filenumber"

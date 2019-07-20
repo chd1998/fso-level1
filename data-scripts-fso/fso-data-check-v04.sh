@@ -45,7 +45,6 @@ procing() {
 if [ $# -ne 3 ];then
   echo "usage: ./fso-data-check-xx.sh /youdirhere/ fileformat standardsize(in bytes)"
   echo "example: ./fso-data-check-xx.sh /lustre/data/tmp/ fits 11062080"
-  echo "example: ./fso-data-check-xx.sh /lustre/data/tmp/ fits 2111040"
   exit 0
 fi
 
@@ -58,10 +57,10 @@ stdsize=$3
 syssep="/"
 list=/home/chd/log/$fileformat-$today-$ctime.list
 fn=/home/chd/log/$fileformat-$today-$ctime-number.dat
-errorlist=/home/chd/log/$fileformat-of-wrong-size-$today-$ctime.list
+errorlist=/home/chd/result/$fileformat-of-wrong-size-$today-$ctime.list
 
 if [ ! -d "$cdir" ];then
-  echo "Dest Dir: $cdir doesn't exist...."
+  echo "Target Dir: $cdir     doesn't exist...."
   echo "Please check..."
   exit 0
 fi
