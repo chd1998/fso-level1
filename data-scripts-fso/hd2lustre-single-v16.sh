@@ -18,7 +18,6 @@
 #                               add datatype to destdir if missing in src
 #                  Release 1.2, copy data of single day only
 #         20190710 Release 1.4, copy process indicator added
-#         20190714 Release 1.6, using tar & pv instead of cp
 #
 
 waiting() {
@@ -197,8 +196,6 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 
-find $dest ! -perm 777 -type f -exec chmod 777 {} \; & 
-find $dest ! -perm 777 -type d -exec chmod 777 {} \; &
 ctime1=`date --date='0 days ago' +%H:%M:%S`
 t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 

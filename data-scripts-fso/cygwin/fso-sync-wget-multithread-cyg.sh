@@ -147,15 +147,16 @@ itmp=$threadnumber
 #touch $datatype.lock
 while  [ $itmp -gt 0 ]
 do
-  echo "Starting wget Thread: #$itmp..."
+	ctimet=`date --date='0 days ago' +%H:%M:%S`
+  echo "$today $ctimet: Starting wget Thread: $itmp..."
   wget  -q --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=$user --ftp-password=$password --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir > /dev/null 2>&1 &
   itmp=$((itmp-1))
 done
-
+ctime1=`date --date='0 days ago' +%H:%M:%S`
 #waiting for each thread to stop
 jobnumber=$(jobs -p | wc -l)
-#echo "$jobnumber processes started!"
-
+echo "$today $ctime1: $jobnumber processes started!"
+#wait for all threads to end
 j=1
 while [ $j -lt $jobnumber ]; do
   wait %$j
@@ -164,7 +165,7 @@ while [ $j -lt $jobnumber ]; do
 done
 
 ctimethread=`date --date='0 days ago' +%H:%M:%S`
-echo  "$today $ctimethread: $threadnumber wget threads started..."
+echo  "$today $ctimethread: $threadnumber wget threads ended!..."
 
 
 ctime3=`date --date='0 days ago' +%H:%M:%S`
@@ -191,7 +192,7 @@ echo "$today $ctime2: Summerizing File Numbers & Size..."
 #n2=`ls -lR $targetdir | grep "^-" | wc -l`
 #s2=`du -sm $targetdir|awk '{print $1}'`
 
-ls -lR $targetdir | grep "^-" | wc -l > $filenumber1 &
+find $targetdir | grep fits | wc -l > $filenumber1 &
 waiting "$!" "File Number Sumerizing" "Sumerizing File Number"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`

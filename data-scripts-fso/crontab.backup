@@ -1,0 +1,12 @@
+#*/1 8-20 * * *  /home/chd/tio-sync.sh >> /home/chd/log/tio-sync.log
+*/1 8-20 * * * /home/chd/fso-sync-lftp-v08.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40 >> /home/chd/log/fso-sync-tio.log
+*/1 8-20 * * * /home/chd/fso-sync-lftp-v08.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA 100 >> /home/chd/log/fso-sync-ha.log
+*/1 8-20 * * * /home/chd/fso-count-lftp.sh  192.168.111.120 21  tio ynao246135 TIO >> /home/chd/log/fso-remote-info-tio.log
+*/1 8-20 * * * /home/chd/fso-count-lftp.sh  192.168.111.122 21  ha ynao246135 HA >> /home/chd/log/fso-remote-info-ha.log
+*/10 20 * * * /home/chd/fso-data-check-v03.sh /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/TIO fits 11062080 >> /home/chd/log/check-TIO-size.log
+*/10 20 * * * /home/chd/fso-data-check-v03.sh /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/HA fits 2111040  >> /home/chd/log/check-HA-size.log
+0 0 * * 1 rm -f /home/chd/log/*.log
+1 0 * * * rm -f /home/chd/log/*.dat
+2 0 * * * rm -f /home/chd/log/*.list
+5 0 * * * rm -f /root/.lftp/transfer_log
+9 0 * * * "/root/.acme.sh"/acme.sh --cron --home "/root/.acme.sh" > /dev/null

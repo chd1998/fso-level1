@@ -62,26 +62,30 @@ cyear=`date --date='0 days ago' +%Y`
 today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 
-if [ $# -ne 6 ]  ;then
+if [ $# -ne 9 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to /lustre/data mannually"
-  echo "Usage: ./fso-copy-wget-xx.sh srcip dest year(4 digits)  monthday(4 digits) datatype(TIO/HA) ThreadNumber"
-  echo "Example: ./fso-copy-wget-xx.sh ftp://192.168.111.120 /lustre/data 2019 0427 TIO 5"
+  echo "Usage: ./fso-copy-wget.sh srcip port user passwd dest year(4 digits)  monthday(4 digits) datatype(TIO/HA) threadnumber"
+  echo "Example: ./fso-copy-wget.sh ftp://192.168.111.120 21 tio ynao246135 /lustre/data 2019 0703 TIO 5"
   exit 1
 fi
 
 #procName="lftp"
 syssep="/"
-destpre0=$2
-ftpserver=$1
-remoteport="21"
-srcyear=$3
-srcmonthday=$4
-datatype=$5
-threadnumber=$6
-ftpuser=$(echo $datatype|tr '[A-Z]' '[a-z]')
-password="ynao246135"
 
-lockfile=/home/chd/log/$(basename $0)_lockfile
+ftpserver=$1
+remoteport=$2
+ftpuser=$3
+password=$4
+destpre0=$5
+srcyear=$6
+srcmonthday=$7
+datatype=$8
+threadnumber=$9
+
+tmpfn=/home/chd/log/$(basename $0)-$datatype-tmpfn.dat
+tmpfs=/home/chd/log/$(basename $0)-$datatype-tmpfs.dat
+
+lockfile=/home/chd/log/$(basename $0)-$datatype.lock
 if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
   ps -p $mypid | grep $mypid &>/dev/null
@@ -100,7 +104,7 @@ echo "                                                         "
 echo "                 fso-copy-wget.sh                        "  
 echo "                                                         "
 echo "             Relase 1.3     20190704  01:37              "
-echo " Copy the TiO/HA data from remote SSD to lustre manually "
+echo " Copy the $datatype data from remote to lustre manually  "
 echo "                                                         "
 echo "                $today    $ctime                         "
 echo "                                                         "
@@ -130,34 +134,53 @@ echo "                   To  : $destdir "
 cd $destdir
 t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 itmp=$threadnumber
-while [ $itmp -gt 0 ]
-do 
-  wget -q --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=$ftpuser --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir  >> $datatype.lock &
+
+while  [ $itmp -gt 0 ]
+do
   ctimet=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctimet: Start thread  $itmp for Syncing $datatype @ $srcdir1"
+  echo "$today $ctimet: Starting wget Thread: $itmp..."
+  wget  -q --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=$ftpuser --ftp-password=$password --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir > /dev/null 2>&1 &
   itmp=$((itmp-1))
 done
+#wait for every wget thread to end
+ctimet=`date --date='0 days ago' +%H:%M:%S`
+jobnumber=$(jobs -p | wc -l)
+echo "$today $ctimet: $jobnumber processes started!"
+echo "                   Syncing $datatype from @ $srcdir, please wait..."
+j=1
+while [ $j -le $jobnumber ]; do
+  ctimet=`date --date='0 days ago' +%H:%M:%S`
+  wait %$j 
+  echo "$today $ctimet: Thread $j exited with $?..."
+  ((j++))
+done
 
-ctimethread=`date --date='0 days ago' +%H:%M:%S`
-echo  "$today $ctimethread: $threadnumber wget threads started..."
+#while [ $itmp -gt 0 ]
+#do 
+#  wget -q --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=$ftpuser --ftp-password=$password --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir  >> $datatype.lock &
+#  ctimet=`date --date='0 days ago' +%H:%M:%S`
+#  echo "$today $ctimet: Start thread  $itmp for Syncing $datatype @ $srcdir1"
+#  itmp=$((itmp-1))
+#done
+
+#ctimethread=`date --date='0 days ago' +%H:%M:%S`
+echo  "$today $ctimet: $threadnumber wget threads finished..."
 
 ctime1=`date --date='0 days ago' +%H:%M:%S`
-echo "$today $ctime1: $threadnumber wget threads started!..."
-waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
+#waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 #echo "Please Wait..."
-ctime1=`date --date='0 days ago' +%H:%M:%S`
-if [ $? -ne 0 ];then
-  echo "$today $ctime1: Failed in Syncing $datatype Data from $srcdir to $destdir"
-  cd /home/chd
-  exit 1
-fi
+#if [ $? -ne 0 ];then
+#  echo "$today $ctime1: Failed in Syncing $datatype Data from $srcdir to $destdir"
+#  cd /home/chd
+#  exit 1
+#fi
 
 #t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
 
 targetdir=${destdir}
-ls -lR $targetdir | grep "^-" | wc -l > /home/chd/log/tmpfn.dat &
+ls -lR $targetdir | grep "^-" | wc -l > $tmpfn &
 waiting "$!" "File Number Sumerizing" "Sumerizing File Number"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
@@ -165,9 +188,9 @@ if [ $? -ne 0 ];then
   cd /home/chd/
   exit 1
 fi
-filenumber=$(cat /home/chd/log/tmpfn.dat)
+filenumber=$(cat $tmpfn)
 
-du -sm $targetdir|awk '{print $1}' > /home/chd/log/tmpfs.dat &
+du -sm $targetdir|awk '{print $1}' > $tmpfs &
 waiting "$!" "File Size Summerizing" "Sumerizing File Size"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
@@ -176,16 +199,16 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 if [ ! -d "$targetdir" ]; then
-  echo "0" > /home/chd/log/tmpfs.dat
+  echo "0" > $tmpfs
 fi  
 
-filesize=$(cat /home/chd/log/tmpfs.dat)
+filesize=$(cat $tmpfs)
 
 find $targetdir ! -perm 777 -type f -exec chmod 777 {} \; &
 find $targetdir ! -perm 777 -type d -exec chmod 777 {} \; &
 
 timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
-if [ $timediff -eq 0 ]; then
+if [ $timediff -le 0 ]; then
   speed=0
 else
   speed=`echo "$filesize $timediff"|awk '{print($1/$2)}'`

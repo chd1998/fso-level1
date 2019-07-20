@@ -62,25 +62,30 @@ cyear=`date --date='0 days ago' +%Y`
 today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 
-if [ $# -ne 5 ]  ;then
+if [ $# -ne 8 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to /lustre/data mannually"
-  echo "Usage: ./fso-copy-wget.sh srcip dest year(4 digits)  monthday(4 digits) datatype(TIO/HA)"
-  echo "Example: ./fso-copy-wget.sh ftp://192.168.111.120 /lustre/data 2019 0703 TIO"
+  echo "Usage: ./fso-copy-wget.sh srcip port user passwd dest year(4 digits)  monthday(4 digits) datatype(TIO/HA)"
+  echo "Example: ./fso-copy-wget.sh ftp://192.168.111.120 21 tio ynao246135 /lustre/data 2019 0703 TIO"
   exit 1
 fi
 
 #procName="lftp"
 syssep="/"
-destpre0=$2
-ftpserver=$1
-remoteport="21"
-srcyear=$3
-srcmonthday=$4
-datatype=$5
-ftpuser=$(echo $datatype|tr '[A-Z]' '[a-z]')
-password="ynao246135"
+tmpfn=/home/chd/log/$(basename $0)-$datatype-tmpfn.dat
+tmpfs=/home/chd/log/$(basename $0)-$datatype-tmpfs.dat
 
-lockfile=/home/chd/log/$(basename $0)_lockfile
+ftpserver=$1
+remoteport=$2
+ftpuser=$3
+password=$4
+destpre0=$5
+srcyear=$6
+srcmonthday=$7
+datatype=$8
+
+
+
+lockfile=/home/chd/log/$(basename $0)-$datatype.lock
 if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
   ps -p $mypid | grep $mypid &>/dev/null
@@ -146,7 +151,7 @@ t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++
 
 
 targetdir=${destdir}
-ls -lR $targetdir | grep "^-" | wc -l > /home/chd/log/tmpfn.dat &
+ls -lR $targetdir | grep "^-" | wc -l > $tmpfn &
 waiting "$!" "File Number Sumerizing" "Sumerizing File Number"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
@@ -154,9 +159,9 @@ if [ $? -ne 0 ];then
   cd /home/chd/
   exit 1
 fi
-filenumber=$(cat /home/chd/log/tmpfn.dat)
+filenumber=$(cat $tmpfn)
 
-du -sm $targetdir|awk '{print $1}' > /home/chd/log/tmpfs.dat &
+du -sm $targetdir|awk '{print $1}' > $tmpfs &
 waiting "$!" "File Size Summerizing" "Sumerizing File Size"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
@@ -165,10 +170,10 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 if [ ! -d "$targetdir" ]; then
-  echo "0" > /home/chd/log/tmpfs.dat
+  echo "0" > $tmpfs
 fi  
 
-filesize=$(cat /home/chd/log/tmpfs.dat)
+filesize=$(cat $tmpfs)
 
 find $targetdir ! -perm 777 -type f -exec chmod 777 {} \; &
 find $targetdir ! -perm 777 -type d -exec chmod 777 {} \; &

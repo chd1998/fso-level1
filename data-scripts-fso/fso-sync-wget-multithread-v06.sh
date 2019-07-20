@@ -4,8 +4,8 @@
 #usage:  run in crontab every 1 min.  from 08:00-20:00
 #example: none
 #changlog:
-#      	20190603	Release 0.1     first version for tio-sync.sh
-#	      20190625	Release 0.2	    revised lftp performance & multi-thread
+#      	20190603  Release 0.1     first version for tio-sync.sh
+#       20190625  Release 0.2	  revised lftp performance & multi-thread
 #       20190702  Release 0.3     back to use wget in case of lftp failure
 #                 Release 0.4     multithread with wget
 #                 Release 0.5     threadnumber input
@@ -161,7 +161,7 @@ while [ $j -lt $jobnumber ]; do
 done
 
 ctimethread=`date --date='0 days ago' +%H:%M:%S`
-echo  "$today $ctimethread: $threadnumber wget threads started..."
+echo  "$today $ctimethread: $threadnumber wget threads ended..."
 
 
 ctime3=`date --date='0 days ago' +%H:%M:%S`

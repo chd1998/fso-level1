@@ -99,7 +99,7 @@ echo "$today $ctime: Starting to Count $datatype data @ $server1, Please wait...
 ctime1=`date --date='0 days ago' +%H:%M:%S`
 mytime1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 server=ftp://$user:$password@$server
-lftp  $server -e "du -sm $srcdir; quit" | awk '{print $1}'>./log/tmp-size.dat &
+lftp  $server -e "du -sm $srcdir; quit" | awk '{print $1}'>/home/chd/log/tmp-size-$datatype.dat &
 waiting "$!" "$datatype Size Counting @ $server1" "Counting $datatype Data Size @ $server1"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
@@ -107,7 +107,8 @@ if [ $? -ne 0 ];then
   cd /home/chd/
   exit 1
 fi
-lftp  $server -e "find $srcdir | wc -l ; quit" > ./log/tmp-number.dat &
+filetmp=${srcdir}${syssep}*.fits
+lftp  $server -e "find $srcdir |grep fits| wc -l ; quit" > /home/chd/log/tmp-number-$datatype.dat &
 waiting "$!" "$datatype Number Counting @ $server1" "Counting $datatype Data Number @ $server1"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
@@ -118,8 +119,8 @@ fi
 ctime2=`date --date='0 days ago' +%H:%M:%S`
 
 mytime2=$(cat /home/chd/log/$(basename $0)-$datatype-sdtmp.dat)
-size=$(cat tmp-size.dat)
-number=$(cat tmp-number.dat)
+size=$(cat /home/chd/log/tmp-size-$datatype.dat)
+number=$(cat /home/chd/log/tmp-number-$datatype.dat)
 echo "$today $ctime2 $size" > $filesize
 echo "$today $ctime2 $number"> $filenumber
 n2=$(cat $filenumber|awk '{print $3}')

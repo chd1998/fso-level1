@@ -18,6 +18,7 @@
 #        20190704       Release 1.2 using lftp & add input args
 #        20190705       Release 1.3 logics revised
 #                       Release 1.4 revise timing logics
+#        20190718       Release 1.5 modified for use with cygwin
 #
 #waiting pid taskname prompt
 waiting() {
@@ -67,17 +68,19 @@ ctime=`date --date='0 days ago' +%H:%M:%S`
 ctime0=`date --date='0 days ago' +%H:%M:%S`
 if [ $# -ne 8 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to /lustre/data mannually"
-  echo "Usage: ./fso-copy-lftp.sh srcip port  dest year(4 digits) monthday(4 digits) user password datatype(TIO/HA)"
-  echo "Example: ./fso-copy-lftp.sh 192.168.111.120 21 /lustre/data 2019 0427 tio ynao246135 TIO"
+  echo "Usage: ./fso-copy-lftp-xx.sh srcip port  dest year(4 digits) monthday(4 digits) user password datatype(TIO/HA)"
+  echo "Example: ./fso-copy-lftp-xx.sh 192.168.111.120 21 f 2019 0427 tio ynao246135 TIO"
   exit 1
 fi
 
 #procName="lftp"
 
 syssep="/"
+cygpre="/cygdrive/"
+
 ftpserver=$1
 remoteport=$2
-destpre0=$3
+destpre0=$cygdrive$3
 srcyear=$4
 srcmonthday=$5
 ftpuser=$6
@@ -105,9 +108,9 @@ fi
 echo " "
 echo "======== Welcome to FSO Data Copying System@FSO! ========"
 echo "                                                         "
-echo "                 fso-copy-lftp.sh                        "  
+echo "             fso-copy-lftp-cyg.sh                        "  
 echo "                                                         "
-echo "             Relase 1.4     20190705  17:21              "
+echo "             Relase 1.5     20190718  00:04              "
 echo " Copy the $datatype data from remote ftp site to lustre  "
 echo "                                                         "
 echo "                $today    $ctime                         "
@@ -138,7 +141,7 @@ fn1=`ls -lR $destdir | grep "^-" | wc -l`
 fs1=`du -sm $destdir | awk '{print $1}'`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 
-lftp $ftpserver -e "mirror  --only-missing --continue --parallel=40 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
+lftp $ftpserver -e "mirror  --ignore-time --continue --parallel=40 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 if [ $? -ne 0 ];then
   ctime1=`date --date='0 days ago' +%H:%M:%S`
@@ -154,7 +157,7 @@ t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++)
 #t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
 targetdir=${destdir}
-ls -lR $targetdir | grep "^-" | wc -l > /home/chd/log/tmpfn2.dat &
+find  $targetdir | grep fits | wc -l > /home/chd/log/tmpfn2.dat &
 waiting "$!" "File Number Sumerizing" "Sumerizing File Number"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
@@ -182,15 +185,9 @@ fi
 #fs1=$(cat /home/chd/log/tmpfs1.dat)
 fs2=$(cat /home/chd/log/tmpfs2.dat)
 
-#chmod 777 -R $destdir &
 find $targetdir ! -perm 777 -type f -exec chmod 777 {} \; &
-waiting "$!" "Permission Changing" "Changing Permission"
-if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
-  cd /home/chd/
-  exit 1
-fi
+find $targetdir ! -perm 777 -type d -exec chmod 777 {} \; &
+
 
 filenumber=`echo "$fn1 $fn2"|awk '{print($2-$1)}'`
 #echo "$fn2, $fn1, $filenumber"

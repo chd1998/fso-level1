@@ -184,6 +184,13 @@ do
   echo "$today $ctime1: Copying...."
   echo "                   Please Wait..."
   echo "==============================================================="
+#read
+
+#cd $srcdir1
+#src=${srcdir}
+#destdir=${destdir}${
+#echo "src= $src"
+#read
   cd $src
   cp -ruf  . $dest >/dev/null 2>&1 &
   waiting "$!" "$datatype Data Copying" "Copying $datatype Data"
@@ -195,8 +202,7 @@ do
     umount $dev
     exit 1
   fi
-  find $dest ! -perm 777 -type f -exec chmod 777 {} \; & 
-  find $dest ! -perm 777 -type d -exec chmod 777 {} \; &
+
   ctime1=`date --date='0 days ago' +%H:%M:%S`
 
   
