@@ -21,37 +21,37 @@
 #
 #waiting pid taskname prompt
 waiting() {
-        local pid="$1"
-        taskname="$2"
-        procing "$3" &
-        local tmppid="$!"
-        wait $pid
-        tput rc
-        tput ed
-	wctime=`date --date='0 days ago' +%H:%M:%S`
-	wtoday=`date --date='0 days ago' +%Y%m%d`
-        echo "$wtoday $wctime: $2 Task Has Done!"
-        dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-#        echo "                   Finishing..."
-        kill -6 $tmppid >/dev/null 1>&2
-        echo "$dt1" > /home/chd/log/dtmp
+  local pid="$1"
+  taskname="$2"
+  procing "$3" &
+  local tmppid="$!"
+  wait $pid
+  tput rc
+  tput ed
+  wctime=`date --date='0 days ago' +%H:%M:%S`
+  wtoday=`date --date='0 days ago' +%Y%m%d`
+  echo "$wtoday $wctime: $2 Task Has Done!"
+  dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+#  echo "                   Finishing..."
+  kill -6 $tmppid >/dev/null 1>&2
+  echo "$dt1" > /home/chd/log/dtmp
 }
 
 procing() {
-        trap 'exit 0;' 6
-        tput ed
-        while [ 1 ]
-        do
-            for j in '-' '\\' '|' '/'
-            do
-                tput sc
-                ptoday=`date --date='0 days ago' +%Y%m%d`
-                pctime=`date --date='0 days ago' +%H:%M:%S`
-                echo -ne  "$ptoday $pctime: $1...   $j"
-                sleep 0.2
-                tput rc
-          done
-        done
+  trap 'exit 0;' 6
+  tput ed
+  while [ 1 ]
+  do
+    for j in '-' '\\' '|' '/'
+    do
+      tput sc
+      ptoday=`date --date='0 days ago' +%Y%m%d`
+      pctime=`date --date='0 days ago' +%H:%M:%S`
+      echo -ne  "$ptoday $pctime: $1...   $j"
+      sleep 0.2
+      tput rc
+    done
+  done
 }
 
 trap 'onCtrlC' INT
