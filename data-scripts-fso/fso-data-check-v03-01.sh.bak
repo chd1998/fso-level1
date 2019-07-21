@@ -56,8 +56,6 @@ datatype=$2
 fileformat=$3
 stdsize=$4
 
-#cd /home/chd/
-
 syssep="/"
 logpath=$PWD/log
 
