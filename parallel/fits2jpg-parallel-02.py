@@ -1,5 +1,5 @@
 '''
-fits2jpg-parallel.py
+fits2jpg-parallel-xx.py
 
 @author: chen dong @ fso
 purposes: generating the jpeg thumbnails of fits files in source SAVE_DIRECTORY
