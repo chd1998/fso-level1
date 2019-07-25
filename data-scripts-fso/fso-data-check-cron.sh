@@ -9,8 +9,8 @@
 
 trap 'onCtrlC' INT
 function onCtrlC(){
-		echo 'ctrl-c captured!'
-		exit 1
+  echo 'ctrl-c captured!'
+  exit 1
 }
 
 waiting() {                                                                                                                                       
