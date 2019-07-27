@@ -62,7 +62,11 @@ fi
 syssep="/"
 destpre="/lustre/data"
 
-
+#tmpfn=/home/chd/log/$(basename $0)-$errorlist-tmpfn.dat
+#tmpfs=/home/chd/log/$(basename $0)-$errorlist-tmpfs.dat
+remotefile=/home/chd/log/$(basename $0)-$errorlist-remote.list
+#errordir=/home/chd/log/$(basename $0)-$errorlist-dir.list
+#errorfile=/home/chd/log/$(basename $0)-$errorlist-file.list
 
 ftpserver=$1
 remoteport=$2
@@ -70,12 +74,6 @@ ftpuser=$3
 password=$4
 errorlist=$5
 stdsize=$6
-
-#tmpfn=/home/chd/log/$(basename $0)-$errorlist-tmpfn.dat
-#tmpfs=/home/chd/log/$(basename $0)-$errorlist-tmpfs.dat
-remotefile=/home/chd/log/$(basename $0)-$errorlist-remote.list
-#errordir=/home/chd/log/$(basename $0)-$errorlist-dir.list
-#errorfile=/home/chd/log/$(basename $0)-$errorlist-file.list
 
 lockfile=/home/chd/log/$(basename $0)-$datatype.lock
 if [ -f $lockfile ];then
@@ -136,7 +134,7 @@ do
 	  else 
 	    echo $localfile >localfile.tmp
             #remove corrected file from the list
-	    grep -vwf localfile.tmp $remotefile > $remotefile
+	    grep -vwf $remotefile localfile.tmp > $remotefile
             #change the permission of copied file
 	    find $localfile ! -perm 777 -type f -exec chmod 777 {} \;
     	    size=$((size+tmps))
