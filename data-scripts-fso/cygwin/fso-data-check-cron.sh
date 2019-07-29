@@ -52,7 +52,7 @@ if [ $# -ne 4 ];then
 fi
 
 #cd /home/chd/
-homepre="/cygdrive/d/chd/LFTP4WIN-master/home/chd"
+homepre="/home/chd"
 dirpre="/cygdrive"
 syssep="/"
 logpath=$homepre/log
@@ -68,13 +68,8 @@ list=$logpath/$datatype-$fileformat-$today.list
 listtmp=$logpath/$datatype-$fileformat-$today-tmp.list
 difflist=$logpath/$datatype-$fileformat-$today-diff.list
 fn=$logpath/$datatype-$fileformat-$today-number.dat
-<<<<<<< HEAD
-curerrorlist=$logpath/$datatype-$fileformat@$today-error-cur.list
-totalerrorlist=$logpath/$datatype-$fileformat@$today-error-total.list
-=======
 curerrorlist=$logpath/size-error-of-$datatype-$fileformat@$today-cur.list
 totalerrorlist=$logpath/size-error-of-$datatype-$fileformat@$today-total.list
->>>>>>> 70676ab2c5cea9decc86dbfd32c1c1512b616b71
 
 lockfile=$logpath/$(basename $0)-$datatype.lock
                                                                                    
@@ -133,11 +128,10 @@ grep -vwf $list $listtmp > $difflist &
 waiting "$!" "new $datatype $fileformat file(s) getting" "Getting  new $datatype $fileformat file(s) "
 #count error number for this round
 cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $curerrorlist &
-waiting "$!" "Wrong $datatype $fileformat file(s) checking" "Checking wrong $datatype $fileformat file(s)"
+waiting "$!" "Wrong $datatype $fileformat file(s) checking round #1" "Checking wrong $datatype $fileformat file(s) for round #1"
 curerror=`cat $curerrorlist|wc -l`
 #check new files
-#cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' >> $totalerrorlist &
-cat $curerrorlist >> $totalerrorlist &
+cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' >> $totalerrorlist &
 waiting "$!" "Wrong $datatype $fileformat file(s) checking round #2" "Checking wrong $datatype $fileformat file(s) for round #2"
 totalerror=`cat $totalerrorlist|wc -l`
 mv -f $listtmp $list

@@ -97,7 +97,11 @@ st1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i+
 echo "                                                       "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
 echo "              fso-data-check-copy.sh                   "
+<<<<<<< HEAD
 echo "          (Release 0.2 20190725 11:51)                 "
+=======
+echo "          (Release 0.1 20190725 11:51)                 "
+>>>>>>> 70676ab2c5cea9decc86dbfd32c1c1512b616b71
 echo "                                                       "
 echo "           Check $datatype data and copy               "
 echo "                                                       "
@@ -115,7 +119,11 @@ if [ $? -ne 0 ];then
 fi
 
 echo "$today $ctime: $datatype Copying, please wait..."
+<<<<<<< HEAD
 /home/chd/fso-copy-wget-error-cron-v02.sh $server $port $user $password /home/chd/log/$datatype-fits@$(date +\%Y\%m\%d)-error-total.list > /home/chd/log/$datatype-error-copy-$(date +\%Y\%m\%d).list &
+=======
+/home/chd/fso-copy-wget-error-cron-v02.sh $server $port $user $password /home/chd/log/size-error-of-$datatype-fits@$(date +\%Y\%m\%d)-total.list > /home/chd/log/$datatype-error-copy-$(date +\%Y\%m\%d).list &
+>>>>>>> 70676ab2c5cea9decc86dbfd32c1c1512b616b71
 waiting "$!" "$datatype Copying" "Copying $datatype Data"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`

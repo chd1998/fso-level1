@@ -73,7 +73,11 @@ remoteport=$2
 ftpuser=$3
 password=$4
 errorlist=$5
+<<<<<<< HEAD
 stdsize=%6
+=======
+stdsize=$6
+>>>>>>> 70676ab2c5cea9decc86dbfd32c1c1512b616b71
 
 lockfile=/home/chd/log/$(basename $0)-$datatype.lock
 if [ -f $lockfile ];then
