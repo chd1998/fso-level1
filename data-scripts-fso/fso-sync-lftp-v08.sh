@@ -127,6 +127,7 @@ else
   echo "$today $ctime: $targetdir exists!"
 fi
 srcdir=${syssep}${today}${syssep}${datatype}
+srcdir0=${syssep}${today}${syssep}
 srcdir1=${srcpre0}
 
 n1=$(cat $filenumber)
@@ -141,7 +142,8 @@ echo "$today $ctime: Sync Task Started, Please Wait ... "
 ctime1=`date --date='0 days ago' +%H:%M:%S`
 mytime1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 server=ftp://$user:$password@$server
-lftp  $server -e "mirror --ignore-time --continue  --parallel=$pnum  $srcdir $targetdir; quit">/dev/null 2>&1 &
+#lftp  $server -e "mirror --ignore-time --continue  --parallel=$pnum  $srcdir $targetdir; quit">/dev/null 2>&1 &
+lftp  $server -e "mirror --ignore-time --continue  --parallel=$pnum  $srcdir0 $destdir; quit">/dev/null 2>&1 &
 #lftp -p 2121 -u tio,ynao246135 -e "mirror --only-missing --continue  --parallel=40  /20190704/TIO /lustre/data/2019/20190704/TIO; quit" ftp://192.168.111.120 >/dev/null 2>&1 &
 #wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir1
 

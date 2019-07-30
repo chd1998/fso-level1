@@ -34,10 +34,10 @@ waiting() {
 	wctime=`date --date='0 days ago' +%H:%M:%S`
 	wtoday=`date --date='0 days ago' +%Y%m%d`
   echo "$wtoday $wctime: $2 Task Has Done!"
-  dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+  #dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
   echo "                   Finishing..."
   kill -6 $tmppid >/dev/null 1>&2
-  echo "$dt1" > ./log/$(basename $0)_${datatype}_dtmp.dat
+  #echo "$dt1" > ./log/$(basename $0)_${datatype}_dtmp.dat
 }
 
 procing() {
@@ -64,6 +64,7 @@ cyear=`date --date='0 days ago' +%Y`
 today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 ctime0=`date --date='0 days ago' +%H:%M:%S`
+t0=`echo $ctime0|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 if [ $# -ne 9 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to local HD under cygwin"
   echo "Usage: ./fso-copy-lftp-cyg-xx.sh srcip port dest year(4 digits)  monthday(4 digits) user password datatype(TIO/HA) procnum"
@@ -108,9 +109,11 @@ fi
 #pid=$(ps x|grep -w $procName|grep -v grep|awk '{print $1}')
 #if [ $procCmd -le 0 ];then
 destdir=${destpre}${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
+destdir1=${destpre}${syssep}${srcyear}${srcmonthday}${syssep}
 #remotesrcdir=${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
 srcdir=${ftpserver1}${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
 srcdir1=${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
+srcdir2=${syssep}${srcyear}${srcmonthday}${syssep}
 
 echo " "
 echo "======== Welcome to FSO Data Copying System@FSO! ========"
@@ -157,8 +160,9 @@ fs1=$(cat ./log/$(basename $0)_${datatype}_tmpfs2.dat)
 
 
 ctime=`date --date='0 days ago' +%H:%M:%S`
+t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
-lftp $ftpserver -e "mirror  --ignore-time --continue --parallel=$threadnumber $srcdir1  $destdir; quit" >/dev/null 2>&1 &
+lftp $ftpserver -e "mirror  --ignore-time --continue --parallel=$threadnumber $srcdir2  $destdir1; quit" >/dev/null 2>&1 &
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 if [ $? -ne 0 ];then
   ctime1=`date --date='0 days ago' +%H:%M:%S`
@@ -167,11 +171,11 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 
-ttmp=$(cat ./log/$(basename $0)_${datatype}_dtmp.dat)
+#ttmp=$(cat ./log/$(basename $0)_${datatype}_dtmp.dat)
 
 ctime1=`date --date='0 days ago' +%H:%M:%S`
-t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-#t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+
+t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
 targetdir=${destdir}
 
@@ -217,7 +221,7 @@ if [ $filesize -lt 0 ]; then
   filesize=0
 fi
 
-timediff=$(($ttmp-$t1))
+timediff=$(($t2-$t1))
 #timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
 if [ $timediff -le 0 ]; then
   timediff=1
@@ -229,7 +233,7 @@ speed=`echo "$filesize $timediff"|awk '{print($1/$2)}'`
 ctime3=`date --date='0 days ago' +%H:%M:%S`
 #t3=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 t4=`echo $ctime3|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-timediff1=`echo "$t1 $t4"|awk '{print($2-$1)}'`
+timediff1=`echo "$t0 $t4"|awk '{print($2-$1)}'`
 
 echo " " 
 echo "$today $ctime3: Succeeded in Syncing $datatype data @ FSO!"

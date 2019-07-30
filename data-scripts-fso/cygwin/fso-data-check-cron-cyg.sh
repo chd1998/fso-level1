@@ -26,7 +26,7 @@ waiting() {
   #dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
   echo "                   Finishing...."                                                                                                         
   kill -6 $tmppid >/dev/null 1>&2                                                                                                                 
-  #echo "$dt1" > /home/chd/log/$(basename $0)-$datatype-sdtmp.dat                                                                                  
+  #echo "$dt1" > /cygdrive/d/chd/LFTP4WIN-master/home/chd/log/$(basename $0)-$datatype-sdtmp.dat                                                                                  
 }                                                                                                                                                 
                                                                                                                                                   
 procing() {                                                                                                                                       
@@ -68,13 +68,8 @@ list=$logpath/$datatype-$fileformat-$today.list
 listtmp=$logpath/$datatype-$fileformat-$today-tmp.list
 difflist=$logpath/$datatype-$fileformat-$today-diff.list
 fn=$logpath/$datatype-$fileformat-$today-number.dat
-<<<<<<< HEAD
 curerrorlist=$logpath/$datatype-$fileformat@$today-error-cur.list
 totalerrorlist=$logpath/$datatype-$fileformat@$today-error-total.list
-=======
-curerrorlist=$logpath/size-error-of-$datatype-$fileformat@$today-cur.list
-totalerrorlist=$logpath/size-error-of-$datatype-$fileformat@$today-total.list
->>>>>>> 70676ab2c5cea9decc86dbfd32c1c1512b616b71
 
 lockfile=$logpath/$(basename $0)-$datatype.lock
                                                                                    
