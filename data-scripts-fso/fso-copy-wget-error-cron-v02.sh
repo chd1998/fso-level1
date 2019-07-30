@@ -1,8 +1,8 @@
 #!/bin/bash
 #author: chen dong @fso
-#echo "Copy file of wrong size TIO/HA data on remote host to dest mannually"
-#echo "Usage: ./fso-copy-wget-error-xx.sh srcip port user passwd error-file-list"
-#echo "Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.120 21 tio ynao246135  error.list"
+#Purposes: Copy file of wrong size TIO/HA data in error list from remote host to dest mannually
+#Usage: ./fso-copy-wget-error-xx.sh srcip port user passwd error-file-list
+#Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.120 21 tio ynao246135  error.list
 #changlog:
 #        20190723       Release 0.1   first prototype release 0.1
 
@@ -52,9 +52,9 @@ ctime=`date --date='0 days ago' +%H:%M:%S`
 
 if [ $# -ne 6 ]  ;then
 	echo "Copy file of wrong size TIO/HA data on remote host to dest mannually"
-	echo "Usage: ./fso-copy-wget-error-xx.sh srcip port user passwd error-file-list stdsize"
-	echo "Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.120 21 tio ynao246135  error.list 11062080"
-	echo "Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.122 21 ha ynao246135  error.list 2111040"
+	echo "Usage: ./fso-copy-wget-error-cron-v02.sh srcip port user passwd error-file-list stdsize"
+	echo "Example: ./fso-copy-wget-error-cron-v02.sh ftp://192.168.111.120 21 tio ynao246135  error.list 11062080"
+	echo "Example: ./fso-copy-wget-error-cron-v02.sh ftp://192.168.111.122 21 ha ynao246135  error.list 2111040"
 	exit 1
 fi
 
@@ -71,9 +71,11 @@ password=$4
 errorlist=$5
 stdsize=$6
 
+datatype=`cat $errorlist|awk '{print $1}'|cut -d '/' -f 6`
+
 #tmpfn=/home/chd/log/$(basename $0)-$errorlist-tmpfn.dat
 #tmpfs=/home/chd/log/$(basename $0)-$errorlist-tmpfs.dat
-remotefile=/home/chd/log/$(basename $0)-$errorlist-remote.list
+remotefile=/home/chd/log/$datatype-$today-remote.list
 #errordir=/home/chd/log/$(basename $0)-$errorlist-dir.list
 #errorfile=/home/chd/log/$(basename $0)-$errorlist-file.list
 
@@ -107,7 +109,7 @@ echo " "
 cat $errorlist|awk '{print $1}'|cut -d '/' -f 5-10 > $remotefile
 #cat $errorlist|awk '{print $1}'|cut -d '/' -f 1-9 > $errordir
 #cat $errorlist|awk '{print $1}'|cut -d '/' -f 1-10 > $errorfile
-
+#datatype=`cat $errorlist|awk '{print $1}'|cut -d '/' -f 6`
 ftpserver1=${ftpserver}:${remoteport}
 
 count=0

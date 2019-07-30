@@ -68,8 +68,8 @@ list=$logpath/$datatype-$fileformat-$today.list
 listtmp=$logpath/$datatype-$fileformat-$today-tmp.list
 difflist=$logpath/$datatype-$fileformat-$today-diff.list
 fn=$logpath/$datatype-$fileformat-$today-number.dat
-curerrorlist=$logpath/size-error-of-$datatype-$fileformat@$today-cur.list
-totalerrorlist=$logpath/size-error-of-$datatype-$fileformat@$today-total.list
+curerrorlist=$logpath/$datatype-$fileformat@$today-error-cur.list
+totalerrorlist=$logpath/$datatype-$fileformat@$today-error-total.list
 
 lockfile=$logpath/$(basename $0)-$datatype.lock
                                                                                    

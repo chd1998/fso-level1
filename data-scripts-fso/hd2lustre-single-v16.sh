@@ -1,8 +1,8 @@
 #!/bin/bash
 #author: chen dong @FSO
 #Purposes: mount HD to /data directory, copy HD to /lustre/data and safely unmount HD
-#Usage: ./hd2lustre-single-v12.sh srcdir destdir year(4 digits) monthday(4 digits) datatype(TIO or HA)
-#Example: ./hd2lustre-single-v12.sh  /data  /lustre/data 2019 0707 TIO
+#Usage: ./hd2lustre-single-v16.sh srcdir destdir year(4 digits) monthday(4 digits) datatype(TIO or HA)
+#Example: ./hd2lustre-single-v16.sh  /data  /lustre/data 2019 0707 TIO
 #Changelog:
 #         20190420 Release 0.1, first working script
 #         20190421 Release 0.2, fixed minor errors, and using cp instead of rsync
@@ -18,7 +18,10 @@
 #                               add datatype to destdir if missing in src
 #                  Release 1.2, copy data of single day only
 #         20190710 Release 1.4, copy process indicator added
+#         20190711 Release 1.5, using tar & pv to copy data with all dirs  
+#                  Release 1.6, revised for copying only single dir	
 #
+
 
 waiting() {
   local pid="$1"
@@ -70,7 +73,7 @@ devpre="/dev/"
 echo " "
 echo " "
 echo "====== Welcome to HD-->Lustre data Archiving System @FSO ======"
-echo "                 Release 1.1 20190625 21:10)                   "
+echo "                 Release 1.6 2019711 21:10                     "
 echo "                                                               "
 echo "              Syncing data from local HD to Lustre             "
 echo "                                                               "
