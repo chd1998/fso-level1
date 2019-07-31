@@ -75,10 +75,10 @@ fi
 #procName="lftp"
 
 syssep="/"
-dest00="/cygdrive/"
+dest00="/cygdrive"
 ftpserver=$1
 remoteport=$2
-destpre=${dest00}$3
+destpre=$dest00/$3
 srcyear=$4
 srcmonthday=$5
 ftpuser=$6

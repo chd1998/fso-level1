@@ -111,11 +111,11 @@ grep -vwf $list $listtmp > $difflist &
 waiting "$!" "new $datatype $fileformat file(s) getting" "Getting  new $datatype $fileformat file(s) "
 #count error number for this round
 cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $curerrorlist &
-waiting "$!" "Wrong $datatype $fileformat file(s) checking round #1" "Checking wrong $datatype $fileformat file(s) for round #1"
+waiting "$!" "Wrong $datatype $fileformat file(s) checking " "Checking wrong $datatype $fileformat file(s)"
 curerror=`cat $curerrorlist|wc -l`
 #check new files
-cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' >> $totalerrorlist &
-waiting "$!" "Wrong $datatype $fileformat file(s) checking round #2" "Checking wrong $datatype $fileformat file(s) for round #2"
+cat $curerrorlist  >> $totalerrorlist &
+waiting "$!" "Wrong $datatype $fileformat file(s) adding" "Adding wrong $datatype $fileformat file(s) to total list"
 totalerror=`cat $totalerrorlist|wc -l`
 mv -f $listtmp $list
 curnum=$(cat $difflist|wc -l)

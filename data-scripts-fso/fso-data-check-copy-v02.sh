@@ -77,6 +77,9 @@ datatype=$6
 fileformat=$7
 stdsize=$8
 
+targetdir=$destpre/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype
+errlist=/home/chd/log/$datatype-$fileformat@$(date +\%Y\%m\%d)-error-total.list
+
 lockfile=/home/chd/log/$(basename $0)-$datatype.lock
 
 if [ -f $lockfile ];then
@@ -97,11 +100,7 @@ st1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i+
 echo "                                                       "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
 echo "              fso-data-check-copy.sh                   "
-<<<<<<< HEAD
 echo "          (Release 0.2 20190725 11:51)                 "
-=======
-echo "          (Release 0.1 20190725 11:51)                 "
->>>>>>> 70676ab2c5cea9decc86dbfd32c1c1512b616b71
 echo "                                                       "
 echo "           Check $datatype data and copy               "
 echo "                                                       "
@@ -109,7 +108,7 @@ echo "                $today $ctime1                          "
 echo "======================================================="
 echo " "
 echo "$today $ctime: $datatype Checking, please wait..."
-/home/chd/fso-data-check-cron.sh /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype $datatype $fileformat $stdsize > /home/chd/log/check-$datatype-size.log &
+/home/chd/fso-data-check-cron.sh $targetdir $datatype $fileformat $stdsize > /home/chd/log/check-$datatype-size.log &
 waiting "$!" "$datatype Checking" "Checking $datatype Data"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
@@ -119,11 +118,7 @@ if [ $? -ne 0 ];then
 fi
 
 echo "$today $ctime: $datatype Copying, please wait..."
-<<<<<<< HEAD
-/home/chd/fso-copy-wget-error-cron-v02.sh $server $port $user $password /home/chd/log/$datatype-fits@$(date +\%Y\%m\%d)-error-total.list > /home/chd/log/$datatype-error-copy-$(date +\%Y\%m\%d).list &
-=======
-/home/chd/fso-copy-wget-error-cron-v02.sh $server $port $user $password /home/chd/log/size-error-of-$datatype-fits@$(date +\%Y\%m\%d)-total.list > /home/chd/log/$datatype-error-copy-$(date +\%Y\%m\%d).list &
->>>>>>> 70676ab2c5cea9decc86dbfd32c1c1512b616b71
+/home/chd/fso-copy-wget-error-cron-v02.sh $server $port $user $password $errlist > /home/chd/log/$datatype-error-copy-$(date +\%Y\%m\%d).list &
 waiting "$!" "$datatype Copying" "Copying $datatype Data"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
@@ -132,11 +127,22 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 
+errsize2=`cat $errlist|wc -l`
+ctime3=`date --date='0 days ago' +%H:%M:%S`
+if [ $errsize2 -eq 0 ]; then
+  echo "$today $ctime3: $datatype data under /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype are O.K.!" | mail -s "$today $ctime3: $datatype Data Sync Result @ lustre" nvst_obs@ynao.ac.cn
+  echo "$today $ctime3: $datatype data under /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype are O.K.!" | mail -s "$today $ctime3: $datatype Data Sync Result @ lustre" chd@ynao.ac.cn
+else
+  mail -s "$today $ctime3: $datatype Data Sync Result @ lustre" nvst_obs@ynao.ac.cn < $errlist
+  mail -s "$today $ctime3: $datatype Data Sync Result @ lustre" chd@ynao.ac.cn < $errlist
+fi
+
 ctime4=`date --date='0 days ago' +%H:%M:%S`
 st2=`echo $ctime4|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 stdiff=`echo "$st1 $st2"|awk '{print($2-$1)}'`
 
 echo "$today $ctime4: Checking & Copying $datatype data @ FSO finished!"
+echo "  $datatype Data : /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype"
 echo "       Time Used : $stdiff secs."
 echo " Total Time From : $ctime1"
 echo "              To : $ctime4"

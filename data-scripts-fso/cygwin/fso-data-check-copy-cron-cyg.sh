@@ -47,13 +47,13 @@ syssep="/"
 
 if [ $# -ne 8 ];then
   echo "Usage: ./fso-data-check-copy-cron.sh ip port  destdir user password datatype(TIO or HA) threadnumber"
-  echo "Example: ./fso-data-check-copy-cron.sh  192.168.111.120 21 /f tio ynao246135 TIO fits 11062080"
-  echo "Example: ./fso-data-check-copy-cron.sh  192.168.111.122 21 /e ha ynao246135 HA fits 2111040"
+  echo "Example: ./fso-data-check-copy-cron.sh  192.168.111.120 21 f tio ynao246135 TIO fits 11062080"
+  echo "Example: ./fso-data-check-copy-cron.sh  192.168.111.122 21 e ha ynao246135 HA fits 2111040"
   exit 1
 fi
 server1=$1
 port=$2
-destpre=$3
+destpre=/cygdrive/$3
 user=$4
 password=$5
 datatype=$6

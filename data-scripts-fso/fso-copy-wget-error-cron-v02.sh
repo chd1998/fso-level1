@@ -1,14 +1,8 @@
 #!/bin/bash
 #author: chen dong @fso
-<<<<<<< HEAD
 #Purposes: Copy file of wrong size TIO/HA data in error list from remote host to dest mannually
 #Usage: ./fso-copy-wget-error-xx.sh srcip port user passwd error-file-list
 #Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.120 21 tio ynao246135  error.list
-=======
-#echo "Copy file of wrong size TIO/HA data on remote host to dest mannually"
-#echo "Usage: ./fso-copy-wget-error-xx.sh srcip port user passwd error-file-list"
-#echo "Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.120 21 tio ynao246135  error.list"
->>>>>>> 70676ab2c5cea9decc86dbfd32c1c1512b616b71
 #changlog:
 #        20190723       Release 0.1   first prototype release 0.1
 
@@ -58,15 +52,9 @@ ctime=`date --date='0 days ago' +%H:%M:%S`
 
 if [ $# -ne 6 ]  ;then
 	echo "Copy file of wrong size TIO/HA data on remote host to dest mannually"
-<<<<<<< HEAD
 	echo "Usage: ./fso-copy-wget-error-cron-v02.sh srcip port user passwd error-file-list stdsize"
 	echo "Example: ./fso-copy-wget-error-cron-v02.sh ftp://192.168.111.120 21 tio ynao246135  error.list 11062080"
 	echo "Example: ./fso-copy-wget-error-cron-v02.sh ftp://192.168.111.122 21 ha ynao246135  error.list 2111040"
-=======
-	echo "Usage: ./fso-copy-wget-error-xx.sh srcip port user passwd error-file-list stdsize"
-	echo "Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.120 21 tio ynao246135  error.list 11062080"
-	echo "Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.122 21 ha ynao246135  error.list 2111040"
->>>>>>> 70676ab2c5cea9decc86dbfd32c1c1512b616b71
 	exit 1
 fi
 
@@ -83,17 +71,11 @@ password=$4
 errorlist=$5
 stdsize=$6
 
-<<<<<<< HEAD
 datatype=`cat $errorlist|awk '{print $1}'|cut -d '/' -f 6`
 
 #tmpfn=/home/chd/log/$(basename $0)-$errorlist-tmpfn.dat
 #tmpfs=/home/chd/log/$(basename $0)-$errorlist-tmpfs.dat
 remotefile=/home/chd/log/$datatype-$today-remote.list
-=======
-#tmpfn=/home/chd/log/$(basename $0)-$errorlist-tmpfn.dat
-#tmpfs=/home/chd/log/$(basename $0)-$errorlist-tmpfs.dat
-remotefile=/home/chd/log/$(basename $0)-$errorlist-remote.list
->>>>>>> 70676ab2c5cea9decc86dbfd32c1c1512b616b71
 #errordir=/home/chd/log/$(basename $0)-$errorlist-dir.list
 #errorfile=/home/chd/log/$(basename $0)-$errorlist-file.list
 
@@ -127,11 +109,7 @@ echo " "
 cat $errorlist|awk '{print $1}'|cut -d '/' -f 5-10 > $remotefile
 #cat $errorlist|awk '{print $1}'|cut -d '/' -f 1-9 > $errordir
 #cat $errorlist|awk '{print $1}'|cut -d '/' -f 1-10 > $errorfile
-<<<<<<< HEAD
 #datatype=`cat $errorlist|awk '{print $1}'|cut -d '/' -f 6`
-=======
-
->>>>>>> 70676ab2c5cea9decc86dbfd32c1c1512b616b71
 ftpserver1=${ftpserver}:${remoteport}
 
 count=0
@@ -159,11 +137,11 @@ do
 	    echo "$today $ctime1: Copying Failed for  $localfile $tmps MB"
 	  else 
 	    echo $localfile >localfile.tmp
-            #remove corrected file from the list
-	    grep -vwf localfile.tmp $remotefile > $remotefile
-            #change the permission of copied file
+      #remove corrected file from the list
+	    comm -3 --nocheck-order localfile.tmp $remotefile > $remotefile
+      #change the permission of copied file
 	    find $localfile ! -perm 777 -type f -exec chmod 777 {} \;
-    	    size=$((size+tmps))
+    	size=$((size+tmps))
 	    echo "$today $ctime1: $localfile copied in $tmps MB"
 	    ((count++))
 	  fi

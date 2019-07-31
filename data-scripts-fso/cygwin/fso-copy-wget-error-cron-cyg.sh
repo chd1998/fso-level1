@@ -73,11 +73,7 @@ remoteport=$2
 ftpuser=$3
 password=$4
 errorlist=$5
-<<<<<<< HEAD
-stdsize=%6
-=======
 stdsize=$6
->>>>>>> 70676ab2c5cea9decc86dbfd32c1c1512b616b71
 
 lockfile=/home/chd/log/$(basename $0)-$datatype.lock
 if [ -f $lockfile ];then
@@ -138,7 +134,7 @@ do
 	  else 
 	    echo $localfile >localfile.tmp
             #remove corrected file from the list
-	    grep -vwf $remotefile localfile.tmp > $remotefile
+	    comm -3 --nocheck-order $remotefile localfile.tmp > $remotefile
             #change the permission of copied file
 	    find $localfile ! -perm 777 -type f -exec chmod 777 {} \;
     	    size=$((size+tmps))
