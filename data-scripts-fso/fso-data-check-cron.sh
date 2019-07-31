@@ -123,7 +123,8 @@ waiting "$!" "$datatype $fileformat file(s) number getting" "Getting $datatype $
 find $cdir/ -type f -name '*.fits' -printf "%h/%f %s\n" > $listtmp &
 waiting "$!" "$datatype $fileformat file(s) info getting" "Getting $datatype $fileformat file(s) info"
 #remove checked files, list is error files list, listtmp is all files
-grep -vwf $list $listtmp > $difflist &
+#grep -vwf $list $listtmp > $difflist &
+comm -3 --nocheck-order $listtmp $list > $difflist &
 waiting "$!" "new $datatype $fileformat file(s) getting" "Getting  new $datatype $fileformat file(s) "
 #count error number for this round
 cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $curerrorlist &

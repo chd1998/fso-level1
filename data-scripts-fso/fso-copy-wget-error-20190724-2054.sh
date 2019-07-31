@@ -135,7 +135,7 @@ do
 	  else 
 	    echo $localfile >localfile.tmp
             #remove corrected file from the list
-	    grep -vwf $remotefile localfile.tmp > $remotefile
+	    comm -3 --nocheck-order $remotefile localfile.tmp > $remotefile
             #change the permission of copied file
 	    find $localfile ! -perm 777 -type f -exec chmod 777 {} \;
     	    size=$((size+tmps))

@@ -1,8 +1,8 @@
 #!/bin/bash
 #check the size of dest dir every 10 minutes via cron, and export total error list in file
 #usage: ./fso-data-check-xx.sh /youdirhere/ datatype fileformat standardsize(in bytes)"
-#example: ./fso-data-check-xx.sh /lustre/data/tmp/ TIO fits 11062080"
-#example: ./fso-data-check-xx.sh /lustre/data/tmp/ HA fits 2111040"
+#example: ./fso-data-check-xx.sh /lustre/data/2019/20190730/TIO TIO fits 11062080"
+#example: ./fso-data-check-xx.sh /lustre/data/2019/20190730/HA HA fits 2111040"
 #press ctrl-c to break the script
 #change log:
 #           Release 20190721-0931: First working prototype
@@ -23,6 +23,7 @@ waiting() {
   tput ed
   ctime=`date --date='0 days ago' +%H:%M:%S`
   today=`date --date='0 days ago' +%Y%m%d`
+  echo " "
   echo "$today $ctime: $2 Task Has Done!"
   kill -6 $tmppid >/dev/null 1>&2
 }
@@ -67,8 +68,8 @@ list=$logpath/$datatype-$fileformat-$today.list
 listtmp=$logpath/$datatype-$fileformat-$today-tmp.list
 difflist=$logpath/$datatype-$fileformat-$today-diff.list
 fn=$logpath/$datatype-$fileformat-$today-number.dat
-curerrorlist=$logpath/size-error-of-$datatype-$fileformat@$today-cur.list
-totalerrorlist=$logpath/size-error-of-$datatype-$fileformat@$today-total.list
+curerrorlist=$logpath/$datatype-$fileformat@$today-error-cur.list
+totalerrorlist=$logpath/$datatype-$fileformat@$today-error-total.list
 
 
 if [ ! -d "$logpath" ];then
@@ -107,15 +108,17 @@ cd $cdir
 find $cdir/ -type f -name '*.fits' -printf "%h/%f %s\n" > $listtmp &
 waiting "$!" "$datatype $fileformat file(s) info getting" "Getting $datatype $fileformat file(s) info"
 #remove checked files
-grep -vwf $list $listtmp > $difflist &
+#grep -vwf $list $listtmp > $difflist &
+comm -3 --nocheck-order $listtmp $list > $difflist &
 waiting "$!" "new $datatype $fileformat file(s) getting" "Getting  new $datatype $fileformat file(s) "
 #count error number for this round
 cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $curerrorlist &
-waiting "$!" "Wrong $datatype $fileformat file(s) checking round #1" "Checking wrong $datatype $fileformat file(s) for round #1"
+waiting "$!"  "Wrong $datatype $fileformat file(s) checking " "Checking wrong $datatype $fileformat file(s)"
 curerror=`cat $curerrorlist|wc -l`
-#check new files
-cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' >> $totalerrorlist &
-waiting "$!" "Wrong $datatype $fileformat file(s) checking round #2" "Checking wrong $datatype $fileformat file(s) for round #2"
+#add new error files to total
+#cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' >> $totalerrorlist &
+cat $difflist >> $totalerrorlist &
+waiting "$!" "Current wrong $datatype $fileformat file(s) adding" "Adding current wrong $datatype $fileformat file(s) to total list"
 totalerror=`cat $totalerrorlist|wc -l`
 mv -f $listtmp $list
 curnum=$(cat $difflist|wc -l)

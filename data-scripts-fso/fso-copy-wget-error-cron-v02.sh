@@ -137,11 +137,11 @@ do
 	    echo "$today $ctime1: Copying Failed for  $localfile $tmps MB"
 	  else 
 	    echo $localfile >localfile.tmp
-            #remove corrected file from the list
-	    grep -vwf localfile.tmp $remotefile > $remotefile
-            #change the permission of copied file
+      #remove corrected file from the list
+	    comm -3 --nocheck-order localfile.tmp $remotefile > $remotefile
+      #change the permission of copied file
 	    find $localfile ! -perm 777 -type f -exec chmod 777 {} \;
-    	    size=$((size+tmps))
+    	size=$((size+tmps))
 	    echo "$today $ctime1: $localfile copied in $tmps MB"
 	    ((count++))
 	  fi

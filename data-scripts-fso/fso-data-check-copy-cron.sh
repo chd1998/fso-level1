@@ -6,7 +6,7 @@
 #Example: ./fso-data-check-copy-cron.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA fits 2111040
 #changlog: 
 #       20190725   Release 0.1     first working version.sh
-#      
+#                  Release 0.2     fixed some minor errors and revised display info
 # 
 
 #waiting pid taskname prompt
@@ -62,6 +62,7 @@ stdsize=$8
 
 #errlist=/home/chd/log/$datatype-$today-remote.list
 errlist=/home/chd/log/$datatype-$fileformat@$(date +\%Y\%m\%d)-error-total.list
+targetdir=/lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype
 
 lockfile=/home/chd/log/$(basename $0)-$datatype.lock
 
@@ -83,15 +84,15 @@ st1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i+
 echo "                                                       "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
 echo "              fso-data-check-copy.sh                   "
-echo "          (Release 0.1 20190725 11:51)                 "
+echo "          (Release 0.2 20190725 11:51)                 "
 echo "                                                       "
 echo "           Check $datatype data and copy               "
 echo "                                                       "
-echo "                $today $ctime1                          "
+echo "                $today $ctime1                         "
 echo "======================================================="
 echo " "
 echo "$today $ctime: $datatype Checking, please wait..."
-/home/chd/fso-data-check-cron.sh /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype $datatype $fileformat $stdsize > /home/chd/log/check-$datatype-size@$today.log &
+/home/chd/fso-data-check-cron.sh $targetdir $datatype $fileformat $stdsize > /home/chd/log/check-$datatype-size@$today.log &
 waiting "$!" "$datatype Checking" "Checking $datatype Data"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
@@ -119,8 +120,8 @@ errsize2=`cat $errlist|wc -l`
 ctime3=`date --date='0 days ago' +%H:%M:%S`
 #sending email to observers
 if [ $errsize2 -eq 0 ]; then
-  echo "$today $ctime3: $datatype data are O.K.!" | mail -s "$today $ctime3: $datatype Data Sync Result @ lustre" nvst_obs@ynao.ac.cn
-  echo "$today $ctime3: $datatype data are O.K.!" | mail -s "$today $ctime3: $datatype Data Sync Result @ lustre" chd@ynao.ac.cn
+  echo "$today $ctime3: $datatype data under /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype are O.K.!" | mail -s "$today $ctime3: $datatype Data Sync Result @ lustre" nvst_obs@ynao.ac.cn
+  echo "$today $ctime3: $datatype data under /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype are O.K.!" | mail -s "$today $ctime3: $datatype Data Sync Result @ lustre" chd@ynao.ac.cn
 else
   mail -s "$today $ctime3: $datatype Data Sync Result @ lustre" nvst_obs@ynao.ac.cn < $errlist
   mail -s "$today $ctime3: $datatype Data Sync Result @ lustre" chd@ynao.ac.cn < $errlist

@@ -26,7 +26,7 @@ waiting() {
   #dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
   echo "                   Finishing...."                                                                                                         
   kill -6 $tmppid >/dev/null 1>&2                                                                                                                 
-  #echo "$dt1" > /home/chd/log/$(basename $0)-$datatype-sdtmp.dat                                                                                  
+  #echo "$dt1" > /cygdrive/d/chd/LFTP4WIN-master/home/chd/log/$(basename $0)-$datatype-sdtmp.dat                                                                                  
 }                                                                                                                                                 
                                                                                                                                                   
 procing() {                                                                                                                                       
@@ -46,8 +46,8 @@ procing() {
 
 if [ $# -ne 4 ];then
   echo "usage: ./fso-data-check-cron-cyg.sh /youdirhere/ datatype fileformat standardsize(in bytes)"
-  echo "example: ./fso-data-check-cron-cyg.sh /f/20190721/TIO TIO fits 11062080"
-  echo "example: ./fso-data-check-cron-cyg.sh /e/20190721/HA HA fits 2111040"
+  echo "example: ./fso-data-check-cron-cyg.sh /cygdrive/f/20190721/TIO TIO fits 11062080"
+  echo "example: ./fso-data-check-cron-cyg.sh /cygdrive/e/20190721/HA HA fits 2111040"
   exit 0
 fi
 
@@ -59,7 +59,7 @@ logpath=$homepre/log
 
 today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
-cdir=$dirpre$1
+cdir=$1
 datatype=$2
 fileformat=$3
 stdsize=$4
@@ -124,7 +124,8 @@ waiting "$!" "$datatype $fileformat file(s) number getting" "Getting $datatype $
 find $cdir/ -type f -name '*.fits' -printf "%h/%f %s\n" > $listtmp &
 waiting "$!" "$datatype $fileformat file(s) info getting" "Getting $datatype $fileformat file(s) info"
 #remove checked files
-grep -vwf $list $listtmp > $difflist &
+#grep -vwf $list $listtmp > $difflist &
+comm -3 --nocheck-order $listtmp $list > $difflist &
 waiting "$!" "new $datatype $fileformat file(s) getting" "Getting  new $datatype $fileformat file(s) "
 #count error number for this round
 cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $curerrorlist &
@@ -133,7 +134,7 @@ curerror=`cat $curerrorlist|wc -l`
 #check new files
 #cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' >> $totalerrorlist &
 cat $curerrorlist >> $totalerrorlist &
-waiting "$!" "Wrong $datatype $fileformat file(s) checking round #2" "Checking wrong $datatype $fileformat file(s) for round #2"
+waiting "$!" "Current wrong $datatype $fileformat file(s) adding" "Adding current wrong $datatype $fileformat file(s)"
 totalerror=`cat $totalerrorlist|wc -l`
 mv -f $listtmp $list
 curnum=$(cat $fn)

@@ -24,7 +24,7 @@ waiting() {
   dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
   echo "                   Finishing...."
   kill -6 $tmppid >/dev/null 1>&2
-  echo "$dt1" > /home/chd/log/$(basename $0)-$datatype-sdtmp.dat
+  echo "$dt1" > /cygdrive/d/chd/LFTP4WIN-master/home/chd/log/$(basename $0)-$datatype-sdtmp.dat
 }
 
 procing() {
@@ -47,13 +47,13 @@ syssep="/"
 
 if [ $# -ne 8 ];then
   echo "Usage: ./fso-data-check-copy-cron.sh ip port  destdir user password datatype(TIO or HA) threadnumber"
-  echo "Example: ./fso-data-check-copy-cron.sh  192.168.111.120 21 /f tio ynao246135 TIO fits 11062080"
-  echo "Example: ./fso-data-check-copy-cron.sh  192.168.111.122 21 /e ha ynao246135 HA fits 2111040"
+  echo "Example: ./fso-data-check-copy-cron.sh  192.168.111.120 21 f tio ynao246135 TIO fits 11062080"
+  echo "Example: ./fso-data-check-copy-cron.sh  192.168.111.122 21 e ha ynao246135 HA fits 2111040"
   exit 1
 fi
 server1=$1
 port=$2
-destpre=$3
+destpre=/cygdrive/$3
 user=$4
 password=$5
 datatype=$6
@@ -134,7 +134,7 @@ stdiff=`echo "$st1 $st2"|awk '{print($2-$1)}'`
 echo "$today $ctime4: Checking & Copying $datatype data @ FSO finished!"
 echo "           Total : $errsize2 error file(s) copied"
 echo "       Time Used : $stdiff secs."
-echo " Total Time From : $ctime1"
+echo "            From : $ctime1"
 echo "              To : $ctime4"
 echo "================================================================================="
 rm -rf $lockfile

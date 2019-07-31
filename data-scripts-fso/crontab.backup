@@ -3,8 +3,8 @@
 */1 8-18 * * * /home/chd/fso-sync-lftp-v08.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA 100 >> /home/chd/log/fso-sync-ha.log
 */1 7-18 * * * /home/chd/fso-count-lftp.sh  192.168.111.120 21  tio ynao246135 TIO >> /home/chd/log/fso-remote-info-tio.log
 */1 7-18 * * * /home/chd/fso-count-lftp.sh  192.168.111.122 21  ha ynao246135 HA >> /home/chd/log/fso-remote-info-ha.log
-02 20 * * *  /home/chd/fso-data-check-copy-cron.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO fits 11062080 > /home/chd/log/check-TIO-copy.log
-02 20 * * *  /home/chd/fso-data-check-copy-cron.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA fits 2111040 > /home/chd/log/check-HA-copy.log
+*/30 19 * * *  /home/chd/fso-data-check-copy-cron.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO fits 11062080 > /home/chd/log/check-TIO-copy.log
+*/30 19 * * *  /home/chd/fso-data-check-copy-cron.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA fits 2111040 > /home/chd/log/check-HA-copy.log
 #02 20 * * * /home/chd/fso-data-check-cron.sh /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/TIO TIO fits 11062080 >> /home/chd/log/check-TIO-size.log
 #02 20 * * * /home/chd/fso-data-check-cron.sh /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/HA HA fits 2111040  >> /home/chd/log/check-HA-size.log
 #30 20 * * * /home/chd/fso-copy-wget-error-cron-v02.sh ftp://192.168.111.120 21 tio ynao246135 /home/chd/log/size-error-of-TIO-fits@$(date +\%Y\%m\%d)-total.list
