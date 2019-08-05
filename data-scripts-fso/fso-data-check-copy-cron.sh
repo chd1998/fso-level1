@@ -120,11 +120,11 @@ errsize2=`cat $errlist|wc -l`
 ctime3=`date --date='0 days ago' +%H:%M:%S`
 #sending email to observers
 if [ $errsize2 -eq 0 ]; then
-  echo "$today $ctime3: $datatype data under /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype are O.K.!" | mail -s "$today $ctime3: $datatype Data Sync Result @ lustre is O.K.!" nvst_obs@ynao.ac.cn
-  echo "$today $ctime3: $datatype data under /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype are O.K.!" | mail -s "$today $ctime3: $datatype Data Sync Result @ lustre is O.K.!" chd@ynao.ac.cn
+  echo "$today $ctime3: $datatype data under /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype are O.K.!" | mail -s "lustre: $errorsize2 Error File(s) Found in $datatype on $today" nvst_obs@ynao.ac.cn
+  echo "$today $ctime3: $datatype data under /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype are O.K.!" | mail -s "lustre: $errorsize2 Error File(s) Found in $datatype on $today" chd@ynao.ac.cn
 else
-  mail -s "$today $ctime3: Pls Check $datatype Data Sync Result @ lustre" nvst_obs@ynao.ac.cn < $errlist
-  mail -s "$today $ctime3: Pls Check $datatype Data Sync Result @ lustre" chd@ynao.ac.cn < $errlist
+  mail -s "lustre: $errorsize2 Error Files(s) Found in $datatype on $today" nvst_obs@ynao.ac.cn < $errlist
+  mail -s "lustre: $errorsize2 Error File(s) Found in $datatype on $today" chd@ynao.ac.cn < $errlist
 fi
 
 ctime4=`date --date='0 days ago' +%H:%M:%S`

@@ -102,7 +102,7 @@ echo "                                                         "
 echo "========================================================="
 echo " "
 #get path and file name of each error file
-cat $errorlist|awk '{print $1}'|cut -d '/' -f 5-10 > $remotefile
+cat $errorlist|awk '{print $1}'|cut -d '/' -f 4-10 > $remotefile
 #cat $errorlist|awk '{print $1}'|cut -d '/' -f 1-9 > $errordir
 #cat $errorlist|awk '{print $1}'|cut -d '/' -f 1-10 > $errorfile
 
@@ -118,7 +118,7 @@ for line in $(cat $remotefile);
 do
 	ctime=`date --date='0 days ago' +%H:%M:%S`
 	rfile=$ftpserver1/$line
-	localfile=$destpre/$cyear/$line
+	localfile=$destpre/$line
 	echo "$today $ctime: Copying $rfile"
 	wget -O $localfile --ftp-user=$ftpuser --ftp-password=$password --no-passive-ftp  $rfile >/dev/null 2>&1
 	if [ $? -ne 0 ];then
