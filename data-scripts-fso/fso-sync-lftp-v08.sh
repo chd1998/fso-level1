@@ -162,7 +162,7 @@ mytime2=$(cat /home/chd/log/$(basename $0)-$datatype-sdtmp.dat)
 #curhm=`date  +%H%M`
 #if [ $curhm -ge 1501 ]; then
 #chmod 777 -R $targetdir &
-find $targetdir ! -perm 777 -type f -exec chmod 777 {} \; & 
+#find $targetdir ! -perm 777 -type f -exec chmod 777 {} \; & 
 find $targetdir ! -perm 777 -type d -exec chmod 777 {} \; &
 #  waiting "$!" "$datatype Files Permission Changing" "Changing $datatype Files Permission"
 #  if [ $? -ne 0 ];then

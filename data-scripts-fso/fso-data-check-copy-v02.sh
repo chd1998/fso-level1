@@ -104,7 +104,7 @@ echo "          (Release 0.2 20190725 11:51)                 "
 echo "                                                       "
 echo "           Check $datatype data and copy               "
 echo "                                                       "
-echo "                $today $ctime1                          "
+echo "                $today $ctime1                         "
 echo "======================================================="
 echo " "
 echo "$today $ctime: $datatype Checking, please wait..."
@@ -142,7 +142,7 @@ st2=`echo $ctime4|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i+
 stdiff=`echo "$st1 $st2"|awk '{print($2-$1)}'`
 
 echo "$today $ctime4: Checking & Copying $datatype data @ FSO finished!"
-echo "  $datatype Data : /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype"
+echo "  $datatype Data : $targetdir"
 echo "       Time Used : $stdiff secs."
 echo " Total Time From : $ctime1"
 echo "              To : $ctime4"

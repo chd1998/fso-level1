@@ -101,24 +101,29 @@ echo "                                                                          
 echo "================================================================================"
 echo " "
 cd $cdir
-#getting file number
-#find . -type f -name '*.fits'  |wc -l > $fn &
-#waiting "$!" "$datatype $fileformat file(s) number getting" "Getting $datatype $fileformat file(s) number"
 #getting file name & size
 find $cdir/ -type f -name '*.fits' -printf "%h/%f %s\n" > $listtmp &
 waiting "$!" "$datatype $fileformat file(s) info getting" "Getting $datatype $fileformat file(s) info"
+
+#getting file number
+#cat $listtmp  |wc -l > $fn &
+#waiting "$!" "$datatype $fileformat file(s) number getting" "Getting $datatype $fileformat file(s) number"
+
 #remove checked files
 #grep -vwf $list $listtmp > $difflist &
 comm -3 --nocheck-order $listtmp $list > $difflist &
 waiting "$!" "new $datatype $fileformat file(s) getting" "Getting  new $datatype $fileformat file(s) "
+
 #count error number for this round
 cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $curerrorlist &
 waiting "$!"  "Wrong $datatype $fileformat file(s) checking " "Checking wrong $datatype $fileformat file(s)"
 curerror=`cat $curerrorlist|wc -l`
+
 #add new error files to total
 #cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' >> $totalerrorlist &
 cat $difflist >> $totalerrorlist &
 waiting "$!" "Current wrong $datatype $fileformat file(s) adding" "Adding current wrong $datatype $fileformat file(s) to total list"
+
 totalerror=`cat $totalerrorlist|wc -l`
 mv -f $listtmp $list
 curnum=$(cat $difflist|wc -l)
