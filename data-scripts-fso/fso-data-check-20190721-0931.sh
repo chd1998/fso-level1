@@ -118,12 +118,18 @@ waiting "$!" "new $datatype $fileformat file(s) getting" "Getting  new $datatype
 cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $curerrorlist &
 waiting "$!"  "Wrong $datatype $fileformat file(s) checking " "Checking wrong $datatype $fileformat file(s)"
 curerror=`cat $curerrorlist|wc -l`
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57863bf69542058eaa3fd35cd67073148b9f18c7
 #add new error files to total
 #cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' >> $totalerrorlist &
 cat $difflist >> $totalerrorlist &
 waiting "$!" "Current wrong $datatype $fileformat file(s) adding" "Adding current wrong $datatype $fileformat file(s) to total list"
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57863bf69542058eaa3fd35cd67073148b9f18c7
 totalerror=`cat $totalerrorlist|wc -l`
 mv -f $listtmp $list
 curnum=$(cat $difflist|wc -l)

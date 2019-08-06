@@ -42,26 +42,26 @@ procing() {
         done
 }
 
-if [ $# -ne 3 ];then
+if [ $# -ne 4 ];then
   echo "usage: ./fso-data-check-xx.sh /youdirhere/ fileformat standardsize(in bytes)"
-  echo "example: ./fso-data-check-xx.sh /lustre/data/tmp/ fits 11062080"
-  echo "example: ./fso-data-check-xx.sh /lustre/data/tmp/ fits 2111040"
+  echo "example: ./fso-data-check-xx.sh /lustre/data/2019/20190720/ HA fits 11062080"
   exit 0
 fi
 
 today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 cdir=$1
-fileformat=$2
-stdsize=$3
+datatype=$2
+fileformat=$3
+stdsize=$4
 
 syssep="/"
-list=/home/chd/log/$fileformat-$today-$ctime.list
-fn=/home/chd/log/$fileformat-$today-$ctime-number.dat
-errorlist=/home/chd/log/$fileformat-of-wrong-size-$today-$ctime.list
+list=/home/chd/log/$datatype-$fileformat-$today-$ctime.list
+fn=/home/chd/log/$datatype-$fileformat-$today-$ctime-number.dat
+errorlist=/home/chd/result/$datatype-$fileformat-of-wrong-size-$today-$ctime.list
 
 if [ ! -d "$cdir" ];then
-  echo "Dest Dir: $cdir doesn't exist...."
+  echo "Target Dir: $cdir     doesn't exist...."
   echo "Please check..."
   exit 0
 fi
