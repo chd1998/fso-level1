@@ -120,16 +120,11 @@ errsize2=`cat $errlist|wc -l`
 ctime3=`date --date='0 days ago' +%H:%M:%S`
 #sending email to observers
 if [ $errsize2 -eq 0 ]; then
-<<<<<<< HEAD
-  echo "$today $ctime3: $datatype data under /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype are O.K.!" | mail -s "lustre: $errsize2 Error File(s) Found in $datatype on $today" nvst_obs@ynao.ac.cn
-  echo "$today $ctime3: $datatype data under /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype are O.K.!" | mail -s "lustre: $errsize2 Error File(s) Found in $datatype on $today" chd@ynao.ac.cn
-=======
-  echo "$today $ctime3: $datatype data under /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype are O.K.!" | mail -s "$today $ctime3: $datatype Data Sync Result @ lustre" nvst_obs@ynao.ac.cn
-  echo "$today $ctime3: $datatype data under /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype are O.K.!" | mail -s "$today $ctime3: $datatype Data Sync Result @ lustre" chd@ynao.ac.cn
->>>>>>> 57863bf69542058eaa3fd35cd67073148b9f18c7
+  echo "$today $ctime3: $datatype data under /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype are O.K.!" | mail -s "lustre-$datatype@$today: $errsize2 Error File(s) Found" nvst_obs@ynao.ac.cn
+  echo "$today $ctime3: $datatype data under /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype are O.K.!" | mail -s "lustre-$datatype@$today: $errsize2 Error File(s) Found" chd@ynao.ac.cn
 else
-  mail -s "lustre: $errsize2 Error Files(s) Found in $datatype on $today" nvst_obs@ynao.ac.cn < $errlist
-  mail -s "lustre: $errsize2 Error File(s) Found in $datatype on $today" chd@ynao.ac.cn < $errlist
+  mail -s "lustre-$datatype@$today: $errsize2 Error File(s) Found" nvst_obs@ynao.ac.cn < $errlist
+  mail -s "lustre-$datatype@$today: $errsize2 Error File(s) Found" chd@ynao.ac.cn < $errlist
 fi
 
 ctime4=`date --date='0 days ago' +%H:%M:%S`
