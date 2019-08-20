@@ -121,7 +121,11 @@ curerror=`cat $curerrorlist|wc -l`
 <<<<<<< HEAD
 
 =======
+<<<<<<< HEAD
+
+=======
 >>>>>>> 57863bf69542058eaa3fd35cd67073148b9f18c7
+>>>>>>> bfd957cd272436aaf6d687231bc2cb2a2485d935
 #add new error files to total
 #cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' >> $totalerrorlist &
 cat $difflist >> $totalerrorlist &
@@ -129,7 +133,11 @@ waiting "$!" "Current wrong $datatype $fileformat file(s) adding" "Adding curren
 <<<<<<< HEAD
 
 =======
+<<<<<<< HEAD
+
+=======
 >>>>>>> 57863bf69542058eaa3fd35cd67073148b9f18c7
+>>>>>>> bfd957cd272436aaf6d687231bc2cb2a2485d935
 totalerror=`cat $totalerrorlist|wc -l`
 mv -f $listtmp $list
 curnum=$(cat $difflist|wc -l)

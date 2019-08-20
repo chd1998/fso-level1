@@ -117,27 +117,32 @@ echo "                                                                          
 echo "================================================================================"
 echo " "
 cd $cdir
-#getting file number
-find . -type f -name '*.fits'  |wc -l > $fn &
-waiting "$!" "$datatype $fileformat file(s) number getting" "Getting $datatype $fileformat file(s) number"
+
 #getting file name & size
 find $cdir/ -type f -name '*.fits' -printf "%h/%f %s\n" > $listtmp &
 waiting "$!" "$datatype $fileformat file(s) info getting" "Getting $datatype $fileformat file(s) info"
+
+#getting file number
+#cat $listtmp  |wc -l > $fn &
+#waiting "$!" "$datatype $fileformat file(s) number getting" "Getting $datatype $fileformat file(s) number"
+
 #remove checked files
 #grep -vwf $list $listtmp > $difflist &
 comm -3 --nocheck-order $listtmp $list > $difflist &
 waiting "$!" "new $datatype $fileformat file(s) getting" "Getting  new $datatype $fileformat file(s) "
+
 #count error number for this round
 cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $curerrorlist &
 waiting "$!" "Wrong $datatype $fileformat file(s) checking" "Checking wrong $datatype $fileformat file(s)"
 curerror=`cat $curerrorlist|wc -l`
+
 #check new files
 #cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' >> $totalerrorlist &
 cat $curerrorlist >> $totalerrorlist &
 waiting "$!" "Current wrong $datatype $fileformat file(s) adding" "Adding current wrong $datatype $fileformat file(s)"
 totalerror=`cat $totalerrorlist|wc -l`
 mv -f $listtmp $list
-curnum=$(cat $fn)
+curnum=$(cat $difflist|wc -l)
 today=`date --date='0 days ago' +%Y%m%d`
 ctime1=`date --date='0 days ago' +%H:%M:%S`
 t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`

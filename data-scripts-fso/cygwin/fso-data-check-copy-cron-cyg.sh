@@ -119,11 +119,11 @@ ctime3=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime3: Sending notification email to Observation Assistant..."
 #sending email to observers
 if [ $errsize2 -eq 0 ]; then
-  echo "$today $ctime3: $datatype data are O.K.!" | email -s "$today $ctime3: $datatype Data Sync Result @ fso-data" nvst_obs@ynao.ac.cn
-  echo "$today $ctime3: $datatype data are O.K.!" | email -s "$today $ctime3: $datatype Data Sync Result @ fso-data" chd@ynao.ac.cn
+  echo "$today $ctime3: $datatype data under $destpre/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype are O.K.!" | email -s "fso-data: $errsize2 Error File(s) Found in $datatype on $today" nvst_obs@ynao.ac.cn
+  echo "$today $ctime3: $datatype data under $destpre/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype are O.K.!" | email -s "fso-data: $errsize2 Error File(s) Found in $datatype on $today" chd@ynao.ac.cn
 else
-  mail -s "$today $ctime3: $datatype Data Sync Result @ fso-data" nvst_obs@ynao.ac.cn < $errlist
-  mail -s "$today $ctime3: $datatype Data Sync Result @ fso-data" chd@ynao.ac.cn < $errlist
+  email -s "fso-data: $errsize2 Error File(s) Found in $datatype on $today" nvst_obs@ynao.ac.cn < $errlist
+  email -s "fso-data: $errsize2 Error File(s) Found in $datatype on $today" chd@ynao.ac.cn < $errlist
 fi
 
 
