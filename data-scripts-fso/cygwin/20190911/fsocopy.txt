@@ -1,0 +1,1 @@
+./fso-copy-lftp-v15-cyg.sh 192.168.111.120 21 f 2019 0819 tio ynao246135 TIO

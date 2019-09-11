@@ -1,0 +1,112 @@
+                                                       
+======= Welcome to Data Archiving System @ FSO! =======
+              fso-data-check-copy.sh                   
+          (Release 0.2 20190725 11:51)                 
+                                                       
+           Check HA data and copy               
+                                                       
+                20190909 19:00:01                         
+=======================================================
+ 
+20190909 19:00:01: Remote HA Checking, please wait...
+20190909 19:00:01: Remote HA Checking Task Has Done!
+                   Finishing....
+20190909 19:00:01: Copying local missing HA file(s), please wait...
+20190909 19:00:01: HA Copying Task Has Done!
+                   Finishing....
+20190909 19:00:01: Local HA Checking, please wait...
+20190909 19:00:01: HA Checking Task Has Done!
+                   Finishing....
+20190909 19:00:01: HA Copying for wrong size, please wait...
+20190909 19:00:01: HA Copying Task Has Done!
+                   Finishing....
+20190909 19:00:01: Checking & Copying HA data @ FSO finished!
+           Total : 0 error file(s) Copied!
+       Time Used : 0 secs.
+ Total Time From : 19:00:01
+              To : 19:00:01
+=================================================================================
+                                                       
+======= Welcome to Data Archiving System @ FSO! =======
+              fso-data-check-copy.sh                   
+          (Release 0.2 20190725 11:51)                 
+                                                       
+           Check HA data and copy               
+                                                       
+                20190909 19:30:01                         
+=======================================================
+ 
+20190909 19:30:01: Remote HA Checking, please wait...
+20190909 19:30:01: Remote HA Checking Task Has Done!
+                   Finishing....
+20190909 19:30:01: Copying local missing HA file(s), please wait...
+20190909 19:30:01: HA Copying Task Has Done!
+                   Finishing....
+20190909 19:30:02: Local HA Checking, please wait...
+20190909 19:30:02: HA Checking Task Has Done!
+                   Finishing....
+20190909 19:30:02: HA Copying for wrong size, please wait...
+20190909 19:30:02: HA Copying Task Has Done!
+                   Finishing....
+20190909 19:30:02: Checking & Copying HA data @ FSO finished!
+           Total : 0 error file(s) Copied!
+       Time Used : 1 secs.
+ Total Time From : 19:30:01
+              To : 19:30:02
+=================================================================================
+                                                       
+======= Welcome to Data Archiving System @ FSO! =======
+              fso-data-check-copy.sh                   
+          (Release 0.2 20190725 11:51)                 
+                                                       
+           Check HA data and copy               
+                                                       
+                20190910 19:00:01                         
+=======================================================
+ 
+20190910 19:00:01: Remote & Local HA File(s) Checking, please wait...
+20190910 19:00:01: Remote & Local HA File(s) Checking Task Has Done!
+                   Finishing....
+20190910 19:00:01: Copying local missing HA file(s) from remote, please wait...
+20190910 19:00:01: HA Copying Task Has Done!
+                   Finishing....
+20190910 19:00:01: Local Wrong Size HA File(s) Checking, please wait...
+20190910 19:00:01: Local Wrong Size HA File(s) Checking Task Has Done!
+                   Finishing....
+20190910 19:00:01: Wrong size HA File(s) Copying from remote, please wait...
+20190910 19:00:01: Local Wrong Size HA File(s) Copying Task Has Done!
+                   Finishing....
+20190910 19:00:01: Checking & Copying HA data @ FSO finished!
+           Total : 0 error file(s) Copied!
+       Time Used : 0 secs.
+ Total Time From : 19:00:01
+              To : 19:00:01
+=================================================================================
+                                                       
+======= Welcome to Data Archiving System @ FSO! =======
+              fso-data-check-copy.sh                   
+          (Release 0.2 20190725 11:51)                 
+                                                       
+           Check HA data and copy               
+                                                       
+                20190910 19:30:01                         
+=======================================================
+ 
+20190910 19:30:01: Remote & Local HA File(s) Checking, please wait...
+20190910 19:30:01: Remote & Local HA File(s) Checking Task Has Done!
+                   Finishing....
+20190910 19:30:01: Copying local missing HA file(s) from remote, please wait...
+20190910 19:30:01: HA Copying Task Has Done!
+                   Finishing....
+20190910 19:30:01: Local Wrong Size HA File(s) Checking, please wait...
+20190910 19:30:01: Local Wrong Size HA File(s) Checking Task Has Done!
+                   Finishing....
+20190910 19:30:01: Wrong size HA File(s) Copying from remote, please wait...
+20190910 19:30:01: Local Wrong Size HA File(s) Copying Task Has Done!
+                   Finishing....
+20190910 19:30:01: Checking & Copying HA data @ FSO finished!
+           Total : 0 error file(s) Copied!
+       Time Used : 0 secs.
+ Total Time From : 19:30:01
+              To : 19:30:01
+=================================================================================

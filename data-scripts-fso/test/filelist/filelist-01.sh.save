@@ -1,0 +1,5 @@
+#!/bin/sh
+
+grep -vwf a.txt b.txt>c.txt
+
+for line in $(cat c.txtx)

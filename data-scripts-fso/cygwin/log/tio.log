@@ -1,0 +1,2773 @@
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:00:01                       
+                                                         
+=========================================================
+ 
+20190911 08:00:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:00:02: Syncing TIO Data...   Please Wait...
+20190911 08:00:03: Syncing TIO Data...   Please Wait...
+20190911 08:00:04: Syncing TIO Data...   Please Wait...
+20190911 08:00:06: Syncing TIO Data...   Please Wait...
+20190911 08:00:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:00:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:00:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:00:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 08:00:01 
+              To : 08:00:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:02:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:02:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:02:02: Syncing TIO Data...   Please Wait...
+20190911 08:02:03: Syncing TIO Data...   Please Wait...
+20190911 08:02:04: Syncing TIO Data...   Please Wait...
+20190911 08:02:05: Syncing TIO Data...   Please Wait...
+20190911 08:02:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:02:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:02:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:02:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 08:02:01 
+              To : 08:02:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:04:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:04:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:04:03: Syncing TIO Data...   Please Wait...
+20190911 08:04:04: Syncing TIO Data...   Please Wait...
+20190911 08:04:05: Syncing TIO Data...   Please Wait...
+20190911 08:04:06: Syncing TIO Data...   Please Wait...
+20190911 08:04:07: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:04:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:04:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:04:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 08:04:01 
+              To : 08:04:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:06:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:06:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:06:02: Syncing TIO Data...   Please Wait...
+20190911 08:06:03: Syncing TIO Data...   Please Wait...
+20190911 08:06:04: Syncing TIO Data...   Please Wait...
+20190911 08:06:06: Syncing TIO Data...   Please Wait...
+20190911 08:06:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:06:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:06:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:06:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 08:06:01 
+              To : 08:06:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:08:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:08:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:08:02: Syncing TIO Data...   Please Wait...
+20190911 08:08:03: Syncing TIO Data...   Please Wait...
+20190911 08:08:04: Syncing TIO Data...   Please Wait...
+20190911 08:08:05: Syncing TIO Data...   Please Wait...
+20190911 08:08:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:08:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:08:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:08:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 08:08:01 
+              To : 08:08:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:10:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:10:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:10:03: Syncing TIO Data...   Please Wait...
+20190911 08:10:04: Syncing TIO Data...   Please Wait...
+20190911 08:10:05: Syncing TIO Data...   Please Wait...
+20190911 08:10:06: Syncing TIO Data...   Please Wait...
+20190911 08:10:07: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:10:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:10:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:10:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 6 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 08:10:01 
+              To : 08:10:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:12:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:12:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:12:02: Syncing TIO Data...   Please Wait...
+20190911 08:12:03: Syncing TIO Data...   Please Wait...
+20190911 08:12:04: Syncing TIO Data...   Please Wait...
+20190911 08:12:05: Syncing TIO Data...   Please Wait...
+20190911 08:12:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:12:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:12:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:12:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 08:12:01 
+              To : 08:12:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:14:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:14:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:14:02: Syncing TIO Data...   Please Wait...
+20190911 08:14:03: Syncing TIO Data...   Please Wait...
+20190911 08:14:04: Syncing TIO Data...   Please Wait...
+20190911 08:14:05: Syncing TIO Data...   Please Wait...
+20190911 08:14:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:14:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:14:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:14:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 08:14:01 
+              To : 08:14:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:16:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:16:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:16:02: Syncing TIO Data...   Please Wait...
+20190911 08:16:03: Syncing TIO Data...   Please Wait...
+20190911 08:16:05: Syncing TIO Data...   Please Wait...
+20190911 08:16:06: Syncing TIO Data...   Please Wait...
+20190911 08:16:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:16:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:16:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:16:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 08:16:01 
+              To : 08:16:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:18:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:18:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:18:02: Syncing TIO Data...   Please Wait...
+20190911 08:18:03: Syncing TIO Data...   Please Wait...
+20190911 08:18:04: Syncing TIO Data...   Please Wait...
+20190911 08:18:05: Syncing TIO Data...   Please Wait...
+20190911 08:18:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:18:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:18:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:18:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 08:18:01 
+              To : 08:18:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:20:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:20:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:20:02: Syncing TIO Data...   Please Wait...
+20190911 08:20:03: Syncing TIO Data...   Please Wait...
+20190911 08:20:04: Syncing TIO Data...   Please Wait...
+20190911 08:20:05: Syncing TIO Data...   Please Wait...
+20190911 08:20:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:20:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:20:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:20:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 08:20:01 
+              To : 08:20:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:22:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:22:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:22:02: Syncing TIO Data...   Please Wait...
+20190911 08:22:03: Syncing TIO Data...   Please Wait...
+20190911 08:22:04: Syncing TIO Data...   Please Wait...
+20190911 08:22:06: Syncing TIO Data...   Please Wait...
+20190911 08:22:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:22:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:22:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:22:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 08:22:01 
+              To : 08:22:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:24:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:24:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:24:02: Syncing TIO Data...   Please Wait...
+20190911 08:24:03: Syncing TIO Data...   Please Wait...
+20190911 08:24:04: Syncing TIO Data...   Please Wait...
+20190911 08:24:05: Syncing TIO Data...   Please Wait...
+20190911 08:24:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:24:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:24:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:24:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 08:24:01 
+              To : 08:24:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:26:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:26:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:26:02: Syncing TIO Data...   Please Wait...
+20190911 08:26:03: Syncing TIO Data...   Please Wait...
+20190911 08:26:04: Syncing TIO Data...   Please Wait...
+20190911 08:26:05: Syncing TIO Data...   Please Wait...
+20190911 08:26:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:26:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:26:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:26:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 08:26:01 
+              To : 08:26:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:28:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:28:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:28:02: Syncing TIO Data...   Please Wait...
+20190911 08:28:03: Syncing TIO Data...   Please Wait...
+20190911 08:28:04: Syncing TIO Data...   Please Wait...
+20190911 08:28:06: Syncing TIO Data...   Please Wait...
+20190911 08:28:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:28:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:28:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:28:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 08:28:01 
+              To : 08:28:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:30:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:30:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:30:02: Syncing TIO Data...   Please Wait...
+20190911 08:30:03: Syncing TIO Data...   Please Wait...
+20190911 08:30:04: Syncing TIO Data...   Please Wait...
+20190911 08:30:05: Syncing TIO Data...   Please Wait...
+20190911 08:30:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:30:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:30:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:30:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 08:30:01 
+              To : 08:30:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:32:02                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:32:02: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:32:03: Syncing TIO Data...   Please Wait...
+20190911 08:32:04: Syncing TIO Data...   Please Wait...
+20190911 08:32:05: Syncing TIO Data...   Please Wait...
+20190911 08:32:06: Syncing TIO Data...   Please Wait...
+20190911 08:32:07: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:32:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:32:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:32:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 08:32:02 
+              To : 08:32:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:34:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:34:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:34:02: Syncing TIO Data...   Please Wait...
+20190911 08:34:03: Syncing TIO Data...   Please Wait...
+20190911 08:34:04: Syncing TIO Data...   Please Wait...
+20190911 08:34:05: Syncing TIO Data...   Please Wait...
+20190911 08:34:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:34:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:34:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:34:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 08:34:01 
+              To : 08:34:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:36:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:36:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:36:02: Syncing TIO Data...   Please Wait...
+20190911 08:36:03: Syncing TIO Data...   Please Wait...
+20190911 08:36:04: Syncing TIO Data...   Please Wait...
+20190911 08:36:05: Syncing TIO Data...   Please Wait...
+20190911 08:36:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:36:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:36:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:36:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 08:36:01 
+              To : 08:36:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:38:02                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:38:02: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:38:03: Syncing TIO Data...   Please Wait...
+20190911 08:38:04: Syncing TIO Data...   Please Wait...
+20190911 08:38:05: Syncing TIO Data...   Please Wait...
+20190911 08:38:06: Syncing TIO Data...   Please Wait...
+20190911 08:38:07: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:38:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:38:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:38:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 08:38:02 
+              To : 08:38:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:40:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:40:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:40:02: Syncing TIO Data...   Please Wait...
+20190911 08:40:03: Syncing TIO Data...   Please Wait...
+20190911 08:40:04: Syncing TIO Data...   Please Wait...
+20190911 08:40:05: Syncing TIO Data...   Please Wait...
+20190911 08:40:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:40:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:40:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:40:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 08:40:01 
+              To : 08:40:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:42:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:42:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:42:02: Syncing TIO Data...   Please Wait...
+20190911 08:42:03: Syncing TIO Data...   Please Wait...
+20190911 08:42:04: Syncing TIO Data...   Please Wait...
+20190911 08:42:05: Syncing TIO Data...   Please Wait...
+20190911 08:42:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:42:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:42:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:42:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 08:42:01 
+              To : 08:42:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:44:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:44:02: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:44:03: Syncing TIO Data...   Please Wait...
+20190911 08:44:04: Syncing TIO Data...   Please Wait...
+20190911 08:44:05: Syncing TIO Data...   Please Wait...
+20190911 08:44:06: Syncing TIO Data...   Please Wait...
+20190911 08:44:07: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:44:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:44:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:44:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 08:44:02 
+              To : 08:44:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:46:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:46:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:46:02: Syncing TIO Data...   Please Wait...
+20190911 08:46:03: Syncing TIO Data...   Please Wait...
+20190911 08:46:04: Syncing TIO Data...   Please Wait...
+20190911 08:46:05: Syncing TIO Data...   Please Wait...
+20190911 08:46:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:46:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:46:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:46:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 08:46:01 
+              To : 08:46:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:48:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:48:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:48:02: Syncing TIO Data...   Please Wait...
+20190911 08:48:03: Syncing TIO Data...   Please Wait...
+20190911 08:48:04: Syncing TIO Data...   Please Wait...
+20190911 08:48:05: Syncing TIO Data...   Please Wait...
+20190911 08:48:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:48:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:48:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:48:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 08:48:01 
+              To : 08:48:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:50:02                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:50:02: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:50:03: Syncing TIO Data...   Please Wait...
+20190911 08:50:04: Syncing TIO Data...   Please Wait...
+20190911 08:50:05: Syncing TIO Data...   Please Wait...
+20190911 08:50:06: Syncing TIO Data...   Please Wait...
+20190911 08:50:07: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:50:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:50:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:50:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 08:50:02 
+              To : 08:50:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:52:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:52:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:52:02: Syncing TIO Data...   Please Wait...
+20190911 08:52:03: Syncing TIO Data...   Please Wait...
+20190911 08:52:04: Syncing TIO Data...   Please Wait...
+20190911 08:52:05: Syncing TIO Data...   Please Wait...
+20190911 08:52:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:52:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:52:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:52:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 08:52:01 
+              To : 08:52:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:54:02                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:54:02: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:54:03: Syncing TIO Data...   Please Wait...
+20190911 08:54:04: Syncing TIO Data...   Please Wait...
+20190911 08:54:05: Syncing TIO Data...   Please Wait...
+20190911 08:54:06: Syncing TIO Data...   Please Wait...
+20190911 08:54:07: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:54:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:54:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:54:08: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 08:54:02 
+              To : 08:54:08 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:56:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:56:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:56:02: Syncing TIO Data...   Please Wait...
+20190911 08:56:03: Syncing TIO Data...   Please Wait...
+20190911 08:56:04: Syncing TIO Data...   Please Wait...
+20190911 08:56:05: Syncing TIO Data...   Please Wait...
+20190911 08:56:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:56:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:56:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:56:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 08:56:01 
+              To : 08:56:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    08:58:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 08:58:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 08:58:02: Syncing TIO Data...   Please Wait...
+20190911 08:58:03: Syncing TIO Data...   Please Wait...
+20190911 08:58:04: Syncing TIO Data...   Please Wait...
+20190911 08:58:06: Syncing TIO Data...   Please Wait...
+20190911 08:58:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 08:58:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 08:58:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 08:58:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 08:58:01 
+              To : 08:58:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:00:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:00:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:00:02: Syncing TIO Data...   Please Wait...
+20190911 09:00:03: Syncing TIO Data...   Please Wait...
+20190911 09:00:04: Syncing TIO Data...   Please Wait...
+20190911 09:00:05: Syncing TIO Data...   Please Wait...
+20190911 09:00:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:00:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:00:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:00:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 09:00:01 
+              To : 09:00:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:02:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:02:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:02:02: Syncing TIO Data...   Please Wait...
+20190911 09:02:03: Syncing TIO Data...   Please Wait...
+20190911 09:02:04: Syncing TIO Data...   Please Wait...
+20190911 09:02:05: Syncing TIO Data...   Please Wait...
+20190911 09:02:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:02:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:02:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:02:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 09:02:01 
+              To : 09:02:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:04:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:04:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:04:03: Syncing TIO Data...   Please Wait...
+20190911 09:04:04: Syncing TIO Data...   Please Wait...
+20190911 09:04:05: Syncing TIO Data...   Please Wait...
+20190911 09:04:06: Syncing TIO Data...   Please Wait...
+20190911 09:04:07: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:04:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:04:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:04:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 6 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 09:04:01 
+              To : 09:04:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:06:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:06:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:06:02: Syncing TIO Data...   Please Wait...
+20190911 09:06:03: Syncing TIO Data...   Please Wait...
+20190911 09:06:04: Syncing TIO Data...   Please Wait...
+20190911 09:06:05: Syncing TIO Data...   Please Wait...
+20190911 09:06:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:06:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:06:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:06:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 09:06:01 
+              To : 09:06:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:08:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:08:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:08:02: Syncing TIO Data...   Please Wait...
+20190911 09:08:03: Syncing TIO Data...   Please Wait...
+20190911 09:08:04: Syncing TIO Data...   Please Wait...
+20190911 09:08:05: Syncing TIO Data...   Please Wait...
+20190911 09:08:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:08:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:08:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:08:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 09:08:01 
+              To : 09:08:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:10:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:10:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:10:03: Syncing TIO Data...   Please Wait...
+20190911 09:10:04: Syncing TIO Data...   Please Wait...
+20190911 09:10:05: Syncing TIO Data...   Please Wait...
+20190911 09:10:06: Syncing TIO Data...   Please Wait...
+20190911 09:10:07: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:10:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:10:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:10:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 6 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 09:10:01 
+              To : 09:10:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:12:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:12:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:12:02: Syncing TIO Data...   Please Wait...
+20190911 09:12:03: Syncing TIO Data...   Please Wait...
+20190911 09:12:04: Syncing TIO Data...   Please Wait...
+20190911 09:12:05: Syncing TIO Data...   Please Wait...
+20190911 09:12:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:12:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:12:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:12:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 09:12:01 
+              To : 09:12:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:14:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:14:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:14:02: Syncing TIO Data...   Please Wait...
+20190911 09:14:03: Syncing TIO Data...   Please Wait...
+20190911 09:14:04: Syncing TIO Data...   Please Wait...
+20190911 09:14:05: Syncing TIO Data...   Please Wait...
+20190911 09:14:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:14:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:14:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:14:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 09:14:01 
+              To : 09:14:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:16:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:16:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:16:03: Syncing TIO Data...   Please Wait...
+20190911 09:16:04: Syncing TIO Data...   Please Wait...
+20190911 09:16:05: Syncing TIO Data...   Please Wait...
+20190911 09:16:06: Syncing TIO Data...   Please Wait...
+20190911 09:16:07: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:16:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:16:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:16:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 6 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 09:16:01 
+              To : 09:16:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:18:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:18:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:18:02: Syncing TIO Data...   Please Wait...
+20190911 09:18:03: Syncing TIO Data...   Please Wait...
+20190911 09:18:04: Syncing TIO Data...   Please Wait...
+20190911 09:18:05: Syncing TIO Data...   Please Wait...
+20190911 09:18:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:18:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:18:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:18:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 09:18:01 
+              To : 09:18:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:20:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:20:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:20:02: Syncing TIO Data...   Please Wait...
+20190911 09:20:03: Syncing TIO Data...   Please Wait...
+20190911 09:20:04: Syncing TIO Data...   Please Wait...
+20190911 09:20:05: Syncing TIO Data...   Please Wait...
+20190911 09:20:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:20:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:20:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:20:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 09:20:01 
+              To : 09:20:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:22:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:22:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:22:03: Syncing TIO Data...   Please Wait...
+20190911 09:22:04: Syncing TIO Data...   Please Wait...
+20190911 09:22:05: Syncing TIO Data...   Please Wait...
+20190911 09:22:06: Syncing TIO Data...   Please Wait...
+20190911 09:22:07: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:22:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:22:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:22:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 6 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 09:22:01 
+              To : 09:22:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:24:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:24:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:24:02: Syncing TIO Data...   Please Wait...
+20190911 09:24:03: Syncing TIO Data...   Please Wait...
+20190911 09:24:04: Syncing TIO Data...   Please Wait...
+20190911 09:24:05: Syncing TIO Data...   Please Wait...
+20190911 09:24:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:24:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:24:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:24:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 09:24:01 
+              To : 09:24:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:26:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:26:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:26:02: Syncing TIO Data...   Please Wait...
+20190911 09:26:03: Syncing TIO Data...   Please Wait...
+20190911 09:26:04: Syncing TIO Data...   Please Wait...
+20190911 09:26:05: Syncing TIO Data...   Please Wait...
+20190911 09:26:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:26:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:26:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:26:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 09:26:01 
+              To : 09:26:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:28:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:28:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:28:02: Syncing TIO Data...   Please Wait...
+20190911 09:28:04: Syncing TIO Data...   Please Wait...
+20190911 09:28:05: Syncing TIO Data...   Please Wait...
+20190911 09:28:06: Syncing TIO Data...   Please Wait...
+20190911 09:28:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:28:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:28:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:28:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 6 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 09:28:01 
+              To : 09:28:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:30:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:30:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:30:02: Syncing TIO Data...   Please Wait...
+20190911 09:30:03: Syncing TIO Data...   Please Wait...
+20190911 09:30:04: Syncing TIO Data...   Please Wait...
+20190911 09:30:05: Syncing TIO Data...   Please Wait...
+20190911 09:30:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:30:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:30:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:30:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 09:30:01 
+              To : 09:30:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:32:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:32:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:32:02: Syncing TIO Data...   Please Wait...
+20190911 09:32:03: Syncing TIO Data...   Please Wait...
+20190911 09:32:04: Syncing TIO Data...   Please Wait...
+20190911 09:32:05: Syncing TIO Data...   Please Wait...
+20190911 09:32:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:32:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:32:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:32:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 09:32:01 
+              To : 09:32:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:34:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:34:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:34:02: Syncing TIO Data...   Please Wait...
+20190911 09:34:04: Syncing TIO Data...   Please Wait...
+20190911 09:34:05: Syncing TIO Data...   Please Wait...
+20190911 09:34:06: Syncing TIO Data...   Please Wait...
+20190911 09:34:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:34:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:34:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:34:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 6 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 09:34:01 
+              To : 09:34:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:36:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:36:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:36:02: Syncing TIO Data...   Please Wait...
+20190911 09:36:03: Syncing TIO Data...   Please Wait...
+20190911 09:36:04: Syncing TIO Data...   Please Wait...
+20190911 09:36:05: Syncing TIO Data...   Please Wait...
+20190911 09:36:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:36:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:36:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:36:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 09:36:01 
+              To : 09:36:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:38:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:38:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:38:02: Syncing TIO Data...   Please Wait...
+20190911 09:38:03: Syncing TIO Data...   Please Wait...
+20190911 09:38:04: Syncing TIO Data...   Please Wait...
+20190911 09:38:05: Syncing TIO Data...   Please Wait...
+20190911 09:38:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:38:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:38:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:38:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 09:38:01 
+              To : 09:38:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:40:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:40:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:40:02: Syncing TIO Data...   Please Wait...
+20190911 09:40:03: Syncing TIO Data...   Please Wait...
+20190911 09:40:05: Syncing TIO Data...   Please Wait...
+20190911 09:40:06: Syncing TIO Data...   Please Wait...
+20190911 09:40:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:40:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:40:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:40:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 09:40:01 
+              To : 09:40:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:42:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:42:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:42:02: Syncing TIO Data...   Please Wait...
+20190911 09:42:03: Syncing TIO Data...   Please Wait...
+20190911 09:42:04: Syncing TIO Data...   Please Wait...
+20190911 09:42:05: Syncing TIO Data...   Please Wait...
+20190911 09:42:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:42:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:42:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:42:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 09:42:01 
+              To : 09:42:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:44:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:44:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:44:02: Syncing TIO Data...   Please Wait...
+20190911 09:44:03: Syncing TIO Data...   Please Wait...
+20190911 09:44:04: Syncing TIO Data...   Please Wait...
+20190911 09:44:05: Syncing TIO Data...   Please Wait...
+20190911 09:44:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:44:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:44:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:44:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 09:44:01 
+              To : 09:44:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:46:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:46:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:46:02: Syncing TIO Data...   Please Wait...
+20190911 09:46:03: Syncing TIO Data...   Please Wait...
+20190911 09:46:05: Syncing TIO Data...   Please Wait...
+20190911 09:46:06: Syncing TIO Data...   Please Wait...
+20190911 09:46:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:46:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:46:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:46:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 09:46:01 
+              To : 09:46:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:48:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:48:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:48:02: Syncing TIO Data...   Please Wait...
+20190911 09:48:03: Syncing TIO Data...   Please Wait...
+20190911 09:48:04: Syncing TIO Data...   Please Wait...
+20190911 09:48:05: Syncing TIO Data...   Please Wait...
+20190911 09:48:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:48:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:48:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:48:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 09:48:01 
+              To : 09:48:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:50:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:50:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:50:02: Syncing TIO Data...   Please Wait...
+20190911 09:50:03: Syncing TIO Data...   Please Wait...
+20190911 09:50:04: Syncing TIO Data...   Please Wait...
+20190911 09:50:05: Syncing TIO Data...   Please Wait...
+20190911 09:50:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:50:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:50:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:50:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 09:50:01 
+              To : 09:50:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:52:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:52:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:52:02: Syncing TIO Data...   Please Wait...
+20190911 09:52:03: Syncing TIO Data...   Please Wait...
+20190911 09:52:04: Syncing TIO Data...   Please Wait...
+20190911 09:52:05: Syncing TIO Data...   Please Wait...
+20190911 09:52:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:52:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:52:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:52:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 09:52:01 
+              To : 09:52:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:54:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:54:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:54:02: Syncing TIO Data...   Please Wait...
+20190911 09:54:03: Syncing TIO Data...   Please Wait...
+20190911 09:54:04: Syncing TIO Data...   Please Wait...
+20190911 09:54:05: Syncing TIO Data...   Please Wait...
+20190911 09:54:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:54:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:54:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:54:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 09:54:01 
+              To : 09:54:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:56:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:56:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:56:02: Syncing TIO Data...   Please Wait...
+20190911 09:56:03: Syncing TIO Data...   Please Wait...
+20190911 09:56:04: Syncing TIO Data...   Please Wait...
+20190911 09:56:05: Syncing TIO Data...   Please Wait...
+20190911 09:56:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:56:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:56:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:56:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 09:56:01 
+              To : 09:56:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    09:58:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 09:58:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 09:58:02: Syncing TIO Data...   Please Wait...
+20190911 09:58:03: Syncing TIO Data...   Please Wait...
+20190911 09:58:04: Syncing TIO Data...   Please Wait...
+20190911 09:58:05: Syncing TIO Data...   Please Wait...
+20190911 09:58:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 09:58:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 09:58:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 09:58:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 09:58:01 
+              To : 09:58:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    10:00:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 10:00:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 10:00:02: Syncing TIO Data...   Please Wait...
+20190911 10:00:03: Syncing TIO Data...   Please Wait...
+20190911 10:00:04: Syncing TIO Data...   Please Wait...
+20190911 10:00:05: Syncing TIO Data...   Please Wait...
+20190911 10:00:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 10:00:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 10:00:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 10:00:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 10:00:01 
+              To : 10:00:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    10:02:02                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 10:02:02: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 10:02:03: Syncing TIO Data...   Please Wait...
+20190911 10:02:04: Syncing TIO Data...   Please Wait...
+20190911 10:02:05: Syncing TIO Data...   Please Wait...
+20190911 10:02:06: Syncing TIO Data...   Please Wait...
+20190911 10:02:07: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 10:02:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 10:02:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 10:02:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 10:02:02 
+              To : 10:02:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    10:04:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 10:04:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 10:04:02: Syncing TIO Data...   Please Wait...
+20190911 10:04:03: Syncing TIO Data...   Please Wait...
+20190911 10:04:04: Syncing TIO Data...   Please Wait...
+20190911 10:04:05: Syncing TIO Data...   Please Wait...
+20190911 10:04:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 10:04:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 10:04:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 10:04:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 10:04:01 
+              To : 10:04:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    10:06:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 10:06:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 10:06:02: Syncing TIO Data...   Please Wait...
+20190911 10:06:03: Syncing TIO Data...   Please Wait...
+20190911 10:06:04: Syncing TIO Data...   Please Wait...
+20190911 10:06:05: Syncing TIO Data...   Please Wait...
+20190911 10:06:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 10:06:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 10:06:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 10:06:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 10:06:01 
+              To : 10:06:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    10:08:02                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 10:08:02: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 10:08:03: Syncing TIO Data...   Please Wait...
+20190911 10:08:04: Syncing TIO Data...   Please Wait...
+20190911 10:08:05: Syncing TIO Data...   Please Wait...
+20190911 10:08:06: Syncing TIO Data...   Please Wait...
+20190911 10:08:07: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 10:08:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 10:08:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 10:08:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 10:08:02 
+              To : 10:08:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    10:10:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 10:10:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 10:10:02: Syncing TIO Data...   Please Wait...
+20190911 10:10:03: Syncing TIO Data...   Please Wait...
+20190911 10:10:04: Syncing TIO Data...   Please Wait...
+20190911 10:10:05: Syncing TIO Data...   Please Wait...
+20190911 10:10:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 10:10:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 10:10:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 10:10:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 10:10:01 
+              To : 10:10:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    10:12:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 10:12:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 10:12:02: Syncing TIO Data...   Please Wait...
+20190911 10:12:03: Syncing TIO Data...   Please Wait...
+20190911 10:12:04: Syncing TIO Data...   Please Wait...
+20190911 10:12:05: Syncing TIO Data...   Please Wait...
+20190911 10:12:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 10:12:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 10:12:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 10:12:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 10:12:01 
+              To : 10:12:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    10:14:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 10:14:02: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 10:14:03: Syncing TIO Data...   Please Wait...
+20190911 10:14:04: Syncing TIO Data...   Please Wait...
+20190911 10:14:05: Syncing TIO Data...   Please Wait...
+20190911 10:14:06: Syncing TIO Data...   Please Wait...
+20190911 10:14:07: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 10:14:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 10:14:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 10:14:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 10:14:01 
+              To : 10:14:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    10:16:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 10:16:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 10:16:02: Syncing TIO Data...   Please Wait...
+20190911 10:16:03: Syncing TIO Data...   Please Wait...
+20190911 10:16:04: Syncing TIO Data...   Please Wait...
+20190911 10:16:05: Syncing TIO Data...   Please Wait...
+20190911 10:16:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 10:16:06: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 10:16:06: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 10:16:06: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 10:16:01 
+              To : 10:16:06 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    10:18:02                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 10:18:02: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 10:18:03: Syncing TIO Data...   Please Wait...
+20190911 10:18:04: Syncing TIO Data...   Please Wait...
+20190911 10:18:05: Syncing TIO Data...   Please Wait...
+20190911 10:18:06: Syncing TIO Data...   Please Wait...
+20190911 10:18:07: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 10:18:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 10:18:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 10:18:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 5 secs.
+            From : 10:18:02 
+              To : 10:18:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    10:20:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 10:20:02: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 10:20:03: Syncing TIO Data...   Please Wait...
+20190911 10:20:04: Syncing TIO Data...   Please Wait...
+20190911 10:20:05: Syncing TIO Data...   Please Wait...
+20190911 10:20:06: Syncing TIO Data...   Please Wait...
+20190911 10:20:07: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 10:20:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 10:20:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 10:20:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 10:20:01 
+              To : 10:20:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    10:22:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 10:22:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 10:22:03: Syncing TIO Data...   Please Wait...
+20190911 10:22:04: Syncing TIO Data...   Please Wait...
+20190911 10:22:05: Syncing TIO Data...   Please Wait...
+20190911 10:22:06: Syncing TIO Data...   Please Wait...
+20190911 10:22:07: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 10:22:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 10:22:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 10:22:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 10:22:01 
+              To : 10:22:07 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20190911    10:24:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20190911/TIO/ already exist!
+20190911 10:24:01: Copying TIO data @ FSO...
+                   From: /20190911/TIO/ 
+                   To  : /cygdrive/e/20190911/TIO/ 
+                   Please Wait...
+20190911 10:24:02: Syncing TIO Data...   Please Wait...
+20190911 10:24:03: Syncing TIO Data...   Please Wait...
+20190911 10:24:05: Syncing TIO Data...   Please Wait...
+20190911 10:24:06: Syncing TIO Data...   Please Wait...
+20190911 10:24:06: TIO Syncing Task Has Done!
+                   Finishing...
+20190911 10:24:07: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20190911 10:24:07: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20190911 10:24:07: Succeeded in Syncing TIO data @ FSO!
+ Synced file No. : 0 file(s)
+Synced data size : 0 MB
+    Sync @ Speed : 0 MB/s
+  Sync Time Used : 5 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 10:24:01 
+              To : 10:24:07 

@@ -1,0 +1,112 @@
+                                                       
+======= Welcome to Data Archiving System @ FSO! =======
+              fso-data-check-copy.sh                   
+          (Release 0.2 20190725 11:51)                 
+                                                       
+           Check TIO data and copy               
+                                                       
+                20190909 19:00:01                         
+=======================================================
+ 
+20190909 19:00:01: Remote TIO Checking, please wait...
+20190909 19:00:01: Remote TIO Checking Task Has Done!
+                   Finishing....
+20190909 19:00:01: Copying local missing TIO file(s), please wait...
+20190909 19:00:01: TIO Copying Task Has Done!
+                   Finishing....
+20190909 19:00:01: Local TIO Checking, please wait...
+20190909 19:00:01: TIO Checking Task Has Done!
+                   Finishing....
+20190909 19:00:01: TIO Copying for wrong size, please wait...
+20190909 19:00:01: TIO Copying Task Has Done!
+                   Finishing....
+20190909 19:00:01: Checking & Copying TIO data @ FSO finished!
+           Total : 0 error file(s) Copied!
+       Time Used : 0 secs.
+ Total Time From : 19:00:01
+              To : 19:00:01
+=================================================================================
+                                                       
+======= Welcome to Data Archiving System @ FSO! =======
+              fso-data-check-copy.sh                   
+          (Release 0.2 20190725 11:51)                 
+                                                       
+           Check TIO data and copy               
+                                                       
+                20190909 19:30:01                         
+=======================================================
+ 
+20190909 19:30:01: Remote TIO Checking, please wait...
+20190909 19:30:01: Remote TIO Checking Task Has Done!
+                   Finishing....
+20190909 19:30:01: Copying local missing TIO file(s), please wait...
+20190909 19:30:01: TIO Copying Task Has Done!
+                   Finishing....
+20190909 19:30:02: Local TIO Checking, please wait...
+20190909 19:30:02: TIO Checking Task Has Done!
+                   Finishing....
+20190909 19:30:02: TIO Copying for wrong size, please wait...
+20190909 19:30:02: TIO Copying Task Has Done!
+                   Finishing....
+20190909 19:30:02: Checking & Copying TIO data @ FSO finished!
+           Total : 0 error file(s) Copied!
+       Time Used : 1 secs.
+ Total Time From : 19:30:01
+              To : 19:30:02
+=================================================================================
+                                                       
+======= Welcome to Data Archiving System @ FSO! =======
+              fso-data-check-copy.sh                   
+          (Release 0.2 20190725 11:51)                 
+                                                       
+           Check TIO data and copy               
+                                                       
+                20190910 19:00:01                         
+=======================================================
+ 
+20190910 19:00:01: Remote & Local TIO File(s) Checking, please wait...
+20190910 19:00:01: Remote & Local TIO File(s) Checking Task Has Done!
+                   Finishing....
+20190910 19:00:01: Copying local missing TIO file(s) from remote, please wait...
+20190910 19:00:01: TIO Copying Task Has Done!
+                   Finishing....
+20190910 19:00:01: Local Wrong Size TIO File(s) Checking, please wait...
+20190910 19:00:01: Local Wrong Size TIO File(s) Checking Task Has Done!
+                   Finishing....
+20190910 19:00:01: Wrong size TIO File(s) Copying from remote, please wait...
+20190910 19:00:01: Local Wrong Size TIO File(s) Copying Task Has Done!
+                   Finishing....
+20190910 19:00:01: Checking & Copying TIO data @ FSO finished!
+           Total : 0 error file(s) Copied!
+       Time Used : 0 secs.
+ Total Time From : 19:00:01
+              To : 19:00:01
+=================================================================================
+                                                       
+======= Welcome to Data Archiving System @ FSO! =======
+              fso-data-check-copy.sh                   
+          (Release 0.2 20190725 11:51)                 
+                                                       
+           Check TIO data and copy               
+                                                       
+                20190910 19:30:01                         
+=======================================================
+ 
+20190910 19:30:01: Remote & Local TIO File(s) Checking, please wait...
+20190910 19:30:01: Remote & Local TIO File(s) Checking Task Has Done!
+                   Finishing....
+20190910 19:30:01: Copying local missing TIO file(s) from remote, please wait...
+20190910 19:30:01: TIO Copying Task Has Done!
+                   Finishing....
+20190910 19:30:01: Local Wrong Size TIO File(s) Checking, please wait...
+20190910 19:30:01: Local Wrong Size TIO File(s) Checking Task Has Done!
+                   Finishing....
+20190910 19:30:01: Wrong size TIO File(s) Copying from remote, please wait...
+20190910 19:30:01: Local Wrong Size TIO File(s) Copying Task Has Done!
+                   Finishing....
+20190910 19:30:01: Checking & Copying TIO data @ FSO finished!
+           Total : 0 error file(s) Copied!
+       Time Used : 0 secs.
+ Total Time From : 19:30:01
+              To : 19:30:01
+=================================================================================

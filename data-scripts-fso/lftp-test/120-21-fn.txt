@@ -1,0 +1,20 @@
+open 192.168.111.120:21
+user tio ynao246135
+set net:reconnect-interval-base 10
+set net:max-retries 1
+set net:timeout 5
+set ftp:charset "gbk"
+set file:charset "utf-8"
+set mirror:set-permissions true
+set ftp:use-feat false
+set ftp:ssl-allow false
+set ssl:check-hostname false
+set ftp:ignore-pasv-address true
+set ftp:prefer-epsv false
+set dns:order "inet inet6"
+set dns:fatal-timeout 10
+set dns:max-retries 1
+set cmd:fail-exit true
+cd /20190716/TIO/
+ls -lR | grep "^-" | wc -l
+bye
