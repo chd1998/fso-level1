@@ -229,6 +229,7 @@ stdiff=`echo "$st1 $st2"|awk '{print($2-$1)}'`
 echo "$today $ctime4: Checking & Copying $datatype data @ FSO finished!"
 echo "          Before : $errsize3 error file(s) Found!"
 echo "           After : $errsize4 error file(s) left!"
+echo "                 : see $tmplist for details"
 echo "       Time Used : $stdiff secs."
 echo " Total Time From : $ctime1"
 echo "              To : $ctime4"
