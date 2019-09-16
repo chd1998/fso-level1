@@ -100,46 +100,61 @@ echo "                $today $ctime1                         "
 echo "======================================================="
 echo " "
 
+ctime1=`date --date='0 days ago' +%H:%M:%S`
+touch ./log/pingtmp
+echo "$today $ctime1: Testing $server is online or not, please wait..."
+ping $server -c5 | grep ttl >> ./log/pingtmp
+pingres=`cat ./log/pingtmp | wc -l`
+ctime1=`date --date='0 days ago' +%H:%M:%S`
+if [ $pingres -ne 0 ];then 
 #comparing remote and local file(s),creat local missing file(s)
-ctime=`date --date='0 days ago' +%H:%M:%S`
-echo "$today $ctime: Remote & Local $datatype File(s) Checking, please wait..."
-#/home/chd/fso-data-check-remote-cron.sh 192.168.111.120 21 tio ynao246135 2019 0913 TIO fits
-/home/chd/fso-data-check-remote-cron.sh $server $port $user $password $cyear $mday $datatype $fileformat > /home/chd/log/check-remote-$datatype-size@$today.log &
-waiting "$!" "Remote & Local $datatype File(s) Checking" "Checking Remote & Local $datatype File(s)"
-if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctime3: $datatype Check Failed!"
-  cd /home/chd/
-  exit 1
-fi
-if [ -f $remoteerrlist ]; then 
-  remoteerrsize=`cat $remoteerrlist|wc -l`
-  if [ $remoteerrsize -eq 0 ]; then
+  ctime1=`date --date='0 days ago' +%H:%M:%S`
+  echo "$today $ctime1: $server is online..."
+  echo "$today $ctime1: Remote & Local $datatype File(s) Checking, please wait..."
+  #/home/chd/fso-data-check-remote-cron.sh 192.168.111.120 21 tio ynao246135 2019 0913 TIO fits
+  /home/chd/fso-data-check-remote-cron.sh $server $port $user $password $cyear $mday $datatype $fileformat > /home/chd/log/check-remote-$datatype-size@$today.log &
+  waiting "$!" "Remote & Local $datatype File(s) Checking" "Checking Remote & Local $datatype File(s)"
+  if [ $? -ne 0 ];then
+    ctime3=`date --date='0 days ago' +%H:%M:%S`
+    echo "$today $ctime3: $datatype Check Failed!"
+    cd /home/chd/
+    exit 1
+  fi
+  if [ -f $remoteerrlist ]; then 
+    remoteerrsize=`cat $remoteerrlist|wc -l`
+    if [ $remoteerrsize -eq 0 ]; then
+      remoteerrsize=0
+    fi
+  else
     remoteerrsize=0
   fi
-else
-  remoteerrsize=0
-fi
 
-#copying local missing file(s) from remote server
-ctime=`date --date='0 days ago' +%H:%M:%S`
-echo "$today $ctime: Copying local missing $datatype file(s) from remote, please wait..."
-/home/chd/fso-copy-wget-error-cron-v02.sh $server $port $user $password $remoteerrlist > /home/chd/log/remote-$datatype-error-copy-$today.log &
-waiting "$!" "Local $datatype Missing File(s) Copying" "Copying Local Missing $datatype Data from Remote"
-if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctime3: $datatype Copy Failed!"
-  cd /home/chd/
-  exit 1
-fi
-if [ -f $remoteerrlist ]; then
-  remoteerrsize1=`cat $remoteerrlist|wc -l`
-  if [ $remoteerrsize1 -eq 0 ]; then
+  #copying local missing file(s) from remote server
+  ctime=`date --date='0 days ago' +%H:%M:%S`
+  echo "$today $ctime: Copying local missing $datatype file(s) from remote, please wait..."
+  /home/chd/fso-copy-wget-error-cron-v02.sh $server $port $user $password $remoteerrlist > /home/chd/log/remote-$datatype-error-copy-$today.log &
+  waiting "$!" "Local $datatype Missing File(s) Copying" "Copying Local Missing $datatype Data from Remote"
+  if [ $? -ne 0 ];then
+    ctime3=`date --date='0 days ago' +%H:%M:%S`
+    echo "$today $ctime3: $datatype Copy Failed!"
+    cd /home/chd/
+    exit 1
+  fi
+  if [ -f $remoteerrlist ]; then
+    remoteerrsize1=`cat $remoteerrlist|wc -l`
+    if [ $remoteerrsize1 -eq 0 ]; then
+      remoteerrsize1=0
+    fi
+  else
     remoteerrsize1=0
   fi
 else
+  echo "$today $ctime1: $server is offline, skip checking remote & local file(s)..."
+  touch $remoteerrlist
+  remoteerrsize=0
   remoteerrsize1=0
 fi
+rm -f ./log/pingtmp
 
 #checking local wrong size file(s)
 ctime=`date --date='0 days ago' +%H:%M:%S`

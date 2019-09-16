@@ -98,35 +98,51 @@ echo "                $today $ctime1                         "
 echo "======================================================="
 echo " "
 
-#remote local diff 
-echo "$today $ctime: Local Missing $datatype File(s) Checking, please wait..."
-#./fso-data-check-copy-cron.sh  192.168.111.120 21 f tio ynao246135 TIO fits 11062080
-#./fso-data-check-copy-cron.sh  192.168.111.122 21 e ha ynao246135 HA fits 2111040
-#./fso-data-check-copy-cron.sh  192.168.111.122 21 g sp ynao246135 SP fits 5359680
-ctime=`date --date='0 days ago' +%H:%M:%S`
-/cygdrive/d/chd/LFTP4WIN-master/home/chd/fso-data-check-remote-cyg-cron.sh $server $port $user $password $cyear $mday $datatype $fileformat $localdrive > /cygdrive/d/chd/LFTP4WIN-master/home/chd/log/check-local-missing-$datatype-file.log &
-waiting "$!" "Local Missing $datatype File(s) Checking" "Checking Local Missing $datatype File(s)"
-if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctime3: Local Missing $datatype File(s) Size Check Failed!"
-  exit 1
-fi
-errsize=`cat $remotelocaldifflist|wc -l`
-if [ $errsize -eq 0 ]; then
-errsize=0
-fi
+#test server is online or not
+ctime1=`date --date='0 days ago' +%H:%M:%S`
+touch ./log/pingtmp
+echo "$today $ctime1: Testing $server is online or not, please wait..."
+ping $server -c5 | grep ttl >> ./log/pingtmp
+pingres=`cat ./log/pingtmp | wc -l`
+ctime1=`date --date='0 days ago' +%H:%M:%S`
+if [ $pingres -ne 0 ];then 
+  #remote local diff
+  echo "$today $ctime1: $server is online..." 
+  echo "$today $ctime1: Local Missing $datatype File(s) Checking, please wait..."
+  #./fso-data-check-copy-cron.sh  192.168.111.120 21 f tio ynao246135 TIO fits 11062080
+  #./fso-data-check-copy-cron.sh  192.168.111.122 21 e ha ynao246135 HA fits 2111040
+  #./fso-data-check-copy-cron.sh  192.168.111.122 21 g sp ynao246135 SP fits 5359680
+  ctime=`date --date='0 days ago' +%H:%M:%S`
+  /cygdrive/d/chd/LFTP4WIN-master/home/chd/fso-data-check-remote-cyg-cron.sh $server $port $user $password $cyear $mday $datatype $fileformat $localdrive > /cygdrive/d/chd/LFTP4WIN-master/home/chd/log/check-local-missing-$datatype-file.log &
+  waiting "$!" "Local Missing $datatype File(s) Checking" "Checking Local Missing $datatype File(s)"
+  if [ $? -ne 0 ];then
+    ctime3=`date --date='0 days ago' +%H:%M:%S`
+    echo "$today $ctime3: Local Missing $datatype File(s) Size Check Failed!"
+    exit 1
+  fi
+  errsize=`cat $remotelocaldifflist|wc -l`
+  if [ $errsize -eq 0 ]; then
+    errsize=0
+  fi
 
-#copy local missing file
-ctime=`date --date='0 days ago' +%H:%M:%S`
-echo "$today $ctime: $datatype Wrong Size File(s) Copying, please wait..."
-/cygdrive/d/chd/LFTP4WIN-master/home/chd/fso-copy-wget-error-cron-cyg.sh $server $port $user $password $remotelocaldifflist > /cygdrive/d/chd/LFTP4WIN-master/home/chd/log/$datatype-missing-copy-$(date +\%Y\%m\%d).log &
-waiting "$!" "$datatype Wrong Size File(s) Copying" "Copying $datatype Wrong Size File(s)"
-if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctime3: $datatype Wrong Size File(s) Copy Failed!"
-  exit 1
+  #copy local missing file
+  ctime=`date --date='0 days ago' +%H:%M:%S`
+  echo "$today $ctime: $datatype Wrong Size File(s) Copying, please wait..."
+  /cygdrive/d/chd/LFTP4WIN-master/home/chd/fso-copy-wget-error-cron-cyg.sh $server $port $user $password $remotelocaldifflist > /cygdrive/d/chd/LFTP4WIN-master/home/chd/log/$datatype-missing-copy-$(date +\%Y\%m\%d).log &
+  waiting "$!" "$datatype Wrong Size File(s) Copying" "Copying $datatype Wrong Size File(s)"
+  if [ $? -ne 0 ];then
+    ctime3=`date --date='0 days ago' +%H:%M:%S`
+    echo "$today $ctime3: $datatype Wrong Size File(s) Copy Failed!"
+    exit 1
+  fi
+  errsize0=`cat $remotelocaldifflist|wc -l`
+else
+  echo "$today $ctime1: $server is offline, skip remote & local file(s) checking..."
+  errsize=0
+  errsiez1=0
+  touch $remotelocaldifflist
 fi
-errsize0=`cat $remotelocaldifflist|wc -l`
+rm -f ./log/pingtmp
 
 #checking local files' size
 ctime=`date --date='0 days ago' +%H:%M:%S`
@@ -167,7 +183,7 @@ echo "$today $ctime3: Local Wrong Size File(s):" >> $tmplist
 cat $errlist >> $tmplist
 
 #cat $remotelocaldifflist $errlist > $tmplist 
-errsiz5=`cat $tmplist|wc -l`
+errsize5=`cat $tmplist|wc -l`
 
 ctime3=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime3: Sending notification email to Observation Assistant..."

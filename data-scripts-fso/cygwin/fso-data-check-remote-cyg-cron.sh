@@ -131,6 +131,7 @@ server1=ftp://$user:$passwd@$server
 #echo $server1
 lftp $server1 -e "find $remotedir;quit"| grep $fileformat|cut -d '/' -f 1-9 > $remotelist &
 waiting "$!" "remote $datatype $fileformat file(s) info getting" "Getting remote $datatype $fileformat file(s) info"
+
 #add / to locallist
 touch ./localtmplist
 for line in $(cat $locallist);

@@ -1,8 +1,9 @@
 #!/bin/bash
 #check the size of dest dir every 10 minutes via cron, and export total error list in file
-#usage: ./fso-data-check-xx.sh /youdirhere/ datatype fileformat standardsize(in bytes)"
-#example: ./fso-data-check-local-cron.sh /lustre/data/2019/20190913 TIO fits 11062080"
-#example: ./fso-data-check-local-cron.sh /lustre/data/2019/20190913 HA fits 2111040"
+#usage: ./fso-data-check-xx.sh /youdirhere/ datatype fileformat standardsize(in bytes)
+#example: ./fso-data-check-local-cron.sh /lustre/data/2019/20190913 TIO fits 11062080
+#example: ./fso-data-check-local-cron.sh /lustre/data/2019/20190913 SP  fits 5359680
+#example: ./fso-data-check-local-cron.sh /lustre/data/2019/20190913 HA fits 2111040
 #press ctrl-c to break the script
 #change log:
 #           Release 20190721-0931: First working prototype
@@ -58,6 +59,9 @@ cdir=$1
 datatype=$2
 fileformat=$3
 stdsize=$4
+if [ $datatype == "SP" ];then
+  stdsize1="1342080"
+fi
 
 #cd /home/chd/
 homepre="/home/chd"
@@ -133,7 +137,12 @@ comm -23 $listtmp $list > $difflist &
 waiting "$!" "new $datatype $fileformat file(s) getting" "Getting  new $datatype $fileformat file(s) "
 
 #count error number for this round
-cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $curerrorlist &
+#cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $curerrorlist &
+if [ $datatype == "SP" ];then
+  cat $difflist |awk '{ if ($2!='''$stdsize''' && $2!='''$stdsize1''') {print $1"  "$2}}' > $curerrorlist &
+else
+  cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $curerrorlist &
+fi
 waiting "$!" "Wrong $datatype $fileformat file(s) checking" "Checking wrong $datatype $fileformat file(s)"
 curerror=`cat $curerrorlist|wc -l`
 
