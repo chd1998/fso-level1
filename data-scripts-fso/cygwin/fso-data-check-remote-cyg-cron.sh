@@ -1,8 +1,8 @@
 #!/bin/bash
 #check the file diff between remote dir  and local dir, export the diff list file
-#usage: ./fso-data-check-lftp-xx.sh ip port user passwd year monthday datatype fileformat localdrive"
-#example: ./fso-data-check-lftp-xx.sh 192.168.111.120 21 tio ynao246135 2019 0907 TIO fits e"
-#example: ./fso-data-check-lftp-xx.sh 192.168.111.122 21 ha ynao246135 2019 0907 HA fits f"
+#usage: ./fso-data-check-remote-cyg-cron.sh ip port user passwd year monthday datatype fileformat localdrive"
+#example: ./fso-data-check-remote-cyg-cron.sh 192.168.111.120 21 tio ynao246135 2019 0907 TIO fits e"
+#example: ./fso-data-check-remote-cyg-cron.sh 192.168.111.122 21 ha ynao246135 2019 0907 HA fits f"
 #press ctrl-c to break the script
 #change log:
 #           Release 20190721-0931: First working prototype
@@ -45,9 +45,9 @@ procing() {
 
 
 if [ $# -ne 9 ];then
-  echo "usage: ./fso-data-check-lftp-xx.sh ip port user passwd  year monthday datatype fileformat localdrive"
-  echo "example: ./fso-data-check-lftp-xx.sh 192.168.111.120 21 tio ynao246135 2019 0907 TIO fits e"
-  echo "example: ./fso-data-check-lftp-xx.sh 192.168.111.122 21 ha ynao246135 2019 0907 HA fits f "
+  echo "usage: ./fso-data-check-remote-cyg-cron.sh ip port user passwd  year monthday datatype fileformat localdrive"
+  echo "example: ./fso-data-check-remote-cyg-cron.sh 192.168.111.120 21 tio ynao246135 2019 0907 TIO fits e"
+  echo "example: ./fso-data-check-remote-cyg-cron.sh 192.168.111.122 21 ha ynao246135 2019 0907 HA fits f "
   exit 0
 fi
 
@@ -98,7 +98,11 @@ fi
 #fi
 
 localdir=$localpre$localdrive/$year$monthday/$datatype
-remotedir=/$year$monthday/$datatype
+if [ $datatype == "SP" ];then 
+  remotedir=/$year$monthday/
+else
+  remotedir=/$year$monthday/$datatype
+fi
 
 ctime=`date --date='0 days ago' +%H:%M:%S`
 t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
@@ -128,13 +132,13 @@ server1=ftp://$user:$passwd@$server
 lftp $server1 -e "find $remotedir;quit"| grep $fileformat|cut -d '/' -f 1-9 > $remotelist &
 waiting "$!" "remote $datatype $fileformat file(s) info getting" "Getting remote $datatype $fileformat file(s) info"
 #add / to locallist
-touch tmplist
+touch ./localtmplist
 for line in $(cat $locallist);
 do
   line=/$line
-  echo $line >> tmplist
+  echo $line >> ./localtmplist
 done
-mv tmplist $locallist
+mv ./localtmplist $locallist
 
 #sort filelist
 sort $locallist -o $locallist
@@ -142,7 +146,7 @@ sort $remotelist -o $remotelist
 
 #remove synced files, list is error files list, listtmp is all files
 #grep -vwf $list $listtmp > $difflist &
-comm -3  $remotelist $locallist > $difflist &
+comm -23  $remotelist $locallist > $difflist &
 waiting "$!" "diff $datatype $fileformat file(s) getting" "Getting diff new $datatype $fileformat file(s) "
 
 totalnum=$(cat $remotelist|wc -l)

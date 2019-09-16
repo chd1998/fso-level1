@@ -102,7 +102,7 @@ if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
   ps -p $mypid | grep $mypid &>/dev/null
   if [ $? -eq 0 ];then
-    echo "$today $ctime: $(basename $0) is running for syncing $datatype " && exit 1
+    echo "$today $ctime: $(basename $0) is running for syncing $datatype data... " && exit 1
   else
     echo $$>$lockfile
   fi

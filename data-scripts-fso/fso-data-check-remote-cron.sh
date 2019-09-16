@@ -1,11 +1,13 @@
 #!/bin/bash
 #check the size of dest dir every 10 minutes via cron, and export total error list in file
-#usage: ./fso-data-check-lftp-xx.sh ip port user passwd datatype fileformat"
-#example: ./fso-data-check-lftp-xx.sh 192.168.111.120 21 tio ynao246135 TIO fits"
-#example: ./fso-data-check-lftp-xx.sh 192.168.111.122 21 ha ynao246135 HA fits"
+#usage: ./fso-data-check-remote-cron.sh ip port user passwd datatype fileformat"
+#example: ./fso-data-check-remote-cron.sh 192.168.111.120 21 tio ynao246135 2019 0907 TIO fits"
+#example: ./fso-data-check-remote-cron.sh 192.168.111.122 21 ha ynao246135 2019 0907 HA fits"
 #press ctrl-c to break the script
 #change log:
 #           Release 20190721-0931: First working prototype
+#           Release 20190908-1435: Revised remote & local file lists comparison
+#           Release 20190915-0832: Using comm -23 for file lists comparison
 
 trap 'onCtrlC' INT
 function onCtrlC(){
@@ -45,10 +47,10 @@ procing() {
 
 
 if [ $# -ne 8 ];then
-  echo "usage: ./fso-data-check-lftp-xx.sh ip port user passwd datatype year monthday fileformat"
-  echo "example: ./fso-data-check-lftp-xx.sh 192.168.111.120 21 tio ynao246135 2019 0907 TIO fits"
-  echo "example: ./fso-data-check-lftp-xx.sh 192.168.111.122 21 ha ynao246135 2019 0907 HA fits"
-  exit 0
+  echo "usage: ./fso-data-check-remote-cron.sh ip port user passwd datatype year monthday fileformat"
+  echo "example: ./fso-data-check-remote-cron.sh 192.168.111.120 21 tio ynao246135 2019 0907 TIO fits"
+  echo "example: ./fso-data-check-remote-cron.sh 192.168.111.122 21 ha ynao246135 2019 0907 HA fits"
+  exit 1
 fi
 
 today=`date --date='0 days ago' +%Y%m%d`
@@ -100,12 +102,19 @@ localdir=$localpre/$year/$year$monthday/$datatype
 remotedir=/$year$monthday/$datatype
 
 ctime=`date --date='0 days ago' +%H:%M:%S`
+if [ ! -d $localdir ];then
+  echo "$today $ctime : $localdir isn't exist!"
+  exit 1
+fi
+
+
+ctime=`date --date='0 days ago' +%H:%M:%S`
 t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 echo " "
 echo "================================================================================"
 echo "                                                                                "
 echo "               fso-data-check for remote and local files                        "
-echo "                       Release 20190908-1435(for Cron)                          "
+echo "                       Release 20190915-0832(for Cron)                          "
 echo "                                                                                "
 echo "$today $ctime : Checking the $fileformat file between $server & local           "
 echo "                    Please wait...                                              "
@@ -126,21 +135,21 @@ server1=ftp://$user:$passwd@$server
 lftp $server1 -e "find $remotedir;quit"| grep $fileformat|cut -d '/' -f 1-9 > $remotelist &
 waiting "$!" "remote $datatype $fileformat file(s) info getting" "Getting remote $datatype $fileformat file(s) info"
 #add / to locallist
-touch tmplist
+touch ./localtmplist
 for line in $(cat $locallist);
 do
   line=/$line
-  echo $line >> tmplist
+  echo $line >> ./localtmplist
 done
-mv tmplist $locallist
+mv localtmplist $locallist
 
 #sort filelist
 sort $locallist -o $locallist
 sort $remotelist -o $remotelist
 
-#remove synced files, list is error files list, listtmp is all files
-#grep -vwf $list $listtmp > $difflist &
-comm -3  $remotelist $locallist > $difflist &
+#getting local missing file(s) list
+#grep -vwf $remotelist $locallist > $difflist &
+comm -23  $remotelist $locallist > $difflist &
 waiting "$!" "diff $datatype $fileformat file(s) getting" "Getting diff new $datatype $fileformat file(s) "
 
 totalnum=$(cat $remotelist|wc -l)

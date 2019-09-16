@@ -1,11 +1,12 @@
 #!/bin/bash
 #check the size of dest dir every 10 minutes via cron, and export total error list in file
 #usage: ./fso-data-check-xx.sh /youdirhere/ datatype fileformat standardsize(in bytes)"
-#example: ./fso-data-check-xx.sh /lustre/data/tmp/ TIO fits 11062080"
-#example: ./fso-data-check-xx.sh /lustre/data/tmp/ HA fits 2111040"
+#example: ./fso-data-check-local-cron.sh /lustre/data/2019/20190913 TIO fits 11062080"
+#example: ./fso-data-check-local-cron.sh /lustre/data/2019/20190913 HA fits 2111040"
 #press ctrl-c to break the script
 #change log:
 #           Release 20190721-0931: First working prototype
+#           Release 20190915-0835: Revised file(s) lists comparison
 
 trap 'onCtrlC' INT
 function onCtrlC(){
@@ -46,8 +47,8 @@ procing() {
 
 if [ $# -ne 4 ];then
   echo "usage: ./fso-data-check-xx.sh /youdirhere/ datatype fileformat standardsize(in bytes)"
-  echo "example: ./fso-data-check-xx.sh /lustre/data/tmp/ TIO fits 11062080"
-  echo "example: ./fso-data-check-xx.sh /lustre/data/tmp/ HA fits 2111040"
+  echo "example: ./fso-data-check-local-cron.sh /lustre/data/2019/20190913 TIO fits 11062080"
+  echo "example: ./fso-data-check-local-cron.sh /lustre/data/2019/20190913 HA fits 2111040"
   exit 0
 fi
 
@@ -106,18 +107,18 @@ echo " "
 echo "================================================================================"
 echo "                                                                                "
 echo "               fso-data-check utility for $datatype data @ fso                  "
-echo "                       Release 20190721-0931(for Cron)                          "
+echo "                       Release 20190915-0835(for Cron)                          "
 echo "                                                                                "
 echo "$today $ctime : Checking the $fileformat file numbers & size                    "
-echo "                    @ $cdir                                                     "
+echo "                    @ $cdir/$datatype/                                                     "
 echo "                    Please wait...                                              "
 echo "                    Press ctrl-c to break!                                      "
 echo "                                                                                "
 echo "================================================================================"
 echo " "
-cd $cdir
+#cd $cdir
 #getting file name & size
-find $cdir/ -type f -name '*.fits' -printf "%h/%f %s\n" > $listtmp &
+find $cdir/$datatype/ -type f -name '*.fits' -printf "%h/%f %s\n" > $listtmp &
 waiting "$!" "$datatype $fileformat file(s) info getting" "Getting $datatype $fileformat file(s) info"
 
 #getting file number
@@ -125,8 +126,10 @@ waiting "$!" "$datatype $fileformat file(s) info getting" "Getting $datatype $fi
 #waiting "$!" "$datatype $fileformat file(s) number getting" "Getting $datatype $fileformat file(s) number"
 
 #remove checked files, list is error files list, listtmp is all files
-#grep -vwf $list $listtmp > $difflist &
-comm -3 --nocheck-order $listtmp $list > $difflist &
+sort $listtmp -o $listtmp
+sort $list -o $list
+#grep -vwf $listtmp $list > $difflist &
+comm -23 $listtmp $list > $difflist &
 waiting "$!" "new $datatype $fileformat file(s) getting" "Getting  new $datatype $fileformat file(s) "
 
 #count error number for this round

@@ -103,6 +103,14 @@ echo "========================================================="
 echo " "
 #get path and file name of each error file
 cat $errorlist|awk '{print $1}'|cut -d '/' -f 4-10 > $remotefile
+touch ./localtmplist1
+for line in $(cat $remotefile);
+do
+  line=/$line
+  echo $line >> ./localtmplist1
+done
+mv ./localtmplist1 $remotefile
+
 #cat $errorlist|awk '{print $1}'|cut -d '/' -f 1-9 > $errordir
 #cat $errorlist|awk '{print $1}'|cut -d '/' -f 1-10 > $errorfile
 

@@ -1,0 +1,29 @@
+ 
+================================================================================
+                                                                                
+               fso-data-check utility for HA data @ fso                  
+                       Release 20190721-0931(for Cron)                          
+                                                                                
+20190911 19:30:01 : Checking the fits file numbers & size                    
+                    @ /lustre/data/2019/20190911/HA                                                     
+                    Please wait...                                              
+                    Press ctrl-c to break!                                      
+                                                                                
+================================================================================
+ 
+20190911 19:30:01: HA fits file(s) info getting Task Has Done!
+                   Finishing....
+20190911 19:30:01: new HA fits file(s) getting Task Has Done!
+                   Finishing....
+20190911 19:30:01: Wrong HA fits file(s) checking Task Has Done!
+                   Finishing....
+20190911 19:30:01: Current error HA fits file(s) list adding Task Has Done!
+                   Finishing....
+20190911 19:30:01: For HA fits Data File(s) @ /lustre/data/2019/20190911/HA 
+     File Checked: 0 file(s)
+ This Round Found: 0 file(s) in wrong size
+      Total Found: 0 file(s) in wrong size
+        Time Used: 0 secs.
+  Error File List: /home/chd/log/HA-fits@20190911-error-total.list
+ 
+================================================================================

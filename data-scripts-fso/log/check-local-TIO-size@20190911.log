@@ -1,0 +1,29 @@
+ 
+================================================================================
+                                                                                
+               fso-data-check utility for TIO data @ fso                  
+                       Release 20190721-0931(for Cron)                          
+                                                                                
+20190911 19:30:01 : Checking the fits file numbers & size                    
+                    @ /lustre/data/2019/20190911/TIO                                                     
+                    Please wait...                                              
+                    Press ctrl-c to break!                                      
+                                                                                
+================================================================================
+ 
+20190911 19:30:01: TIO fits file(s) info getting Task Has Done!
+                   Finishing....
+20190911 19:30:01: new TIO fits file(s) getting Task Has Done!
+                   Finishing....
+20190911 19:30:01: Wrong TIO fits file(s) checking Task Has Done!
+                   Finishing....
+20190911 19:30:01: Current error TIO fits file(s) list adding Task Has Done!
+                   Finishing....
+20190911 19:30:01: For TIO fits Data File(s) @ /lustre/data/2019/20190911/TIO 
+     File Checked: 0 file(s)
+ This Round Found: 0 file(s) in wrong size
+      Total Found: 0 file(s) in wrong size
+        Time Used: 0 secs.
+  Error File List: /home/chd/log/TIO-fits@20190911-error-total.list
+ 
+================================================================================

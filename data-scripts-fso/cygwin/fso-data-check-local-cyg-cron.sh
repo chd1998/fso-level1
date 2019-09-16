@@ -1,9 +1,9 @@
 #!/bin/bash
 #check the size of file(s) in dest dir and export total error list in file
-#usage: ./fso-data-check-xx.sh /youdirhere/ datatype fileformat standardsize(in bytes)"
-#example: ./fso-data-check-local-xx.sh /cygdrive/e/20190907 TIO fits 11062080"
-#example: ./fso-data-check-local-xx.sh /cygdrive/f/20190907 HA fits 2111040"
-#press ctrl-c to break the script
+#usage: ./fso-data-check-local-cyg-cron.sh /youdirhere/ datatype fileformat standardsize(in bytes)
+#example: ./fso-data-check-local-cyg-cron.sh /cygdrive/f/20190721/TIO TIO fits 11062080
+#example: ./fso-data-check-local-cyg-cron.sh /cygdrive/e/20190721/HA HA fits 2111040
+#example: ./fso-data-check-local-cyg-cron.sh /cygdrive/g/20190721/SP SP fits 5359680
 #change log:
 #           Release 20190721-0931: First working prototype
 
@@ -45,9 +45,10 @@ procing() {
 
 
 if [ $# -ne 4 ];then
-  echo "usage: ./fso-data-check-cron-cyg.sh /youdirhere/ datatype fileformat standardsize(in bytes)"
-  echo "example: ./fso-data-check-cron-cyg.sh /cygdrive/f/20190721/TIO TIO fits 11062080"
-  echo "example: ./fso-data-check-cron-cyg.sh /cygdrive/e/20190721/HA HA fits 2111040"
+  echo "usage: ./fso-data-check-local-cyg-cron.sh /youdirhere/ datatype fileformat standardsize(in bytes)"
+  echo "example: ./fso-data-check-local-cyg-cron.sh /cygdrive/f/20190721/TIO TIO fits 11062080"
+  echo "example: ./fso-data-check-local-cyg-cron.sh /cygdrive/e/20190721/HA HA fits 2111040"
+  echo "example: ./fso-data-check-local-cyg-cron.sh /cygdrive/g/20190721/SP SP fits 5359680"
   exit 0
 fi
 
@@ -63,6 +64,9 @@ cdir=$1
 datatype=$2
 fileformat=$3
 stdsize=$4
+if [ $datatype == "SP" ];then
+  stdsize1="1342080"
+fi
 
 list=$logpath/$datatype-$fileformat-$today.list
 listtmp=$logpath/$datatype-$fileformat-$today-tmp.list
@@ -116,7 +120,7 @@ echo "                    Press ctrl-c to break!                                
 echo "                                                                                "
 echo "================================================================================"
 echo " "
-cd $cdir
+#cd $cdir
 
 #getting file name & size
 find $cdir/ -type f -name '*.fits' -printf "%h/%f %s\n" > $listtmp &
@@ -126,13 +130,21 @@ waiting "$!" "$datatype $fileformat file(s) info getting" "Getting $datatype $fi
 #cat $listtmp  |wc -l > $fn &
 #waiting "$!" "$datatype $fileformat file(s) number getting" "Getting $datatype $fileformat file(s) number"
 
+#sort file lists
+sort $listtmp -o $listtmp
+sort $list -o $list
+
 #remove checked files
 #grep -vwf $list $listtmp > $difflist &
-comm -3 --nocheck-order $listtmp $list > $difflist &
+comm -23 --nocheck-order $listtmp $list > $difflist &
 waiting "$!" "new $datatype $fileformat file(s) getting" "Getting  new $datatype $fileformat file(s) "
 
 #count error number for this round
-cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $curerrorlist &
+if [ $datatype == "SP" ];then
+  cat $difflist |awk '{ if ($2!='''$stdsize''' && $2!='''$stdsize1''') {print $1"  "$2}}' > $curerrorlist &
+else
+  cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $curerrorlist &
+fi
 waiting "$!" "Wrong $datatype $fileformat file(s) checking" "Checking wrong $datatype $fileformat file(s)"
 curerror=`cat $curerrorlist|wc -l`
 

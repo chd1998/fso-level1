@@ -96,7 +96,7 @@ if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
   ps -p $mypid | grep $mypid &>/dev/null
   if [ $? -eq 0 ];then
-    echo "$today $ctime: $(basename $0) is running for syncing $datatype" && exit 1
+    echo "$today $ctime: $(basename $0) is running for syncing $datatype data..." && exit 1
   else
     echo $$>$lockfile
   fi
@@ -109,7 +109,11 @@ fi
 #pid=$(ps x|grep -w $procName|grep -v grep|awk '{print $1}')
 #if [ $procCmd -le 0 ];then
 destdir=${destpre}${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
-destdir1=${destpre}${syssep}${srcyear}${srcmonthday}${syssep}
+if [ $datatype == "SP" ];then
+  destdir1=${destpre}${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
+else 
+  destdir1=${destpre}${syssep}${srcyear}${srcmonthday}${syssep}
+fi
 #remotesrcdir=${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
 srcdir=${ftpserver1}${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
 srcdir1=${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
@@ -162,7 +166,10 @@ fs1=$(cat ./log/$(basename $0)_${datatype}_tmpfs2.dat)
 ctime=`date --date='0 days ago' +%H:%M:%S`
 t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
-lftp $ftpserver -e "mirror  --ignore-time --continue --parallel=$threadnumber $srcdir2  $destdir1; quit" >/dev/null 2>&1 &
+
+
+lftp $ftpserver -e "mirror --parallel=$threadnumber $srcdir2  $destdir1; quit" >/dev/null 2>&1 &
+#lftp $ftpserver -e "mirror  --ignore-time --continue --parallel=$threadnumber $srcdir2  $destdir1; quit" >/dev/null 2>&1 &
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 if [ $? -ne 0 ];then
   ctime1=`date --date='0 days ago' +%H:%M:%S`
