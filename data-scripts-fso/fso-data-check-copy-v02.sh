@@ -1,9 +1,9 @@
 #!/bin/sh
 #author: chen dong @fso
 #purposes: check the data & copy the wrong file(s) again
-#Usage: ./fso-data-check-copy-cron.sh ip port  destdir user password datatype(TIO or HA) threadnumber
-#Example: ./fso-data-check-copy-cron.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO fits 11062080
-#Example: ./fso-data-check-copy-cron.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA fits 2111040
+#Usage: ./fso-data-check-copy-xx.sh ip port  destdir user password datatype(TIO or HA) threadnumber
+#Example: ./fso-data-check-copy-xx.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO fits 11062080
+#Example: ./fso-data-check-copy-xx.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA fits 2111040
 #changlog: 
 #       20190725   Release 0.1     first working version.sh
 #                  Release 0.2     revised for display
