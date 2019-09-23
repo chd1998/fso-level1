@@ -2,9 +2,9 @@
 #author: chen dong @fso
 #purposes: check the data & copy the wrong file(s) 
 #Usage: ./fso-data-check-copy-cron-cyg.sh ip port  localdrive user password datatype(TIO/HA/SP) fileformat stdsize
-#Example: ./fso-data-check-copy-cron-cyg.sh  192.168.111.120 21 f tio ynao246135 TIO fits 11062080
-#Example: ./fso-data-check-copy-cron-cyg.sh  192.168.111.122 21 e ha ynao246135 HA fits 2111040
-#Example: ./fso-data-check-copy-cron-cyg.sh  192.168.111.122 21 g sp ynao246135 SP fits 5359680
+#Example: ./fso-data-check-copy-cron-cyg.sh  192.168.111.120 21 e tio ynao246135 2019 0918 fits 11062080
+#Example: ./fso-data-check-copy-cron-cyg.sh  192.168.111.122 21 f ha ynao246135 2019 0918 fits 2111040
+#Example: ./fso-data-check-copy-cron-cyg.sh  192.168.111.122 21 g sp ynao246135 2019 0918 fits 5359680
 #changlog: 
 #       20190725   Release 0.1     first working version.sh
 #       20190914   Release 0.2     revised and add comparison of remote & local file(s)
@@ -48,11 +48,11 @@ mday=`date --date='0 days ago' +%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 syssep="/"
 
-if [ $# -ne 8 ];then
+if [ $# -ne 9 ];then
   echo "Usage: ./fso-data-check-copy-cron-cyg.sh ip port  localdrive user password datatype(TIO/HA/SP) fileformat stdsize"
-  echo "Example: ./fso-data-check-copy-cron-cyg.sh  192.168.111.120 21 f tio ynao246135 TIO fits 11062080"
-  echo "Example: ./fso-data-check-copy-cron-cyg.sh  192.168.111.122 21 e ha ynao246135 HA fits 2111040"
-  echo "Example: ./fso-data-check-copy-cron-cyg.sh  192.168.111.122 21 g sp ynao246135 SP fits 5359680"
+  echo "Example: ./fso-data-check-copy-cron-cyg.sh  192.168.111.120 21 e tio ynao246135 2019 0918 fits 11062080"
+  echo "Example: ./fso-data-check-copy-cron-cyg.sh  192.168.111.122 21 f ha ynao246135  2019 0918 fits 2111040"
+  echo "Example: ./fso-data-check-copy-cron-cyg.sh  192.168.111.122 21 g sp ynao246135 2019 0918 fits 5359680"
   exit 1
 fi
 server=$1
@@ -61,9 +61,11 @@ localdrive=$3
 destpre=/cygdrive/$3
 user=$4
 password=$5
-datatype=$6
-fileformat=$7
-stdsize=$8
+year=$6
+monthday=$7
+fileformat=$8
+stdsize=$9
+datatype=`echo $user|tr -t 'a-z' 'A-Z'`
 
 homepre="/cygdrive/d/chd/LFTP4WIN-master/home/chd/"
 lockfile=/cygdrive/d/chd/LFTP4WIN-master/home/chd/log/$(basename $0)-$datatype.lock
@@ -81,9 +83,10 @@ else
   echo $$>$lockfile
 fi
 
-remotelocaldifflist=/cygdrive/d/chd/LFTP4WIN-master/home/chd/log/$datatype-$fileformat-$today-diff-cyg.list
-errlist=/cygdrive/d/chd/LFTP4WIN-master/home/chd/log/$datatype-$fileformat@$(date +\%Y\%m\%d)-error-total.list
-tmplist=/cygdrive/d/chd/LFTP4WIN-master/home/chd/log/$datatype-$fileformat@$(date +\%Y\%m\%d)-tmp.list
+remotelocaldifflist=/cygdrive/d/chd/LFTP4WIN-master/home/chd/log/$datatype-$fileformat-$year$monthday-diff-cyg.list
+localwrongsize=/cygdrive/d/chd/LFTP4WIN-master/home/chd/log/$datatype-local-wrongsize-$year$monthday-cyg.list
+#errlist=/cygdrive/d/chd/LFTP4WIN-master/home/chd/log/$datatype-$fileformat@$(date +\%Y\%m\%d)-error-total.list
+tmplist=/cygdrive/d/chd/LFTP4WIN-master/home/chd/log/$datatype-$fileformat-$year$monthday-tmp.list
 
 ctime1=`date --date='0 days ago' +%H:%M:%S`
 st1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
@@ -97,23 +100,23 @@ echo "                                                       "
 echo "                $today $ctime1                         "
 echo "======================================================="
 echo " "
-
-#test server is online or not
-ctime1=`date --date='0 days ago' +%H:%M:%S`
-touch ./log/pingtmp
 echo "$today $ctime1: Testing $server is online or not, please wait..."
 ping $server -c5 | grep ttl >> ./log/pingtmp
 pingres=`cat ./log/pingtmp | wc -l`
-ctime1=`date --date='0 days ago' +%H:%M:%S`
+rm -f ./log/pingtmp
+
+ctime=`date --date='0 days ago' +%H:%M:%S`
+
 if [ $pingres -ne 0 ];then 
-  #remote local diff
-  echo "$today $ctime1: $server is online..." 
-  echo "$today $ctime1: Local Missing $datatype File(s) Checking, please wait..."
-  #./fso-data-check-copy-cron.sh  192.168.111.120 21 f tio ynao246135 TIO fits 11062080
-  #./fso-data-check-copy-cron.sh  192.168.111.122 21 e ha ynao246135 HA fits 2111040
+  echo "$today $ctime: $server is online..."
+  #echo "$today $ctime: Remote & Local $datatype File(s) Checking, please wait..."
+  #remote local diff 
+  echo "$today $ctime: Local Missing $datatype File(s) Checking, please wait..."
+  #./fso-data-check-copy-cron.sh  192.168.111.120 21 e tio ynao246135 TIO fits 11062080
+  #./fso-data-check-copy-cron.sh  192.168.111.122 21 f ha ynao246135 HA fits 2111040
   #./fso-data-check-copy-cron.sh  192.168.111.122 21 g sp ynao246135 SP fits 5359680
   ctime=`date --date='0 days ago' +%H:%M:%S`
-  /cygdrive/d/chd/LFTP4WIN-master/home/chd/fso-data-check-remote-cyg-cron.sh $server $port $user $password $cyear $mday $datatype $fileformat $localdrive > /cygdrive/d/chd/LFTP4WIN-master/home/chd/log/check-local-missing-$datatype-file.log &
+  /cygdrive/d/chd/LFTP4WIN-master/home/chd/fso-data-check-remote-cyg-cron.sh $server $port $user $password $year $monthday $datatype $fileformat $localdrive > /cygdrive/d/chd/LFTP4WIN-master/home/chd/log/check-local-missing-$datatype-file.log &
   waiting "$!" "Local Missing $datatype File(s) Checking" "Checking Local Missing $datatype File(s)"
   if [ $? -ne 0 ];then
     ctime3=`date --date='0 days ago' +%H:%M:%S`
@@ -122,14 +125,14 @@ if [ $pingres -ne 0 ];then
   fi
   errsize=`cat $remotelocaldifflist|wc -l`
   if [ $errsize -eq 0 ]; then
-    errsize=0
+  errsize=0
   fi
 
   #copy local missing file
   ctime=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctime: $datatype Wrong Size File(s) Copying, please wait..."
+  echo "$today $ctime: Local $datatype Wrong Size File(s) Copying, please wait..."
   /cygdrive/d/chd/LFTP4WIN-master/home/chd/fso-copy-wget-error-cron-cyg.sh $server $port $user $password $remotelocaldifflist > /cygdrive/d/chd/LFTP4WIN-master/home/chd/log/$datatype-missing-copy-$(date +\%Y\%m\%d).log &
-  waiting "$!" "$datatype Wrong Size File(s) Copying" "Copying $datatype Wrong Size File(s)"
+  waiting "$!" "Local Missing $datatype  File(s) Copying" "Copying Local Missing $datatype  File(s)"
   if [ $? -ne 0 ];then
     ctime3=`date --date='0 days ago' +%H:%M:%S`
     echo "$today $ctime3: $datatype Wrong Size File(s) Copy Failed!"
@@ -137,50 +140,55 @@ if [ $pingres -ne 0 ];then
   fi
   errsize0=`cat $remotelocaldifflist|wc -l`
 else
-  echo "$today $ctime1: $server is offline, skip remote & local file(s) checking..."
   errsize=0
-  errsiez1=0
+  errisize0=0
   touch $remotelocaldifflist
-fi
-rm -f ./log/pingtmp
+  echo "$today $ctime: $server is offline, skipping remote & local comparison..."
+fi 
 
 #checking local files' size
 ctime=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime: Local $datatype File(s) Size Checking, please wait..."
-/cygdrive/d/chd/LFTP4WIN-master/home/chd/fso-data-check-local-cyg-cron.sh $destpre/$(date +\%Y\%m\%d)/$datatype $datatype $fileformat $stdsize > /cygdrive/d/chd/LFTP4WIN-master/home/chd/log/check-$datatype-size.log &
+/cygdrive/d/chd/LFTP4WIN-master/home/chd/fso-data-check-local-cyg-cron.sh $localdrive $year $monthday $datatype $fileformat $stdsize > /cygdrive/d/chd/LFTP4WIN-master/home/chd/log/check-$datatype-size.log &
 waiting "$!" "Local $datatype File(s) Size Checking" "Checking Local $datatype File(s) Size"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
   echo "$today $ctime3: Local $datatype File(s) Size Check Failed!"
   exit 1
 fi
-errsize1=`cat $errlist|wc -l`
+errsize1=`cat $localwrongsize|wc -l`
 if [ $errsize1 -eq 0 ]; then
 errsize1=0
 fi
 
-#copying local wrong size files from remote
-ctime=`date --date='0 days ago' +%H:%M:%S`
-echo "$today $ctime: $datatype Wrong Size File(s) Copying, please wait..."
-waiting "$!" "$datatype Wrong Size File(s) Copying" "Copying $datatype Wrong Size File(s)"
-if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctime3: $datatype Wrong Size File(s) Copy Failed!"
-  exit 1
+ ctime=`date --date='0 days ago' +%H:%M:%S`
+if [ $pingres -ne 0 ];then 
+  #copying local wrong size files from remote
+  echo "$today $ctime: $datatype Wrong Size File(s) Copying, please wait..."
+  /cygdrive/d/chd/LFTP4WIN-master/home/chd/fso-copy-wget-error-cron-cyg.sh $server $port $user $password $localwrongsize > /cygdrive/d/chd/LFTP4WIN-master/home/chd/log/$datatype-wrongsize-copy-$year$monthday.log &
+  waiting "$!" "Local $datatype Wrong Size File(s) Copying" "Copying Local $datatype Wrong Size File(s)"
+  if [ $? -ne 0 ];then
+    ctime3=`date --date='0 days ago' +%H:%M:%S`
+    echo "$today $ctime3: $datatype Wrong Size File(s) Copy Failed!"
+    exit 1
+  fi
+else
+  echo "$today $citme: Skipping Copying Local Wrong Size $datatype File(s) from Remote..."
 fi
-errsize2=`cat $errlist|wc -l`
+errsize2=`cat $localwrongsize|wc -l`
+
 #add final corrected file(s)
 errsize3=`echo "$errsize0 $errsize2"|awk '{print($1+$2)}'`
 #add total number of wrong file(s)
 errsize4=`echo "$errsize $errsize1"|awk '{print($1+$2)}'`
 
 ctime3=`date --date='0 days ago' +%H:%M:%S`
-#cat $remoteerrlist $errlist > $tmplist
-echo "$today $ctime3: Local Missing File(s):" > $tmplist
-cat $remotelocaldifflist >> $tmplist
-echo "                " >> $tmplist
-echo "$today $ctime3: Local Wrong Size File(s):" >> $tmplist
-cat $errlist >> $tmplist
+cat $remoteerrlist $localwrongsize > $tmplist
+#echo "$today $ctime3: Local Missing File(s):" > $tmplist
+#cat $remotelocaldifflist >> $tmplist
+#echo "                " >> $tmplist
+#echo "$today $ctime3: Local Wrong Size File(s):" >> $tmplist
+#cat $errlist >> $tmplist
 
 #cat $remotelocaldifflist $errlist > $tmplist 
 errsize5=`cat $tmplist|wc -l`
@@ -188,12 +196,12 @@ errsize5=`cat $tmplist|wc -l`
 ctime3=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime3: Sending notification email to Observation Assistant..."
 #sending email to observers
-if [ $errsize3 -eq 0 ]; then
-  echo "$today $ctime3: $datatype data under $destpre/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype are O.K.!" | email -s "fso-data-$datatype@$today: $errsize3 Error File(s) Found" nvst_obs@ynao.ac.cn
-  echo "$today $ctime3: $datatype data under $destpre/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype are O.K.!" | email -s "fso-data-$datatype@$today: $errsize3 Error File(s) Found" chd@ynao.ac.cn
+if [ $errsize5 -eq 0 ]; then
+  echo "$today $ctime3: $datatype data under $destpre/$year$monthday/$datatype are O.K.!" | email -s "$year$monthday-$datatype@fso-data: $errsize5 Error File(s) Found" nvst_obs@ynao.ac.cn
+  echo "$today $ctime3: $datatype data under $destpre/$year$monthday/$datatype are O.K.!" | email -s "$year$monthday-$datatype@fso-data: $errsize5 Error File(s) Found" chd@ynao.ac.cn
 else
-  email -s "fso-data-$datatype@$today: $errsize3 Error File(s) Found" nvst_obs@ynao.ac.cn < $tmplist
-  email -s "fso-data-$datatype@$today: $errsize3 Error File(s) Found" chd@ynao.ac.cn < $tmplist
+  email -s "$year$monthday-$datatype@fso-data: $errsize5 Error File(s) Found" nvst_obs@ynao.ac.cn < $tmplist
+  email -s "$year$monthday-$datatype@fso-data: $errsize5 Error File(s) Found" chd@ynao.ac.cn < $tmplist
 fi
 
 
@@ -203,7 +211,7 @@ stdiff=`echo "$st1 $st2"|awk '{print($2-$1)}'`
 
 echo "$today $ctime4: Checking & Copying $datatype data @ FSO finished!"
 echo "           Total : $errsize4 error file(s) found"
-echo "                 : $errsize3 file(s) not corrected"
+echo "                 : $errsize5 file(s) not corrected"
 echo "                 : see $tmplist for details"
 echo "       Time Used : $stdiff secs."
 echo "            From : $ctime1"

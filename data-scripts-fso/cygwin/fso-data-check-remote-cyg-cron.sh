@@ -44,10 +44,10 @@ procing() {
 
 
 
-if [ $# -ne 9 ];then
+if [ $# -ne 8 ];then
   echo "usage: ./fso-data-check-remote-cyg-cron.sh ip port user passwd  year monthday datatype fileformat localdrive"
-  echo "example: ./fso-data-check-remote-cyg-cron.sh 192.168.111.120 21 tio ynao246135 2019 0907 TIO fits e"
-  echo "example: ./fso-data-check-remote-cyg-cron.sh 192.168.111.122 21 ha ynao246135 2019 0907 HA fits f "
+  echo "example: ./fso-data-check-remote-cyg-cron.sh 192.168.111.120 21 tio ynao246135 2019 0907 fits e"
+  echo "example: ./fso-data-check-remote-cyg-cron.sh 192.168.111.122 21 ha ynao246135 2019 0907 fits f "
   exit 0
 fi
 
@@ -60,15 +60,15 @@ user=$3
 passwd=$4
 year=$5
 monthday=$6
-datatype=$7
-fileformat=$8
-localdrive=$9
+fileformat=$7
+localdrive=$8
+datatype=`echo $user|tr 'a-z' 'A-Z'`
 
 #cd /home/chd/
 homepre="/cygdrive/d/chd/LFTP4WIN-master/home/chd"
 syssep="/"
 logpath=$homepre/log
-localpre="/cygdrive/"
+localpre="/cygdrive"
 
 remotelist=$logpath/$datatype-$fileformat-$year$monthday-$server-cyg.list
 locallist=$logpath/$datatype-$fileformat-$year$monthday-local-cyg.list
@@ -97,7 +97,7 @@ fi
 #  touch $list
 #fi
 
-localdir=$localpre$localdrive/$year$monthday/$datatype
+localdir=$localpre/$localdrive/$year$monthday/$datatype
 if [ $datatype == "SP" ];then 
   remotedir=/$year$monthday/
 else
@@ -121,8 +121,9 @@ echo " "
 #cd $cdir
 
 #getting local file list
-find $localdir/ -type f -name '*.fits' |cut -d '/' -f 5-10> $locallist &
+find $localdir -type f -name '*.fits' |cut -d '/' -f 4-11> $locallist &
 waiting "$!" "local $datatype $fileformat file(s) info getting" "Getting local $datatype $fileformat file(s) info"
+
 
 #getting remote file list
 #cat $listtmp |wc -l > $fn &

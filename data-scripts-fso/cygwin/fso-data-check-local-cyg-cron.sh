@@ -1,9 +1,9 @@
 #!/bin/bash
 #check the size of file(s) in dest dir and export total error list in file
-#usage: ./fso-data-check-local-cyg-cron.sh /youdirhere/ datatype fileformat standardsize(in bytes)
-#example: ./fso-data-check-local-cyg-cron.sh /cygdrive/f/20190721/TIO TIO fits 11062080
-#example: ./fso-data-check-local-cyg-cron.sh /cygdrive/e/20190721/HA HA fits 2111040
-#example: ./fso-data-check-local-cyg-cron.sh /cygdrive/g/20190721/SP SP fits 5359680
+#usage: ./fso-data-check-local-cyg-cron.sh /youdir year monthday datatype fileformat standardsize(in bytes)
+#example: ./fso-data-check-local-cyg-cron.sh e 2019 0915 TIO fits 11062080
+#example: ./fso-data-check-local-cyg-cron.sh f 2019 0915 HA fits 2111040
+#example: ./fso-data-check-local-cyg-cron.sh g 2019 0721 SP fits 5359680
 #change log:
 #           Release 20190721-0931: First working prototype
 
@@ -44,11 +44,11 @@ procing() {
 
 
 
-if [ $# -ne 4 ];then
-  echo "usage: ./fso-data-check-local-cyg-cron.sh /youdirhere/ datatype fileformat standardsize(in bytes)"
-  echo "example: ./fso-data-check-local-cyg-cron.sh /cygdrive/f/20190721/TIO TIO fits 11062080"
-  echo "example: ./fso-data-check-local-cyg-cron.sh /cygdrive/e/20190721/HA HA fits 2111040"
-  echo "example: ./fso-data-check-local-cyg-cron.sh /cygdrive/g/20190721/SP SP fits 5359680"
+if [ $# -ne 6 ];then
+  echo "#usage: ./fso-data-check-local-cyg-cron.sh /youdir year monthday datatype fileformat standardsize(in bytes)"
+  echo "example: ./fso-data-check-local-cyg-cron.sh e 2019 0915 TIO fits 11062080"
+  echo "example: ./fso-data-check-local-cyg-cron.sh f 2019 0915 HA fits 2111040"
+  echo "example: ./fso-data-check-local-cyg-cron.sh g 2019 0915 SP fits 5359680"
   exit 0
 fi
 
@@ -60,20 +60,25 @@ logpath=$homepre/log
 
 today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
-cdir=$1
-datatype=$2
-fileformat=$3
-stdsize=$4
+
+destpre=$dirpre/$1
+year=$2
+monthday=$3
+datatype=$4
+fileformat=$5
+stdsize=$6
 if [ $datatype == "SP" ];then
   stdsize1="1342080"
 fi
+cdir=$destpre/$year$monthday/$datatype
 
-list=$logpath/$datatype-$fileformat-$today.list
-listtmp=$logpath/$datatype-$fileformat-$today-tmp.list
-difflist=$logpath/$datatype-$fileformat-$today-diff.list
-fn=$logpath/$datatype-$fileformat-$today-number.dat
-curerrorlist=$logpath/$datatype-$fileformat@$today-error-cur.list
-totalerrorlist=$logpath/$datatype-$fileformat@$today-error-total.list
+list=$logpath/$datatype-$fileformat-$year$monthday.list
+listtmp=$logpath/$datatype-$fileformat-$year$monthday-tmp.list
+difflist=$logpath/$datatype-$fileformat-$year$monthday-diff-cyg.list
+fn=$logpath/$datatype-$fileformat-$year$monthday-number.dat
+curerrorlist=$logpath/$datatype-$fileformat-$year$monthday-error-cur.list
+totalerrorlist=$logpath/$datatype-$fileformat-$year$monthday-error-total.list
+localwrongsize=$logpath/$datatype-local-wrongsize-$year$monthday-cyg.list
 
 lockfile=$logpath/$(basename $0)-$datatype.lock
                                                                                    
@@ -124,7 +129,7 @@ echo " "
 
 #getting file name & size
 find $cdir/ -type f -name '*.fits' -printf "%h/%f %s\n" > $listtmp &
-waiting "$!" "$datatype $fileformat file(s) info getting" "Getting $datatype $fileformat file(s) info"
+waiting "$!" "local $datatype $fileformat file(s) info getting" "Getting local $datatype $fileformat file(s) info"
 
 #getting file number
 #cat $listtmp  |wc -l > $fn &
@@ -152,6 +157,19 @@ curerror=`cat $curerrorlist|wc -l`
 #cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' >> $totalerrorlist &
 cat $curerrorlist >> $totalerrorlist &
 waiting "$!" "Current wrong $datatype $fileformat file(s) adding" "Adding current wrong $datatype $fileformat file(s)"
+
+cat $totalerrorlist|awk '{print $1}' >> $localwrongsize & 
+waiting "$!" "Wrong $datatype $fileformat files list generating" "Generating  wrong $datatype $fileformat file(s)"
+
+#add / to locallist
+touch ./localtmplist
+for line in $(cat $localwrongsize);
+do
+  line=/$line
+  echo $line >> ./localtmplist
+done
+mv ./localtmplist $localwrongsize
+
 totalerror=`cat $totalerrorlist|wc -l`
 mv -f $listtmp $list
 curnum=$(cat $difflist|wc -l)

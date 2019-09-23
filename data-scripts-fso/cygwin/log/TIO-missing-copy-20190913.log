@@ -1,4 +1,0 @@
-Copy file of wrong size TIO/HA data on remote host to dest mannually
-Usage: ./fso-copy-wget-error-xx.sh srcip port user passwd error-file-list stdsize
-Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.120 21 tio ynao246135  error.list 11062080
-Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.122 21 ha ynao246135  error.list 2111040

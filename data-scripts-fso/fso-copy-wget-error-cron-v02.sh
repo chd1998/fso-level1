@@ -75,7 +75,7 @@ datatype=`cat $errorlist|awk '{print $1}'|cut -d '/' -f 6`
 
 #tmpfn=/home/chd/log/$(basename $0)-$errorlist-tmpfn.dat
 #tmpfs=/home/chd/log/$(basename $0)-$errorlist-tmpfs.dat
-remotefile=/home/chd/log/$datatype-$today-remote.list
+remotefile=/home/chd/log/$datatype-remote.list
 #errordir=/home/chd/log/$(basename $0)-$errorlist-dir.list
 #errorfile=/home/chd/log/$(basename $0)-$errorlist-file.list
 
@@ -106,7 +106,8 @@ echo "                                                         "
 echo "========================================================="
 echo " "
 #get path and file name of each error file
-cat $errorlist|awk '{print $1}'|cut -d '/' -f 5-10 > $remotefile
+#cat $errorlist|awk '{print $1}'|cut -d '/' -f 5-11 > $remotefile
+#cat $errorlist|awk '{print $1}' > $remotefile
 #cat $errorlist|awk '{print $1}'|cut -d '/' -f 1-9 > $errordir
 #cat $errorlist|awk '{print $1}'|cut -d '/' -f 1-10 > $errorfile
 #datatype=`cat $errorlist|awk '{print $1}'|cut -d '/' -f 6`
@@ -118,11 +119,11 @@ starttime=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $starttime: Copying From $ftpserver1 "
 echo "  "
 #for each file in errlist
-for line in $(cat $remotefile);
+for line in $(cat $errorlist);
 do
 	ctime=`date --date='0 days ago' +%H:%M:%S`
-	rfile=$ftpserver1/$line
-	localfile=$destpre/$cyear/$line
+	rfile=$ftpserver1$line
+	localfile=$destpre/$cyear$line
 	echo "$today $ctime: Copying $rfile"
 	wget -O $localfile --ftp-user=$ftpuser --ftp-password=$password --no-passive-ftp  $rfile >/dev/null 2>&1
 	if [ $? -ne 0 ];then

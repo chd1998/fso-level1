@@ -1,9 +1,9 @@
 #!/bin/bash
 #check the size of dest dir every 10 minutes via cron, and export total error list in file
-#usage: ./fso-data-check-xx.sh /youdirhere/ datatype fileformat standardsize(in bytes)
-#example: ./fso-data-check-local-cron.sh /lustre/data/2019/20190913 TIO fits 11062080
-#example: ./fso-data-check-local-cron.sh /lustre/data/2019/20190913 SP  fits 5359680
-#example: ./fso-data-check-local-cron.sh /lustre/data/2019/20190913 HA fits 2111040
+#usage: ./fso-data-check-xx.sh /youdirpre year monthday datatype fileformat standardsize(in bytes)
+#example: ./fso-data-check-local-cron.sh /lustre/data/ 2019 0913 TIO fits 11062080
+#example: ./fso-data-check-local-cron.sh /lustre/data/ 2019 0913 SP  fits 5359680
+#example: ./fso-data-check-local-cron.sh /lustre/data/ 2019 0913 HA fits 2111040
 #press ctrl-c to break the script
 #change log:
 #           Release 20190721-0931: First working prototype
@@ -46,34 +46,41 @@ procing() {
 
 
 
-if [ $# -ne 4 ];then
-  echo "usage: ./fso-data-check-xx.sh /youdirhere/ datatype fileformat standardsize(in bytes)"
-  echo "example: ./fso-data-check-local-cron.sh /lustre/data/2019/20190913 TIO fits 11062080"
-  echo "example: ./fso-data-check-local-cron.sh /lustre/data/2019/20190913 HA fits 2111040"
+if [ $# -ne 6 ];then
+  echo "usage: ./fso-data-check-xx.sh /youdirpre year monthday datatype fileformat standardsize(in bytes)"
+  echo "example: ./fso-data-check-local-cron.sh /lustre/data 2019 0913 TIO fits 11062080"
+  echo "example: ./fso-data-check-local-cron.sh /lustre/data 2019 0913 SP  fits 5359680"
+  echo "example: ./fso-data-check-local-cron.sh /lustre/data 2019 0913 HA fits 2111040"
   exit 0
 fi
 
 today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
-cdir=$1
-datatype=$2
-fileformat=$3
-stdsize=$4
+
+destpre=$1
+year=$2
+monthday=$3
+datatype=$4
+fileformat=$5
+stdsize=$6
 if [ $datatype == "SP" ];then
   stdsize1="1342080"
 fi
+cdir=$destpre/$year/$year$monthday
+
 
 #cd /home/chd/
 homepre="/home/chd"
 syssep="/"
 logpath=$homepre/log
 
-list=$logpath/$datatype-$fileformat-$today.list
-listtmp=$logpath/$datatype-$fileformat-$today-tmp.list
-difflist=$logpath/$datatype-$fileformat-$today-diff.list
-fn=$logpath/$datatype-$fileformat-$today-number.dat
-curerrorlist=$logpath/$datatype-$fileformat@$today-error-cur.list
-totalerrorlist=$logpath/$datatype-$fileformat@$today-error-total.list
+list=$logpath/$datatype-$fileformat-$year$monthday.list
+listtmp=$logpath/$datatype-$fileformat-$year$monthday-tmp.list
+difflist=$logpath/$datatype-$fileformat-$year$monthday-diff.list
+fn=$logpath/$datatype-$fileformat-$year$monthday-number.dat
+curerrorlist=$logpath/$datatype-$fileformat-$year$monthday-error-cur.list
+totalerrorlist=$logpath/$datatype-$fileformat-$year$monthday-error-total.list
+localwrongsize=$logpath/$datatype-localwrongsize-$year$monthday.list
 
 lockfile=$logpath/$(basename $0)-$datatype.lock
                                                                                    
@@ -123,7 +130,7 @@ echo " "
 #cd $cdir
 #getting file name & size
 find $cdir/$datatype/ -type f -name '*.fits' -printf "%h/%f %s\n" > $listtmp &
-waiting "$!" "$datatype $fileformat file(s) info getting" "Getting $datatype $fileformat file(s) info"
+waiting "$!" "local $datatype $fileformat file(s) info getting" "Getting  local $datatype $fileformat file(s) info"
 
 #getting file number
 #cat $listtmp |wc -l > $fn &
@@ -152,6 +159,17 @@ cat $curerrorlist >> $totalerrorlist &
 waiting "$!" "Current error $datatype $fileformat file(s) list adding" "Adding error $datatype $fileformat file(s) to total error file(s) list"
 
 totalerror=`cat $totalerrorlist|wc -l`
+#get 1st column of totalerrorlist , prepare for wget
+cat $totalerrorlist|awk '{print $1}'|cut -d '/' -f 6-11 > $localwrongsize
+#add / to each line in 1st column
+touch ./mytmplist
+for line in $(cat $localwrongsize);
+do
+  line=/$line
+  echo $line >> ./mytmplist
+done
+mv ./mytmplist $localwrongsize
+
 mv -f $listtmp $list
 curnum=$(cat $difflist|wc -l)
 today=`date --date='0 days ago' +%Y%m%d`

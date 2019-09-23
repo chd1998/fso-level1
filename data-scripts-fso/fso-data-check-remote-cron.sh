@@ -124,7 +124,7 @@ echo "==========================================================================
 echo " "
 #cd $cdir
 #getting local file list
-find $localdir/ -type f -name '*.fits' |cut -d '/' -f 5-10> $locallist &
+find $localdir/ -type f -name '*.fits' |cut -d '/' -f 5-11> $locallist &
 waiting "$!" "local $datatype $fileformat file(s) info getting" "Getting local $datatype $fileformat file(s) info"
 
 #getting remote file list
@@ -141,7 +141,7 @@ do
   line=/$line
   echo $line >> ./localtmplist
 done
-mv localtmplist $locallist
+mv ./localtmplist $locallist
 
 #sort filelist
 sort $locallist -o $locallist

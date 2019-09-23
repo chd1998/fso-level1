@@ -1,8 +1,8 @@
 #!/bin/bash
 #author: chen dong @fso
 #echo "Copy file of wrong size TIO/HA data on remote host to dest mannually"
-#echo "Usage: ./fso-copy-wget-error-xx.sh srcip port user passwd error-file-list"
-#echo "Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.120 21 tio ynao246135  error.list"
+#echo "Usage: ./fso-copy-wget-error-xx.sh srcip port user passwd error-file-list stdsize"
+#echo "Example: ./fso-copy-wget-error-xx.sh 192.168.111.120 21 tio ynao246135  error.list 11062080"
 #changlog:
 #        20190723       Release 0.1   first prototype release 0.1
 
@@ -64,7 +64,7 @@ destpre="/lustre/data"
 
 #tmpfn=/home/chd/log/$(basename $0)-$errorlist-tmpfn.dat
 #tmpfs=/home/chd/log/$(basename $0)-$errorlist-tmpfs.dat
-remotefile=/home/chd/log/$(basename $0)-$errorlist-remote.list
+#remotefile=/home/chd/log/$(basename $0)-$errorlist-remote.list
 #errordir=/home/chd/log/$(basename $0)-$errorlist-dir.list
 #errorfile=/home/chd/log/$(basename $0)-$errorlist-file.list
 
@@ -72,7 +72,7 @@ ftpserver=$1
 remoteport=$2
 ftpuser=$3
 password=$4
-errorlist=$5
+errlist=$5
 stdsize=$6
 
 lockfile=/home/chd/log/$(basename $0)-$datatype.lock
@@ -102,14 +102,14 @@ echo "                                                         "
 echo "========================================================="
 echo " "
 #get path and file name of each error file
-cat $errorlist|awk '{print $1}'|cut -d '/' -f 4-10 > $remotefile
-touch ./localtmplist1
-for line in $(cat $remotefile);
-do
-  line=/$line
-  echo $line >> ./localtmplist1
-done
-mv ./localtmplist1 $remotefile
+#cat $errorlist|awk '{print $1}'|cut -d '/' -f 4-10 > $remotefile
+#touch ./localtmplist1
+#for line in $(cat $remotefile);
+#do
+#  line=/$line
+#  echo $line >> ./localtmplist1
+#done
+#mv ./localtmplist1 $remotefile
 
 #cat $errorlist|awk '{print $1}'|cut -d '/' -f 1-9 > $errordir
 #cat $errorlist|awk '{print $1}'|cut -d '/' -f 1-10 > $errorfile
@@ -122,7 +122,7 @@ starttime=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $starttime: Copying From $ftpserver1 "
 echo "  "
 #for each file in errlist
-for line in $(cat $remotefile);
+for line in $(cat $errlist);
 do
 	ctime=`date --date='0 days ago' +%H:%M:%S`
 	rfile=$ftpserver1/$line
@@ -142,10 +142,10 @@ do
 	  else 
 	    echo $localfile >localfile.tmp
             #remove corrected file from the list
-	    comm -3 --nocheck-order $remotefile localfile.tmp > $remotefile
+	    comm -3 --nocheck-order $errlist localfile.tmp > $errlist
             #change the permission of copied file
-	    find $localfile ! -perm 777 -type f -exec chmod 777 {} \;
-    	    size=$((size+tmps))
+	    #find $localfile ! -perm 777 -type f -exec chmod 777 {} \;
+    	size=$((size+tmps))
 	    echo "$today $ctime1: $localfile copied in $tmps MB"
 	    ((count++))
 	  fi
@@ -160,11 +160,13 @@ if [ $timediff -le 0 ]; then
 else
 	speed=`echo "$size $timediff"|awk '{print($1/$2)}'`
 fi
+errleft=`cat $errlist|wc -l`
 ctime2=`date --date='0 days ago' +%H:%M:%S`
 echo " "
-echo "$today $ctime2: Succeeded in Data File Error Correcting!"
+echo "$today $ctime2: Succeeded in Data File(s) Error Correcting!"
 echo "Synced file No.  : $count file(s)"
 echo "Synced data size : $size MB"
+echo "      Error Left : $errleft file(s)"
 echo "           Speed : $speed MB/s"
 echo "       Time Used : $timediff secs."
 echo "       Time From : $starttime  "

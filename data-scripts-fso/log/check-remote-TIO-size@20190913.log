@@ -1,3 +1,0 @@
-usage: ./fso-data-check-remote-cron.sh ip port user passwd datatype year monthday fileformat
-example: ./fso-data-check-remote-cron.sh 192.168.111.120 21 tio ynao246135 2019 0907 TIO fits
-example: ./fso-data-check-remote-cron.sh 192.168.111.122 21 ha ynao246135 2019 0907 HA fits
