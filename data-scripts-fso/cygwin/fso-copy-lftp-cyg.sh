@@ -36,10 +36,11 @@ waiting() {
 	
 	echo -e "\n$wtoday $wctime: $2 Task Has Done!"
 	echo "                   Finishing..."
-  dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+  dt1=`date +%s`
+  #dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
   
   kill -6 $tmppid >/dev/null 1>&2
-  echo "$dt1" > ./log/$(basename $0)_${datatype}_dtmp.dat
+  echo "$dt1" > $logpath/$(basename $0)_${datatype}_dtmp.dat
 }
 
 procing() {
@@ -72,6 +73,7 @@ cyear=`date --date='0 days ago' +%Y`
 today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 ctime0=`date --date='0 days ago' +%H:%M:%S`
+
 if [ $# -ne 8 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to local HD under cygwin"
   echo "Usage: ./fso-copy-lftp-cyg.sh srcip port dest year(4 digits)  monthday(4 digits) user password datatype(TIO/HA)"
@@ -97,7 +99,10 @@ ftpserver=ftp://$ftpuser:$password@$ftpserver:$remoteport
 #echo "$ftpserver"
 #read
 
-lockfile=./log/$(basename $0)_${datatype}.lock
+homepre="/home/chd"
+logpath=$homepre/log
+
+lockfile=$logpath/$(basename $0)_${datatype}-$today.lock
 if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
   ps -p $mypid | grep $mypid &>/dev/null
@@ -145,22 +150,23 @@ echo "                   To  : $destdir "
 echo "                   Please Wait..."
 
 #count existed file number
-if [ ! -f "./log/$(basename $0)_${datatype}_tmpfn2.dat" ]; then
-  #ls -lR $destdir | grep "^-" | wc -l > ./log/$(basename $0)_${datatype}_tmpfn2.dat  & 
+if [ ! -f "$logpath/$(basename $0)_${datatype}_tmpfn2.dat" ]; then
+  #ls -lR $destdir | grep "^-" | wc -l > $logpath/$(basename $0)_${datatype}_tmpfn2.dat  & 
   #waiting "$!" "Existed $datatype File Number @ Dest Counting" "Counting Existed $datatype File Number @ Dest"
-  echo "0" > ./log/$(basename $0)_${datatype}_tmpfn2.dat
+  echo "0" > $logpath/$(basename $0)_${datatype}_tmpfn2.dat
 fi
-fn1=$(cat ./log/$(basename $0)_${datatype}_tmpfn2.dat)
+fn1=$(cat $logpath/$(basename $0)_${datatype}_tmpfn2.dat)
 
 #count existed file size  
-if [ ! -f "./log/$(basename $0)_${datatype}_tmpfs2.dat" ]; then
-  #fs1=`du -sm $destdir | awk '{print $1}'` > ./log/$(basename $0)_${datatype}_tmpfs2.dat &
+if [ ! -f "$logpath/$(basename $0)_${datatype}_tmpfs2.dat" ]; then
+  #fs1=`du -sm $destdir | awk '{print $1}'` > $logpath/$(basename $0)_${datatype}_tmpfs2.dat &
   #waiting "$!" "Existed $datatype File Size @ Dest Counting" "Counting Existed $datatype Dest File Size"
-  echo "0" > ./log/$(basename $0)_${datatype}_tmpfs2.dat
+  echo "0" > $logpath/$(basename $0)_${datatype}_tmpfs2.dat
 fi
-fs1=$(cat ./log/$(basename $0)_${datatype}_tmpfs2.dat)
+fs1=$(cat $logpath/$(basename $0)_${datatype}_tmpfs2.dat)
 
 ctime=`date --date='0 days ago' +%H:%M:%S`
+t1=`date +%s`
 
 lftp $ftpserver -e "mirror  --ignore-time --continue --parallel=40 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
@@ -171,14 +177,16 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 
-ttmp=$(cat ./log/$(basename $0)_${datatype}_dtmp.dat)
+ttmp=$(cat $logpath/$(basename $0)_${datatype}_dtmp.dat)
 
 ctime1=`date --date='0 days ago' +%H:%M:%S`
-t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+#t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+
 #t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
+
 targetdir=${destdir}
-ls -lR $targetdir | grep "^-" | wc -l > ./log/$(basename $0)_${datatype}_tmpfn2.dat &
+ls -lR $targetdir | grep "^-" | wc -l > $logpath/$(basename $0)_${datatype}_tmpfn2.dat &
 waiting "$!" "File Number Sumerizing for Synced $datatype Data" "Sumerizing File Number for Synced $datatype Data"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
@@ -188,10 +196,10 @@ if [ $? -ne 0 ];then
 fi
 
 #fn1=$(cat /home/chd/log/tmpfn1.dat)
-fn2=$(cat ./log/$(basename $0)_${datatype}_tmpfn2.dat)
+fn2=$(cat $logpath/$(basename $0)_${datatype}_tmpfn2.dat)
 
 
-du -sm $targetdir|awk '{print $1}' > ./log/$(basename $0)_${datatype}_tmpfs2.dat &
+du -sm $targetdir|awk '{print $1}' > $logpath/$(basename $0)_${datatype}_tmpfs2.dat &
 waiting "$!" "File Size Summerizing for Synced $datatype Data" "Sumerizing File Size for Synced $datatype Data"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
@@ -200,12 +208,12 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 if [ ! -d "$targetdir" ]; then
-  echo "0" > ./log/$(basename $0)_${datatype}_tmpfs.dat
-  echo "0" > ./log/$(basename $0)_${datatype}_tmpfs2.dat
+  echo "0" > $logpath/$(basename $0)_${datatype}_tmpfs.dat
+  echo "0" > $logpath/$(basename $0)_${datatype}_tmpfs2.dat
 fi  
 
 #fs1=$(cat /home/chd/log/tmpfs1.dat)
-fs2=$(cat ./log/$(basename $0)_${datatype}_tmpfs2.dat)
+fs2=$(cat $logpath/$(basename $0)_${datatype}_tmpfs2.dat)
 
 #chmod 777 -R $destdir &
 #waiting "$!" "Permission Changing" "Changing Permission"
@@ -228,26 +236,27 @@ fi
   
 speed=`echo "$filesize $timediff"|awk '{print($1/$2)}'`
 
-
+today0=`date --date='0 days ago' +%Y%m%d`
 ctime3=`date --date='0 days ago' +%H:%M:%S`
 #t3=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-t4=`echo $ctime3|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+#t4=`echo $ctime3|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+t4=`date +%s`
 timediff1=`echo "$t1 $t4"|awk '{print($2-$1)}'`
 
 echo " " 
-echo "$today $ctime3: Succeeded in Syncing $datatype data @ FSO!"
-echo " Synced file No. : $filenumber file(s)"
-echo "Synced data size : $filesize MB"
-echo "    Sync @ Speed : $speed MB/s"
-echo "  Sync Time Used : $timediff secs."
-echo "  Total File No. : $fn2 file(s)"
-echo "            Size : $fs2 MB"
+echo "$today0 $ctime3: Succeeded in Syncing $datatype data @ FSO!"
+echo "          Synced : $filenumber file(s)"
+echo "                 : $filesize MB"
+echo "         @ Speed : $speed MB/s"
+echo "       Time Used : $timediff secs."
+echo "   Total  Synced : $fn2 file(s)"
+echo "                 : $fs2 MB"
 echo " Total Time Used : $timediff1 secs."
-echo "            From : $ctime0 "
-echo "              To : $ctime3 "
-#rm -rf ./log/$lockfile
-#rm -rf ./log/$(basename $0)_${datatype}_*.dat
-#rm -rf ./log/$(basename $0)_*.log
+echo "            From : $today $ctime0 "
+echo "              To : $today0 $ctime3 "
+#rm -rf $logpath/$lockfile
+#rm -rf $logpath/$(basename $0)_${datatype}_*.dat
+#rm -rf $logpath/$(basename $0)_*.log
 exit 0
 
 

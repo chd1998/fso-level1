@@ -1,0 +1,15 @@
+#!/usr/bin/perl
+my $buf;
+open(DATA, "<ha.fits") or die "ha.fits 文件无法打开, $!";
+#@lines = <DATA>;
+#print @lines[0];
+binmode (DATA);
+$count = 0;
+$rd = read(DATA, $buf, 80);
+@char = unpack("a1" x 80, $buf);
+while( $count <= 80 )
+{
+  print "$count :  $char[$count]";
+  $count++;
+}
+close(DATA);

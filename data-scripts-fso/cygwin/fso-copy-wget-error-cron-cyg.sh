@@ -1,8 +1,5 @@
 #!/bin/bash
 #author: chen dong @fso
-#echo "Copy file of wrong size TIO/HA data on remote host to dest mannually"
-#echo "Usage: ./fso-copy-wget-error-xx.sh srcip port user passwd error-file-list stdsize"
-#echo "Example: ./fso-copy-wget-error-xx.sh 192.168.111.120 21 tio ynao246135  error.list 11062080"
 #changlog:
 #        20190723       Release 0.1   first prototype release 0.1
 
@@ -50,17 +47,17 @@ cyear=`date --date='0 days ago' +%Y`
 today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 
-if [ $# -ne 6 ]  ;then
+if [ $# -ne 8 ]  ;then
 	echo "Copy file of wrong size TIO/HA data on remote host to dest mannually"
-	echo "Usage: ./fso-copy-wget-error-xx.sh srcip port user passwd error-file-list stdsize"
-	echo "Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.120 21 tio ynao246135  error.list 11062080"
-	echo "Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.122 21 ha ynao246135  error.list 2111040"
+	echo "Usage: ./fso-copy-wget-error-xx.sh srcip port user passwd loacaldrive error-file-list datatype stdsize"
+	echo "Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.120 21 tio ynao246135 e /home/chd/log/error.list TIO 11062080"
+	echo "Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.122 21 ha ynao246135 f /home/chd/log/error.list HA 2111040"
 	exit 1
 fi
 
 #procName="lftp"
 syssep="/"
-destpre="/lustre/data"
+destpre="/cygdrive"
 
 #tmpfn=/home/chd/log/$(basename $0)-$errorlist-tmpfn.dat
 #tmpfs=/home/chd/log/$(basename $0)-$errorlist-tmpfs.dat
@@ -72,15 +69,25 @@ ftpserver=$1
 remoteport=$2
 ftpuser=$3
 password=$4
-errlist=$5
-stdsize=$6
+localdrive=$5
+errlist=$6
+datatype=$7
+stdsize=$8
 
-lockfile=/home/chd/log/$(basename $0)-$datatype.lock
+homepre="/home/chd"
+logpath=$homepre/log
+
+if [ ! -f $errlist ];then 
+  echo "$errlist is not exist, please check ..."
+  exit 1
+fi
+
+lockfile=$logpath/$(basename $0)-$datatype-$today.lock
 if [ -f $lockfile ];then
 	mypid=$(cat $lockfile)
 	ps -p $mypid | grep $mypid &>/dev/null
 	if [ $? -eq 0 ];then
-		echo "$todday $ctime: $(basename $0) is running" && exit 1
+		echo "$todday $ctime: $(basename $0) is running..." && exit 1
 	else
 		echo $$>$lockfile
 	fi
@@ -119,6 +126,7 @@ ftpserver1=${ftpserver}:${remoteport}
 count=0
 size=0
 starttime=`date --date='0 days ago' +%H:%M:%S`
+t1=`date +%s`
 echo "$today $starttime: Copying From $ftpserver1 "
 echo "  "
 #for each file in errlist
@@ -126,9 +134,10 @@ for line in $(cat $errlist);
 do
 	ctime=`date --date='0 days ago' +%H:%M:%S`
 	rfile=$ftpserver1/$line
-	localfile=$destpre/$line
+	localfile=$destpre/$localdrive/$line
 	echo "$today $ctime: Copying $rfile"
-	wget -O $localfile --ftp-user=$ftpuser --ftp-password=$password --no-passive-ftp  $rfile >/dev/null 2>&1
+	wget -O $localfile --ftp-user=$ftpuser --ftp-password=$password --no-passive-ftp  $rfile >/dev/null 2>&1 &
+	waiting "$!" "$datatype file(s) in $errlist copying" "Copying $datatype $fileformat file(s) in $errlist"
 	if [ $? -ne 0 ];then
 		ctime1=`date --date='0 days ago' +%H:%M:%S`
 		echo "$today $ctime1: Failed in Copying $rfile..."
@@ -141,9 +150,10 @@ do
 	    echo "$today $ctime1: Copying Failed for  $localfile $tmps MB"
 	  else 
 	    echo $localfile >localfile.tmp
-            #remove corrected file from the list
-	    comm -3 --nocheck-order $errlist localfile.tmp > $errlist
-            #change the permission of copied file
+        #remove corrected file from the list
+	    #comm -3 --nocheck-order $errlist localfile.tmp > $errlist
+		awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' ./localfile.tmp $errlist > $errlist 
+        #change the permission of copied file
 	    #find $localfile ! -perm 777 -type f -exec chmod 777 {} \;
     	size=$((size+tmps))
 	    echo "$today $ctime1: $localfile copied in $tmps MB"
@@ -152,8 +162,9 @@ do
 	fi  
 done
 endtime=`date --date='0 days ago' +%H:%M:%S`
-t1=`echo $starttime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-t2=`echo $endtime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+#t1=`echo $starttime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+#t2=`echo $endtime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+t2=`date +%s`
 timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
 if [ $timediff -le 0 ]; then
 	speed=0
@@ -162,15 +173,16 @@ else
 fi
 errleft=`cat $errlist|wc -l`
 ctime2=`date --date='0 days ago' +%H:%M:%S`
+today0=`date --date='0 days ago' +%Y%m%d`
 echo " "
-echo "$today $ctime2: Succeeded in Data File(s) Error Correcting!"
-echo "Synced file No.  : $count file(s)"
-echo "Synced data size : $size MB"
+echo "$today0 $ctime2: Succeeded in Data File(s) Error Correcting!"
+echo "          Copied : $count file(s)"
+echo "                 : $size MB"
 echo "      Error Left : $errleft file(s)"
 echo "           Speed : $speed MB/s"
 echo "       Time Used : $timediff secs."
-echo "       Time From : $starttime  "
-echo "              To : $ctime2 "
+echo "            From : $today $starttime  "
+echo "              To : $today0 $endtime "
 rm -rf $lockfile
 cd /home/chd/
 exit 0

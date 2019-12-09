@@ -29,7 +29,7 @@ waiting() {
   procing "$3" &
   local tmppid="$!"
   wait $pid
-#»Ö¸´¹â±êµ½×îºó±£´æµÄÎ»ÖÃ
+#ï¿½Ö¸ï¿½ï¿½ï¿½êµ½ï¿½ï¿½ó±£´ï¿½ï¿½Î»ï¿½ï¿½
 #  tput rc
 #  tput ed
 	wctime=`date --date='0 days ago' +%H:%M:%S`
@@ -43,7 +43,7 @@ waiting() {
   #echo "$dt1" > /home/chd/log/tmp
 }
 
-    #   Êä³ö½ø¶ÈÌõ, Ð¡¹÷ÐÍ
+    #   ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, Ð¡ï¿½ï¿½ï¿½ï¿½
 procing() {
   trap 'exit 0;' 6
   tput ed

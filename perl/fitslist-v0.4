@@ -1,0 +1,124 @@
+#!/usr/bin/perl
+
+
+if (@ARGV < 2 || @ARGV >=3)
+{
+print "Usage: fitslist /path/ yourlogfilename\n";
+print "Aims : Classify the fits files in a directory with regard to objects \n";
+}
+else
+{
+opendir(DIR, "$ARGV[0]") or die ("Could not open $ARGV[0]");
+
+@files = grep ( /\.fits/, readdir(DIR));
+@files = sort (@files);
+closedir(DIR);
+
+@namelist = ("");
+@tmp = ("");
+$result = 0;
+
+$e = (-e $ARGV[1]);
+if ($e == 1)
+{
+	unlink("$ARGV[1]");
+}
+
+print "Working ..... \n";
+
+foreach $file(@files)
+{	
+	
+	$objname = getobjname($file);	
+	$result = 0;
+	foreach $name(@namelist)
+	{
+		if ($objname eq $name)
+		{
+			$result = 0;
+			last;	
+		}
+		else
+		{
+			$result = 1;
+		} 
+	}
+	if($result == 1)
+	{
+		$tmp[0]=$objname;
+		push(@namelist,@tmp);
+		@tmp = ("");
+	}
+}
+shift(@namelist);
+@namelist = sort(@namelist);
+
+open(txt, ">>$ARGV[1]");
+
+print txt "**********************************\n";
+foreach $name1(@namelist)
+{
+	print txt "$name1 \n";
+	$exist = ( -e $name1);
+	if(!$exist)
+	{
+		mkdir("./$name1", 0755);
+	}
+	foreach $file(@files)
+	{
+		$t = getobjname($file);
+		if ($t eq $name1)
+		{
+			print txt "$file\n";
+			print "Copying $file to ./$name1\n";
+			$status = system("cp -f $file ./$name1");
+		}
+	}
+	print txt "**********************************\n";
+}
+print "Finished!\n";
+}
+
+sub getobjname
+{
+
+	open infile, "<$_[0]" or die("Could not open $_[0]");
+	binmode (infile);
+	while(1)
+	{
+		my $buf;
+		my $rd = read(infile, $buf, 80);
+		my @char = unpack("a1" x 80, $buf);
+		$tmp = "";
+        	foreach my $ch(@char)
+        	{
+                	$tmp .= $ch;
+        	}
+		$exp = "OBJECT  =";
+        	$res = ( $tmp =~ m/($exp)+/);
+        	if ($res == 1)
+        	{
+			$name = "";
+        		$count1 = 0;
+			while ( $char[$count1] ne "\'")
+			{
+		#		print "$count1  $char[$count1]\n";
+				$count1++;
+			}
+			$count1++;
+			while ( $char[$count1] ne "\'")
+			{
+				if($char[$count1] ne " ")
+				{
+					$name .= $char[$count1];
+				}
+				#print "$count1\n";
+				$count1++;
+			}
+	#	print "$name \n";
+		return $name;
+		last;
+        	}
+	}
+}
+
