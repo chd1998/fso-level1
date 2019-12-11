@@ -11,6 +11,8 @@ Example: python fits2jpg-parallel-xx.py -p d:\\fso-test --sx 200 --sy 200
 Changlog:
 20190701	Release 0.1		prototype version both in single & parallel version
 20190705	Release 0.2     revised, add input argvs
+20191210    Release 0.3     using click instead of getopt
+20191211    Release 0.4     thumbnail size input revised
 
 '''
 

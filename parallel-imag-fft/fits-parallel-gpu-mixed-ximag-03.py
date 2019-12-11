@@ -9,6 +9,8 @@ Example: python fits-parallel-ximag-gpu-xx.py --path=d:\\ximage --pn=1
 
 Changlog:
 20191207	Release 0.1		prototype version both in single & parallel version
+20191210    Release 0.2     using pool.apply_async instead of pool.map
+20191211    Release 0.3     using pool.map_async instead of pool.apply_async
 
 '''
 
@@ -96,7 +98,7 @@ def myfft(image):
     print ("Processing %40s..." %(image))
     fdata = (fits.open(image))[0].data
     d,m,n = fdata.shape
-    print (d)
+    #print (d)
     for i in range(d):
         ximage = fdata[i].astype(np.float32)
         im = fft.fft2(ximage)

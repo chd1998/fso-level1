@@ -9,6 +9,7 @@ Example: python fits-parallel-ximag-gpu-xx.py --path=d:\\ximage --pn=1
 
 Changlog:
 20191207	Release 0.1		prototype version both in single & parallel version
+20191210    Release 0.2     using pool.apply_async instead of pool.map
 
 '''
 
