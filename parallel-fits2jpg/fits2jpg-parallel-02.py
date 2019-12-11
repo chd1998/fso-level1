@@ -80,9 +80,8 @@ def main(argv):
             print(
                 'Example: python fits2jpg-xx.py -p d:\\fso-test --tn 10 --sx 200 --sy 200 ')
             sys.exit()
-        SIZE = tuple([sx, sy])
-    folder = os.path.realpath(
-        T_DIR)
+    SIZE = tuple([sx, sy])
+    folder = os.path.realpath(T_DIR)
 
     if not os.path.isdir(os.path.join(folder, SAVE_DIRECTORY)):
         os.makedirs(os.path.join(folder, SAVE_DIRECTORY))
