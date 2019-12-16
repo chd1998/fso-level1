@@ -11,6 +11,9 @@ Example: python fits2jpg-parallel-xx.py -p d:\\fso-test --sx 200 --sy 200
 Changlog:
 20190701	Release 0.1		prototype version both in single & parallel version
 20190705	Release 0.2     revised, add input argvs
+20191212    Release 0.3     using click to input argvs
+20191213    Release 0.4     using map_async instead of map
+                            using tuple(x,y) instead of x,y
 
 '''
 
@@ -41,10 +44,8 @@ def main(path,pn,tsize,savedir):
         print ("Folder %s doesn't exist!  Pls Check..." % path)
     else:
         #print(tsize,TSIZE)
-        
         if not os.path.isdir(os.path.join(folder, savedir)):
             os.makedirs(os.path.join(folder, savedir))
-
         images = get_image_paths(folder)
         #for image in images:
         #    print (image)
@@ -52,7 +53,7 @@ def main(path,pn,tsize,savedir):
         pool = Pool(processes=pn)
         print("Converting...")
         #print (TSIZE,SAVEDIR)
-        pool.map(create_thumbnail, images)
+        pool.starmap_async(create_thumbnail, images)
         pool.close()
         pool.join()
         b = datetime.datetime.now()
