@@ -43,9 +43,6 @@ procing() {
   done                                                                                                                                            
 }                                                                                                                                                 
 
-
-
-
 if [ $# -ne 6 ];then
   echo "usage: ./fso-data-check-xx.sh /youdirpre year monthday datatype fileformat standardsize(in bytes)"
   echo "example: ./fso-data-check-local-cron.sh /lustre/data 2019 0913 TIO fits 11062080"
@@ -80,7 +77,7 @@ difflist=$logpath/$datatype-$fileformat-$year$monthday-diff.list
 fn=$logpath/$datatype-$fileformat-$year$monthday-number.dat
 curerrorlist=$logpath/$datatype-$fileformat-$year$monthday-error-cur.list
 totalerrorlist=$logpath/$datatype-$fileformat-$year$monthday-error-total.list
-localwrongsize=$logpath/$datatype-localwrongsize-$year$monthday.list
+localwrongsize=$logpath/$datatype-local-wrongsize-$year$monthday.list
 
 lockfile=$logpath/$(basename $0)-$datatype.lock
                                                                                    
@@ -97,23 +94,24 @@ else
   echo $$>$lockfile
 fi                                                                                  
 
-if [ ! -d "$logpath" ];then
+if [ ! -d $logpath ];then
   mkdir -p $logpath
 fi
 
-if [ ! -f "$list" ];then
+if [ ! -f $list ];then
   touch $list
 fi
 
 
 
-if [ ! -d "$cdir" ];then
+if [ ! -d $cdir ];then
   echo "Dest Dir: $cdir doesn't exist...."
   echo "Please check..."
   exit 0
 fi
 ctime=`date --date='0 days ago' +%H:%M:%S`
-t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+#t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+t1=`date +%s`
 echo " "
 echo "================================================================================"
 echo "                                                                                "
@@ -121,7 +119,7 @@ echo "               fso-data-check utility for $datatype data @ fso            
 echo "                       Release 20190915-0835(for Cron)                          "
 echo "                                                                                "
 echo "$today $ctime : Checking the $fileformat file numbers & size                    "
-echo "                    @ $cdir/$datatype/                                                     "
+echo "                    @ $cdir/$datatype/                                          "
 echo "                    Please wait...                                              "
 echo "                    Press ctrl-c to break!                                      "
 echo "                                                                                "
@@ -137,44 +135,74 @@ waiting "$!" "local $datatype $fileformat file(s) info getting" "Getting  local 
 #waiting "$!" "$datatype $fileformat file(s) number getting" "Getting $datatype $fileformat file(s) number"
 
 #remove checked files, list is error files list, listtmp is all files
-sort $listtmp -o $listtmp
-sort $list -o $list
+#sort $listtmp -o $listtmp
+#sort $list -o $list
+
 #grep -vwf $listtmp $list > $difflist &
-comm -23 $listtmp $list > $difflist &
+#show only new file in listtmp
+#comm -23 --nocheck-order $listtmp $list > $difflist &
+awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' $list $listtmp> $difflist &
 waiting "$!" "new $datatype $fileformat file(s) getting" "Getting  new $datatype $fileformat file(s) "
 
 #count error number for this round
+ctime0=`date --date='0 days ago' +%H:%M:%S`
+echo "$today $ctime0: Checking local wrong size $datatype files, please waiting..."
 #cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $curerrorlist &
 if [ $datatype == "SP" ];then
   cat $difflist |awk '{ if ($2!='''$stdsize''' && $2!='''$stdsize1''') {print $1"  "$2}}' > $curerrorlist &
+  waiting "$!" "Wrong $datatype $fileformat file(s) checking" "Checking wrong $datatype $fileformat file(s)"
 else
-  cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $curerrorlist &
+#  if [ $datatype == "HA" || $datatype == "TIO" ];then
+   cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $curerrorlist &
+   waiting "$!" "Wrong $datatype $fileformat file(s) checking" "Checking wrong $datatype $fileformat file(s)"
+#  else
+#    echo "$today $ctime0 : Wrong $datatype inputed, please check..."
+#    touch $curerrorlist
+#  fi
 fi
-waiting "$!" "Wrong $datatype $fileformat file(s) checking" "Checking wrong $datatype $fileformat file(s)"
+#waiting "$!" "Wrong $datatype $fileformat file(s) checking" "Checking wrong $datatype $fileformat file(s)"
 curerror=`cat $curerrorlist|wc -l`
 
 #add wrongsize list to total error list
-#cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' >> $totalerrorlist &
-cat $curerrorlist >> $totalerrorlist &
+
+#show only new files in curerrorlist
+if [ ! -f "$totalerrorlist" ];then
+  if [ $datatype == "SP" ];then
+    cat $difflist |awk '{ if ($2!='''$stdsize''' && $2!='''$stdsize1''') {print $1"  "$2}}' > $totalerrorlist &
+  else
+    cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' >> $totalerrorlist &
+  fi
+  waiting "$!" "Total error $datatype $fileformat file(s) list finding  --- first round" "Finding new error $datatype $fileformat file(s) to total error file(s) list for first round"
+fi
+
+#sort $totalerrorlist -o $totalerrorlist
+#comm -23 --nocheck-order $curerrorlist $totalerrorlist > ./errtmp &
+#get files only in curerrorlist
+awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' $totalerrorlist $curerrorlist > ./errtmp &
+waiting "$!" "New current error $datatype $fileformat file(s) list finding" "Finding new error $datatype $fileformat file(s) to total error file(s) list"
+cat ./errtmp >> $totalerrorlist &
 waiting "$!" "Current error $datatype $fileformat file(s) list adding" "Adding error $datatype $fileformat file(s) to total error file(s) list"
 
 totalerror=`cat $totalerrorlist|wc -l`
 #get 1st column of totalerrorlist , prepare for wget
-cat $totalerrorlist|awk '{print $1}'|cut -d '/' -f 6-11 > $localwrongsize
+cat $totalerrorlist|awk '{print $1}'|cut -d '/' -f 5-11 > $localwrongsize
 #add / to each line in 1st column
 touch ./mytmplist
 for line in $(cat $localwrongsize);
 do
+  if [[ $line != /* ]]; then
   line=/$line
+  fi
   echo $line >> ./mytmplist
 done
-mv ./mytmplist $localwrongsize
+mv -f ./mytmplist $localwrongsize
 
 mv -f $listtmp $list
 curnum=$(cat $difflist|wc -l)
 today=`date --date='0 days ago' +%Y%m%d`
 ctime1=`date --date='0 days ago' +%H:%M:%S`
-t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+t2=`date +%s`
+#t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
 if [ $timediff -lt 0 ]; then
 	timediff=0
@@ -184,6 +212,8 @@ echo "     File Checked: $curnum file(s)"
 echo " This Round Found: $curerror file(s) in wrong size"
 echo "      Total Found: $totalerror file(s) in wrong size"
 echo "        Time Used: $timediff secs."
-echo "  Error File List: $totalerrorlist"
+echo "  Error File List: $localwrongsize"
 echo " "
 echo "================================================================================"
+#rm -f ./mytmplist
+rm -f ./errtmp

@@ -1,8 +1,8 @@
 #!/bin/bash
 #check the file diff between remote dir  and local dir, export the diff list file
 #usage: ./fso-data-check-remote-cyg-cron.sh ip port user passwd year monthday datatype fileformat localdrive"
-#example: ./fso-data-check-remote-cyg-cron.sh 192.168.111.120 21 tio ynao246135 2019 0907 TIO fits e"
-#example: ./fso-data-check-remote-cyg-cron.sh 192.168.111.122 21 ha ynao246135 2019 0907 HA fits f"
+#example: ./fso-data-check-remote-cyg-cron.sh 192.168.111.120 21 tio ynao246135 2019 0907 fits e"
+#example: ./fso-data-check-remote-cyg-cron.sh 192.168.111.122 21 ha ynao246135 2019 0907 fits f"
 #press ctrl-c to break the script
 #change log:
 #           Release 20190721-0931: First working prototype
@@ -65,16 +65,19 @@ localdrive=$8
 datatype=`echo $user|tr 'a-z' 'A-Z'`
 
 #cd /home/chd/
-homepre="/cygdrive/d/chd/LFTP4WIN-master/home/chd"
+homepre="/home/chd"
 syssep="/"
 logpath=$homepre/log
 localpre="/cygdrive"
+cyear=`date --date='0 days ago' +%Y`
+today=`date --date='0 days ago' +%Y%m%d`
+
 
 remotelist=$logpath/$datatype-$fileformat-$year$monthday-$server-cyg.list
 locallist=$logpath/$datatype-$fileformat-$year$monthday-local-cyg.list
 difflist=$logpath/$datatype-$fileformat-$year$monthday-diff-cyg.list
 
-lockfile=$logpath/$(basename $0)-$datatype-cyg.lock
+lockfile=$logpath/$(basename $0)-$datatype-$cyear$today.lock
                                                                                    
 if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
@@ -105,7 +108,8 @@ else
 fi
 
 ctime=`date --date='0 days ago' +%H:%M:%S`
-t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+#t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+t1=`date +%s`
 echo " "
 echo "================================================================================"
 echo "                                                                                "
@@ -121,9 +125,13 @@ echo " "
 #cd $cdir
 
 #getting local file list
-find $localdir -type f -name '*.fits' |cut -d '/' -f 4-11> $locallist &
-waiting "$!" "local $datatype $fileformat file(s) info getting" "Getting local $datatype $fileformat file(s) info"
-
+if [ ! -d "$localdir" ];then
+  echo "$today $ctime : local directory $localdir doesn't exist, pls check ..."
+  exit 0
+else
+  find $localdir -type f -name '*.fits' |cut -d '/' -f 4-11> $locallist &
+  waiting "$!" "local $datatype $fileformat file(s) info getting" "Getting local $datatype $fileformat file(s) info"
+fi
 
 #getting remote file list
 #cat $listtmp |wc -l > $fn &
@@ -143,12 +151,14 @@ done
 mv ./localtmplist $locallist
 
 #sort filelist
-sort $locallist -o $locallist
-sort $remotelist -o $remotelist
+#sort $locallist -o $locallist
+#sort $remotelist -o $remotelist
 
 #remove synced files, list is error files list, listtmp is all files
 #grep -vwf $list $listtmp > $difflist &
-comm -23  $remotelist $locallist > $difflist &
+#show files only in remote
+#comm -23  $remotelist $locallist > $difflist &
+awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}'  $locallist $remotelist > $difflist &
 waiting "$!" "diff $datatype $fileformat file(s) getting" "Getting diff new $datatype $fileformat file(s) "
 
 totalnum=$(cat $remotelist|wc -l)
@@ -156,12 +166,14 @@ diffnum=$(cat $difflist|wc -l)
 
 today=`date --date='0 days ago' +%Y%m%d`
 ctime1=`date --date='0 days ago' +%H:%M:%S`
-t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+#t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+t2=`date +%s`
 timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
 if [ $timediff -lt 0 ]; then
 	timediff=0
 fi
-echo "$today $ctime1: For $datatype $fileformat Data File(s) @ $cdir "
+today0=`date --date='0 days ago' +%Y%m%d`
+echo "$today0 $ctime1: For $datatype $fileformat Data File(s) @ $cdir "
 echo "     File Checked: $totalnum file(s) @ $server"
 echo "      Total Found: $diffnum file(s) missing in local dir"
 echo "        Time Used: $timediff secs."

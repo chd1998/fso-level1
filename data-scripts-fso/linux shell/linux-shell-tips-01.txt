@@ -77,6 +77,7 @@ du -sm /home/qy| awk '{print $1}' >> sum.log
 cat sum.log | awk '{a+= $0}END{print a}'
 
 6.获取某个目录下所有文件个数（含子目录）
+6.1 using ls & grep
 #!/bin/bash
 #count the number of files under a directory including subdir
 ls -lR /lustre/data/2019/20190426/TIO | grep "^-" | wc -l
@@ -89,6 +90,9 @@ ls -lR /lustre/data/2019/20190426/TIO | grep "^-" | wc -l
 	1
 	查看某目录下文件夹(目录)的个数（包括子目录）
 	$ ls -lR | grep "^d" | wc -l
+
+6.2 find
+find /lustre/data/2019/20190914/TIO  -type f -name '*.fits'|wc -l
 
 7. 使用wget over ftp同步目录
 wget --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir
@@ -125,7 +129,122 @@ BEGIN { FS = ":" }
   }
 }
 
+8.3 example:
+
+ctime1=`date --date='0 days ago' +%H:%M:%S`
+t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
+
 
 9. shell中进行算术运算
 
  speed=`echo "$sdata $edata $delaytime"|awk '{print(($2-$1)/$3)}'`
+ 
+10.比较2个文件，输出其中一个有，另外一个没有的内容：
+
+#sort filelist
+sort $locallist -o $locallist
+sort $remotelist -o $remotelist
+
+#getting local missing file(s) list
+comm -23  $remotelist $locallist > $difflist &
+
+
+comm -1 A B 不显示在A文件中独有内容(显示B文件独有内容+两个文件共有)
+comm -2 A B 不显示在B文件中独有内容
+comm -3 A B 不显示同时在两个文件中都存在的内容
+comm -12 A B 显示A与B公共的部分
+comm -23 A B 显示A独有的
+comm -13 A B 显示B独有的
+
+11. 获取文件名称和大小，并与标准大小比较输出不符合的列表
+
+#cd $cdir
+#getting file name & size
+find $cdir/$datatype/ -type f -name '*.fits' -printf "%h/%f %s\n" > $listtmp &
+waiting "$!" "$datatype $fileformat file(s) info getting" "Getting $datatype $fileformat file(s) info"
+
+#getting file number
+#cat $listtmp |wc -l > $fn &
+#waiting "$!" "$datatype $fileformat file(s) number getting" "Getting $datatype $fileformat file(s) number"
+
+#remove checked files, list is error files list, listtmp is all files
+sort $listtmp -o $listtmp
+sort $list -o $list
+#grep -vwf $listtmp $list > $difflist &
+comm -23 $listtmp $list > $difflist &
+waiting "$!" "new $datatype $fileformat file(s) getting" "Getting  new $datatype $fileformat file(s) "
+
+#count error number for this round
+cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $curerrorlist &
+waiting "$!" "Wrong $datatype $fileformat file(s) checking" "Checking wrong $datatype $fileformat file(s)"
+curerror=`cat $curerrorlist|wc -l`
+
+#add wrongsize list to total error list
+#cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' >> $totalerrorlist &
+cat $curerrorlist >> $totalerrorlist &
+waiting "$!" "Current error $datatype $fileformat file(s) list adding" "Adding error $datatype $fileformat file(s) to total error file(s) list"
+
+12. 进度条 
+#waiting pid taskname prompt
+waiting() {
+  local pid="$1"
+  taskname="$2"
+  procing "$3" &
+  local tmppid="$!"
+  wait $pid
+  tput rc
+  tput ed
+  wctime=`date --date='0 days ago' +%H:%M:%S`
+  wtoday=`date --date='0 days ago' +%Y%m%d`
+  echo "$wtoday $wctime: $2 Task Has Done!"
+  dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+#  echo "                   Finishing..."
+  kill -6 $tmppid >/dev/null 1>&2
+  echo "$dt1" > /home/chd/log/dtmp
+}
+
+procing() {
+  trap 'exit 0;' 6
+  tput ed
+  while [ 1 ]
+  do
+    for j in '-' '\\' '|' '/'
+    do
+      tput sc
+      ptoday=`date --date='0 days ago' +%Y%m%d`
+      pctime=`date --date='0 days ago' +%H:%M:%S`
+      echo -ne  "$ptoday $pctime: $1...   $j"
+      sleep 0.2
+      tput rc
+    done
+  done
+}
+
+13. 并发
+
+13.1 hd write
+#!/bin/bash
+# ./hd-test.sh  1000 100K 100
+for ((i=1;i<=$1;i++));
+do
+    (
+        echo "Writing to GlusterFS...$i"
+        dd if=/dev/zero bs=$2 count=$3 of=$i-test.dat
+    )&
+done
+wait
+
+13.2 IP test
+#!/bin/bash
+for ip in $1.{1..254}
+do
+    (
+        ping $ip -c2 &> /dev/null
+        if [ $? -eq 0 ];
+        then
+            echo "$ip 在线"
+        fi
+    )&
+done
+wait

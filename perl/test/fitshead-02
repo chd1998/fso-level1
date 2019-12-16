@@ -1,0 +1,10 @@
+#!/usr/bin/perl
+use PDL;
+use PDL::IO::Dumper;
+use PDL::IO::FITS;
+
+my $a = rfits('ha.fits');          # read a FITS header
+my $h = $a->gethdr;                # retrive FITS header
+print "Object=$$h{OBSOBJ}\n";
+print "Number of pixels in the X-direction=$$h{NAXIS1}\n";
+print "Number of pixels in the Y-direction=$$h{NAXIS2}\n";

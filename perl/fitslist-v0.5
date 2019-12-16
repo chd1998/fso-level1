@@ -1,0 +1,126 @@
+#!/usr/bin/perl
+
+use File::Basename;
+use Data::Dumper;
+use File::Find;
+use PDL;
+use PDL::IO::Dumper;
+use PDL::IO::FITS;
+
+if (@ARGV < 2 || @ARGV >=3)
+{
+print "Usage : fitslist /path/ yourlogfilename\n";
+print "Purpose : Classify the fits files in a directory with regard to objects \n";
+print "Example : ./fitslist-v0.5 ./HA/ ha.log\n";
+}
+else
+{
+print "=============================================================\n";
+print "=                                                           =\n";
+print "=            FSO fits files Archiving Utility               =\n";
+print "=                                                           =\n";
+print "=        fitslist to sort the files of each object          =\n";
+print "=                                                           =\n";
+print "=                 Rev. 0.5 (2019-11-11)                     =\n";
+print "=                                                           =\n";
+print "=============================================================\n";
+print "FSO Fits files sorting, please wait .....\n";
+#opendir(DIR, "$ARGV[0]") or die ("Could not open $ARGV[0]");
+my $DIR = $ARGV[0] ||= "./" || die $!;
+print "Getting all files under $DIR, please wait.....\n";
+my @files = get_all_files($DIR);
+
+#my $count = 0;
+#foreach $file(@files) {
+#    print "$count $file \n" ;
+#    $count += 1;
+#}
+
+@namelist = ("");
+@tmp = ("");
+$result = 0;
+
+$e = (-e $ARGV[1]);
+if ($e == 1)
+{
+	unlink("$ARGV[1]");
+}
+my $count = 0; 
+#get namelist of objects
+print "Getting name list of objects, please wait.....\n";
+foreach $file(@files)
+{	
+	
+	$objname = getobjname($file);	
+	$result = 0;
+	foreach $name(@namelist)
+	{
+		if ($objname eq $name)
+		{
+			$result = 0;
+			last;	
+		}
+		else
+		{
+			$result = 1;
+		} 
+	}
+	if($result == 1)
+	{
+		$tmp[0]=$objname;
+		push(@namelist,@tmp);
+                print " $count : $objname \n";
+                $count += 1;
+		@tmp = ("");
+	}
+}
+shift(@namelist);
+@namelist = sort(@namelist);
+$count = 0;
+open(txt, ">>$ARGV[1]");
+
+print txt "**********************************\n";
+#sort out the files with regard to each object
+print "Sorting files with regard to each object, please wait.....\n";
+foreach $name1(@namelist)
+{
+	print txt "$name1 \n";
+	$exist = ( -e $name1);
+	if(!$exist)
+	{
+		mkdir("./$name1", 0755);
+	}
+	foreach $file(@files)
+	{
+		$t = getobjname($file);
+		if ($t eq $name1)
+		{
+			print txt "$file\n";
+			print "$count : Copying $file to ./$name1\n";
+                        $count += 1;
+			$status = system("cp -f $file ./$name1");
+		}
+	}
+	print txt "**********************************\n";
+}
+print "Finished!\n";
+}
+
+sub get_all_files {
+    my ($dir) = @_;
+    my @Files;
+    # Use $File::Find::name instead of $_ to get the paths.
+    #find(sub {  (-f && /\.fits$/i);  push @Files, $_ }, $dir);
+    find(sub { (-f && /\.fits$/i); push @Files,  $File::Find::name }, $dir);
+    return @Files
+}
+
+sub getobjname
+{
+    #open infile, "<$_[0]" or die("Could not open $_[0]");
+    my $infits = rfits ($_[0]);
+    my $h = $infits->gethdr;
+    my $objname = $${OBSOBJ};
+    return $objname
+}
+

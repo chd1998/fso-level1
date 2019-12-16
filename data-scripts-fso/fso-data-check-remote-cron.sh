@@ -1,6 +1,6 @@
 #!/bin/bash
 #check the size of dest dir every 10 minutes via cron, and export total error list in file
-#usage: ./fso-data-check-remote-cron.sh ip port user passwd datatype fileformat"
+#usage: ./fso-data-check-remote-cron.sh ip port user passwd year monthday datatype fileformat"
 #example: ./fso-data-check-remote-cron.sh 192.168.111.120 21 tio ynao246135 2019 0907 TIO fits"
 #example: ./fso-data-check-remote-cron.sh 192.168.111.122 21 ha ynao246135 2019 0907 HA fits"
 #press ctrl-c to break the script
@@ -109,7 +109,8 @@ fi
 
 
 ctime=`date --date='0 days ago' +%H:%M:%S`
-t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+t1=`date +%s`
+#t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 echo " "
 echo "================================================================================"
 echo "                                                                                "
@@ -144,12 +145,13 @@ done
 mv ./localtmplist $locallist
 
 #sort filelist
-sort $locallist -o $locallist
-sort $remotelist -o $remotelist
+#sort $locallist -o $locallist
+#sort $remotelist -o $remotelist
 
 #getting local missing file(s) list
 #grep -vwf $remotelist $locallist > $difflist &
-comm -23  $remotelist $locallist > $difflist &
+#comm -23 --nocheck-order $remotelist $locallist | uniq > $difflist &
+awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' $locallist $remotelist  > $difflist &
 waiting "$!" "diff $datatype $fileformat file(s) getting" "Getting diff new $datatype $fileformat file(s) "
 
 totalnum=$(cat $remotelist|wc -l)
@@ -157,7 +159,8 @@ diffnum=$(cat $difflist|wc -l)
 
 today=`date --date='0 days ago' +%Y%m%d`
 ctime1=`date --date='0 days ago' +%H:%M:%S`
-t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+t2=`date +%s`
+#t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
 if [ $timediff -lt 0 ]; then
 	timediff=0

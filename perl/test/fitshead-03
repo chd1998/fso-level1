@@ -1,0 +1,18 @@
+#!/usr/bin/perl
+use PDL;
+use PDL::IO::Dumper;
+use PDL::IO::FITS;
+
+
+my $objname = getobjname('ha.fits');
+print "Object = $objname \n";
+
+sub getobjname
+{
+    #open infile, "<$_[0]" or die("Could not open $_[0]");
+    print "$_[0] \n";
+    my $infits = rfits ($_[0]);
+    my $h = $infits->gethdr;
+    my $obj = $$h{OBSOBJ};
+    return $obj;
+}

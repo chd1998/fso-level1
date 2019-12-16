@@ -1,0 +1,7 @@
+#!/usr/bin/perl
+use Astro::FITS::CFITSIO
+my $status = 0;
+my $fptr = Astro::FITS::CFITSIO::open_file($filename,
+                    Astro::FITS::CFITSIO::READONLY(),$status);
+ 
+$fptr->read_key_str('OBSOBJ',$obsobj,undef,$status);
