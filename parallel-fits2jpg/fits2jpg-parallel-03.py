@@ -51,7 +51,7 @@ def main(path,pn,sx,sy,savedir):
         a = datetime.datetime.now()
         pool = Pool(processes=pn)
         print("Converting...")
-        print (TSIZE,SAVEDIR)
+        #print (TSIZE,SAVEDIR)
         pool.map(create_thumbnail, images)
         pool.close()
         pool.join()

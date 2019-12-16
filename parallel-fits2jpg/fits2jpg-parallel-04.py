@@ -53,7 +53,7 @@ def main(path,pn,tsize,savedir):
         pool = Pool(processes=pn)
         print("Converting...")
         #print (TSIZE,SAVEDIR)
-        pool.starmap_async(create_thumbnail, images)
+        pool.map(create_thumbnail, images)
         pool.close()
         pool.join()
         b = datetime.datetime.now()
