@@ -77,7 +77,11 @@ remotelist=$logpath/$datatype-$fileformat-$year$monthday-$server-cyg.list
 locallist=$logpath/$datatype-$fileformat-$year$monthday-local-cyg.list
 difflist=$logpath/$datatype-$fileformat-$year$monthday-diff-cyg.list
 
+<<<<<<< HEAD
 lockfile=$logpath/$(basename $0)-$datatype-$cyear$today.lock
+=======
+lockfile=$logpath/$(basename $0)-$datatype-$today.lock
+>>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
                                                                                    
 if [ -f $lockfile ];then
   mypid=$(cat $lockfile)

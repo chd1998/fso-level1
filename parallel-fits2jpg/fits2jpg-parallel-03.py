@@ -11,7 +11,11 @@ Example: python fits2jpg-parallel-xx.py -p d:\\fso-test --sx 200 --sy 200
 Changlog:
 20190701	Release 0.1		prototype version both in single & parallel version
 20190705	Release 0.2     revised, add input argvs
+<<<<<<< HEAD
 20191212    Release 0.3     using click to input argvs
+=======
+20191210    Release 0.3     using click instead of getopt
+>>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
 
 '''
 
@@ -51,7 +55,11 @@ def main(path,pn,sx,sy,savedir):
         a = datetime.datetime.now()
         pool = Pool(processes=pn)
         print("Converting...")
+<<<<<<< HEAD
         #print (TSIZE,SAVEDIR)
+=======
+        print (TSIZE,SAVEDIR)
+>>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
         pool.map(create_thumbnail, images)
         pool.close()
         pool.join()

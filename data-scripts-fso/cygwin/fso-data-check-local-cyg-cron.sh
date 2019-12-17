@@ -81,7 +81,11 @@ curerrorlist=$logpath/$datatype-$fileformat-$year$monthday-error-cur.list
 totalerrorlist=$logpath/$datatype-$fileformat-$year$monthday-error-total.list
 localwrongsize=$logpath/$datatype-local-wrongsize-$year$monthday-cyg.list
 
+<<<<<<< HEAD
 lockfile=$logpath/$(basename $0)-$datatype-$cyear$today.lock
+=======
+lockfile=$logpath/$(basename $0)-$datatype-$today.lock
+>>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
                                                                                    
 if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
@@ -162,6 +166,7 @@ curerror=`cat $curerrorlist|wc -l`
 
 #check new files
 if [ ! -f $totalerrorlist ]; then 
+<<<<<<< HEAD
   #if [ $datatype == "SP" ]; then 
   #  cat $difflist |awk '{ if ($2!='''$stdsize''' && $2!='''$stdsize1''') {print $1"  "$2}}' > $totalerrorlist &
   #  waiting "$!" "Total local wrong size $datatype $fileformat file(s) adding for first time" "Adding local wrong $datatype $fileformat file(s) to $totalerrorlist for first time"
@@ -169,6 +174,8 @@ if [ ! -f $totalerrorlist ]; then
   #  cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $totalerrorlist &
   #  waiting "$!" "Total local wrong size $datatype $fileformat file(s) adding for first time" "Adding local wrong $datatype $fileformat file(s) to $totalerrorlist for first time"
   #fi
+=======
+>>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
   cp -f $curerrorlist $totalerrorlist
 fi
 #comm -23 $curerrorlist $totalerrorlist > ./curtmp &
