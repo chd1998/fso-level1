@@ -102,7 +102,7 @@ ftpserver=ftp://$ftpuser:$password@$ftpserver:$remoteport
 homepre="/home/chd"
 logpath=$homepre/log
 
-lockfile=$logpath/$(basename $0)_${datatype}-$cyear$today.lock
+lockfile=$logpath/$(basename $0)_${datatype}-$today.lock
 if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
   ps -p $mypid | grep $mypid &>/dev/null
