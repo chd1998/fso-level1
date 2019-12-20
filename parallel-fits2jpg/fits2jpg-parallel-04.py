@@ -5,8 +5,8 @@ fits2jpg-parallel-xx.py
 purposes: generating the jpeg thumbnails of fits files in source SAVE_DIRECTORY
 Note: single --- using 1 process; parallel --- using specific number of processes via input
 
-Usage: python fits2jpg-parallel-xx.py -p <inputpath> --sx <num1> --sy <num2>
-Example: python fits2jpg-parallel-xx.py -p d:\\fso-test --sx 200 --sy 200
+Usage: python fits2jpg-parallel-xx.py --path=<str> --pn=<int> --tsize=int int --savedir=<str>
+Example: python fits2jpg-parallel-04.py --path=d:\\fso-data\\fso-test-data --pn=4 --tsize=256 256 --savedir=thumbs
 
 Changlog:
 20190701	Release 0.1		prototype version both in single & parallel version
@@ -39,6 +39,8 @@ SAVEDIR="thumbs"
 def main(path,pn,tsize,savedir):
     TSIZE=tsize
     SAVEDIR=savedir
+    #print (TSIZE)
+    #print (SAVEDIR)
     folder = os.path.realpath(path)
     if not os.path.isdir(os.path.join(folder)):
         print ("Folder %s doesn't exist!  Pls Check..." % path)
@@ -53,7 +55,7 @@ def main(path,pn,tsize,savedir):
         pool = Pool(processes=pn)
         print("Converting...")
         #print (TSIZE,SAVEDIR)
-        pool.map(create_thumbnail, images)
+        pool.map_async(create_thumbnail, images)
         pool.close()
         pool.join()
         b = datetime.datetime.now()
@@ -86,7 +88,7 @@ def create_thumbnail(filename):
     save_path = os.path.join(base, SAVEDIR, fname)
     print("Converting %s" % save_path)
     im.save(save_path)
-    print (save_path)
+    #print (save_path)
 
 
 if __name__ == '__main__':
