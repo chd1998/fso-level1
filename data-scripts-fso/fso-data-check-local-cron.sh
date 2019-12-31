@@ -79,7 +79,7 @@ curerrorlist=$logpath/$datatype-$fileformat-$year$monthday-error-cur.list
 totalerrorlist=$logpath/$datatype-$fileformat-$year$monthday-error-total.list
 localwrongsize=$logpath/$datatype-local-wrongsize-$year$monthday.list
 
-lockfile=$logpath/$(basename $0)-$datatype.lock
+lockfile=$logpath/$(basename $0)-$datatype-$monthday.lock
                                                                                    
 if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
@@ -134,7 +134,7 @@ waiting "$!" "local $datatype $fileformat file(s) info getting" "Getting  local 
 #cat $listtmp |wc -l > $fn &
 #waiting "$!" "$datatype $fileformat file(s) number getting" "Getting $datatype $fileformat file(s) number"
 
-#remove checked files, list is error files list, listtmp is all files
+#remove checked files, list is files list from previous, listtmp is all files for this run
 #sort $listtmp -o $listtmp
 #sort $list -o $list
 
@@ -176,11 +176,11 @@ if [ ! -f "$totalerrorlist" ];then
 fi
 
 #sort $totalerrorlist -o $totalerrorlist
-#comm -23 --nocheck-order $curerrorlist $totalerrorlist > ./errtmp &
+#comm -23 --nocheck-order $curerrorlist $totalerrorlist > $logpath/errtmp-check-local-$monthday &
 #get files only in curerrorlist
-awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' $totalerrorlist $curerrorlist > ./errtmp &
+awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' $totalerrorlist $curerrorlist > $logpath/errtmp-check-local-$monthday &
 waiting "$!" "New current error $datatype $fileformat file(s) list finding" "Finding new error $datatype $fileformat file(s) to total error file(s) list"
-cat ./errtmp >> $totalerrorlist &
+cat $logpath/errtmp-check-local-$monthday >> $totalerrorlist &
 waiting "$!" "Current error $datatype $fileformat file(s) list adding" "Adding error $datatype $fileformat file(s) to total error file(s) list"
 
 totalerror=`cat $totalerrorlist|wc -l`
@@ -216,4 +216,4 @@ echo "  Error File List: $localwrongsize"
 echo " "
 echo "================================================================================"
 #rm -f ./mytmplist
-rm -f ./errtmp
+rm -f $logpath/errtmp-check-local-$monthday

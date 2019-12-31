@@ -84,7 +84,7 @@ filesize1=/home/chd/log/$(basename $0)-$datatype-size-1.dat
 srcsize=/home/chd/log/$datatype-$today-$server1-filesize.dat
 srcnumber=/home/chd/log/$datatype-$today-$server1-filenumber.dat
 
-lockfile=/home/chd/log/$(basename $0)-$datatype.lock
+lockfile=/home/chd/log/$(basename $0)-$datatype-$today.lock
 
 if [ ! -f $filenumber ];then
   echo "0">$filenumber
@@ -277,11 +277,11 @@ echo "     Source Data : $srcs MB "
 echo "*******************************************************"
 echo "$today $ctime4: @ $targetdir          "
 echo "          Synced : $sn file(s)"
-echo "                 : $ss MB "
+echo "          Synced : $ss MB "
 echo "  Sync Time Used : $timediff secs."
 echo "        @  Speed : $speed MB/s"
-echo "    Total Synced : $s2 MB"
-echo "                 : $n2 File(s)"
+echo "    Total Synced : $n2 File(s)"
+echo "                 : $s2 MB"
 echo " Total Time Used : $stdiff secs."
 echo "            From : $today0 $ctime1"
 echo "              To : $today1 $ctime4"

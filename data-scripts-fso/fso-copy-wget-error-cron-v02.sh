@@ -77,23 +77,18 @@ stdsize=$7
 
 datatype=`cat $errorlist|awk '{print $1}'|cut -d '/' -f 6`
 
-if [ ! -f $errorlist ]; then 
-  echo "$today $ctime: $errorlist does not exist, please check... "
-  exit 1
-fi
-
 #tmpfn=/home/chd/log/$(basename $0)-$errorlist-tmpfn.dat
 #tmpfs=/home/chd/log/$(basename $0)-$errorlist-tmpfs.dat
 #remotefile=$logpath/$datatype-remote.list
 #errordir=/home/chd/log/$(basename $0)-$errorlist-dir.list
 #errorfile=/home/chd/log/$(basename $0)-$errorlist-file.list
 
-lockfile=$logpath/$(basename $0)-$datatype.lock
+lockfile=$logpath/$(basename $0)-$datatype-$today.lock
 if [ -f "$lockfile" ];then
 	mypid=$(cat $lockfile)
 	ps -p $mypid | grep $mypid &>/dev/null
 	if [ $? -eq 0 ];then
-		echo "$todday $ctime: $(basename $0) is running" && exit 1
+		echo "$today $ctime: $(basename $0) is running" && exit 1
 	else
 		echo $$>$lockfile
 	fi
@@ -153,10 +148,10 @@ do
 	  #if [ $tmps != $stdsize ]; then 
 	  #  echo "$today $ctime1: Copying Failed for  $localfile $tmps MB"
 	  #else 
-	  echo $localfile > ./localfile.tmp
+	  echo $localfile > $logpath/localfile-$today.tmp
       #remove corrected file from the list
-	    #comm -13 ./localfile.tmp $errorlist | sort | uniq > $errorlist
-	  awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' ./localfile.tmp $errorlist > $errorlist 
+	    #comm -13 $logpath/localfile-$today.tmp $errorlist | sort | uniq > $errorlist
+	  awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' $logpath/localfile-$today.tmp $errorlist > $errorlist 
       #change the permission of copied file
 	  find $localfile ! -perm 777 -type f -exec chmod 777 {} \;
       size=$((size+tmps))
