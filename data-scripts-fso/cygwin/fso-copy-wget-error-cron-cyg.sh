@@ -1,8 +1,5 @@
 #!/bin/bash
 #author: chen dong @fso
-#echo "Copy file of wrong size TIO/HA data on remote host to dest mannually"
-#echo "Usage: ./fso-copy-wget-error-xx.sh srcip port user passwd error-file-list stdsize"
-#echo "Example: ./fso-copy-wget-error-xx.sh 192.168.111.120 21 tio ynao246135  error.list 11062080"
 #changlog:
 #        20190723       Release 0.1   first prototype release 0.1
 
@@ -50,11 +47,11 @@ cyear=`date --date='0 days ago' +%Y`
 today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 
-if [ $# -ne 7 ]  ;then
+if [ $# -ne 8 ]  ;then
 	echo "Copy file of wrong size TIO/HA data on remote host to dest mannually"
-	echo "Usage: ./fso-copy-wget-error-xx.sh srcip port user passwd error-file-list stdsize"
-	echo "Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.120 21 tio ynao246135 e /home/chd/log/error.list 11062080"
-	echo "Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.122 21 ha ynao246135 f /home/chd/log/error.list 2111040"
+	echo "Usage: ./fso-copy-wget-error-xx.sh srcip port user passwd loacaldrive error-file-list datatype stdsize"
+	echo "Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.120 21 tio ynao246135 e /home/chd/log/error.list TIO 11062080"
+	echo "Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.122 21 ha ynao246135 f /home/chd/log/error.list HA 2111040"
 	exit 1
 fi
 
@@ -74,7 +71,8 @@ ftpuser=$3
 password=$4
 localdrive=$5
 errlist=$6
-stdsize=$7
+datatype=$7
+stdsize=$8
 
 homepre="/home/chd"
 logpath=$homepre/log
@@ -84,12 +82,12 @@ if [ ! -f $errlist ];then
   exit 1
 fi
 
-lockfile=$logpath/$(basename $0)-$datatype-$cyear$today.lock
+lockfile=$logpath/$(basename $0)-$datatype-$today.lock
 if [ -f $lockfile ];then
 	mypid=$(cat $lockfile)
 	ps -p $mypid | grep $mypid &>/dev/null
 	if [ $? -eq 0 ];then
-		echo "$todday $ctime: $(basename $0) is running" && exit 1
+		echo "$todday $ctime: $(basename $0) is running..." && exit 1
 	else
 		echo $$>$lockfile
 	fi
@@ -140,28 +138,28 @@ do
 	echo "$today $ctime: Copying $rfile"
 	wget -O $localfile --ftp-user=$ftpuser --ftp-password=$password --no-passive-ftp  $rfile >/dev/null 2>&1 &
 	waiting "$!" "$datatype file(s) in $errlist copying" "Copying $datatype $fileformat file(s) in $errlist"
-	if [ $? -ne 0 ];then
-		ctime1=`date --date='0 days ago' +%H:%M:%S`
-		echo "$today $ctime1: Failed in Copying $rfile..."
-		cd /home/chd
-		exit 1
-	else
-	  tmps=`du -sm $localfile|awk '{print $1}'`
-	  ctime1=`date --date='0 days ago' +%H:%M:%S`
-	  if [ $tmps != $stdsize ]; then 
-	    echo "$today $ctime1: Copying Failed for  $localfile $tmps MB"
-	  else 
-	    echo $localfile >localfile.tmp
-        #remove corrected file from the list
-	    #comm -3 --nocheck-order $errlist localfile.tmp > $errlist
-		awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' ./localfile.tmp $errlist > $errlist 
-        #change the permission of copied file
-	    #find $localfile ! -perm 777 -type f -exec chmod 777 {} \;
-    	size=$((size+tmps))
-	    echo "$today $ctime1: $localfile copied in $tmps MB"
-	    ((count++))
-	  fi
-	fi  
+	#if [ $? -ne 0 ];then
+	#	ctime1=`date --date='0 days ago' +%H:%M:%S`
+	#	echo "$today $ctime1: Failed in Copying $rfile..."
+	#	cd /home/chd
+	#	exit 1
+	#else
+	tmps=`du -sm $localfile|awk '{print $1}'`
+	ctime1=`date --date='0 days ago' +%H:%M:%S`
+	if [ $tmps != $stdsize ]; then 
+	  echo "$today $ctime1: Copying Failed for  $localfile $tmps MB"
+	else 
+	  echo $localfile >localfile.tmp
+      #remove corrected file from the list
+	  #comm -3 --nocheck-order $errlist localfile.tmp > $errlist
+	  awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' ./localfile.tmp $errlist > $errlist 
+      #change the permission of copied file
+	  #find $localfile ! -perm 777 -type f -exec chmod 777 {} \;
+      size=$((size+tmps))
+	  echo "$today $ctime1: $localfile copied in $tmps MB"
+	  ((count++))
+	fi
+	#fi  
 done
 endtime=`date --date='0 days ago' +%H:%M:%S`
 #t1=`echo $starttime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`

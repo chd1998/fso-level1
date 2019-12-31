@@ -1,0 +1,75 @@
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20191220    08:00:02                       
+                                                         
+=========================================================
+ 
+20191220 08:00:02: Copying SP data @ FSO...
+                   From: /20191220/SP/ 
+                   To  : /cygdrive/g/20191220/SP/ 
+                   Please Wait...
+20191220 08:00:03: Syncing SP Data...   Please Wait...
+20191220 08:00:04: Syncing SP Data...   Please Wait...
+20191220 08:00:06: Syncing SP Data...   Please Wait...
+20191220 08:00:07: Syncing SP Data...   Please Wait...
+20191220 08:00:07: SP Syncing Task Has Done!
+                   Finishing...
+20191220 08:00:08: File Number Sumerizing for Synced SP Data Task Has Done!
+                   Finishing...
+20191220 08:00:08: File Size Summerizing for Synced SP Data Task Has Done!
+                   Finishing...
+ 
+20191220 08:00:08: Succeeded in Syncing SP data @ FSO!
+          Synced : 0 file(s)
+                 : 0 MB
+         @ Speed : 0 MB/s
+       Time Used : 6 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 20191220 08:00:02 
+              To : 20191220 08:00:08 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20191220    08:01:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/g/20191220/SP/ already exist!
+20191220 08:01:01: Copying SP data @ FSO...
+                   From: /20191220/SP/ 
+                   To  : /cygdrive/g/20191220/SP/ 
+                   Please Wait...
+20191220 08:01:03: Syncing SP Data...   Please Wait...
+20191220 08:01:04: Syncing SP Data...   Please Wait...
+20191220 08:01:05: Syncing SP Data...   Please Wait...
+20191220 08:01:06: Syncing SP Data...   Please Wait...
+20191220 08:01:07: SP Syncing Task Has Done!
+                   Finishing...
+20191220 08:01:07: File Number Sumerizing for Synced SP Data Task Has Done!
+                   Finishing...
+20191220 08:01:07: File Size Summerizing for Synced SP Data Task Has Done!
+                   Finishing...
+ 
+20191220 08:01:07: Succeeded in Syncing SP data @ FSO!
+          Synced : 0 file(s)
+                 : 0 MB
+         @ Speed : 0 MB/s
+       Time Used : 6 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 6 secs.
+            From : 20191220 08:01:01 
+              To : 20191220 08:01:07 
