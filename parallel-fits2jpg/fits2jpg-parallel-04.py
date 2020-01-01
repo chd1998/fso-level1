@@ -34,7 +34,7 @@ SAVEDIR="thumbs"
 @click.option('--tsize', type=(int,int) , help='size of thumbnail')
 #@click.option('--sx', default=256,nargs=1, required=True, type=int, help='x size of thumbnail')
 #@click.option('--sy', default=256,nargs=1, required=True, type=int, help='y size of thumbnail')
-@click.option('--savedir', default="thumbs",nargs=1, required=True, type=str, help='directory of thumbnail, related to path')
+@click.option('--savedir', default="thumbs",nargs=1, type=str, help='directory of thumbnail, related to path')
 
 def main(path,pn,tsize,savedir):
     TSIZE=tsize
@@ -86,7 +86,7 @@ def create_thumbnail(filename):
     #print(base,fname)
     fname = fname + ".jpg"
     save_path = os.path.join(base, SAVEDIR, fname)
-    print("Converting %s" % save_path)
+    print("Converting %s to %s" % (filename, save_path))
     im.save(save_path)
     #print (save_path)
 

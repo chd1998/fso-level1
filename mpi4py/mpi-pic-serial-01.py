@@ -1,0 +1,37 @@
+import numpy as np
+from skimage import data, img_as_float
+from skimage.restoration import denoise_bilateral
+import skimage.io
+import os.path
+import time
+#curPath = os.path.abspath(os.path.curdir)
+curPath="d:\\fso-data\\mpi"
+noisyDir = os.path.join(curPath,'noisy')
+denoisedDir = os.path.join(curPath,'denoised')
+
+def loop(imgFiles):
+    num = 0
+    for f in imgFiles:
+        img = img_as_float(data.load(os.path.join(noisyDir,f)))
+        startTime = time.time()
+        img = denoise_bilateral(img)
+        skimage.io.imsave(os.path.join(denoisedDir,f), img)
+        print("%d : %s with %f secs" %(num, f, time.time() - startTime))
+        num = num + 1
+
+def serial():
+    total_start_time = time.time()
+    #imgFiles = ["%.4d.jpg"%x for x in range(1,101)]
+    imgFiles = get_image_paths(noisyDir,"jpg")
+    #for img in imgFiles:
+    #    print (img)
+    loop(imgFiles)
+    print("Total time %f seconds" %(time.time() - total_start_time))
+
+def get_image_paths(folder,filetype):
+    return (os.path.join(folder, f)
+            for f in os.listdir(folder)
+            if filetype in f)
+
+if __name__=='__main__':
+    serial()

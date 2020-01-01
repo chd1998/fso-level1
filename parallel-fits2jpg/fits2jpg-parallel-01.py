@@ -10,7 +10,6 @@ Example: python fits2jpg-parallel-xx.py -p d:\\fso-test --sx 200 --sy 200
 
 Changlog:
 20190701	Release 0.1		prototype version both in single & parallel version
-20190705	Release 0.2     revised, add input argvs
 '''
 import os
 import PIL
