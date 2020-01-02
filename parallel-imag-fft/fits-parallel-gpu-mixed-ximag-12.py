@@ -83,7 +83,7 @@ def myfft_gpu(image,gpunum,gpuid):
     with cp.cuda.Device(gpuid):
         #s_gpu = cp.ndarray((m,n),dtype=np.complex64)
         #r_gpu = cp.ndarray((m,n),dtype=np.complex64)
-        s_gpu = cp.asarray(im)
+        s_gpu = cp.asarray(fdata)
         s_gpu = cp.fft.fftn(s_gpu)
         s_gpu = cp.fft.ifftshift(s_gpu)
         r_gpu = cp.fft.irfftn(s_gpu)
