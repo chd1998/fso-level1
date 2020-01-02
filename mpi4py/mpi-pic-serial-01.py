@@ -16,16 +16,15 @@ def loop(imgFiles):
         #img = img_as_float(skimage.io.imread(os.path.join(noisyDir,f)))
         #inimg = os.path.join(noisyDir,f)
         base, fname = os.path.split(f)
-        print(base)
-        print(fname)
+        #print(fname)
         img = img_as_float(data.load(f))
         img = denoise_bilateral(img)
         #int_img=np.uint8(img)
         outimg = os.path.join(curPath,'denoised',fname)
-        print (outimg)
+        #print (outimg)
         #print (f)
         skimage.io.imsave(outimg, img)
-        #print("%d : saving %s to %s using %f secs" %(num, inimg, outimg, time.time() - startTime))
+        print("%d : saving %s to %s using %f secs" %(num, f, outimg, time.time() - startTime))
         num = num + 1
 
 def serial():

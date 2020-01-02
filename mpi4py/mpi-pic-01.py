@@ -14,13 +14,13 @@ denoisedDir = os.path.join(curPath,'denoised')
 #@jit
 def denoise(imgFiles,rank):
     for f in imgFiles:
-        #img = img_as_float(data.load(os.path.join(noisyDir,f)))
-        #print (f)
-        img = np.float(data.load(os.path.join(noisyDir,f)))
         startTime = time.time()
+        base, fname = os.path.split(f)
+        img = img_as_float(data.load(f))
         img = denoise_bilateral(img)
-        skimage.io.imsave(os.path.join(denoisedDir,f), img)
-        print ("Process %d: Took %f seconds for %s" %(rank, time.time() - startTime, f))
+        outimg = os.path.join(curPath,'denoised',fname)
+        skimage.io.imsave(outimg, img)
+        print ("Process %d: Saving %s to %s using %f seconds" %(rank, f, outimg,time.time() - startTime))
 
 def parallel():
     comm = MPI.COMM_WORLD
@@ -39,11 +39,11 @@ def parallel():
     #print (numFiles)
     #imgFiles = ["%.4d.jpg"%x for x in range(rank*numFiles+1, (rank+1)*numFiles+1)] # Fix this line to distribute imgFiles
     ntmp = 0
-    nimgFiles = np.array(numFiles,dtype=str)
+    nimgFiles = np.asarray(imgFiles)
     #print(len(nimgFiles))
     #print(imgFiles.shape)
     for x in range(rank*numFiles+1,(rank+1)*numFiles+1):
-        nimgFiles[ntmp] = enumerate(imgFiles[x])
+        nimgFiles[ntmp] = imgFiles[x]
         ntmp = ntmp + 1
     denoise(nimgFiles,rank)
     #assert denoise.nopython_signatures
