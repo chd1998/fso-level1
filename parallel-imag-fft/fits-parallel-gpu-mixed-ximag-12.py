@@ -95,7 +95,7 @@ def myfft_gpu(image,gpunum,gpuid):
 
 def myfft(image):
     fdata = ((fits.open(image)[0].data)).astype(np.complex64)
-    d,m,n = fdata.shape
+    #d,m,n = fdata.shape
     #ximage = (fdata[0].data).astype(np.complex64)
     print ("Calculating  %s" %(image))
 	#ximage=np.fft.fft2(fdata[0].data)
