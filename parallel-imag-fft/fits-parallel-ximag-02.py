@@ -9,6 +9,10 @@ Example: python fits-parallel-ximag-xx.py --path=d:\\ximage --pn=1
 
 Changlog:
 20191207	Release 0.1		prototype version both in single & parallel version
+<<<<<<< HEAD
+=======
+20191217    Release 0.2     optimized, using map_async instead of map
+>>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
 
 '''
 
