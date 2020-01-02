@@ -75,7 +75,7 @@ remotelist=$logpath/$datatype-$fileformat-$year$monthday-$server.list
 locallist=$logpath/$datatype-$fileformat-$year$monthday-local.list
 difflist=$logpath/$datatype-$fileformat-$year$monthday-diff.list
 
-lockfile=$logpath/$(basename $0)-$datatype.lock
+lockfile=$logpath/$(basename $0)-$datatype-$monthday.lock
                                                                                    
 if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
@@ -151,7 +151,11 @@ mv ./localtmplist $locallist
 #getting local missing file(s) list
 #grep -vwf $remotelist $locallist > $difflist &
 #comm -23 --nocheck-order $remotelist $locallist | uniq > $difflist &
+<<<<<<< HEAD
 awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' $locallist $remotelist  > $difflist &
+=======
+awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}'  $locallist $remotelist  > $difflist &
+>>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
 waiting "$!" "diff $datatype $fileformat file(s) getting" "Getting diff new $datatype $fileformat file(s) "
 
 totalnum=$(cat $remotelist|wc -l)

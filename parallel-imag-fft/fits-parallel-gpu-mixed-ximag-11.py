@@ -18,8 +18,14 @@ Changlog:
 20191216    Release 0.8     using starmap_asysnc
             Release 0.9     making multi-gpu working simultaneously
             Release 1.0     assign gpu randomly
+<<<<<<< HEAD
 20191217    Release 1.1     optimize
             
+=======
+            Release 1.1     optimized
+
+
+>>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
 '''
 
 import os

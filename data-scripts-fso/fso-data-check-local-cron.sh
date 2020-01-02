@@ -79,7 +79,7 @@ curerrorlist=$logpath/$datatype-$fileformat-$year$monthday-error-cur.list
 totalerrorlist=$logpath/$datatype-$fileformat-$year$monthday-error-total.list
 localwrongsize=$logpath/$datatype-local-wrongsize-$year$monthday.list
 
-lockfile=$logpath/$(basename $0)-$datatype.lock
+lockfile=$logpath/$(basename $0)-$datatype-$monthday.lock
                                                                                    
 if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
@@ -134,7 +134,11 @@ waiting "$!" "local $datatype $fileformat file(s) info getting" "Getting  local 
 #cat $listtmp |wc -l > $fn &
 #waiting "$!" "$datatype $fileformat file(s) number getting" "Getting $datatype $fileformat file(s) number"
 
+<<<<<<< HEAD
 #remove checked files, list is error files list, listtmp is all files
+=======
+#remove checked files, list is files list from previous, listtmp is all files for this run
+>>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
 #sort $listtmp -o $listtmp
 #sort $list -o $list
 
@@ -176,11 +180,19 @@ if [ ! -f "$totalerrorlist" ];then
 fi
 
 #sort $totalerrorlist -o $totalerrorlist
+<<<<<<< HEAD
 #comm -23 --nocheck-order $curerrorlist $totalerrorlist > ./errtmp &
 #get files only in curerrorlist
 awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' $totalerrorlist $curerrorlist > ./errtmp &
 waiting "$!" "New current error $datatype $fileformat file(s) list finding" "Finding new error $datatype $fileformat file(s) to total error file(s) list"
 cat ./errtmp >> $totalerrorlist &
+=======
+#comm -23 --nocheck-order $curerrorlist $totalerrorlist > $logpath/errtmp-check-local-$monthday &
+#get files only in curerrorlist
+awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' $totalerrorlist $curerrorlist > $logpath/errtmp-check-local-$monthday &
+waiting "$!" "New current error $datatype $fileformat file(s) list finding" "Finding new error $datatype $fileformat file(s) to total error file(s) list"
+cat $logpath/errtmp-check-local-$monthday >> $totalerrorlist &
+>>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
 waiting "$!" "Current error $datatype $fileformat file(s) list adding" "Adding error $datatype $fileformat file(s) to total error file(s) list"
 
 totalerror=`cat $totalerrorlist|wc -l`
@@ -216,4 +228,8 @@ echo "  Error File List: $localwrongsize"
 echo " "
 echo "================================================================================"
 #rm -f ./mytmplist
+<<<<<<< HEAD
 rm -f ./errtmp
+=======
+rm -f $logpath/errtmp-check-local-$monthday
+>>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0

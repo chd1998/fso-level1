@@ -5,15 +5,30 @@ fits2jpg-parallel-xx.py
 purposes: generating the jpeg thumbnails of fits files in source SAVE_DIRECTORY
 Note: single --- using 1 process; parallel --- using specific number of processes via input
 
+<<<<<<< HEAD
 Usage: python fits2jpg-parallel-xx.py --path=<str> --pn=<int> --tsize=int int --savedir=<str>
 Example: python fits2jpg-parallel-04.py --path=d:\\fso-data\\fso-test-data --pn=4 --tsize=256 256 --savedir=thumbs
+=======
+<<<<<<< HEAD
+Usage: python fits2jpg-parallel-xx.py --path=<str> --pn=<int> --tsize=int int --savedir=<str>
+Example: python fits2jpg-parallel-04.py --path=d:\\fso-data\\fso-test-data --pn=4 --tsize=256 256 --savedir=thumbs
+=======
+Usage: python fits2jpg-parallel-xx.py -p <inputpath> --sx <num1> --sy <num2>
+Example: python fits2jpg-parallel-xx.py -p d:\\fso-test --sx 200 --sy 200
+>>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
+>>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
 
 Changlog:
 20190701	Release 0.1		prototype version both in single & parallel version
 20190705	Release 0.2     revised, add input argvs
+<<<<<<< HEAD
 20191212    Release 0.3     using click to input argvs
 20191213    Release 0.4     using map_async instead of map
                             using tuple(x,y) instead of x,y
+=======
+20191210    Release 0.3     using click instead of getopt
+20191211    Release 0.4     thumbnail size input revised
+>>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
 
 '''
 
@@ -39,15 +54,30 @@ SAVEDIR="thumbs"
 def main(path,pn,tsize,savedir):
     TSIZE=tsize
     SAVEDIR=savedir
+<<<<<<< HEAD
     #print (TSIZE)
     #print (SAVEDIR)
+=======
+<<<<<<< HEAD
+    #print (TSIZE)
+    #print (SAVEDIR)
+=======
+>>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
+>>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
     folder = os.path.realpath(path)
     if not os.path.isdir(os.path.join(folder)):
         print ("Folder %s doesn't exist!  Pls Check..." % path)
     else:
         #print(tsize,TSIZE)
+<<<<<<< HEAD
         if not os.path.isdir(os.path.join(folder, savedir)):
             os.makedirs(os.path.join(folder, savedir))
+=======
+        
+        if not os.path.isdir(os.path.join(folder, savedir)):
+            os.makedirs(os.path.join(folder, savedir))
+
+>>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
         images = get_image_paths(folder)
         #for image in images:
         #    print (image)
@@ -55,7 +85,15 @@ def main(path,pn,tsize,savedir):
         pool = Pool(processes=pn)
         print("Converting...")
         #print (TSIZE,SAVEDIR)
+<<<<<<< HEAD
         pool.map_async(create_thumbnail, images)
+=======
+<<<<<<< HEAD
+        pool.map_async(create_thumbnail, images)
+=======
+        pool.map(create_thumbnail, images)
+>>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
+>>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
         pool.close()
         pool.join()
         b = datetime.datetime.now()
@@ -88,7 +126,15 @@ def create_thumbnail(filename):
     save_path = os.path.join(base, SAVEDIR, fname)
     print("Converting %s to %s" % (filename, save_path))
     im.save(save_path)
+<<<<<<< HEAD
     #print (save_path)
+=======
+<<<<<<< HEAD
+    #print (save_path)
+=======
+    print (save_path)
+>>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
+>>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
 
 
 if __name__ == '__main__':

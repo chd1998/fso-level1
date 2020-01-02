@@ -47,11 +47,27 @@ cyear=`date --date='0 days ago' +%Y`
 today=`date --date='0 days ago' +%Y%m%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 
+<<<<<<< HEAD
 if [ $# -ne 8 ]  ;then
 	echo "Copy file of wrong size TIO/HA data on remote host to dest mannually"
 	echo "Usage: ./fso-copy-wget-error-xx.sh srcip port user passwd loacaldrive error-file-list datatype stdsize"
 	echo "Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.120 21 tio ynao246135 e /home/chd/log/error.list TIO 11062080"
 	echo "Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.122 21 ha ynao246135 f /home/chd/log/error.list HA 2111040"
+=======
+<<<<<<< HEAD
+if [ $# -ne 7 ]  ;then
+	echo "Copy file of wrong size TIO/HA data on remote host to dest mannually"
+	echo "Usage: ./fso-copy-wget-error-xx.sh srcip port user passwd error-file-list stdsize"
+	echo "Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.120 21 tio ynao246135 e /home/chd/log/error.list 11062080"
+	echo "Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.122 21 ha ynao246135 f /home/chd/log/error.list 2111040"
+=======
+if [ $# -ne 8 ]  ;then
+	echo "Copy file of wrong size TIO/HA data on remote host to dest mannually"
+	echo "Usage: ./fso-copy-wget-error-xx.sh srcip port user passwd loacaldrive error-file-list datatype stdsize"
+	echo "Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.120 21 tio ynao246135 e /home/chd/log/error.list TIO 11062080"
+	echo "Example: ./fso-copy-wget-error-xx.sh ftp://192.168.111.122 21 ha ynao246135 f /home/chd/log/error.list HA 2111040"
+>>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
+>>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
 	exit 1
 fi
 
@@ -71,8 +87,17 @@ ftpuser=$3
 password=$4
 localdrive=$5
 errlist=$6
+<<<<<<< HEAD
 datatype=$7
 stdsize=$8
+=======
+<<<<<<< HEAD
+stdsize=$7
+=======
+datatype=$7
+stdsize=$8
+>>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
+>>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
 
 homepre="/home/chd"
 logpath=$homepre/log
@@ -82,7 +107,15 @@ if [ ! -f $errlist ];then
   exit 1
 fi
 
+<<<<<<< HEAD
 lockfile=$logpath/$(basename $0)-$datatype-$today.lock
+=======
+<<<<<<< HEAD
+lockfile=$logpath/$(basename $0)-$datatype-$cyear$today.lock
+=======
+lockfile=$logpath/$(basename $0)-$datatype-$today.lock
+>>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
+>>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
 if [ -f $lockfile ];then
 	mypid=$(cat $lockfile)
 	ps -p $mypid | grep $mypid &>/dev/null

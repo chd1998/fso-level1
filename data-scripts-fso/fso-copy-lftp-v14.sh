@@ -4,20 +4,21 @@
 #Usage: ./fso-copy-lftp-v14.sh srcip port  dest year(4 digits) monthday(4 digits) user password datatype(TIO/HA)
 #Example: ./fso-copy-lftp-v14.sh 192.168.111.120 21 /lustre/data 2019 0427 tio ynao246135 TIO
 #changlog: 
-#        20190420       Release 0.1 first prototype release 0.1
-#        20190421       Release 0.2 fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
-#        20190423       Release 0.3 fix errors
-#        20190426       Release 0.4 fix errors
-#        20190428       Release 0.5 add monthday to the src dir
-#                       Release 0.6 datatype is an option now
-#        20190603       Release 0.7 using lftp instead of wget
-#        20190604       Release 0.8 add progress bar to lftp
-#        20190608       Release 0.9 fixed error in directory
-#                       Release 1.0 improve display info
-#        20190702       Release 1.1 revise some logical relations
-#        20190704       Release 1.2 using lftp & add input args
-#        20190705       Release 1.3 logics revised
-#                       Release 1.4 revise timing logics
+#        20190420       Release 0.1   first prototype release 0.1
+#        20190421       Release 0.2   fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
+#        20190423       Release 0.3   fix errors
+#        20190426       Release 0.4   fix errors
+#        20190428       Release 0.5   add monthday to the src dir
+#                       Release 0.6   datatype is an option now
+#        20190603       Release 0.7   using lftp instead of wget
+#        20190604       Release 0.8   add progress bar to lftp
+#        20190608       Release 0.9   fixed error in directory
+#                       Release 1.0   improve display info
+#        20190702       Release 1.1   revise some logical relations
+#        20190704       Release 1.2   using lftp & add input args
+#        20190705       Release 1.3   logics revised
+#                       Release 1.4   revise timing logics
+#        20191015               1.41  revised time calculation
 #
 #waiting pid taskname prompt
 waiting() {
@@ -31,7 +32,8 @@ waiting() {
   wctime=`date --date='0 days ago' +%H:%M:%S`
   wtoday=`date --date='0 days ago' +%Y%m%d`
   echo "$wtoday $wctime: $2 Task Has Done!"
-  dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+#  dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+  dt1=`date +%s`
 #  echo "                   Finishing..."
   kill -6 $tmppid >/dev/null 1>&2
   echo "$dt1" > /home/chd/log/dtmp
@@ -63,6 +65,7 @@ function onCtrlC(){
 
 cyear=`date --date='0 days ago' +%Y`
 today=`date --date='0 days ago' +%Y%m%d`
+today0=`date  +%Y-%m-%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 ctime0=`date --date='0 days ago' +%H:%M:%S`
 if [ $# -ne 8 ]  ;then
@@ -89,7 +92,7 @@ ftpserver=ftp://$ftpuser:$password@$ftpserver:$remoteport
 #echo "$ftpserver"
 #read
 
-lockfile=/home/chd/log/$(basename $0)_lockfile
+lockfile=/home/chd/log/$(basename $0)-$srcyear$srcmonthday.lock
 if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
   ps -p $mypid | grep $mypid &>/dev/null
@@ -107,7 +110,7 @@ echo "======== Welcome to FSO Data Copying System@FSO! ========"
 echo "                                                         "
 echo "                 fso-copy-lftp.sh                        "  
 echo "                                                         "
-echo "             Relase 1.4     20190705  17:21              "
+echo "            Relase 1.41     20191015  18:06              "
 echo " Copy the $datatype data from remote ftp site to lustre  "
 echo "                                                         "
 echo "                $today    $ctime                         "
@@ -150,7 +153,8 @@ fi
 ttmp=$(cat /home/chd/log/dtmp)
 
 ctime1=`date --date='0 days ago' +%H:%M:%S`
-t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+t1=`date +%s`
+#t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 #t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
 targetdir=${destdir}
@@ -198,21 +202,22 @@ fi
   
 speed=`echo "$filesize $timediff"|awk '{print($1/$2)}'`
 
-
+today1=`date +%Y-%m-%d`
 ctime3=`date --date='0 days ago' +%H:%M:%S`
 #t3=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-t4=`echo $ctime3|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+#t4=`echo $ctime3|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+t4=`date +%s`
 timediff1=`echo "$t1 $t4"|awk '{print($2-$1)}'`
 
 echo " " 
 echo "$today $ctime3: Succeeded in Syncing $datatype data @ FSO!"
 echo "Synced file No.  : $filenumber file(s)"
-echo "Synced data size : $filesize MB"
+echo "            size : $filesize MB"
 echo "    Sync @ Speed : $speed MB/s"
-echo "  Sync Time Used : $timediff secs."
+echo "       Time Used : $timediff secs."
 echo " Total Time Used : $timediff1 secs."
-echo " Total Time From : $ctime0 "
-echo "              To : $ctime3 "
+echo "            From : $today0 $ctime0 "
+echo "              To : $today1 $ctime3 "
 rm -rf $lockfile
 cd /home/chd/
 exit 0
