@@ -73,6 +73,7 @@
  Total Time Used : 6 secs.
             From : 20191220 08:01:01 
               To : 20191220 08:01:07 
+<<<<<<< HEAD
  
 ======== Welcome to FSO Data Copying System@FSO! ========
                                                          
@@ -7977,3 +7978,5 @@
  Total Time Used : 6 secs.
             From : 20191220 12:27:01 
               To : 20191220 12:27:07 
+=======
+>>>>>>> 5f84ad15b8331e3e9515f85b0cdbf36c892c2aed

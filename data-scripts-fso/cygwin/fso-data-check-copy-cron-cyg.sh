@@ -275,11 +275,19 @@ cat $localwrongsize >> $tmplist
 
 ctime3=`date --date='0 days ago' +%H:%M:%S`
 echo "                  For $year$monthday $datatype Data File(s)" > $logpath/errtmp-$year$monthday
+<<<<<<< HEAD
 echo "$today $ctime3 : $errsize0 Error $datatype File(s) in Local Missing File(s) Checking" >> $logpath/errtmp-$year$monthday
 cat $remotelocaldifflist >> $logpath/errtmp-$year$monthday
 
 echo "                " >> $logpath/errtmp-$year$monthday
 echo "                  $errsize2 Error $datatype File(s) in Local Wrong Size File(s) Checking" >> $logpath/errtmp-$year$monthday
+=======
+echo "***********************************************************************************************************************" >> $logpath/errtmp-$year$monthday
+echo "$today $ctime3 : $errsize0 Error $datatype File(s) in Local Missing File(s) Checking" >> $logpath/errtmp-$year$monthday
+cat $remotelocaldifflist >> $logpath/errtmp-$year$monthday
+echo "                " >> $logpath/errtmp-$year$monthday
+echo "                    $errsize2 Error $datatype File(s) in Local Wrong Size File(s) Checking" >> $logpath/errtmp-$year$monthday
+>>>>>>> 5f84ad15b8331e3e9515f85b0cdbf36c892c2aed
 cat $localwrongsize >> $logpath/errtmp-$year$monthday
 
 <<<<<<< HEAD

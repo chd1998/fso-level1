@@ -171,28 +171,28 @@ do
 	echo "$today $ctime: Copying $rfile"
 	wget -O $localfile --ftp-user=$ftpuser --ftp-password=$password --no-passive-ftp  $rfile >/dev/null 2>&1 &
 	waiting "$!" "$datatype file(s) in $errlist copying" "Copying $datatype $fileformat file(s) in $errlist"
-	if [ $? -ne 0 ];then
-		ctime1=`date --date='0 days ago' +%H:%M:%S`
-		echo "$today $ctime1: Failed in Copying $rfile..."
-		cd /home/chd
-		exit 1
-	else
-	  tmps=`du -sm $localfile|awk '{print $1}'`
-	  ctime1=`date --date='0 days ago' +%H:%M:%S`
-	  if [ $tmps != $stdsize ]; then 
-	    echo "$today $ctime1: Copying Failed for  $localfile $tmps MB"
-	  else 
-	    echo $localfile >localfile.tmp
-        #remove corrected file from the list
-	    #comm -3 --nocheck-order $errlist localfile.tmp > $errlist
-		awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' ./localfile.tmp $errlist > $errlist 
-        #change the permission of copied file
-	    #find $localfile ! -perm 777 -type f -exec chmod 777 {} \;
-    	size=$((size+tmps))
-	    echo "$today $ctime1: $localfile copied in $tmps MB"
-	    ((count++))
-	  fi
-	fi  
+	#if [ $? -ne 0 ];then
+	#	ctime1=`date --date='0 days ago' +%H:%M:%S`
+	#	echo "$today $ctime1: Failed in Copying $rfile..."
+	#	cd /home/chd
+	#	exit 1
+	#else
+	tmps=`du -sm $localfile|awk '{print $1}'`
+	ctime1=`date --date='0 days ago' +%H:%M:%S`
+	if [ $tmps != $stdsize ]; then 
+	  echo "$today $ctime1: Copying Failed for  $localfile $tmps MB"
+	else 
+	  echo $localfile >localfile.tmp
+      #remove corrected file from the list
+	  #comm -3 --nocheck-order $errlist localfile.tmp > $errlist
+	  awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' ./localfile.tmp $errlist > $errlist 
+      #change the permission of copied file
+	  #find $localfile ! -perm 777 -type f -exec chmod 777 {} \;
+      size=$((size+tmps))
+	  echo "$today $ctime1: $localfile copied in $tmps MB"
+	  ((count++))
+	fi
+	#fi  
 done
 endtime=`date --date='0 days ago' +%H:%M:%S`
 #t1=`echo $starttime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`

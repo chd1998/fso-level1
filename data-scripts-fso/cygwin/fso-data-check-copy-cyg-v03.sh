@@ -324,6 +324,15 @@ fi
 <<<<<<< HEAD
 #checking local files' size
 ctime=`date --date='0 days ago' +%H:%M:%S`
+<<<<<<< HEAD
+=======
+echo "$today $ctime: Local $datatype File(s) Size Checking, please wait..."
+$homepre/fso-data-check-local-cyg-cron.sh $localdrive $year $monthday $datatype $fileformat $stdsize > $logpath/check-local-$datatype-size.log &
+waiting "$!" "Local $datatype File(s) Size Checking" "Checking Local $datatype File(s) Size"
+errsize1=`cat $localwrongsize|wc -l`
+
+ctime=`date --date='0 days ago' +%H:%M:%S`
+>>>>>>> 5f84ad15b8331e3e9515f85b0cdbf36c892c2aed
 =======
 ctime=`date --date='0 days ago' +%H:%M:%S`
 <<<<<<< HEAD
@@ -418,6 +427,24 @@ cat $localwrongsize >> $logpath/errtmp-$year$monthday
 =======
 
 ctime3=`date --date='0 days ago' +%H:%M:%S`
+<<<<<<< HEAD
+
+#$tmp1=`cat $remotelocaldifflist|wc -l`
+#$tmp2=`cat $localwrongsize|wc -l`
+cat $remotelocaldifflist > $tmplist
+cat $localwrongsize >> $tmplist
+
+ctime3=`date --date='0 days ago' +%H:%M:%S`
+echo "                  For $year$monthday $datatype Data File(s)" > $logpath/errtmp-$year$monthday
+echo "***********************************************************************************************************************" >> $logpath/errtmp-$year$monthday
+echo "$today $ctime3 : $errsize0 Error $datatype File(s) in Local Missing File(s) Checking" >> $logpath/errtmp-$year$monthday
+cat $remotelocaldifflist >> $logpath/errtmp-$year$monthday
+echo "                " >> $logpath/errtmp-$year$monthday
+echo "                    $errsize2 Error $datatype File(s) in Local Wrong Size File(s) Checking" >> $logpath/errtmp-$year$monthday
+cat $localwrongsize >> $logpath/errtmp-$year$monthday
+
+
+=======
 
 #$tmp1=`cat $remotelocaldifflist|wc -l`
 #$tmp2=`cat $localwrongsize|wc -l`

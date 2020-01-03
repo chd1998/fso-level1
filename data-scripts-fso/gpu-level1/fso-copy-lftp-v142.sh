@@ -113,7 +113,7 @@ echo "======== Welcome to FSO Data Copying System@FSO! ========"
 echo "                                                         "
 echo "                 fso-copy-lftp.sh                        "  
 echo "                                                         "
-echo "            Relase 1.41     20191015  18:06              "
+echo "            Relase 1.42     20191015  18:06              "
 echo " Copy the $datatype data from remote ftp site to lustre  "
 echo "                                                         "
 echo "                $today    $ctime                         "
@@ -149,7 +149,7 @@ waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 if [ $? -ne 0 ];then
   ctime1=`date --date='0 days ago' +%H:%M:%S`
   echo "$today $ctime1: Failed in Syncing $datatype Data from $srcdir to $destdir"
-  cd /home/chd
+  #cd /home/
   exit 1
 fi
 
@@ -166,7 +166,7 @@ waiting "$!" "File Number Sumerizing" "Sumerizing File Number"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
   echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
-  cd /home/chd/
+  #cd /home/chd/
   exit 1
 fi
 
@@ -222,7 +222,7 @@ echo " Total Time Used : $timediff1 secs."
 echo "            From : $today0 $ctime0 "
 echo "              To : $today1 $ctime3 "
 rm -rf $lockfile
-cd /home/chd/
+#cd /home/chd/
 exit 0
 
 

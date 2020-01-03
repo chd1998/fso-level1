@@ -82,6 +82,11 @@ totalerrorlist=$logpath/$datatype-$fileformat-$year$monthday-error-total.list
 localwrongsize=$logpath/$datatype-local-wrongsize-$year$monthday-cyg.list
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 5f84ad15b8331e3e9515f85b0cdbf36c892c2aed
 lockfile=$logpath/$(basename $0)-$datatype-$today.lock
 =======
 <<<<<<< HEAD
@@ -112,7 +117,9 @@ if [ ! -f "$list" ];then
   touch $list
 fi
 
-
+if [ ! -f "$localwrongsize" ];then
+  touch $localwrongsize
+fi
 
 if [ ! -d "$cdir" ];then
   echo "Dest Dir: $cdir doesn't exist...."
