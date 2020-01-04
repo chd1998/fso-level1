@@ -17,6 +17,7 @@
 #       20190718    Release 0.8     add remote data info 
 #       20190914    Release 0.9     revised display info and some minor errors
 #       20191015    Release 0.91    correct the time calculating
+#       20200103    Release 0.92    modify to use for ha level1 reduction
 # 
 #waiting pid taskname prompt
 waiting() {
@@ -36,7 +37,7 @@ waiting() {
   dt1=`date +%s`
   echo "                   Finishing...."
   kill -6 $tmppid >/dev/null 1>&2
-  echo "$dt1" > /home/chd/log/$(basename $0)-$datatype-sdtmp.dat
+  echo "$dt1" > $logpre/$(basename $0)-$datatype-sdtmp.dat
 }
 
 #   输出进度条, 小棍型
@@ -61,7 +62,7 @@ syssep="/"
 
 if [ $# -ne 7 ];then
   echo "Usage: ./fso-sync-lftp.sh ip port  destdir user password datatype(TIO or HA) threadnumber"
-  echo "Example: ./fso-sync-lftp.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40"
+  echo "Example: ./fso-sync-lftp.sh  192.168.100.238 21 /home/user/data ha ynao246135 ha 40"
   exit 1
 fi
 server1=$1
@@ -73,18 +74,18 @@ datatype=$6
 pnum=$7
 
 server=${server1}:${port}
-
+logpre=./log
 #umask 0000
 
-filenumber=/home/chd/log/$(basename $0)-$datatype-number.dat
-filesize=/home/chd/log/$(basename $0)-$datatype-size.dat
-filenumber1=/home/chd/log/$(basename $0)-$datatype-number-1.dat
-filesize1=/home/chd/log/$(basename $0)-$datatype-size-1.dat
+filenumber=$logpre/$(basename $0)-$datatype-number.dat
+filesize=$logpre/$(basename $0)-$datatype-size.dat
+filenumber1=$logpre/$(basename $0)-$datatype-number-1.dat
+filesize1=$logpre/$(basename $0)-$datatype-size-1.dat
 
-srcsize=/home/chd/log/$datatype-$today-$server1-filesize.dat
-srcnumber=/home/chd/log/$datatype-$today-$server1-filenumber.dat
+srcsize=$logpre/$datatype-$today-$server1-filesize.dat
+srcnumber=$logpre/$datatype-$today-$server1-filenumber.dat
 
-lockfile=/home/chd/log/$(basename $0)-$datatype-$today.lock
+lockfile=$logpre/$(basename $0)-$datatype-$today.lock
 
 if [ ! -f $filenumber ];then
   echo "0">$filenumber
@@ -148,8 +149,8 @@ srcdir=${syssep}${today}${syssep}${datatype}
 srcdir0=${syssep}${today}${syssep}
 srcdir1=${srcpre0}
 
-n1=$(cat $filenumber)
-s1=$(cat $filesize)
+#n1=$(cat $filenumber)
+#s1=$(cat $filesize)
 
 ctime=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime: Syncing $datatype data @ FSO..."
@@ -175,7 +176,7 @@ if [ $? -ne 0 ];then
 fi
 ctime2=`date --date='0 days ago' +%H:%M:%S`
 
-mytime2=$(cat /home/chd/log/$(basename $0)-$datatype-sdtmp.dat)
+mytime2=$(cat $logpre/$(basename $0)-$datatype-sdtmp.dat)
 #mytime2=`echo $ttmp|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
 #curhm=`date  +%H%M`
@@ -294,4 +295,3 @@ exit 0
 #  echo "              PID: $pid                    "
 #  exit 0
 #fi
-

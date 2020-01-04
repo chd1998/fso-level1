@@ -135,10 +135,14 @@ waiting "$!" "local $datatype $fileformat file(s) info getting" "Getting  local 
 #waiting "$!" "$datatype $fileformat file(s) number getting" "Getting $datatype $fileformat file(s) number"
 
 <<<<<<< HEAD
+#remove checked files, list is files list from previous, listtmp is all files for this run
+=======
+<<<<<<< HEAD
 #remove checked files, list is error files list, listtmp is all files
 =======
 #remove checked files, list is files list from previous, listtmp is all files for this run
 >>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
+>>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
 #sort $listtmp -o $listtmp
 #sort $list -o $list
 
@@ -181,10 +185,17 @@ fi
 
 #sort $totalerrorlist -o $totalerrorlist
 <<<<<<< HEAD
+#comm -23 --nocheck-order $curerrorlist $totalerrorlist > $logpath/errtmp-check-local-$monthday &
+=======
+<<<<<<< HEAD
 #comm -23 --nocheck-order $curerrorlist $totalerrorlist > ./errtmp &
+>>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
 #get files only in curerrorlist
-awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' $totalerrorlist $curerrorlist > ./errtmp &
+awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' $totalerrorlist $curerrorlist > $logpath/errtmp-check-local-$monthday &
 waiting "$!" "New current error $datatype $fileformat file(s) list finding" "Finding new error $datatype $fileformat file(s) to total error file(s) list"
+<<<<<<< HEAD
+cat $logpath/errtmp-check-local-$monthday >> $totalerrorlist &
+=======
 cat ./errtmp >> $totalerrorlist &
 =======
 #comm -23 --nocheck-order $curerrorlist $totalerrorlist > $logpath/errtmp-check-local-$monthday &
@@ -193,6 +204,7 @@ awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' $totalerrorlist $c
 waiting "$!" "New current error $datatype $fileformat file(s) list finding" "Finding new error $datatype $fileformat file(s) to total error file(s) list"
 cat $logpath/errtmp-check-local-$monthday >> $totalerrorlist &
 >>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
+>>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
 waiting "$!" "Current error $datatype $fileformat file(s) list adding" "Adding error $datatype $fileformat file(s) to total error file(s) list"
 
 totalerror=`cat $totalerrorlist|wc -l`
@@ -229,7 +241,11 @@ echo " "
 echo "================================================================================"
 #rm -f ./mytmplist
 <<<<<<< HEAD
+rm -f $logpath/errtmp-check-local-$monthday
+=======
+<<<<<<< HEAD
 rm -f ./errtmp
 =======
 rm -f $logpath/errtmp-check-local-$monthday
 >>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
+>>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402

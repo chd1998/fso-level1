@@ -19,7 +19,6 @@
 #        20190705       Release 1.3   logics revised
 #                       Release 1.4   revise timing logics
 #        20191015               1.41  revised time calculation
-#        20200103       Release 1.42  modified to use for ha levle quicklook
 #
 #waiting pid taskname prompt
 waiting() {
@@ -37,7 +36,7 @@ waiting() {
   dt1=`date +%s`
 #  echo "                   Finishing..."
   kill -6 $tmppid >/dev/null 1>&2
-  echo "$dt1" > $logpre/dtmp
+  echo "$dt1" > /home/chd/log/dtmp
 }
 
 procing() {
@@ -71,8 +70,8 @@ ctime=`date --date='0 days ago' +%H:%M:%S`
 ctime0=`date --date='0 days ago' +%H:%M:%S`
 if [ $# -ne 8 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to /lustre/data mannually"
-  echo "Usage: ./fso-copy-lftp-v142.sh srcip port  dest year(4 digits) monthday(4 digits) user password datatype(TIO/HA)"
-  echo "Example: ./fso-copy-lftp-v142.sh 192.168.100.238 21 /home/user/data 2020 0103 ha ynao246135 HA"
+  echo "Usage: ./fso-copy-lftp-v14.sh srcip port  dest year(4 digits) monthday(4 digits) user password datatype(TIO/HA)"
+  echo "Example: ./fso-copy-lftp-v14.sh 192.168.111.120 21 /lustre/data 2019 0427 tio ynao246135 TIO"
   exit 1
 fi
 
@@ -89,13 +88,12 @@ password=$7
 datatype=$8
 #ftpuser=$(echo $datatype|tr '[A-Z]' '[a-z]')
 
-logpre=./log
-
 ftpserver=ftp://$ftpuser:$password@$ftpserver:$remoteport
 #echo "$ftpserver"
 #read
+homepre="./log"
 
-lockfile=$logpre/$(basename $0)-$srcyear$srcmonthday.lock
+lockfile=/home/chd/log/$(basename $0)-$srcyear$srcmonthday.lock
 if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
   ps -p $mypid | grep $mypid &>/dev/null
@@ -153,7 +151,7 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 
-ttmp=$(cat $logpre/dtmp)
+ttmp=$(cat /home/chd/log/dtmp)
 
 ctime1=`date --date='0 days ago' +%H:%M:%S`
 t1=`date +%s`
@@ -161,7 +159,7 @@ t1=`date +%s`
 #t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
 targetdir=${destdir}
-ls -lR $targetdir | grep "^-" | wc -l > $logpre/tmpfn2.dat &
+ls -lR $targetdir | grep "^-" | wc -l > /home/chd/log/tmpfn2.dat &
 waiting "$!" "File Number Sumerizing" "Sumerizing File Number"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
@@ -170,11 +168,11 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 
-#fn1=$(cat $logpre/tmpfn1.dat)
-fn2=$(cat $logpre/tmpfn2.dat)
+#fn1=$(cat /home/chd/log/tmpfn1.dat)
+fn2=$(cat /home/chd/log/tmpfn2.dat)
 
 
-du -sm $targetdir|awk '{print $1}' > $logpre/tmpfs2.dat &
+du -sm $targetdir|awk '{print $1}' > /home/chd/log/tmpfs2.dat &
 waiting "$!" "File Size Summerizing" "Sumerizing File Size"
 if [ $? -ne 0 ];then
   ctime3=`date --date='0 days ago' +%H:%M:%S`
@@ -183,11 +181,11 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 if [ ! -d "$targetdir" ]; then
-  echo "0" > $logpre/tmpfs.dat
+  echo "0" > /home/chd/log/tmpfs.dat
 fi  
 
-#fs1=$(cat $logpre/tmpfs1.dat)
-fs2=$(cat $logpre/tmpfs2.dat)
+#fs1=$(cat /home/chd/log/tmpfs1.dat)
+fs2=$(cat /home/chd/log/tmpfs2.dat)
 
 #chmod 777 -R $destdir &
 find $targetdir ! -perm 777 -type f -exec chmod 777 {} \; &

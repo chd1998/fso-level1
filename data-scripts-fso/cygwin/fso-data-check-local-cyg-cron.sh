@@ -82,10 +82,19 @@ totalerrorlist=$logpath/$datatype-$fileformat-$year$monthday-error-total.list
 localwrongsize=$logpath/$datatype-local-wrongsize-$year$monthday-cyg.list
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 5f84ad15b8331e3e9515f85b0cdbf36c892c2aed
+lockfile=$logpath/$(basename $0)-$datatype-$today.lock
+=======
+<<<<<<< HEAD
 lockfile=$logpath/$(basename $0)-$datatype-$cyear$today.lock
 =======
 lockfile=$logpath/$(basename $0)-$datatype-$today.lock
 >>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
+>>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
                                                                                    
 if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
@@ -108,7 +117,9 @@ if [ ! -f "$list" ];then
   touch $list
 fi
 
-
+if [ ! -f "$localwrongsize" ];then
+  touch $localwrongsize
+fi
 
 if [ ! -d "$cdir" ];then
   echo "Dest Dir: $cdir doesn't exist...."
@@ -167,6 +178,8 @@ curerror=`cat $curerrorlist|wc -l`
 #check new files
 if [ ! -f $totalerrorlist ]; then 
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
   #if [ $datatype == "SP" ]; then 
   #  cat $difflist |awk '{ if ($2!='''$stdsize''' && $2!='''$stdsize1''') {print $1"  "$2}}' > $totalerrorlist &
   #  waiting "$!" "Total local wrong size $datatype $fileformat file(s) adding for first time" "Adding local wrong $datatype $fileformat file(s) to $totalerrorlist for first time"
@@ -176,6 +189,7 @@ if [ ! -f $totalerrorlist ]; then
   #fi
 =======
 >>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
+>>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
   cp -f $curerrorlist $totalerrorlist
 fi
 #comm -23 $curerrorlist $totalerrorlist > ./curtmp &

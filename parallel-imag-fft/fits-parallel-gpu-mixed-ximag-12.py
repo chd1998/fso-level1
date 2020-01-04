@@ -18,14 +18,9 @@ Changlog:
 20191216    Release 0.8     using starmap_asysnc
             Release 0.9     making multi-gpu working simultaneously
             Release 1.0     assign gpu randomly
-<<<<<<< HEAD
 20191217    Release 1.1     optimize
+            Release 1.2     using cupy.fft.fftn instead of fft2
             
-=======
-            Release 1.1     optimized
-
-
->>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
 '''
 
 import os
@@ -55,10 +50,16 @@ def fparallel(path,pn,gpu,gpunum):
         a = datetime.datetime.now()
         pool = Pool(processes=pn)
         if gpu == 1:
+<<<<<<< HEAD
+            print("Starting FFT with %d process(es) and %d GPU..." %(pn,gpunum) )
+=======
             print("Starting FFT with %d process(es) and GPU..." %pn )
+>>>>>>> 5f84ad15b8331e3e9515f85b0cdbf36c892c2aed
             args = []
+            gpuid = 0
             for image in images:
-                args.append([image,gpunum])
+                args.append([image,gpunum,gpuid])
+                gpuid = random.randint(0,gpunum-1)
             fftresult = pool.starmap_async(myfft_gpu, args)
         else: 
             print("Starting FFT with %d process(es)..." %pn )
@@ -70,7 +71,11 @@ def fparallel(path,pn,gpu,gpunum):
         if (gpu==0):
             print("Time Used With %d Process(es) : %d ms" %(pn, int(delta.total_seconds() * 1000)))
         else:
+<<<<<<< HEAD
+            print("Time Used With %d Process(es) + %d GPU: %d ms" %(pn, gpunum, int(delta.total_seconds() * 1000)))
+=======
             print("Time Used With %d Process(es) + GPU: %d ms" %(pn, int(delta.total_seconds() * 1000)))
+>>>>>>> 5f84ad15b8331e3e9515f85b0cdbf36c892c2aed
 
 
 def get_image_paths(folder):
@@ -78,37 +83,38 @@ def get_image_paths(folder):
             for f in os.listdir(folder)
             if 'fits' in f)
 
-def myfft_gpu(image,gpunum):
+def myfft_gpu(image,gpunum,gpuid):
     fdata = (fits.open(image))[0].data
     d,m,n = fdata.shape
-    gpuid=0
-    for i in range(d):
-        ximage = fdata[i]
-        #im = np.ndarray((m,n),dtype=np.complex64)
-        cp.cuda.Device(gpuid).use()
-        with cp.cuda.Device(gpuid):
-            #s_gpu = cp.ndarray((m,n),dtype=np.complex64)
-            #r_gpu = cp.ndarray((m,n),dtype=np.complex64)
-            s_gpu = cp.asarray(ximage)
-            s_gpu = cp.fft.fft2(s_gpu)
-            s_gpu = cp.fft.ifftshift(s_gpu)
-            r_gpu = cp.fft.ifft2(s_gpu)
-            cp.cuda.Stream.null.synchronize()
-            im = cp.asnumpy(r_gpu)
-        print ("Calculating %s  with gpu %d" %(image,gpuid))
-        gpuid=random.randint(0,gpunum-1)
+    im = np.ndarray((d,m,n),dtype=np.complex64)
+    cp.cuda.Device(gpuid).use()
+    with cp.cuda.Device(gpuid):
+        #s_gpu = cp.ndarray((m,n),dtype=np.complex64)
+        #r_gpu = cp.ndarray((m,n),dtype=np.complex64)
+        s_gpu = cp.asarray(fdata)
+        s_gpu = cp.fft.fftn(s_gpu)
+        s_gpu = cp.fft.ifftshift(s_gpu)
+        r_gpu = cp.fft.irfftn(s_gpu)
+        cp.cuda.Stream.null.synchronize()
+        im = cp.asnumpy(r_gpu)
+    print ("Calculating %s  with gpu %d" %(image,gpuid))
+    #gpuid=random.randint(0,gpunum-1)
     return  im
 
 def myfft(image):
-    fdata = ((fits.open(image)[0].data)).astype(np.float)
+    fdata = ((fits.open(image)[0].data)).astype(np.complex64)
+<<<<<<< HEAD
+    #d,m,n = fdata.shape
+=======
     d,m,n = fdata.shape
-    #ximage = (fdata[0].data).astype(np.float)
+>>>>>>> 5f84ad15b8331e3e9515f85b0cdbf36c892c2aed
+    #ximage = (fdata[0].data).astype(np.complex64)
     print ("Calculating  %s" %(image))
 	#ximage=np.fft.fft2(fdata[0].data)
-    for i in range(d):
-        im = fft.fft2(fdata[i])
-        im = fft.fftshift(im)
-        iim = fft.ifft2(im)
+    #for i in range(d):
+    im = fft.fftn(fdata)
+    im = fft.fftshift(im)
+    iim = fft.ifftn(im)
     return iim
 
 if __name__ == '__main__':

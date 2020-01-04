@@ -9,9 +9,14 @@ Note: single --- using 1 process; parallel --- using specific number of processe
 Usage: python fits2jpg-parallel-xx.py --path=<str> --pn=<int> --tsize=int int --savedir=<str>
 Example: python fits2jpg-parallel-04.py --path=d:\\fso-data\\fso-test-data --pn=4 --tsize=256 256 --savedir=thumbs
 =======
+<<<<<<< HEAD
+Usage: python fits2jpg-parallel-xx.py --path=<str> --pn=<int> --tsize=int int --savedir=<str>
+Example: python fits2jpg-parallel-04.py --path=d:\\fso-data\\fso-test-data --pn=4 --tsize=256 256 --savedir=thumbs
+=======
 Usage: python fits2jpg-parallel-xx.py -p <inputpath> --sx <num1> --sy <num2>
 Example: python fits2jpg-parallel-xx.py -p d:\\fso-test --sx 200 --sy 200
 >>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
+>>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
 
 Changlog:
 20190701	Release 0.1		prototype version both in single & parallel version
@@ -44,7 +49,7 @@ SAVEDIR="thumbs"
 @click.option('--tsize', type=(int,int) , help='size of thumbnail')
 #@click.option('--sx', default=256,nargs=1, required=True, type=int, help='x size of thumbnail')
 #@click.option('--sy', default=256,nargs=1, required=True, type=int, help='y size of thumbnail')
-@click.option('--savedir', default="thumbs",nargs=1, required=True, type=str, help='directory of thumbnail, related to path')
+@click.option('--savedir', default="thumbs",nargs=1, type=str, help='directory of thumbnail, related to path')
 
 def main(path,pn,tsize,savedir):
     TSIZE=tsize
@@ -53,7 +58,12 @@ def main(path,pn,tsize,savedir):
     #print (TSIZE)
     #print (SAVEDIR)
 =======
+<<<<<<< HEAD
+    #print (TSIZE)
+    #print (SAVEDIR)
+=======
 >>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
+>>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
     folder = os.path.realpath(path)
     if not os.path.isdir(os.path.join(folder)):
         print ("Folder %s doesn't exist!  Pls Check..." % path)
@@ -78,8 +88,12 @@ def main(path,pn,tsize,savedir):
 <<<<<<< HEAD
         pool.map_async(create_thumbnail, images)
 =======
+<<<<<<< HEAD
+        pool.map_async(create_thumbnail, images)
+=======
         pool.map(create_thumbnail, images)
 >>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
+>>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
         pool.close()
         pool.join()
         b = datetime.datetime.now()
@@ -110,13 +124,17 @@ def create_thumbnail(filename):
     #print(base,fname)
     fname = fname + ".jpg"
     save_path = os.path.join(base, SAVEDIR, fname)
-    print("Converting %s" % save_path)
+    print("Converting %s to %s" % (filename, save_path))
     im.save(save_path)
+<<<<<<< HEAD
+    #print (save_path)
+=======
 <<<<<<< HEAD
     #print (save_path)
 =======
     print (save_path)
 >>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
+>>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
 
 
 if __name__ == '__main__':
