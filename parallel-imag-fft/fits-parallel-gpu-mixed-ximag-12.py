@@ -50,11 +50,7 @@ def fparallel(path,pn,gpu,gpunum):
         a = datetime.datetime.now()
         pool = Pool(processes=pn)
         if gpu == 1:
-<<<<<<< HEAD
             print("Starting FFT with %d process(es) and %d GPU..." %(pn,gpunum) )
-=======
-            print("Starting FFT with %d process(es) and GPU..." %pn )
->>>>>>> 5f84ad15b8331e3e9515f85b0cdbf36c892c2aed
             args = []
             gpuid = 0
             for image in images:
@@ -71,11 +67,7 @@ def fparallel(path,pn,gpu,gpunum):
         if (gpu==0):
             print("Time Used With %d Process(es) : %d ms" %(pn, int(delta.total_seconds() * 1000)))
         else:
-<<<<<<< HEAD
             print("Time Used With %d Process(es) + %d GPU: %d ms" %(pn, gpunum, int(delta.total_seconds() * 1000)))
-=======
-            print("Time Used With %d Process(es) + GPU: %d ms" %(pn, int(delta.total_seconds() * 1000)))
->>>>>>> 5f84ad15b8331e3e9515f85b0cdbf36c892c2aed
 
 
 def get_image_paths(folder):
@@ -103,11 +95,7 @@ def myfft_gpu(image,gpunum,gpuid):
 
 def myfft(image):
     fdata = ((fits.open(image)[0].data)).astype(np.complex64)
-<<<<<<< HEAD
     #d,m,n = fdata.shape
-=======
-    d,m,n = fdata.shape
->>>>>>> 5f84ad15b8331e3e9515f85b0cdbf36c892c2aed
     #ximage = (fdata[0].data).astype(np.complex64)
     print ("Calculating  %s" %(image))
 	#ximage=np.fft.fft2(fdata[0].data)
