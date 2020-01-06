@@ -31,20 +31,20 @@ def parallel():
     imgFiles = list(oimgFiles)
     filenum = 0
     for img in imgFiles:
-    #    print (img)
         filenum = filenum + 1
-    #filenum = len(imgFiles)
     numFiles = np.int(filenum/size) #number of files this process will handle
-    #print (size)
-    #print (numFiles)
     #imgFiles = ["%.4d.jpg"%x for x in range(rank*numFiles+1, (rank+1)*numFiles+1)] # Fix this line to distribute imgFiles
     ntmp = 0
     nimgFiles = np.asarray(imgFiles)
-    #print(len(nimgFiles))
-    #print(imgFiles.shape)
-    for x in range(rank*numFiles+1,(rank+1)*numFiles+1):
+    for x in range(rank*numFiles,(rank+1)*numFiles):
         nimgFiles[ntmp] = imgFiles[x]
         ntmp = ntmp + 1
+    xtmp=(rank+1)*numFiles
+    nftmp=filenum % size
+    if (filenum % size != 0 and rank == size):
+        for y in range(0,nftmp):
+            nimgFiles[ntmp] = imgFiles[xtmp+y]
+            ntmp=ntmp+1
     denoise(nimgFiles,rank)
     #assert denoise.nopython_signatures
     print ("Total time %f seconds" %(time.time() - totalStartTime))
