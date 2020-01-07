@@ -1,3 +1,6 @@
+'''
+usage: python -m timeit 'numba-01.py'
+'''
 from numba import cuda, void, float64, complex128, boolean
 import cupy as cp
 import numpy as np
