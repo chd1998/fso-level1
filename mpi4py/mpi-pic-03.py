@@ -1,3 +1,21 @@
+'''
+mpi-pic-xx.py
+
+@author: chen dong @ fso
+purposes: demo image processing using mpi
+Note: 
+
+Usage: mpiexec -n x python mpi-pic-xx.py --path=<path>
+Example: mpiexec -n 2 python mpi-pic-xx.py --path=d:\\fso-data
+
+
+Changlog:
+20200103	Release 0.1		prototype version 
+20200105	Release 0.2     using numba jit
+20200107    Release 0.3     using click to input argvs
+
+
+'''
 import numpy as np
 from skimage import data, img_as_float
 from skimage.restoration import denoise_tv_chambolle, denoise_bilateral,denoise_tv_bregman
