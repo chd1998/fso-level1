@@ -40,8 +40,8 @@ def parallel():
         nimgFiles[ntmp] = imgFiles[x]
         ntmp = ntmp + 1
     xtmp=(rank+1)*numFiles
-    nftmp=filenum % size
-    if (filenum % size != 0 and rank == size):
+    nftmp=filenum % size #number of files left 
+    if (filenum % size != 0 and rank == size): #last rank  and  filenum is not divisible by size
         for y in range(0,nftmp):
             nimgFiles[ntmp] = imgFiles[xtmp+y]
             ntmp=ntmp+1
