@@ -7,8 +7,8 @@ def _transform_radix2(vector, inverse, out):
     levels = int32(math.log(float32(n))/math.log(float32(2)))
     assert 2**levels==n # error: Length is not a power of 2
 
-    exptable = cuda.shared.array(1024, dtype=complex128)
-    working = cuda.shared.array(256, dtype=complex128)
+    exptable = cuda.shared.array(n*2, dtype=complex128)
+    working = cuda.shared.array((n//4), dtype=complex128)
 
     assert (n // 2) <= len(exptable)  # error: FFT length > MAXFFTSIZE
 

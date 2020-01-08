@@ -1,6 +1,7 @@
 '''
-usage: python -m timeit 'numba-01.py'
+usage: python -m timeit 'test.py'
 '''
+from __future__ import print_function, division, absolute_import
 from numba import cuda, void, float64, complex128, boolean
 import cupy as cp
 import numpy as np
@@ -13,7 +14,7 @@ def fftbench(y, inverse, FT):
     for i in range(len(y)):
         Y[i]=complex128(y[i])
     fft.gtransform_radix2(Y, False, FT)
-
+print("test started!")
 str='\nbest [%2d/%2d] iterations, min:[%9.3f], max:[%9.3f], mean:[%9.3f], std:[%9.3f] usec'
 a=[127.734375 ,130.87890625 ,132.1953125  ,129.62109375 ,118.6015625
  ,110.2890625  ,106.55078125 ,104.8203125  ,106.1875     ,109.328125
@@ -76,4 +77,4 @@ for i in range(len(a)):
 r=1000
 series=sorted(timeit.repeat("fftbench[1,256](y1, False, FT1)",      number=1, repeat=r, globals=globals()))
 series=series[0:r-5]
-print(str % (len(series), r, 1e6*np.min(series), 1e6*np.max(series), 1e6*np.mean(series), 1e6*np.std(series)))
+print (str % (len(series), r, 1e6*np.min(series), 1e6*np.max(series), 1e6*np.mean(series), 1e6*np.std(series)))
