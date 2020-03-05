@@ -32,10 +32,14 @@ from numba import jit
 #@click.option('--gpu', default="1",nargs=1, required=True, type=int, help='1 using gpu, 0 using cpu')
 #@click.option('--gpunum', default="1",nargs=1, required=True, type=int, help='number of gpu(s)')
 
+<<<<<<< HEAD
 @jit(fastmath=True)
 #@jit(fastmath=True,parallel=True,nogil=True)
 #@jit(nopython=True,fastmath=True,parallel=True,nogil=True)
 #@jit
+=======
+#@jit(fastmath=True)
+>>>>>>> 702bb655808700ac018037f20e8e7f25fb723e1f
 def myfft(fdata):
     im=fft.fft2(fdata)
     im=fft.fftshift(im)
