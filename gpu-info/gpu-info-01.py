@@ -17,9 +17,9 @@ def get_gpu_info():
     # 获取多个GPU的信息，存在列表里
     for gpu in Gpus:
         print('gpu.id:', gpu.id)
-        print('GPU总量：', gpu.memoryTotal)
-        print('GPU使用量：', gpu.memoryUsed)
-        print('gpu使用占比:', gpu.memoryUtil * 100)
+        print('GPU显存总量：', gpu.memoryTotal)
+        print('GPU显存使用量：', gpu.memoryUsed)
+        print('GPU显存使用占比:', gpu.memoryUtil * 100)
         # 按GPU逐个添加信息
         gpulist.append([ gpu.id, gpu.memoryTotal, gpu.memoryUsed,gpu.memoryUtil * 100])
 
@@ -40,6 +40,9 @@ def get_cpu_info():
     mempercent = mem.percent
     memused = mem.used
     cpu = psutil.cpu_percent(percpu=True)
+    print('内存总量：', memtotal)
+    print('已用内存：', memused)
+    print('可用内存: ', memfree)
 
     return memtotal, memfree, memused, mempercent, cpu
 
