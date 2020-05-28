@@ -1,8 +1,8 @@
 #!/bin/bash
 #author: chen dong @fso
 #Copy specified date TIO/HA data on remote host to /lustre/data mannually
-#Usage: ./fso-copy-lftp-v14.sh srcip port  dest year(4 digits) monthday(4 digits) user password datatype(TIO/HA)
-#Example: ./fso-copy-lftp-v14.sh 192.168.111.120 21 /lustre/data 2019 0427 tio ynao246135 TIO
+#Usage: ./fso-copy-lftp.sh srcip port  dest year(4 digits) monthday(4 digits) user password datatype(TIO/HA)
+#Example: ./fso-copy-lftp.sh 192.168.111.120 21 /lustre/data 2019 0427 tio ynao246135 TIO
 #changlog: 
 #        20190420       Release 0.1   first prototype release 0.1
 #        20190421       Release 0.2   fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
@@ -20,6 +20,8 @@
 #                       Release 1.4   revise timing logics
 #        20191015               1.41  revised time calculation
 #        20200103       Release 1.42  modified to use for ha levle quicklook
+#        20200430       Release 1.43  add ping to test server online and other minor correction
+#        20200520       Release 1.44  fixed minor errors in displaying
 #
 #waiting pid taskname prompt
 waiting() {
@@ -69,6 +71,8 @@ today=`date --date='0 days ago' +%Y%m%d`
 today0=`date  +%Y-%m-%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 ctime0=`date --date='0 days ago' +%H:%M:%S`
+tstart=`date +%s`
+
 if [ $# -ne 8 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to /lustre/data mannually"
   echo "Usage: ./fso-copy-lftp-v142.sh srcip port  dest year(4 digits) monthday(4 digits) user password datatype(TIO/HA)"
@@ -107,19 +111,20 @@ if [ -f $lockfile ];then
 else
   echo $$>$lockfile
 fi
-
+progname=$(basename $0)
+pversion=1.44
 echo " "
 echo "======== Welcome to FSO Data Copying System@FSO! ========"
 echo "                                                         "
-echo "                 fso-copy-lftp.sh                        "  
+echo "              $progname                                  "
 echo "                                                         "
-echo "            Relase 1.42     20191015  18:06              "
-echo " Copy the $datatype data from remote ftp site to lustre  "
+echo "            Relase $pversion     20200520  14:22         "
 echo "                                                         "
 echo "                $today    $ctime                         "
 echo "                                                         "
 echo "========================================================="
 echo " "
+
 #procCmd=`ps ef|grep -w $procName|grep -v grep|wc -l`
 #pid=$(ps x|grep -w $procName|grep -v grep|awk '{print $1}')
 #if [ $procCmd -le 0 ];then
@@ -209,8 +214,8 @@ today1=`date +%Y-%m-%d`
 ctime3=`date --date='0 days ago' +%H:%M:%S`
 #t3=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 #t4=`echo $ctime3|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-t4=`date +%s`
-timediff1=`echo "$t1 $t4"|awk '{print($2-$1)}'`
+tend=`date +%s`
+timediff1=`echo "$tstart $tend"|awk '{print($2-$1)}'`
 
 echo " " 
 echo "$today $ctime3: Succeeded in Syncing $datatype data @ FSO!"

@@ -1,8 +1,8 @@
 #!/bin/bash
 #author: chen dong @fso
 #Copy specified date TIO/HA data on remote host to /lustre/data mannually
-#Usage: ./fso-copy-lftp-v14.sh srcip port  dest year(4 digits) monthday(4 digits) user password datatype(TIO/HA)
-#Example: ./fso-copy-lftp-v14.sh 192.168.111.120 21 /lustre/data 2019 0427 tio ynao246135 TIO
+#Usage: ./fso-copy-lftp-vxxx-xxx.sh srcip port  dest year(4 digits) monthday(4 digits) user password datatype(TIO/HA)
+#Example: ./fso-copy-lftp-vxxx-xxx.sh 192.168.111.120 21 /lustre/data 2019 0427 tio ynao246135 TIO
 #changlog: 
 #        20190420       Release 0.1   first prototype release 0.1
 #        20190421       Release 0.2   fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
@@ -20,6 +20,8 @@
 #                       Release 1.4   revise timing logics
 #        20191015               1.41  revised time calculation
 #        20200103       Release 1.42  modified to use for ha levle quicklook
+#        20200430       Release 1.43  add ping to test server online and other minor correction
+#        20200520       Release 1.44  fixed minor errors in displaying
 #
 #waiting pid taskname prompt
 waiting() {
@@ -34,10 +36,10 @@ waiting() {
   wtoday=`date --date='0 days ago' +%Y%m%d`
   echo "$wtoday $wctime: $2 Task Has Done!"
 #  dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-  dt1=`date +%s`
+  #dt1=`date +%s`
 #  echo "                   Finishing..."
   kill -6 $tmppid >/dev/null 1>&2
-  echo "$dt1" > $logpre/dtmp
+  #echo "$dt1" > $logpre/dtmp
 }
 
 procing() {
@@ -45,15 +47,16 @@ procing() {
   tput ed
   while [ 1 ]
   do
-    for j in '-' '\\' '|' '/'
-    do
-      tput sc
+    #for j in '-' '\\' '|' '/'
+    #do
+    #  tput sc
       ptoday=`date --date='0 days ago' +%Y%m%d`
       pctime=`date --date='0 days ago' +%H:%M:%S`
-      echo -ne  "$ptoday $pctime: $1...   $j"
-      sleep 0.2
-      tput rc
-    done
+      #echo -ne  "$ptoday $pctime: $1...   $j"
+      echo "$ptoday $pctime: $1..."
+      sleep 1
+      #tput rc
+    #done
   done
 }
 
@@ -69,10 +72,12 @@ today=`date --date='0 days ago' +%Y%m%d`
 today0=`date  +%Y-%m-%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 ctime0=`date --date='0 days ago' +%H:%M:%S`
+tstart=`date +%s`
+
 if [ $# -ne 8 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to /lustre/data mannually"
-  echo "Usage: ./fso-copy-lftp-v142.sh srcip port  dest year(4 digits) monthday(4 digits) user password datatype(TIO/HA)"
-  echo "Example: ./fso-copy-lftp-v142.sh 192.168.100.238 21 /home/user/data 2020 0103 ha ynao246135 HA"
+  echo "Usage: ./fso-copy-lftp-vxx-xxx.sh srcip port  dest year(4 digits) monthday(4 digits) user password datatype(TIO/HA)"
+  echo "Example: ./fso-copy-lftp-vxxx-xxx.sh 192.168.100.238 21 /home/user/data 2020 0103 ha ynao246135 HA"
   exit 1
 fi
 
@@ -89,9 +94,19 @@ password=$7
 datatype=$8
 #ftpuser=$(echo $datatype|tr '[A-Z]' '[a-z]')
 
+server=$1
 logpre=./log
 
 ftpserver=ftp://$ftpuser:$password@$ftpserver:$remoteport
+#ping $ftpserver -c 5 | grep ttl >> $logpre/pingtmp
+#pingres=`cat $logpre/pingtmp | wc -l`
+#rm -f $logpre/pingtmp
+#ctime1=`date --date='0 days ago' +%H:%M:%S`
+#if [ $pingres -eq 0 ];then 
+#  echo "$today $ctime1: $ftpserver is offline, skip syncing remote file(s)..." >>
+#  exit 0
+#fi
+  
 #echo "$ftpserver"
 #read
 
@@ -100,7 +115,7 @@ if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
   ps -p $mypid | grep $mypid &>/dev/null
   if [ $? -eq 0 ];then
-    echo "$todday $ctime: $(basename $0) is running" && exit 1
+    echo "$today $ctime: $(basename $0) is running" && exit 1
   else
     echo $$>$lockfile
   fi
@@ -108,13 +123,14 @@ else
   echo $$>$lockfile
 fi
 
+progname=$(basename $0)
+
 echo " "
 echo "======== Welcome to FSO Data Copying System@FSO! ========"
 echo "                                                         "
-echo "                 fso-copy-lftp.sh                        "  
+echo "              $progname                                  "  
 echo "                                                         "
-echo "            Relase 1.42     20191015  18:06              "
-echo " Copy the $datatype data from remote ftp site to lustre  "
+echo "            Relase 1.44     20200520  14:22              "
 echo "                                                         "
 echo "                $today    $ctime                         "
 echo "                                                         "
@@ -135,15 +151,29 @@ else
 fi
 
 ctime=`date --date='0 days ago' +%H:%M:%S`
+#ctime0=`date --date='0 days ago' +%H:%M:%S`
+#t1=`date +%s`
 echo "$today $ctime: Syncing $datatype data @ FSO..."
 echo "                   From: $srcdir "
 echo "                   To  : $destdir "
 echo "                   Please Wait..."
 
+echo "$today $ctime: Testing $server is online or not... "
+ping $server -c 5 | grep ttl >> $logpre/pingtmp
+pingres=`cat $logpre/pingtmp | wc -l`
+rm -f $logpre/pingtmp
+ctime1=`date --date='0 days ago' +%H:%M:%S`
+if [ $pingres -eq 0 ];then
+  echo "$today $ctime1: $server is offline, skip syncing remote file(s)..." 
+  exit 0
+fi
+
+echo "$today $ctime1: $server is online, syncing remote file(s)..."
+
 fn1=`ls -lR $destdir | grep "^-" | wc -l`
 fs1=`du -sm $destdir | awk '{print $1}'`
 ctime=`date --date='0 days ago' +%H:%M:%S`
-
+t1=`date +%s`
 lftp $ftpserver -e "mirror --parallel=40 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 if [ $? -ne 0 ];then
@@ -153,10 +183,11 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 
-ttmp=$(cat $logpre/dtmp)
+#ttmp=$(cat $logpre/dtmp)
+ttmp=`date +%s`
 
 ctime1=`date --date='0 days ago' +%H:%M:%S`
-t1=`date +%s`
+#t1=`date +%s`
 #t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 #t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
@@ -209,11 +240,11 @@ today1=`date +%Y-%m-%d`
 ctime3=`date --date='0 days ago' +%H:%M:%S`
 #t3=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 #t4=`echo $ctime3|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-t4=`date +%s`
-timediff1=`echo "$t1 $t4"|awk '{print($2-$1)}'`
+tend=`date +%s`
+timediff1=`echo "$tstart $tend"|awk '{print($2-$1)}'`
 
 echo " " 
-echo "$today $ctime3: Succeeded in Syncing $datatype data @ FSO!"
+echo "$today $ctime3: Succeeded in Syncing $datatype data @FSO!"
 echo "Synced file No.  : $filenumber file(s)"
 echo "            size : $filesize MB"
 echo "    Sync @ Speed : $speed MB/s"
