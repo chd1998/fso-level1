@@ -1,2 +1,2 @@
 # python@fso
-python version of programs used for fso with CUDA
+python version of programs used for fso 
