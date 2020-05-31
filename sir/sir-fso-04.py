@@ -60,42 +60,6 @@ def main(input_path, input_file, debug, displayimage, sx, sy, ex, ey, videoname,
 	ex = 750
 	ey = 750
 
-	try:
-		opts, args = getopt.getopt(argv,"hp:i:d:v:o:",["help","input_path=","input_file=","sx=","sy=","ex=","ey=","videofile=","output="])
-	except getopt.GetoptError:
-		print ('python sir-fso.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>')
-		sys.exit(2)
-	if(list.__len__(sys.argv) <= 1):
-		print ('python sir-fso.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>')
-		sys.exit(2)
-	#print(list.__len__(sys.argv))
-	for opt, arg in opts:
-		if opt == '-h':
-			print ('python sir-fso.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>')
-			sys.exit()
-		elif opt in ('-p'):
-			input_path = arg
-		elif opt in ('-i'):
-			input_file = arg
-		elif opt in ('-d'):
-			debug = arg
-		elif opt in ('--sx'):
-			sx = arg
-		elif opt in ('--sy'):
-			sy = arg
-		elif opt in ('--ex'):
-			ex = arg
-		elif opt in ('--ey'):
-			ey = arg
-		elif opt in ('-v'):
-			videoname = arg
-		elif opt in ('-o'):
-			createfile = arg
-		else:
-			print ('Usage: python sir-fso-02.py -p <inputpath> -i <inputfile> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
-			print ('Example: python sir-fso-02.py -p d:\\fso-test -i *.fits -d False --sx 200 --sy 200 --ex 700 --ey 700  -v test.avi -o True')
-			sys.exit()
-
 	sx = np.int32(sx)
 	sy = np.int32(sy)
 	ex = np.int32(ex)
