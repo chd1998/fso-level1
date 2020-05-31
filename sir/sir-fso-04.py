@@ -5,9 +5,10 @@ Solar Image Registration （SIR）
 @author: jkf
 
 Usage:
-python sir-fso-cuda-03.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>
+python sir-fso-04.py 
+arguments follows this order:  <inputpath> <inputfile> <debug> <displayimage> sx  sy ex ey v o
 Example:
-Python sir-fso-cuda-03.py -p d:\data\  -i *.fits -d True --sx 250 --sy 250 --ex 750 --ey 750 -v test.avi -o True
+Python sir-fso-04.py d:\data\  *.fits True True 250 250 750 750 test.avi  True
 
 ***change log***
 2019/02/05:
@@ -20,10 +21,13 @@ sir-fso-cuda-02.py:revised
 2019/06/15
 sir-fso-03.py: revised
 sir-fso-cuda-03.py:revised & minor errors corrected
+2020/05/30
+sir-fso-04.py: using fire arguments
+sir-fso-cuda-04.py: using fire arguments
 
 """
 
-import sys, getopt
+import sys
 import numpy as np
 import glob
 import time
@@ -35,8 +39,9 @@ import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 #import tools
 import platform
-import cupy as cp
-from sys import argv
+#import cupy as cp
+import scipy.fftpack as fft
+import fire
 
 #全局变量
 input_path = '.'  # 默认序列图像目录为当前
@@ -47,9 +52,9 @@ videoname = 'test.avi'  # 默认输出的视频文件名，目录为当前目录
 displayimage = True  # 在配准中是否显示动态图像，缺省是TRUE
 createfile = False  # 是否产生配准后的fits 文件，如果产生，将在数据目录下产生一个sir文件夹。 缺省是False
 sys_sep = '\\' #默认windows系统
-debug = False #打印debug信息，默认是False
+debug = False ##打印debug信息，默认是False
 
-def main(argv):
+def main(input_path, input_file, debug, displayimage, sx, sy, ex, ey, videoname, createfile):
 	sx = 250
 	sy = 250
 	ex = 750
@@ -58,15 +63,15 @@ def main(argv):
 	try:
 		opts, args = getopt.getopt(argv,"hp:i:d:v:o:",["help","input_path=","input_file=","sx=","sy=","ex=","ey=","videofile=","output="])
 	except getopt.GetoptError:
-		print ('python sir-fso-cuda-03.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>')
+		print ('python sir-fso.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>')
 		sys.exit(2)
 	if(list.__len__(sys.argv) <= 1):
-		print ('python sir-fso-cuda-03.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>')
+		print ('python sir-fso.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>')
 		sys.exit(2)
 	#print(list.__len__(sys.argv))
 	for opt, arg in opts:
 		if opt == '-h':
-			print ('python sir-fso-cuda-03.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>')
+			print ('python sir-fso.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>')
 			sys.exit()
 		elif opt in ('-p'):
 			input_path = arg
@@ -87,8 +92,8 @@ def main(argv):
 		elif opt in ('-o'):
 			createfile = arg
 		else:
-			print ('Usage: python sir-fso-cuda-03.py -p <inputpath> -i <inputfile> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
-			print ('Example: python sir-fso-cuda-03.py -p d:\\fso-test -i *.fits -d False --sx 200 --sy 200 --ex 700 --ey 700  -v test.avi -o True')
+			print ('Usage: python sir-fso-02.py -p <inputpath> -i <inputfile> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
+			print ('Example: python sir-fso-02.py -p d:\\fso-test -i *.fits -d False --sx 200 --sy 200 --ex 700 --ey 700  -v test.avi -o True')
 			sys.exit()
 
 	sx = np.int32(sx)
@@ -108,20 +113,20 @@ def main(argv):
 	print ("end point :",right)
 	print ("video name :",videoname)
 	print ("create file :",createfile)
-	print("Using CUDA device: ",cp.cuda.Device().id)
+	#print("Using CUDA device: ",cp.cuda.Device().id)
 	dxy = sir_main(input_path + sys_sep, sys_sep, input_file, left,right,disflag=displayimage, fileflag=createfile, videoname=videoname)
-	plt.figure('Subpix shift - with cuda')
+	plt.figure('Subpix shift - without cuda')
 	plt.plot(dxy[:, 0])
 	plt.plot(dxy[:, 1])
-	plt.figure('Correlation - with cuda')
+	plt.figure('Correlation - without cuda')
 	plt.plot(dxy[:, 2])
 	plt.show()
 	sys.exit(0)
 
 def sir_main(dirn, sys_sep, filen, left=[0, 0], right=[0, 0], disflag=True, fileflag=False, videoname=None):
-		plt.close('Sir 3.0 - with cuda')
-		plt.close('Subpix shift - with cuda')
-		plt.close('Correlation - with cuda')
+		plt.close('Sir 3.0 - without cuda')
+		plt.close('Subpix shift - without cuda')
+		plt.close('Correlation - without cuda')
 		total_time = 0
 
 		filename = glob.glob(dirn + sys_sep + filen)
@@ -173,8 +178,8 @@ def sir_main(dirn, sys_sep, filen, left=[0, 0], right=[0, 0], disflag=True, file
 
 				c_subpix, dis_s_subpix, dis_s_pix, sub, cor = align_all(im0, im, dis_s_pix, dis_s_subpix, X, Y)
 
-				if cor > 0.7:
-						im0 = im
+				#if cor > 0.7:
+				#		im0 = im
 
 				dxy.append(list(np.hstack((dis_s_subpix, cor))))
 
@@ -184,7 +189,7 @@ def sir_main(dirn, sys_sep, filen, left=[0, 0], right=[0, 0], disflag=True, file
 						fits.writeto(outfile, c_subpix, header, output_verify='fix', overwrite=True, checksum=False)
 
 				if disflag:
-						plt.figure('Sir 3.0 - with cuda')
+						plt.figure('Sir 3.0 - without cuda')
 
 						if K == 0:
 								dis = plt.imshow(c_subpix, vmin=mi, vmax=mx, cmap='gray')
@@ -213,6 +218,7 @@ def sir_main(dirn, sys_sep, filen, left=[0, 0], right=[0, 0], disflag=True, file
 				dt = end - start
 				dt1 = int(dt.total_seconds() * 1000)
 				total_time = total_time + dt1
+
 				pstr = ('id:%5d   dx=%7.2f   dy=%7.2f   corr=%7.2f Runtime=%d ms  %s' % (
 				i, dis_s_subpix[0], dis_s_subpix[1], cor, dt1, filename[i][dirnlen:]))
 
@@ -226,7 +232,7 @@ def sir_main(dirn, sys_sep, filen, left=[0, 0], right=[0, 0], disflag=True, file
 				video.release()
 
 		dxy = np.array(dxy)
-		print('Total time used with cuda device %d: %d ms ...'%(cp.cuda.Device().id,total_time))
+		print('Total time used without cuda: %d ms...'%total_time)
 		return dxy
 
 def align_all(s_org, c_org, dis_s_pix, dis_s_subpix, X, Y):
@@ -247,7 +253,7 @@ def align_all(s_org, c_org, dis_s_pix, dis_s_subpix, X, Y):
 		#print("here")
 		c_subpix = np.array([sub_x, sub_y]) + dis_c_pix
 		#print("here")
-		dis_c_subpix = c_subpix + dis_s_subpix
+		dis_c_subpix = c_subpix #+ dis_s_subpix
 		#print(dis_c_subpix[0], dis_c_subpix[1])
 		c_subpix = immove(c_org, dis_c_subpix[0], dis_c_subpix[1]).astype('float32')
 		#print("here")
@@ -265,7 +271,7 @@ def align_subpix(A, B, X, Y):
 				standimage = imgcut(A, X, Y)
 				compimage = imgcut(B, X, Y)
 				M, N = standimage.shape
-				L = np.array([256, M, N]).min()
+				L = np.array([600, M, N]).min()
 
 				T1, T2 = M // L, N // L
 
@@ -360,35 +366,28 @@ def xcorrcenter(standimage, compimage, R0, flag):
 		standimage = zscore2(standimage)
 		compimage = zscore2(compimage)
 		im = np.ndarray((M,N),dtype=np.complex64)
-		#s = fft.fft2(standimage)
-		#c = np.fft.ifft2(compimage)
-		#sc = s * c
-		#im = np.abs(fft.fftshift(fft.ifft2(sc)))  # /(M*N-1);%./(1+w1.^2);
+		s = fft.fft2(standimage)
+		c = np.fft.ifft2(compimage)
+		sc = s * c
+		im = np.abs(fft.fftshift(fft.ifft2(sc)))  # /(M*N-1);%./(1+w1.^2);
 		#print("Using GPU")
-        #using GPU device 0
+		'''
 		cp.cuda.Device(0).use()
 		with cp.cuda.Device(0):
-            #prepare 3 arrays on gpu
 			s_gpu = cp.ndarray((M,N),dtype=np.complex64)
 			c_gpu = cp.ndarray((M,N),dtype=np.complex64)
 			sc_gpu = cp.ndarray((M,N),dtype=np.complex64)
-            #copy images from host to gpu
 			s_gpu = cp.asarray(standimage)
 			c_gpu = cp.asarray(compimage)
-            #fft stand image, using ifft comp image for conjugate
 			s_gpu = cp.fft.fft2(s_gpu)
 			c_gpu = cp.fft.ifft2(c_gpu)
 		#print("calculating image for comparison...")
-            #multiply
-			#sc_gpu = s_gpu * c_gpu
-			sc_gpu = cp.multiply(s_gpu,c_gpu)
-            #inverse the upper result
+			sc_gpu = s_gpu * c_gpu
 			sc_gpu = cp.fft.ifft2(sc_gpu)
 		#print("calculating product of 2 images...")
-            #shift the result
 			sc_gpu = cp.abs(cp.fft.fftshift(sc_gpu))
 		im = cp.asnumpy(sc_gpu)
-
+		'''
 		#print("GPU ended!")
 		cor = im.max()
 		if cor == 0:
@@ -476,11 +475,11 @@ def immove(image, dx, dy):
     image shift by subpix
     """
     # The shift corresponds to the pixel offset relative to the reference image
+    """
     from scipy.ndimage import fourier_shift
     if dx == 0 and dy == 0:
         offset_image = image
     else:
-        #image moves with gpu
         shift = (dx, dy)
         M, N = image.shape
         gpu_image = cp.ndarray((M,N),dtype=np.complex64)
@@ -492,6 +491,16 @@ def immove(image, dx, dy):
         gpu_image = cp.fft.ifft2(gpu_image)
         offset_image = cp.asnumpy(gpu_image)
         offset_image = np.real(offset_image)
+    """
+    from scipy.ndimage import fourier_shift
+    if dx == 0 and dy == 0:
+        offset_image = image
+    else:
+        shift = (dx, dy)
+        offset_image = fourier_shift(fft.fft2(image), shift)
+        offset_image = np.real(fft.ifft2(offset_image))
+
+    return offset_image
 
     return offset_image
 
@@ -592,4 +601,4 @@ def smallmatchlarge(im,im0):
 
 
 if __name__ == "__main__":
-	main(sys.argv[1:])
+	fire.Fire(main)

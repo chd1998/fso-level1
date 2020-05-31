@@ -5,9 +5,10 @@ Solar Image Registration （SIR）
 @author: jkf
 
 Usage:
-python sir-fso-cuda-03.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>
+python sir-fso-cuda-04.py 
+arguments follows this order:  <inputpath> <inputfile> <debug> <displayimage> sx  sy ex ey v o
 Example:
-Python sir-fso-cuda-03.py -p d:\data\  -i *.fits -d True --sx 250 --sy 250 --ex 750 --ey 750 -v test.avi -o True
+Python sir-fso-cuda-04.py d:\data\  *.fits True True 250 250 750 750 test.avi  True
 
 ***change log***
 2019/02/05:
@@ -20,10 +21,14 @@ sir-fso-cuda-02.py:revised
 2019/06/15
 sir-fso-03.py: revised
 sir-fso-cuda-03.py:revised & minor errors corrected
+2020/05/30
+sir-fso-04.py: using fire arguments
+sir-fso-cuda-04.py: using fire arguments
 
 """
 
-import sys, getopt
+import sys
+import fire 
 import numpy as np
 import glob
 import time
@@ -36,7 +41,6 @@ import matplotlib.pyplot as plt
 #import tools
 import platform
 import cupy as cp
-from sys import argv
 
 #全局变量
 input_path = '.'  # 默认序列图像目录为当前
@@ -49,47 +53,11 @@ createfile = False  # 是否产生配准后的fits 文件，如果产生，将�
 sys_sep = '\\' #默认windows系统
 debug = False #打印debug信息，默认是False
 
-def main(argv):
+def main(input_path, input_file, debug, displayimage, sx, sy, ex, ey, videoname, createfile):
 	sx = 250
 	sy = 250
 	ex = 750
 	ey = 750
-
-	try:
-		opts, args = getopt.getopt(argv,"hp:i:d:v:o:",["help","input_path=","input_file=","sx=","sy=","ex=","ey=","videofile=","output="])
-	except getopt.GetoptError:
-		print ('python sir-fso-cuda-03.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>')
-		sys.exit(2)
-	if(list.__len__(sys.argv) <= 1):
-		print ('python sir-fso-cuda-03.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>')
-		sys.exit(2)
-	#print(list.__len__(sys.argv))
-	for opt, arg in opts:
-		if opt == '-h':
-			print ('python sir-fso-cuda-03.py -p <inputpath> -i <inputfile> -d<debug> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o<output>')
-			sys.exit()
-		elif opt in ('-p'):
-			input_path = arg
-		elif opt in ('-i'):
-			input_file = arg
-		elif opt in ('-d'):
-			debug = arg
-		elif opt in ('--sx'):
-			sx = arg
-		elif opt in ('--sy'):
-			sy = arg
-		elif opt in ('--ex'):
-			ex = arg
-		elif opt in ('--ey'):
-			ey = arg
-		elif opt in ('-v'):
-			videoname = arg
-		elif opt in ('-o'):
-			createfile = arg
-		else:
-			print ('Usage: python sir-fso-cuda-03.py -p <inputpath> -i <inputfile> --sx <num1> --sy <num2> --ex <num3> --ey <num4> -v <videofile> -o')
-			print ('Example: python sir-fso-cuda-03.py -p d:\\fso-test -i *.fits -d False --sx 200 --sy 200 --ex 700 --ey 700  -v test.avi -o True')
-			sys.exit()
 
 	sx = np.int32(sx)
 	sy = np.int32(sy)
@@ -592,4 +560,4 @@ def smallmatchlarge(im,im0):
 
 
 if __name__ == "__main__":
-	main(sys.argv[1:])
+	fire.Fire(main)
