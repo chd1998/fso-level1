@@ -6,7 +6,7 @@ Solar Image Registration （SIR）
 
 Usage:
 python sir-fso-cuda-04.py 
-arguments follows this order:  <inputpath> <inputfile> <debug> <displayimage> sx  sy ex ey v o
+arguments follows this order:  <inputpath> <inputfile> <debug> <displayimage> sx  sy ex ey <videoname> <output>
 Example:
 Python sir-fso-cuda-04.py d:\data\  *.fits True True 250 250 750 750 test.avi  True
 
