@@ -3,8 +3,8 @@
 #purposes: periodically syncing data from remoteip to local lustre storage via lftp
 #usage:  run in crontab every 1 min.  from 08:00-20:00
 #example: 
-#         /home/chd/fso-sync-lftp-v08.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40 >> /home/chd/log/fso-sync-tio.log
-#         /home/chd/fso-sync-lftp-v08.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA 100 >> /home/chd/log/fso-sync-ha.log
+#         /home/chd/fso-sync-lftp-v09.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40 >> /home/chd/log/fso-sync-tio.log
+#         /home/chd/fso-sync-lftp-v09.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA 100 >> /home/chd/log/fso-sync-ha.log
 #
 #changlog: 
 #       20190603    Release 0.1     first version for tio-sync.sh
@@ -116,7 +116,7 @@ fi
 st1=`date +%s`
 echo "                                                       "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
-echo "                fso-sync-lftp.sh                       "
+echo "                 $(basename $0)                        "
 echo "         (Release 0.91 20191015 15:20)                 "
 echo "                                                       "
 echo "         sync $datatype data to $destpre0              "

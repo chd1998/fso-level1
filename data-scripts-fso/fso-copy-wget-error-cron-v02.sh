@@ -83,15 +83,7 @@ datatype=`cat $errorlist|awk '{print $1}'|cut -d '/' -f 6`
 #errordir=/home/chd/log/$(basename $0)-$errorlist-dir.list
 #errorfile=/home/chd/log/$(basename $0)-$errorlist-file.list
 
-<<<<<<< HEAD
 lockfile=$logpath/$(basename $0)-$datatype-$today.lock
-=======
-<<<<<<< HEAD
-lockfile=$logpath/$(basename $0)-$datatype.lock
-=======
-lockfile=$logpath/$(basename $0)-$datatype-$today.lock
->>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
->>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
 if [ -f "$lockfile" ];then
 	mypid=$(cat $lockfile)
 	ps -p $mypid | grep $mypid &>/dev/null
@@ -156,24 +148,10 @@ do
 	  #if [ $tmps != $stdsize ]; then 
 	  #  echo "$today $ctime1: Copying Failed for  $localfile $tmps MB"
 	  #else 
-<<<<<<< HEAD
 	  echo $localfile > $logpath/localfile-$today.tmp
       #remove corrected file from the list
 	    #comm -13 $logpath/localfile-$today.tmp $errorlist | sort | uniq > $errorlist
 	  awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' $logpath/localfile-$today.tmp $errorlist > $errorlist 
-=======
-<<<<<<< HEAD
-	  echo $localfile > ./localfile.tmp
-      #remove corrected file from the list
-	    #comm -13 ./localfile.tmp $errorlist | sort | uniq > $errorlist
-	  awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' ./localfile.tmp $errorlist > $errorlist 
-=======
-	  echo $localfile > $logpath/localfile-$today.tmp
-      #remove corrected file from the list
-	    #comm -13 $logpath/localfile-$today.tmp $errorlist | sort | uniq > $errorlist
-	  awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' $logpath/localfile-$today.tmp $errorlist > $errorlist 
->>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
->>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
       #change the permission of copied file
 	  find $localfile ! -perm 777 -type f -exec chmod 777 {} \;
       size=$((size+tmps))
