@@ -97,8 +97,8 @@ localwrongsize=$logpath/$datatype-local-wrongsize-$year$monthday-cyg.list
 #errlist=/cygdrive/d/chd/LFTP4WIN-master/home/chd/log/$datatype-$fileformat@$(date +\%Y\%m\%d)-error-total.list
 tmplist=$logpath/$datatype-$fileformat-$year$monthday-tmp.list
 
-totalfilenumberdat=$logpath/fso-copy-lftp-cyg-cron.sh_$datatype\_tmpfn2.dat
-totalfilenumber=`cat $totalfilenumberdat | awk {'print $3'}`
+totalfilenumberdat=$logpath/fso-copy-lftp-cyg-cron.sh\_$datatype\_tmpfn2.dat
+totalfilenumber=`cat $totalfilenumberdat | awk {'print $1'}`
 if [[ $totalfilenumber -eq 0 ]];then
   totalfilenumber=0
 fi
@@ -221,6 +221,7 @@ st2=`date +%s`
 stdiff=`echo "$st1 $st2"|awk '{print($2-$1)}'`
 
 echo "$today0 $ctime4: Checking & Copying $datatype data @ FSO finished!"
+echo "   Total Checked : $totalfilenumber $datatype File(s) "
 #echo "           Total : $errsize4 error file(s) found"
 echo "                 : $errsize5 file(s) left"
 echo "                 : see $tmplist for all file(s) details"
