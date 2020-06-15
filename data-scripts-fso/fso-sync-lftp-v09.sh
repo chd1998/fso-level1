@@ -17,6 +17,7 @@
 #       20190718    Release 0.8     add remote data info 
 #       20190914    Release 0.9     revised display info and some minor errors
 #       20191015    Release 0.91    correct the time calculating
+#       20200607    Release 0.92    correct minor errors
 # 
 #waiting pid taskname prompt
 waiting() {
@@ -112,12 +113,15 @@ else
   echo $$>$lockfile
 fi
 
+progversion=0.92
+
+
 #st1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-st1=`date +%s`
+tstart=`date +%s`
 echo "                                                       "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
 echo "                 $(basename $0)                        "
-echo "         (Release 0.91 20191015 15:20)                 "
+echo "         (Release $progversion 20200607 08:13)       "
 echo "                                                       "
 echo "         sync $datatype data to $destpre0              "
 echo "                                                       "
@@ -159,7 +163,7 @@ echo "$today $ctime: Sync Task Started, Please Wait ... "
 #cd $destdir
 ctime1=`date --date='0 days ago' +%H:%M:%S`
 #mytime1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-mytime1=`date +%s`
+syncstart=`date +%s`
 server=ftp://$user:$password@$server
 #lftp  $server -e "mirror --ignore-time --continue  --parallel=$pnum  $srcdir $targetdir; quit">/dev/null 2>&1 &
 lftp  $server -e "mirror  --parallel=$pnum  $srcdir0 $destdir; quit">/dev/null 2>&1 &
@@ -175,7 +179,8 @@ if [ $? -ne 0 ];then
 fi
 ctime2=`date --date='0 days ago' +%H:%M:%S`
 
-mytime2=$(cat /home/chd/log/$(basename $0)-$datatype-sdtmp.dat)
+syncend=`date +%s`
+#mytime2=$(cat /home/chd/log/$(basename $0)-$datatype-sdtmp.dat)
 #mytime2=`echo $ttmp|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
 #curhm=`date  +%H%M`
@@ -228,11 +233,12 @@ s2=$(cat $filesize1)
 sn=`echo "$n1 $n2"|awk '{print($2-$1)}'`
 ss=`echo "$s1 $s2"|awk '{print($2-$1)}'`
 
-timediff=`echo "$mytime1 $mytime2"|awk '{print($2-$1)}'`
-if [ $timediff -le 0 ]; then
-	timediff=1
+synctime=`echo "$syncstart $syncend"|awk '{print($2-$1)}'`
+if [ $synctime -le 0 ]; then
+	synctime=1
+        ss=0
 fi
-speed=`echo "$ss $timediff"|awk '{print($1/$2)}'`
+speed=`echo "$ss $synctime"|awk '{print($1/$2)}'`
 
 echo $n2>$filenumber
 echo $s2>$filesize
@@ -265,8 +271,8 @@ fi
 
 ctime4=`date --date='0 days ago' +%H:%M:%S`
 #st2=`echo $ctime4|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-st2=`date +%s`
-stdiff=`echo "$st1 $st2"|awk '{print($2-$1)}'`
+tend=`date +%s`
+tdiff=`echo "$tstart $tend"|awk '{print($2-$1)}'`
 today1=`date +%Y-%m-%d`
 echo "$today $ctime4: Succeeded in Syncing $datatype data @ $server1!"
 echo "======================================================="
@@ -278,11 +284,11 @@ echo "*******************************************************"
 echo "$today $ctime4: @ $targetdir          "
 echo "          Synced : $sn file(s)"
 echo "          Synced : $ss MB "
-echo "  Sync Time Used : $timediff secs."
+echo "  Sync Time Used : $synctime secs."
 echo "        @  Speed : $speed MB/s"
 echo "    Total Synced : $n2 File(s)"
 echo "                 : $s2 MB"
-echo " Total Time Used : $stdiff secs."
+echo " Total Time Used : $tdiff secs."
 echo "            From : $today0 $ctime1"
 echo "              To : $today1 $ctime4"
 echo "======================================================="
