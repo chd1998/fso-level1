@@ -167,7 +167,7 @@ rm -f $logpre/pingtmp
 ctime1=`date --date='0 days ago' +%H:%M:%S`
 if [ $pingres -eq 0 ];then
   echo "$today $ctime1: $server1 is offline, skip syncing remote file(s)..." 
-  exit 0
+  #exit 0
 else
   echo "$today $ctime1: $server1 is online, proceeding syncing remote file(s)..."
   #echo "                 : pls wait....."
@@ -208,37 +208,38 @@ else
   #    exit 1
   #  fi
   #fi
-
-  ctime2=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctime2: Summerizing $datatype File Numbers & Size..."
-
-  #n2=`ls -lR $targetdir | grep "^-" | wc -l` 
-  #s2=`du -sm $targetdir|awk '{print $1}'` 
-
-  filetmp=${target}${syssep}*.fits
-
-  find $targetdir | grep fits | wc -l > $filenumber1 &
-  waiting "$!" "$datatype File Number Sumerizing" "Sumerizing $datatype File Number"
-  if [ $? -ne 0 ];then
-    ctime3=`date --date='0 days ago' +%H:%M:%S`
-    echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
-    cd /home/chd/
-    exit 1
-  fi
-
-  du -sm $targetdir|awk '{print $1}' > $filesize1 &
-  waiting "$!" "$datatype File Size Summerizing" "Sumerizing $datatype File Size"
-  if [ $? -ne 0 ];then
-    ctime3=`date --date='0 days ago' +%H:%M:%S`
-    echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
-    cd /home/chd/
-    exit 1
-  fi
-  if [ ! -d "$targetdir" ]; then
-    echo "0" > $filesize1
-    echo "0" > $filenumber1
-  fi
 fi
+  
+ctime2=`date --date='0 days ago' +%H:%M:%S`
+echo "$today $ctime2: Summerizing $datatype File Numbers & Size..."
+#n2=`ls -lR $targetdir | grep "^-" | wc -l` 
+#s2=`du -sm $targetdir|awk '{print $1}'` 
+
+filetmp=${target}${syssep}*.fits
+
+find $targetdir | grep fits | wc -l > $filenumber1 &
+waiting "$!" "$datatype File Number Sumerizing" "Sumerizing $datatype File Number"
+if [ $? -ne 0 ];then
+  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
+  cd /home/chd/
+  exit 1
+fi
+
+du -sm $targetdir|awk '{print $1}' > $filesize1 &
+waiting "$!" "$datatype File Size Summerizing" "Sumerizing $datatype File Size"
+if [ $? -ne 0 ];then
+  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
+  cd /home/chd/
+  exit 1
+fi
+
+if [ ! -d "$targetdir" ]; then
+  echo "0" > $filesize1
+  echo "0" > $filenumber1
+fi
+
 find $targetdir ! -perm 777 -type d -exec chmod 777 {} \; &
 
 n2=$(cat $filenumber1)
