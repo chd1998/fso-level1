@@ -23,6 +23,17 @@ firsttime=1
 lastsize=0
 speed=0
 
+<<<<<<< HEAD
+=======
+today=`date --date='0 days ago' +%Y%m%d`
+ctime=`date --date='0 days ago' +%H:%M:%S`
+
+if [ ! -d "$destdir" ]; then
+  echo "$today $ctime: $destsir doesn't exist, pls check...!"
+  exit 1 
+fi
+
+>>>>>>> 7e7f720170dad0058b8d1454cb0bbf41af748773
 while true
 do 
   echo "$destdir size in MB: "

@@ -3,6 +3,7 @@
 #Copy specified date TIO/HA data on remote host to /lustre/data mannually
 #Usage: ./fso-copy-lftp-v14.sh srcip port  dest year(4 digits) monthday(4 digits) user password datatype(TIO/HA)
 #Example: ./fso-copy-lftp-v14.sh 192.168.111.120 21 /lustre/data 2019 0427 tio ynao246135 TIO
+#Example: ./fso-copy-lftp-v14.sh 192.168.111.122 21 /lustre/data 2019 0427 ha ynao246135 HA 10"
 #changlog: 
 #        20190420       Release 0.1   first prototype release 0.1
 #        20190421       Release 0.2   fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
@@ -18,7 +19,9 @@
 #        20190704       Release 1.2   using lftp & add input args
 #        20190705       Release 1.3   logics revised
 #                       Release 1.4   revise timing logics
-#        20191015               1.41  revised time calculation
+#        20191015       Release 1.41  revised time calculation
+#        20200615       Release 1.42  fixed some minor errors
+#                                     add ping test
 #
 #waiting pid taskname prompt
 waiting() {
@@ -68,10 +71,11 @@ today=`date --date='0 days ago' +%Y%m%d`
 today0=`date  +%Y-%m-%d`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 ctime0=`date --date='0 days ago' +%H:%M:%S`
-if [ $# -ne 8 ]  ;then
+if [ $# -ne 9 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to /lustre/data mannually"
-  echo "Usage: ./fso-copy-lftp-v14.sh srcip port  dest year(4 digits) monthday(4 digits) user password datatype(TIO/HA)"
-  echo "Example: ./fso-copy-lftp-v14.sh 192.168.111.120 21 /lustre/data 2019 0427 tio ynao246135 TIO"
+  echo "Usage: ./fso-copy-lftp-v14.sh srcip port  dest year(4 digits) monthday(4 digits) user password datatype(TIO/HA) threadnumber"
+  echo "Example: ./fso-copy-lftp-v14.sh 192.168.111.120 21 /lustre/data 2019 0427 tio ynao246135 TIO 10"
+  echo "Example: ./fso-copy-lftp-v14.sh 192.168.111.122 21 /lustre/data 2019 0427 ha ynao246135 HA 10"
   exit 1
 fi
 
@@ -86,11 +90,15 @@ srcmonthday=$5
 ftpuser=$6
 password=$7
 datatype=$8
+threadn=$9
 #ftpuser=$(echo $datatype|tr '[A-Z]' '[a-z]')
 
+server=$1
 ftpserver=ftp://$ftpuser:$password@$ftpserver:$remoteport
 #echo "$ftpserver"
 #read
+
+logpre=/home/chd/log
 
 lockfile=/home/chd/log/$(basename $0)-$srcyear$srcmonthday.lock
 if [ -f $lockfile ];then
@@ -105,13 +113,15 @@ else
   echo $$>$lockfile
 fi
 
+progver=1.42
+starttime=`date +%s`
+
 echo " "
-echo "======== Welcome to FSO Data Copying System@FSO! ========"
+echo "============ Welcome to FSO Data System@FSO! ============"
 echo "                                                         "
-echo "                 fso-copy-lftp.sh                        "  
+echo "                 $(basename $0)                          "  
 echo "                                                         "
-echo "            Relase 1.41     20191015  18:06              "
-echo " Copy the $datatype data from remote ftp site to lustre  "
+echo "            Relase $progver     20200615 09:04           "
 echo "                                                         "
 echo "                $today    $ctime                         "
 echo "                                                         "
@@ -137,11 +147,24 @@ echo "                   From: $srcdir "
 echo "                   To  : $destdir "
 echo "                   Please Wait..."
 
+echo "$today $ctime: Testing $server is online or not... "
+ping $server -c 5 | grep ttl >> $logpre/pingtmp
+pingres=`cat $logpre/pingtmp | wc -l`
+rm -f $logpre/pingtmp
+ctime1=`date --date='0 days ago' +%H:%M:%S`
+if [ $pingres -eq 0 ];then
+  echo "$today $ctime1: $server is offline, skip syncing remote file(s)..." 
+  exit 0
+else
+  echo "$today $ctime1: $server is online, proceeding syncing remote file(s)..."
+  echo "                 : pls wait....."
+fi
+
 fn1=`ls -lR $destdir | grep "^-" | wc -l`
 fs1=`du -sm $destdir | awk '{print $1}'`
 ctime=`date --date='0 days ago' +%H:%M:%S`
-
-lftp $ftpserver -e "mirror --parallel=40 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
+t1=`date +%s`
+lftp $ftpserver -e "mirror --parallel=$threadn $srcdir1  $destdir; quit" >/dev/null 2>&1 &
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 if [ $? -ne 0 ];then
   ctime1=`date --date='0 days ago' +%H:%M:%S`
@@ -149,11 +172,11 @@ if [ $? -ne 0 ];then
   cd /home/chd
   exit 1
 fi
-
+t2=`date +%s`
 ttmp=$(cat /home/chd/log/dtmp)
 
 ctime1=`date --date='0 days ago' +%H:%M:%S`
-t1=`date +%s`
+#t1=`date +%s`
 #t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 #t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
@@ -194,7 +217,8 @@ filenumber=`echo "$fn1 $fn2"|awk '{print($2-$1)}'`
 #echo "$fn2, $fn1, $filenumber"
 #read
 filesize=$(($fs2-$fs1))
-timediff=$(($ttmp-$t1))
+timediff=$(($t2-$t1))
+#timediff=$(($ttmp-$t1))
 #timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
 if [ $timediff -eq 0 ]; then
   timediff=1
@@ -206,11 +230,12 @@ today1=`date +%Y-%m-%d`
 ctime3=`date --date='0 days ago' +%H:%M:%S`
 #t3=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 #t4=`echo $ctime3|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-t4=`date +%s`
-timediff1=`echo "$t1 $t4"|awk '{print($2-$1)}'`
+#t4=`date +%s`
+endtime=`date +%s`
+timediff1=`echo "$starttime $endtime"|awk '{print($2-$1)}'`
 
 echo " " 
-echo "$today $ctime3: Succeeded in Syncing $datatype data @ FSO!"
+echo "$today1 $ctime3: Succeeded in Syncing $datatype data @ FSO!"
 echo "Synced file No.  : $filenumber file(s)"
 echo "            size : $filesize MB"
 echo "    Sync @ Speed : $speed MB/s"
