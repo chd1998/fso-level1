@@ -14,10 +14,7 @@
 #       20190914    Release 0.9     revised display info and some minor errors
 #       20191015    Release 0.91    correct the time calculating
 #       20200607    Release 0.92    correct minor errors
-<<<<<<< HEAD
-=======
 #       20200615    Release 0.93    add ping test
->>>>>>> 7e7f720170dad0058b8d1454cb0bbf41af748773
 # 
 #waiting pid taskname prompt
 waiting() {
@@ -115,15 +112,12 @@ else
   echo $$>$lockfile
 fi
 
-<<<<<<< HEAD
-progversion=0.92
-=======
 progversion=0.93
->>>>>>> 7e7f720170dad0058b8d1454cb0bbf41af748773
 
 
 #st1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 tstart=`date +%s`
+ctime=`date --date='0 days ago' +%H:%M:%S`
 echo "                                                       "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
 echo "                 $(basename $0)                        "
@@ -177,75 +171,75 @@ if [ $pingres -eq 0 ];then
 else
   echo "$today $ctime1: $server1 is online, proceeding syncing remote file(s)..."
   #echo "                 : pls wait....."
+  echo "$today $ctime1: Sync Task Started, Please Wait ... "
+  #cd $destdir
+  ctime1=`date --date='0 days ago' +%H:%M:%S`
+  #mytime1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+  syncstart=`date +%s`
+  server=ftp://$user:$password@$server
+  #lftp  $server -e "mirror --ignore-time --continue  --parallel=$pnum  $srcdir $targetdir; quit">/dev/null 2>&1 &
+  lftp  $server -e "mirror  --parallel=$pnum  $srcdir0 $destdir; quit">/dev/null 2>&1 &
+  #lftp -p 2121 -u tio,ynao246135 -e "mirror --only-missing --continue  --parallel=40  /20190704/TIO /lustre/data/2019/20190704/TIO; quit" ftp://192.168.111.120 >/dev/null 2>&1 &
+  #wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir1
+
+  waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
+  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  if [ $? -ne 0 ];then
+    echo "$today $ctime3: Syncing $datatype Data @ FSO Failed!"
+    cd /home/chd/
+    exit 1
+  fi
+  ctime2=`date --date='0 days ago' +%H:%M:%S`
+
+  syncend=`date +%s`
+  #mytime2=$(cat /home/chd/log/$(basename $0)-$datatype-sdtmp.dat)
+  #mytime2=`echo $ttmp|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+
+  #curhm=`date  +%H%M`
+  #if [ $curhm -ge 1501 ]; then
+  #chmod 777 -R $targetdir &
+  #find $targetdir ! -perm 777 -type f -exec chmod 777 {} \; & 
+  #find $targetdir ! -perm 777 -type d -exec chmod 777 {} \; &
+  #  waiting "$!" "$datatype Files Permission Changing" "Changing $datatype Files Permission"
+  #  if [ $? -ne 0 ];then
+  #    ctime3=`date --date='0 days ago' +%H:%M:%S`
+  #    echo "$today $ctime3: Changing Permission of $datatype Failed!"
+  #    cd /home/chd/
+  #    exit 1
+  #  fi
+  #fi
+
+  ctime2=`date --date='0 days ago' +%H:%M:%S`
+  echo "$today $ctime2: Summerizing $datatype File Numbers & Size..."
+
+  #n2=`ls -lR $targetdir | grep "^-" | wc -l` 
+  #s2=`du -sm $targetdir|awk '{print $1}'` 
+
+  filetmp=${target}${syssep}*.fits
+
+  find $targetdir | grep fits | wc -l > $filenumber1 &
+  waiting "$!" "$datatype File Number Sumerizing" "Sumerizing $datatype File Number"
+  if [ $? -ne 0 ];then
+    ctime3=`date --date='0 days ago' +%H:%M:%S`
+    echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
+    cd /home/chd/
+    exit 1
+  fi
+
+  du -sm $targetdir|awk '{print $1}' > $filesize1 &
+  waiting "$!" "$datatype File Size Summerizing" "Sumerizing $datatype File Size"
+  if [ $? -ne 0 ];then
+    ctime3=`date --date='0 days ago' +%H:%M:%S`
+    echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
+    cd /home/chd/
+    exit 1
+  fi
+  if [ ! -d "$targetdir" ]; then
+    echo "0" > $filesize1
+    echo "0" > $filenumber1
+  fi
 fi
-
-echo "$today $ctime: Sync Task Started, Please Wait ... "
-#cd $destdir
-ctime1=`date --date='0 days ago' +%H:%M:%S`
-#mytime1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-syncstart=`date +%s`
-server=ftp://$user:$password@$server
-#lftp  $server -e "mirror --ignore-time --continue  --parallel=$pnum  $srcdir $targetdir; quit">/dev/null 2>&1 &
-lftp  $server -e "mirror  --parallel=$pnum  $srcdir0 $destdir; quit">/dev/null 2>&1 &
-#lftp -p 2121 -u tio,ynao246135 -e "mirror --only-missing --continue  --parallel=40  /20190704/TIO /lustre/data/2019/20190704/TIO; quit" ftp://192.168.111.120 >/dev/null 2>&1 &
-#wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir1
-
-waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
-ctime3=`date --date='0 days ago' +%H:%M:%S`
-if [ $? -ne 0 ];then
-  echo "$today $ctime3: Syncing $datatype Data @ FSO Failed!"
-  cd /home/chd/
-  exit 1
-fi
-ctime2=`date --date='0 days ago' +%H:%M:%S`
-
-syncend=`date +%s`
-#mytime2=$(cat /home/chd/log/$(basename $0)-$datatype-sdtmp.dat)
-#mytime2=`echo $ttmp|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-
-#curhm=`date  +%H%M`
-#if [ $curhm -ge 1501 ]; then
-#chmod 777 -R $targetdir &
-#find $targetdir ! -perm 777 -type f -exec chmod 777 {} \; & 
 find $targetdir ! -perm 777 -type d -exec chmod 777 {} \; &
-#  waiting "$!" "$datatype Files Permission Changing" "Changing $datatype Files Permission"
-#  if [ $? -ne 0 ];then
-#    ctime3=`date --date='0 days ago' +%H:%M:%S`
-#    echo "$today $ctime3: Changing Permission of $datatype Failed!"
-#    cd /home/chd/
-#    exit 1
-#  fi
-#fi
-
-ctime2=`date --date='0 days ago' +%H:%M:%S`
-echo "$today $ctime2: Summerizing $datatype File Numbers & Size..."
-
-#n2=`ls -lR $targetdir | grep "^-" | wc -l` 
-#s2=`du -sm $targetdir|awk '{print $1}'` 
-
-filetmp=${target}${syssep}*.fits
-
-find $targetdir | grep fits | wc -l > $filenumber1 &
-waiting "$!" "$datatype File Number Sumerizing" "Sumerizing $datatype File Number"
-if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
-  cd /home/chd/
-  exit 1
-fi
-
-du -sm $targetdir|awk '{print $1}' > $filesize1 &
-waiting "$!" "$datatype File Size Summerizing" "Sumerizing $datatype File Size"
-if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
-  cd /home/chd/
-  exit 1
-fi
-if [ ! -d "$targetdir" ]; then
-  echo "0" > $filesize1
-  echo "0" > $filenumber1
-fi
 
 n2=$(cat $filenumber1)
 s2=$(cat $filesize1)
@@ -256,7 +250,7 @@ ss=`echo "$s1 $s2"|awk '{print($2-$1)}'`
 synctime=`echo "$syncstart $syncend"|awk '{print($2-$1)}'`
 if [ $synctime -le 0 ]; then
 	synctime=1
-        ss=0
+  ss=0
 fi
 speed=`echo "$ss $synctime"|awk '{print($1/$2)}'`
 
@@ -309,7 +303,7 @@ echo "        @  Speed : $speed MB/s"
 echo "    Total Synced : $n2 File(s)"
 echo "                 : $s2 MB"
 echo " Total Time Used : $tdiff secs."
-echo "            From : $today0 $ctime1"
+echo "            From : $today0 $ctime"
 echo "              To : $today1 $ctime4"
 echo "======================================================="
 rm -rf $lockfile
