@@ -20,6 +20,8 @@ Changlog:
             Release 1.0     assign gpu randomly
 20191217    Release 1.1     optimize
             Release 1.2     using cupy.fft.fftn instead of fft2
+20200109    Release 1.3     add numba jit
+            Release 1.4     using  click to input arguments
             
 '''
 
