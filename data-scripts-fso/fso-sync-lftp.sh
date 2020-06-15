@@ -114,6 +114,7 @@ fi
 
 progversion=0.93
 
+
 #st1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 tstart=`date +%s`
 ctime=`date --date='0 days ago' +%H:%M:%S`
