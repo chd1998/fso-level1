@@ -20,9 +20,9 @@ function onCtrlC(){
     exit 1
 }
 
-cyear=`date --date='0 days ago' +%Y`
-today=`date --date='0 days ago' +%Y%m%d`
-ctime=`date --date='0 days ago' +%H:%M:%S`
+cyear=`date  +%Y`
+today=`date  +%Y%m%d`
+ctime=`date  +%H:%M:%S`
 syssep="/"
 
 echo " "
@@ -78,7 +78,7 @@ do
   fi
   let s++
 done
-ctime=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
 echo "                 $hdname selected"
 echo "================================================================"
 
@@ -100,7 +100,7 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 
-ctime=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
 
 dir1=${destdir1}${syssep}${ayear}${amonthday}
 dir2=${dir1}${syssep}${datatype}${syssep}
@@ -122,7 +122,7 @@ fi
 srcsize=`du -sm $srcdir|awk '{print $1}'`
 srcfilenum=`ls -lR $srcdir| grep "^-" | wc -l`
 
-ctime=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
 echo "================================================================"
 echo "$today $ctime: Archiving data from lustre to HD....."
 echo "                   From: $srcdir"
@@ -133,7 +133,7 @@ echo "================================================================"
 echo " "
 cp -ruvf  $srcdir $destdir
 if [ $? -ne 0 ]; then
-  ctime1=`date --date='0 days ago' +%H:%M:%S`
+  ctime1=`date  +%H:%M:%S`
   echo "$today $ctime1: Archiving $datatype data to $dev from $srcdir failed!"
   echo "                   please check!"
   umount $dev
@@ -141,14 +141,14 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-ctime1=`date --date='0 days ago' +%H:%M:%S`
+ctime1=`date  +%H:%M:%S`
 
 t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
 #echo "$today $ctime1: Changing Permissions of the DATA..."
 #chmod 777 -R -cfv $destdir
-#ctime1=`date --date='0 days ago' +%H:%M:%S`
+#ctime1=`date  +%H:%M:%S`
 #if [ $? -ne 0 ];then
 #  echo "$today $ctime1: changing permissions in $srcdir failed!"
 #  echo "                   please check!"
@@ -170,7 +170,7 @@ sleep 5
 #srcsize=`du -sh $srcdir`
 #destfilenum=`ls -lR $destdir| grep "^-" | wc -l`
 #destsize=`du -sm $destdir`
-ctime1=`date --date='0 days ago' +%H:%M:%S`
+ctime1=`date  +%H:%M:%S`
 echo "================================================================"
 echo "$today $ctime1: Succeeded in Archiving:"  
 echo "                   From: $srcdir"

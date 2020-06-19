@@ -21,8 +21,8 @@ waiting() {
         #恢复光标到最后保存的位置
 #        tput rc
 #        tput ed
-	ctime=`date --date='0 days ago' +%H:%M:%S`
-	today=`date --date='0 days ago' +%Y%m%d`
+	ctime=`date  +%H:%M:%S`
+	today=`date  +%Y%m%d`
 
         echo "$today $ctime: $2 Task Has Done!"
         echo "                   Finishing...."
@@ -37,17 +37,17 @@ procing() {
         while [ 1 ]
         do
 		sleep 1
-                today=`date --date='0 days ago' +%Y%m%d`
-                ctime=`date --date='0 days ago' +%H:%M:%S`
+                today=`date  +%Y%m%d`
+                ctime=`date  +%H:%M:%S`
                 echo "$today $ctime: $1, Please Wait...   "
                 #sleep 10
         done
 }
 
 procName="lftp"
-cyear=`date --date='0 days ago' +%Y`
-today=`date --date='0 days ago' +%Y%m%d`
-ctime=`date --date='0 days ago' +%H:%M:%S`
+cyear=`date  +%Y`
+today=`date  +%Y%m%d`
+ctime=`date  +%H:%M:%S`
 syssep="/"
 
 if [ $# -ne 5 ];then
@@ -131,13 +131,13 @@ s1=$(cat $filesize)
 #else
 #  echo "$today $ctime: $destdir exists!"
 #fi
-ctime=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
 echo "$today $ctime: Syncing $datatype data @ FSO..."
 echo "             From: $srcdir1 "
 echo "             To  : $destdir "
 echo "$today $ctime: Sync Task Started, Please Wait ... "
 cd $destdir1
-ctime1=`date --date='0 days ago' +%H:%M:%S`
+ctime1=`date  +%H:%M:%S`
 mytime1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 #lftp -e "mirror --ignore-time --no-perms --continue --no-umask --allow-chown --exclude '[RECYCLE]' --exclude System\ Volume\ Information/ --parallel=30  / .; quit" ftp://tio:ynao246135@192.168.111.120:21/
 #lftp -u $user,$password -e "mirror --ignore-time --continue --no-perms --no-umask --allow-chown --allow-suid --parallel=40  . .; quit" $srcdir1 >/dev/null 2>&1 &
@@ -154,24 +154,24 @@ wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --ine
 #waiting "$!" "$datatype Syncing" "Syncing $datatype Data with Thread5"
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data with MultiThread wget"
 
-ctime3=`date --date='0 days ago' +%H:%M:%S`
+ctime3=`date  +%H:%M:%S`
 if [ $? -ne 0 ];then
   echo "$today $ctime3: Syncing $datatype Data @ FSO Failed!"
   cd /home/chd/
   exit 1
 fi
-ctime2=`date --date='0 days ago' +%H:%M:%S`
+ctime2=`date  +%H:%M:%S`
 mytime2=`echo $ctime3|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
 chmod 777 -R $targetdir &
 waiting "$!" "Permission Changing" "Changing Permission"
 if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  ctime3=`date  +%H:%M:%S`
   echo "$today $ctime3: Changing Permission of $datatype Failed!"
   cd /home/chd/
   exit 1
 fi
-ctime2=`date --date='0 days ago' +%H:%M:%S`
+ctime2=`date  +%H:%M:%S`
 echo "$today $ctime2: Summerizing File Numbers & Size..."
 #n2=`ls -lR $targetdir | grep "^-" | wc -l`
 #s2=`du -sm $targetdir|awk '{print $1}'`
@@ -179,7 +179,7 @@ echo "$today $ctime2: Summerizing File Numbers & Size..."
 ls -lR $targetdir | grep "^-" | wc -l > $filenumber1 &
 waiting "$!" "File Number Sumerizing" "Sumerizing File Number"
 if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  ctime3=`date  +%H:%M:%S`
   echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
   cd /home/chd/
   exit 1
@@ -188,7 +188,7 @@ fi
 du -sm $targetdir|awk '{print $1}' > $filesize1 &
 waiting "$!" "File Size Summerizing" "Sumerizing File Size"
 if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  ctime3=`date  +%H:%M:%S`
   echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
   cd /home/chd/
   exit 1
@@ -212,7 +212,7 @@ fi
 echo $n2>$filenumber
 echo $s2>$filesize
 
-ctime2=`date --date='0 days ago' +%H:%M:%S`
+ctime2=`date  +%H:%M:%S`
 echo "$today $ctime2: Succeeded in Syncing $datatype data @ FSO!"
 echo "          Synced : $sn file(s)"
 echo "          Synced : $ss MB "

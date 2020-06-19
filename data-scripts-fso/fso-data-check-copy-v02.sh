@@ -17,8 +17,8 @@ waiting() {
   local tmppid="$!"
   wait $pid
 
-  wctime=`date --date='0 days ago' +%H:%M:%S`
-	wtoday=`date --date='0 days ago' +%Y%m%d`
+  wctime=`date  +%H:%M:%S`
+	wtoday=`date  +%Y%m%d`
                
   echo "$wtoday $wctime: $2 Task Has Done!"
   #dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
@@ -35,8 +35,8 @@ procing() {
     for j in '-' '\\' '|' '/'
     do
       tput sc
-      ptoday=`date --date='0 days ago' +%Y%m%d`
-      pctime=`date --date='0 days ago' +%H:%M:%S`
+      ptoday=`date  +%Y%m%d`
+      pctime=`date  +%H:%M:%S`
       echo -ne  "$ptoday $pctime: $1...   $j"
       sleep 1
       tput rc
@@ -50,16 +50,16 @@ procing() {
 #  while [ 1 ]
 #  do
 #    sleep 1
-#    ptoday=`date --date='0 days ago' +%Y%m%d`
-#    pctime=`date --date='0 days ago' +%H:%M:%S`
+#    ptoday=`date  +%Y%m%d`
+#    pctime=`date  +%H:%M:%S`
 #    echo "$ptoday $pctime: $1, Please Wait...   "
 #  done
 #}
 
 
-cyear=`date --date='0 days ago' +%Y`
-today=`date --date='0 days ago' +%Y%m%d`
-ctime=`date --date='0 days ago' +%H:%M:%S`
+cyear=`date  +%Y`
+today=`date  +%Y%m%d`
+ctime=`date  +%H:%M:%S`
 syssep="/"
 
 if [ $# -ne 8 ];then
@@ -95,7 +95,7 @@ else
   echo $$>$lockfile
 fi
 
-ctime1=`date --date='0 days ago' +%H:%M:%S`
+ctime1=`date  +%H:%M:%S`
 st1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 echo "                                                       "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
@@ -111,7 +111,7 @@ echo "$today $ctime: $datatype Checking, please wait..."
 /home/chd/fso-data-check-cron.sh $targetdir $datatype $fileformat $stdsize > /home/chd/log/check-$datatype-size.log &
 waiting "$!" "$datatype Checking" "Checking $datatype Data"
 if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  ctime3=`date  +%H:%M:%S`
   echo "$today $ctime3: $datatype Check Failed!"
   cd /home/chd/
   exit 1
@@ -121,14 +121,14 @@ echo "$today $ctime: $datatype Copying, please wait..."
 /home/chd/fso-copy-wget-error-cron-v02.sh $server $port $user $password $errlist > /home/chd/log/$datatype-error-copy-$(date +\%Y\%m\%d).list &
 waiting "$!" "$datatype Copying" "Copying $datatype Data"
 if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  ctime3=`date  +%H:%M:%S`
   echo "$today $ctime3: $datatype Copy Failed!"
   cd /home/chd/
   exit 1
 fi
 
 errsize2=`cat $errlist|wc -l`
-ctime3=`date --date='0 days ago' +%H:%M:%S`
+ctime3=`date  +%H:%M:%S`
 if [ $errsize2 -eq 0 ]; then
   echo "$today $ctime3: $datatype data under /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype are O.K.!" | mail -s "$today $ctime3: $datatype Data Sync Result @ lustre" nvst_obs@ynao.ac.cn
   echo "$today $ctime3: $datatype data under /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/$datatype are O.K.!" | mail -s "$today $ctime3: $datatype Data Sync Result @ lustre" chd@ynao.ac.cn
@@ -137,7 +137,7 @@ else
   mail -s "$today $ctime3: $datatype Data Sync Result @ lustre" chd@ynao.ac.cn < $errlist
 fi
 
-ctime4=`date --date='0 days ago' +%H:%M:%S`
+ctime4=`date  +%H:%M:%S`
 st2=`echo $ctime4|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 stdiff=`echo "$st1 $st2"|awk '{print($2-$1)}'`
 

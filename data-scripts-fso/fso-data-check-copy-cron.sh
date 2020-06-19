@@ -131,14 +131,14 @@ rm -f $logpath/pingtmp
 ctime1=`date +%H:%M:%S`
 if [ $pingres -ne 0 ];then 
 #comparing remote and local file(s),creat local missing file(s)
-  ctime1=`date --date='0 days ago' +%H:%M:%S`
+  ctime1=`date  +%H:%M:%S`
   echo "$today $ctime1: $server is online..."
   echo "$today $ctime1: Remote & Local $datatype File(s) Checking, please wait..."
   #/home/chd/fso-data-check-remote-cron.sh 192.168.111.120 21 tio ynao246135 2019 0913 TIO fits
   $homepre/fso-data-check-remote-cron.sh $server $port $user $password $year $monthday $datatype $fileformat > $logpath/check-remote-$datatype-$year$monthday.log &
   waiting "$!" "Remote & Local $datatype File(s) Checking" "Checking Remote & Local $datatype File(s)"
   #if [ $? -ne 0 ];then
-  #  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  #  ctime3=`date  +%H:%M:%S`
   #  echo "$today $ctime3: $datatype Check Failed!"
   #  cd $homepre
   #  exit 1
@@ -156,7 +156,7 @@ if [ $pingres -ne 0 ];then
     $homepre/fso-copy-wget-error-cron-v02.sh $server $port $user $password $destpre $remoteerrlist $stdsize > $logpath/remote-$datatype-error-copy-$year$monthday.log &
     waiting "$!" "Local $datatype Missing File(s) Copying" "Copying Local Missing $datatype Data from Remote"
     #if [ $? -ne 0 ];then
-    #  ctime3=`date --date='0 days ago' +%H:%M:%S`
+    #  ctime3=`date  +%H:%M:%S`
     #  echo "$today $ctime3: $datatype Copy From Remote Failed!"
     #fi
   fi
@@ -209,7 +209,7 @@ if [ -d $targetdir/$datatype ]; then
     $homepre/fso-copy-wget-error-cron-v02.sh $server $port $user $password $destpre $errlist $stdsize> $logpath/local-$datatype-error-copy-$year$monthday.log &
     waiting "$!" "Local Wrong Size $datatype File(s) Copying" "Copying Local Wrong Size $datatype File(s) from Remote"
     if [ $? -ne 0 ];then
-      ctime3=`date --date='0 days ago' +%H:%M:%S`
+      ctime3=`date  +%H:%M:%S`
       echo "$today $ctime3: $datatype Copy Failed!"
       cd $homepre
       exit 1
@@ -220,7 +220,7 @@ if [ -d $targetdir/$datatype ]; then
       errsize2=0
     fi
   else
-    ctime3=`date --date='0 days ago' +%H:%M:%S`
+    ctime3=`date  +%H:%M:%S`
     echo "$today $ctime3: Skip correcting local wrong size $datatype File(s)!"
     if [ -f $errlist ]; then
       errsize2=`cat $errlist|wc -l`

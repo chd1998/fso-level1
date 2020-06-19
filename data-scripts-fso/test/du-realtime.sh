@@ -28,8 +28,8 @@ destdir=${cyear}/${cyear}${cmonthday}/${cdatatype}
 while true
 do 
   echo "$destdir size in MB: "
-  today=`date --date='0 days ago' +%Y%m%d`
-  ctime=`date --date='0 days ago' +%H:%M:%S`
+  today=`date  +%Y%m%d`
+  ctime=`date  +%H:%M:%S`
   cursize=`du -sm /lustre/data/$destdir`
   echo "$today $ctime: $cursize"
   sleep 10

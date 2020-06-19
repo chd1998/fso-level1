@@ -28,8 +28,8 @@ waiting() {
         wait $pid
         tput rc
         tput ed
-	ctime=`date --date='0 days ago' +%H:%M:%S`
-	today=`date --date='0 days ago' +%Y%m%d`
+	ctime=`date  +%H:%M:%S`
+	today=`date  +%Y%m%d`
         echo "$today $ctime: $2 Task Has Done!"
 #        echo "                   Finishing..."
         kill -6 $tmppid >/dev/null 1>&2
@@ -43,8 +43,8 @@ procing() {
             for j in '-' '\\' '|' '/'
             do
                 tput sc
-                ptoday=`date --date='0 days ago' +%Y%m%d`
-                pctime=`date --date='0 days ago' +%H:%M:%S`
+                ptoday=`date  +%Y%m%d`
+                pctime=`date  +%H:%M:%S`
                 echo -ne  "$ptoday $pctime: $1...   $j"
                 sleep 1
                 tput rc
@@ -60,9 +60,9 @@ function onCtrlC(){
     exit 1
 }
 
-cyear=`date --date='0 days ago' +%Y`
-today=`date --date='0 days ago' +%Y%m%d`
-ctime=`date --date='0 days ago' +%H:%M:%S`
+cyear=`date  +%Y`
+today=`date  +%Y%m%d`
+ctime=`date  +%H:%M:%S`
 
 if [ $# -ne 9 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to /lustre/data mannually"
@@ -127,7 +127,7 @@ else
   echo "$destdir already exist!"
 fi
 
-ctime=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
 echo "$today $ctime: Syncing $datatype data @ FSO..."
 echo "                   From: $srcdir "
 echo "                   To  : $destdir "
@@ -139,19 +139,19 @@ t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++)
 itmp=$threadnumber
 while  [ $itmp -gt 0 ]
 do
-  ctimet=`date --date='0 days ago' +%H:%M:%S`
+  ctimet=`date  +%H:%M:%S`
   echo "$today $ctimet: Starting wget process: $itmp..."
   wget  -q --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=$ftpuser --ftp-password=$password --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir > /dev/null 2>&1 &
   itmp=$((itmp-1))
 done
 #wait for every wget process to end
-ctimet=`date --date='0 days ago' +%H:%M:%S`
+ctimet=`date  +%H:%M:%S`
 jobnumber=$(jobs -p | wc -l)
 echo "$today $ctimet: $jobnumber process(es) started!"
 echo "                   Syncing $datatype from @ $srcdir, please wait..."
 j=1
 while [ $j -le $jobnumber ]; do
-  ctimet=`date --date='0 days ago' +%H:%M:%S`
+  ctimet=`date  +%H:%M:%S`
   wait %$j 
   echo "$today $ctimet: Process $j exited with $?..."
   ((j++))
@@ -160,15 +160,15 @@ done
 #while [ $itmp -gt 0 ]
 #do 
 #  wget -q --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=$ftpuser --ftp-password=$password --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir  >> $datatype.lock &
-#  ctimet=`date --date='0 days ago' +%H:%M:%S`
+#  ctimet=`date  +%H:%M:%S`
 #  echo "$today $ctimet: Start thread  $itmp for Syncing $datatype @ $srcdir1"
 #  itmp=$((itmp-1))
 #done
 
-#ctimethread=`date --date='0 days ago' +%H:%M:%S`
+#ctimethread=`date  +%H:%M:%S`
 echo  "$today $ctimet: $threadnumber wget process(es) finished..."
 
-ctime1=`date --date='0 days ago' +%H:%M:%S`
+ctime1=`date  +%H:%M:%S`
 #waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 #echo "Please Wait..."
 #if [ $? -ne 0 ];then
@@ -185,7 +185,7 @@ targetdir=${destdir}
 ls -lR $targetdir | grep "^-" | wc -l > $tmpfn &
 waiting "$!" "File Number Sumerizing" "Sumerizing File Number"
 if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  ctime3=`date  +%H:%M:%S`
   echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
   cd /home/chd/
   exit 1
@@ -195,7 +195,7 @@ filenumber=$(cat $tmpfn)
 du -sm $targetdir|awk '{print $1}' > $tmpfs &
 waiting "$!" "File Size Summerizing" "Sumerizing File Size"
 if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  ctime3=`date  +%H:%M:%S`
   echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
   cd /home/chd/
   exit 1
@@ -216,7 +216,7 @@ else
   speed=`echo "$filesize $timediff"|awk '{print($1/$2)}'`
 fi
 
-ctime3=`date --date='0 days ago' +%H:%M:%S`
+ctime3=`date  +%H:%M:%S`
 #t3=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 t4=`echo $ctime3|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 timediff1=`echo "$t1 $t4"|awk '{print($2-$1)}'`

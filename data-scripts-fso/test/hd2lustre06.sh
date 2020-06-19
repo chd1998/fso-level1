@@ -23,9 +23,9 @@ echo " "
 echo "===== Welcome to HD data Archiving System @FSO (Rev. 0.6 20190424 16:00) ====="
 echo " "
 
-cyear=`date --date='0 days ago' +%Y`
-today=`date --date='0 days ago' +%Y%m%d`
-ctime=`date --date='0 days ago' +%H:%M:%S`
+cyear=`date  +%Y`
+today=`date  +%Y%m%d`
+ctime=`date  +%H:%M:%S`
 syssep="/"
 devpre="/dev/"
 
@@ -91,7 +91,7 @@ do
   fi
   let s++
 done
-ctime=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
 echo "$today $ctime: $hdname selected"
 
 dev=${devpre}${hdname}
@@ -112,7 +112,7 @@ fi
 #  fi
 #done
 srcsize=`du -sh $srcdir`
-ctime=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
 echo " "
 echo "$today $ctime: Archiving data from HD to lustre....."
 echo "                   From: $srcdir on $dev"
@@ -134,7 +134,7 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 
-ctime1=`date --date='0 days ago' +%H:%M:%S`
+ctime1=`date  +%H:%M:%S`
 echo "$today $ctime1: Copying Finished!....."
 echo "$today $ctime1: Changing Permissions of Data....."
 dir=$(ls -l /data |awk '/^d/ {print $NF}')
@@ -153,7 +153,7 @@ sleep 5s
 umount $dev
 #srcsize=`du -sh $srcdir`
 destsize=`du -sh $destdir`
-ctime1=`date --date='0 days ago' +%H:%M:%S`
+ctime1=`date  +%H:%M:%S`
 echo "$today $ctime1: Succeeded in Archiving Data:"
 echo "                   From: $srcdir on $dev"
 echo "                   To  : $destdir"

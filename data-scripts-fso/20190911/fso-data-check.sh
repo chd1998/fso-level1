@@ -17,9 +17,9 @@ function onCtrlC(){
 }
 
 procName="wget"
-cyear=`date --date='0 days ago' +%Y`
-today=`date --date='0 days ago' +%Y%m%d`
-ctime=`date --date='0 days ago' +%H:%M:%S`
+cyear=`date  +%Y`
+today=`date  +%Y%m%d`
+ctime=`date  +%H:%M:%S`
 syssep="/"
 destpre0="/lustre/data"
 srcpre0="ftp://192.168.111.120"
@@ -69,7 +69,7 @@ if [ $procCmd -le 0 ];then
   else
     echo "$destdir already exist!"
   fi
-  ctime=`date --date='0 days ago' +%H:%M:%S`
+  ctime=`date  +%H:%M:%S`
   echo "$today $ctime: Checking $datatype data@FSO..."
   echo "                   From: $srcdir "
   echo "                   To  : $destdir "
@@ -80,7 +80,7 @@ if [ $procCmd -le 0 ];then
   #wget --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir
 
    if [ $? -ne 0 ];then
-    ctime1=`date --date='0 days ago' +%H:%M:%S`
+    ctime1=`date  +%H:%M:%S`
     echo "$today $ctime1: Failed in Syncing Data from $srcdir to $destdir"
     cd /home/chd
     exit 1
@@ -89,7 +89,7 @@ if [ $procCmd -le 0 ];then
   targetdir=${destdir}${srcyear}${srcmonthday}${syssep}${datatype}
   filenumber=`ls -lR $targetdir | grep "^-" | wc -l`
   srcsize=`du -sm $targetdir | awk '{print $1}'`
-  ctime1=`date --date='0 days ago' +%H:%M:%S`
+  ctime1=`date  +%H:%M:%S`
   #chmod 777 -R $destdir
 
   echo "$today $ctime1: Succeeded in Checking $datatype data@FSO!"

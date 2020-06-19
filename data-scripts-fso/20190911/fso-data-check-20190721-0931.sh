@@ -21,8 +21,8 @@ waiting() {
   wait $pid
   tput rc
   tput ed
-  ctime=`date --date='0 days ago' +%H:%M:%S`
-  today=`date --date='0 days ago' +%Y%m%d`
+  ctime=`date  +%H:%M:%S`
+  today=`date  +%Y%m%d`
   echo " "
   echo "$today $ctime: $2 Task Has Done!"
   kill -6 $tmppid >/dev/null 1>&2
@@ -36,8 +36,8 @@ procing() {
     for j in '-' '\\' '|' '/'
     do
       tput sc
-      ptoday=`date --date='0 days ago' +%Y%m%d`
-      pctime=`date --date='0 days ago' +%H:%M:%S`
+      ptoday=`date  +%Y%m%d`
+      pctime=`date  +%H:%M:%S`
       echo -ne  "$ptoday $pctime: $1...   $j"
       sleep 1
       tput rc
@@ -52,8 +52,8 @@ if [ $# -ne 4 ];then
   exit 0
 fi
 
-today=`date --date='0 days ago' +%Y%m%d`
-ctime=`date --date='0 days ago' +%H:%M:%S`
+today=`date  +%Y%m%d`
+ctime=`date  +%H:%M:%S`
 cdir=$1
 datatype=$2
 fileformat=$3
@@ -85,7 +85,7 @@ if [ ! -d "$cdir" ];then
   echo "Please check..."
   exit 0
 fi
-ctime=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
 t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 echo " "
 echo "================================================================================"
@@ -127,8 +127,8 @@ waiting "$!" "Current wrong $datatype $fileformat file(s) adding" "Adding curren
 totalerror=`cat $totalerrorlist|wc -l`
 mv -f $listtmp $list
 curnum=$(cat $difflist|wc -l)
-today=`date --date='0 days ago' +%Y%m%d`
-ctime1=`date --date='0 days ago' +%H:%M:%S`
+today=`date  +%Y%m%d`
+ctime1=`date  +%H:%M:%S`
 t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
 if [ $timediff -lt 0 ]; then

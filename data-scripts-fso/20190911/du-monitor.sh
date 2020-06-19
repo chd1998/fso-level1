@@ -25,8 +25,8 @@ if [ ! -d "$cdir" ];then
   echo "Please check..."
   exit 0
 fi
-today=`date --date='0 days ago' +%Y%m%d`
-ctime=`date --date='0 days ago' +%H:%M:%S`
+today=`date  +%Y%m%d`
+ctime=`date  +%H:%M:%S`
 echo " "
 echo "$today $ctime : Counting the file numbers &  size in $cdir"
 echo "                    Please wait..."
@@ -35,13 +35,13 @@ echo " "
 sdata=`du -sm $cdir|awk '{print $1}'`
 filenumber=`ls -lR $curdir | grep "^-" | wc -l`
 #sleep $delaytime
-ctime=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
 while true
 do 
-#  ctime=`date --date='0 days ago' +%H:%M:%S`
+#  ctime=`date  +%H:%M:%S`
   t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
   cursize=`du -sm $cdir|awk '{print $1}'`
-  ctime1=`date --date='0 days ago' +%H:%M:%S`
+  ctime1=`date  +%H:%M:%S`
   t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
   curdir=`du -sm $cdir|awk '{print $2}'`
   edata=$cursize
@@ -53,7 +53,7 @@ do
   speed=`echo "$sdata $edata $dtime"|awk '{print(($2-$1)/$3)}'`
   filenumber1=`ls -lR $curdir | grep "^-" | wc -l`
   dfile=$((filenumber1-filenumber))
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  ctime3=`date  +%H:%M:%S`
   echo "$today $ctime3 : $curdir"    
   echo "Start with file No. : $filenumber file(s)"
   echo "          file size : $sdata MB  "

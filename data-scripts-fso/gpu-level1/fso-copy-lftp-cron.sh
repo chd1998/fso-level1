@@ -33,8 +33,8 @@ waiting() {
   wait $pid
   tput rc
   tput ed
-  wctime=`date --date='0 days ago' +%H:%M:%S`
-  wtoday=`date --date='0 days ago' +%Y%m%d`
+  wctime=`date  +%H:%M:%S`
+  wtoday=`date  +%Y%m%d`
   echo "$wtoday $wctime: $2 Task Has Done!"
 #  dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
   #dt1=`date +%s`
@@ -51,8 +51,8 @@ procing() {
     #for j in '-' '\\' '|' '/'
     #do
     #  tput sc
-      ptoday=`date --date='0 days ago' +%Y%m%d`
-      pctime=`date --date='0 days ago' +%H:%M:%S`
+      ptoday=`date  +%Y%m%d`
+      pctime=`date  +%H:%M:%S`
       #echo -ne  "$ptoday $pctime: $1...   $j"
       echo "$ptoday $pctime: $1..."
       sleep 1
@@ -68,11 +68,11 @@ function onCtrlC(){
     exit 1
 }
 
-cyear=`date --date='0 days ago' +%Y`
-today=`date --date='0 days ago' +%Y%m%d`
+cyear=`date  +%Y`
+today=`date  +%Y%m%d`
 today0=`date  +%Y-%m-%d`
-ctime=`date --date='0 days ago' +%H:%M:%S`
-ctime0=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
+ctime0=`date  +%H:%M:%S`
 tstart=`date +%s`
 
 if [ $# -ne 8 ]  ;then
@@ -102,7 +102,7 @@ ftpserver=ftp://$ftpuser:$password@$ftpserver:$remoteport
 #ping $ftpserver -c 5 | grep ttl >> $logpre/pingtmp
 #pingres=`cat $logpre/pingtmp | wc -l`
 #rm -f $logpre/pingtmp
-#ctime1=`date --date='0 days ago' +%H:%M:%S`
+#ctime1=`date  +%H:%M:%S`
 #if [ $pingres -eq 0 ];then 
 #  echo "$today $ctime1: $ftpserver is offline, skip syncing remote file(s)..." >>
 #  exit 0
@@ -152,8 +152,8 @@ else
   echo "$destdir already exist!"
 fi
 
-ctime=`date --date='0 days ago' +%H:%M:%S`
-#ctime0=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
+#ctime0=`date  +%H:%M:%S`
 #t1=`date +%s`
 echo "$today $ctime: Syncing $datatype data @ FSO..."
 echo "                   From: $srcdir "
@@ -164,7 +164,7 @@ echo "$today $ctime: Testing $server is online or not... "
 ping $server -c 5 | grep ttl >> $logpre/pingtmp
 pingres=`cat $logpre/pingtmp | wc -l`
 rm -f $logpre/pingtmp
-ctime1=`date --date='0 days ago' +%H:%M:%S`
+ctime1=`date  +%H:%M:%S`
 if [ $pingres -eq 0 ];then
   echo "$today $ctime1: $server is offline, skip syncing remote file(s)..." 
   exit 0
@@ -174,12 +174,12 @@ echo "$today $ctime1: $server is online, syncing remote file(s)..."
 
 fn1=`ls -lR $destdir | grep "^-" | wc -l`
 fs1=`du -sm $destdir | awk '{print $1}'`
-ctime=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
 t1=`date +%s`
 lftp $ftpserver -e "mirror -X dark/* -X flat/* -X Dark/* -X FLAT*/* --only-missing --parallel=20 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 if [ $? -ne 0 ];then
-  ctime1=`date --date='0 days ago' +%H:%M:%S`
+  ctime1=`date  +%H:%M:%S`
   echo "$today $ctime1: Failed in Syncing $datatype Data from $srcdir to $destdir"
   #cd /home/
   exit 1
@@ -188,7 +188,7 @@ fi
 #ttmp=$(cat $logpre/dtmp)
 ttmp=`date +%s`
 
-ctime1=`date --date='0 days ago' +%H:%M:%S`
+ctime1=`date  +%H:%M:%S`
 #t1=`date +%s`
 #t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 #t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
@@ -197,7 +197,7 @@ targetdir=${destdir}
 ls -lR $targetdir | grep "^-" | wc -l > $logpre/tmpfn2.dat &
 waiting "$!" "File Number Sumerizing" "Sumerizing File Number"
 if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  ctime3=`date  +%H:%M:%S`
   echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
   cd /home/chd/
   exit 1
@@ -210,7 +210,7 @@ fn2=$(cat $logpre/tmpfn2.dat)
 du -sm $targetdir|awk '{print $1}' > $logpre/tmpfs2.dat &
 waiting "$!" "File Size Summerizing" "Sumerizing File Size"
 if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  ctime3=`date  +%H:%M:%S`
   echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
   cd /home/chd/
   exit 1
@@ -239,7 +239,7 @@ fi
 speed=`echo "$filesize $timediff"|awk '{print($1/$2)}'`
 
 today1=`date +%Y-%m-%d`
-ctime3=`date --date='0 days ago' +%H:%M:%S`
+ctime3=`date  +%H:%M:%S`
 #t3=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 #t4=`echo $ctime3|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 tend=`date +%s`

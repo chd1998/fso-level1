@@ -16,8 +16,8 @@ waiting() {
 #恢复光标到最后保存的位置
   tput rc
   tput ed
-  wctime=`date --date='0 days ago' +%H:%M:%S`
-	wtoday=`date --date='0 days ago' +%Y%m%d`
+  wctime=`date  +%H:%M:%S`
+	wtoday=`date  +%Y%m%d`
                
   echo "$wtoday $wctime: $2 Task Has Done!"
   dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
@@ -35,8 +35,8 @@ procing() {
     for j in '-' '\\' '|' '/'
       do
         tput sc
-        ptoday=`date --date='0 days ago' +%Y%m%d`
-        pctime=`date --date='0 days ago' +%H:%M:%S`
+        ptoday=`date  +%Y%m%d`
+        pctime=`date  +%H:%M:%S`
         echo -ne  "$ptoday $pctime: $1...   $j"
         sleep 1
         tput rc
@@ -45,9 +45,9 @@ procing() {
 }
 
 #procName="lftp"
-cyear=`date --date='0 days ago' +%Y`
-today=`date --date='0 days ago' +%Y%m%d`
-ctime=`date --date='0 days ago' +%H:%M:%S`
+cyear=`date  +%Y`
+today=`date  +%Y%m%d`
+ctime=`date  +%H:%M:%S`
 syssep="/"
 
 if [ $# -ne 7 ];then
@@ -128,18 +128,18 @@ srcdir1=${srcpre0}
 n1=$(cat $filenumber)
 s1=$(cat $filesize)
 
-ctime=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
 echo "$today $ctime: Comparing $datatype Data Between $server and $destpre0 @ FSO..."
 echo "             From: $server$srcdir "
 echo "             To  : $targetdir "
 echo "$today $ctime: Counting Task Started, Please Wait ... "
 #cd $destdir
-ctime1=`date --date='0 days ago' +%H:%M:%S`
+ctime1=`date  +%H:%M:%S`
 mytime1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 server=ftp://$user:$password@$server
 lftp  $server -e "du -sm $srcdir; quit">srcfssum-$datatype@$1.dat &
 waiting "$!" "$datatype size counting @ $1" "Counting $datatype Data Size @ $1"
-ctime3=`date --date='0 days ago' +%H:%M:%S`
+ctime3=`date  +%H:%M:%S`
 if [ $? -ne 0 ];then
   echo "$today $ctime3: Counting $datatype Data Size @ $1 Failed!"
   cd /home/chd/
@@ -151,7 +151,7 @@ lftp  $server -e "find $srcdir| wc -l ; quit">srcfnsum-$datatype@$1.dat &
 #wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir1
 
 waiting "$!" "$datatype file No. counting @ $1" "Counting $datatype Data File No. @ $1"
-ctime3=`date --date='0 days ago' +%H:%M:%S`
+ctime3=`date  +%H:%M:%S`
 if [ $? -ne 0 ];then
   echo "$today $ctime3: Counting $datatype File No. @ $1 Failed!"
   cd /home/chd/
@@ -159,7 +159,7 @@ if [ $? -ne 0 ];then
 fi
 srcfssum=$(cat srcfssum-$datatype@$1.dat|awk '{print $1}')
 srcfnsum=$(cat srcfnsum-$datatype@$1.dat|awk '{print $1}')
-ctime2=`date --date='0 days ago' +%H:%M:%S`
+ctime2=`date  +%H:%M:%S`
 
 mytime2=$(cat /home/chd/log/$(basename $0)-$datatype-sdtmp.dat)
 #mytime2=`echo $ttmp|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
@@ -170,14 +170,14 @@ mytime2=$(cat /home/chd/log/$(basename $0)-$datatype-sdtmp.dat)
 #find $targetdir ! -perm 777 -type f -exec chmod 777 {} \; &
 #  waiting "$!" "$datatype Files Permission Changing" "Changing $datatype Files Permission"
 #  if [ $? -ne 0 ];then
-#    ctime3=`date --date='0 days ago' +%H:%M:%S`
+#    ctime3=`date  +%H:%M:%S`
 #    echo "$today $ctime3: Changing Permission of $datatype Failed!"
 #    cd /home/chd/
 #    exit 1
 #  fi
 #fi
 
-ctime2=`date --date='0 days ago' +%H:%M:%S`
+ctime2=`date  +%H:%M:%S`
 echo "$today $ctime2: Summerizing $datatype File Numbers & Size @ $destdir..."
 
 #n2=`ls -lR $targetdir | grep "^-" | wc -l` 
@@ -186,7 +186,7 @@ echo "$today $ctime2: Summerizing $datatype File Numbers & Size @ $destdir..."
 ls -lR $targetdir | grep "^-" | wc -l > $filenumber1 &
 waiting "$!" "$datatype File Number Sumerizing @ $destdir" "Sumerizing $datatype File Number @ $destdir"
 if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  ctime3=`date  +%H:%M:%S`
   echo "$today $ctime3: Sumerizing File Number of $datatype @ $destdir Failed!"
   cd /home/chd/
   exit 1
@@ -195,7 +195,7 @@ fi
 du -sm $targetdir|awk '{print $1}' > $filesize1 &
 waiting "$!" "$datatype File Size Summerizing @ $destdir" "Sumerizing $datatype File Size @ $destdir"
 if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  ctime3=`date  +%H:%M:%S`
   echo "$today $ctime3: Sumerizing File Size of $datatype @ $destdir Failed!"
   cd /home/chd/
   exit 1
@@ -219,7 +219,7 @@ speed=`echo "$ss $timediff"|awk '{print($1/$2)}'`
 echo $n2>$filenumber
 echo $s2>$filesize
 
-ctime4=`date --date='0 days ago' +%H:%M:%S`
+ctime4=`date  +%H:%M:%S`
 st2=`echo $ctime4|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 stdiff=`echo "$st1 $st2"|awk '{print($2-$1)}'`
 

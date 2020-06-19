@@ -29,8 +29,8 @@ waiting() {
 #恢复光标到最后保存的位置
 #        tput rc
 #        tput ed
-  wctime=`date --date='0 days ago' +%H:%M:%S`
-  wtoday=`date --date='0 days ago' +%Y%m%d`
+  wctime=`date  +%H:%M:%S`
+  wtoday=`date  +%Y%m%d`
                
   echo "$wtoday $wctime: $2 Task Has Done!"
   #dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
@@ -47,17 +47,17 @@ procing() {
   while [ 1 ]
   do
     sleep 1
-    ptoday=`date --date='0 days ago' +%Y%m%d`
-    pctime=`date --date='0 days ago' +%H:%M:%S`
+    ptoday=`date  +%Y%m%d`
+    pctime=`date  +%H:%M:%S`
     echo "$ptoday $pctime: $1, Please Wait...   "
   done
 }
 
 #procName="lftp"
-cyear=`date --date='0 days ago' +%Y`
-today=`date --date='0 days ago' +%Y%m%d`
-today0=`date --date='0 days ago' +%Y-%m-%d`
-ctime=`date --date='0 days ago' +%H:%M:%S`
+cyear=`date  +%Y`
+today=`date  +%Y%m%d`
+today0=`date  +%Y-%m-%d`
+ctime=`date  +%H:%M:%S`
 syssep="/"
 
 if [ $# -ne 7 ];then
@@ -152,13 +152,13 @@ srcdir1=${srcpre0}
 #n1=$(cat $filenumber)
 #s1=$(cat $filesize)
 
-ctime=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
 echo "$today $ctime: Syncing $datatype data @ FSO..."
 echo "             From: $server$srcdir "
 echo "             To  : $targetdir "
 echo "$today $ctime: Sync Task Started, Please Wait ... "
 #cd $destdir
-ctime1=`date --date='0 days ago' +%H:%M:%S`
+ctime1=`date  +%H:%M:%S`
 #mytime1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 mytime1=`date +%s`
 server=ftp://$user:$password@$server
@@ -168,13 +168,13 @@ lftp  $server -e "mirror  --parallel=$pnum  $srcdir0 $destdir; quit">/dev/null 2
 #wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir1
 
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
-ctime3=`date --date='0 days ago' +%H:%M:%S`
+ctime3=`date  +%H:%M:%S`
 if [ $? -ne 0 ];then
   echo "$today $ctime3: Syncing $datatype Data @ FSO Failed!"
   cd /home/chd/
   exit 1
 fi
-ctime2=`date --date='0 days ago' +%H:%M:%S`
+ctime2=`date  +%H:%M:%S`
 
 mytime2=$(cat $logpre/$(basename $0)-$datatype-sdtmp.dat)
 #mytime2=`echo $ttmp|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
@@ -186,14 +186,14 @@ mytime2=$(cat $logpre/$(basename $0)-$datatype-sdtmp.dat)
 find $targetdir ! -perm 777 -type d -exec chmod 777 {} \; &
 #  waiting "$!" "$datatype Files Permission Changing" "Changing $datatype Files Permission"
 #  if [ $? -ne 0 ];then
-#    ctime3=`date --date='0 days ago' +%H:%M:%S`
+#    ctime3=`date  +%H:%M:%S`
 #    echo "$today $ctime3: Changing Permission of $datatype Failed!"
 #    cd /home/chd/
 #    exit 1
 #  fi
 #fi
 
-ctime2=`date --date='0 days ago' +%H:%M:%S`
+ctime2=`date  +%H:%M:%S`
 echo "$today $ctime2: Summerizing $datatype File Numbers & Size..."
 
 #n2=`ls -lR $targetdir | grep "^-" | wc -l` 
@@ -204,7 +204,7 @@ filetmp=${target}${syssep}*.fits
 find $targetdir | grep fits | wc -l > $filenumber1 &
 waiting "$!" "$datatype File Number Sumerizing" "Sumerizing $datatype File Number"
 if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  ctime3=`date  +%H:%M:%S`
   echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
   cd /home/chd/
   exit 1
@@ -213,7 +213,7 @@ fi
 du -sm $targetdir|awk '{print $1}' > $filesize1 &
 waiting "$!" "$datatype File Size Summerizing" "Sumerizing $datatype File Size"
 if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  ctime3=`date  +%H:%M:%S`
   echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
   cd /home/chd/
   exit 1
@@ -264,7 +264,7 @@ if [ -z $srcn ];then
   srcn=0
 fi
 
-ctime4=`date --date='0 days ago' +%H:%M:%S`
+ctime4=`date  +%H:%M:%S`
 #st2=`echo $ctime4|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 st2=`date +%s`
 stdiff=`echo "$st1 $st2"|awk '{print($2-$1)}'`

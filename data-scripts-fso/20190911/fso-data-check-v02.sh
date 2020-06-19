@@ -11,9 +11,9 @@ echo "===== Welcome to FSO Data Checking System @FSO (Rev. 0.2 20190426 10:33) =
 echo " "
 
 procName="rsync"
-cyear=`date --date='0 days ago' +%Y`
-today=`date --date='0 days ago' +%Y%m%d`
-ctime=`date --date='0 days ago' +%H:%M:%S`
+cyear=`date  +%Y`
+today=`date  +%Y%m%d`
+ctime=`date  +%H:%M:%S`
 syssep="/"
 #destpre0="/lustre/data"
 #srcIP="192.168.111.120"
@@ -50,7 +50,7 @@ if [ $procCmd -le 0 ];then
   else
     echo "$destdir already exist!"
   fi
-  ctime=`date --date='0 days ago' +%H:%M:%S`
+  ctime=`date  +%H:%M:%S`
   echo "$today $ctime: Checking Syncing Results of $datatype data@FSO"
   echo "From: $srcdir:"
   echo "To  : $destdir"
@@ -64,7 +64,7 @@ if [ $procCmd -le 0 ];then
   fi 
   destsize=`du -sm $destdir`
   filenumber=`ls -lR $destdir | grep "^-" | wc -l`
-  ctime1=`date --date='0 days ago' +%H:%M:%S`
+  ctime1=`date  +%H:%M:%S`
   echo "$today $ctime1: Succeeded in Checking Syncing $datatype data @ FSO!"
   echo "         Dest Dir: $destdir "
   echo "     Dest File No: $filenumber file(s)"
