@@ -270,8 +270,10 @@ echo "$today $ctime3: Sending Email to Observation Assistants..."
 #  echo "$today $ctime3: $datatype data under /lustre/data/$year/$year$monthday/$datatype are O.K.!" | mail -s "$year$monthday-$datatype@lustre: $errsize4 Error File(s) Found" nvst_obs@ynao.ac.cn
 #  echo "$today $ctime3: $datatype data under /lustre/data/$year/$year$monthday/$datatype are O.K.!" | mail -s "$year$monthday-$datatype@lustre: $errsize4 Error File(s) Found" chd@ynao.ac.cn
 #else
-mail -s "$year$monthday-$datatype@lustre: $errsize5 Error $datatype File(s) Found" nvst_obs@ynao.ac.cn < $logpath/errtmp-$datatype-$year$monthday
-mail -s "$year$monthday-$datatype@lustre: $errsize5 Error $datatype File(s) Found" chd@ynao.ac.cn < $logpath/errtmp-$datatype-$year$monthday
+mail -s "$year$monthday-$datatype@lustre: $errsize5 Error $datatype File(s) Found" nvst_obs@ynao.ac.cn < $logpath/errtmp-$datatype-$year$monthday &
+waiting "$!" " Sending" "Sending $datatype Check Result to nvst_obs@ynao.ac.cn"
+mail -s "$year$monthday-$datatype@lustre: $errsize5 Error $datatype File(s) Found" chd@ynao.ac.cn < $logpath/errtmp-$datatype-$year$monthday &
+waiting "$!" " Sending" "Sending $datatype Check Result to chd@ynao.ac.cn"
 #fi
 
 ctime4=`date +%H:%M:%S`
