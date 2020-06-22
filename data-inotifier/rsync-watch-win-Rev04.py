@@ -39,7 +39,8 @@ init(autoreset=True)
 #cygrsyncSrc='/cygdrive/d/test/data'
 #rsyncDes='armnas-rock64::test'
 cygrsyncPrefix='/cygdrive'
-rsync_exec='c:\\cygwin64\\bin'
+#rsync_exec='c:\\cygwin64\\bin'
+rsync_exec='d:\\rsync'
 rsyncSrc=''
 rsyncDes=''
 
