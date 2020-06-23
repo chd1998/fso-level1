@@ -29,6 +29,11 @@ IMPORTANT：
         using fire arguments instead of opt
     #Known Issues:
         don't support file/directory name with spaces
+20200623 Release 06:
+    #OPTIMIZE:
+        using fire arguments instead of opt and working now
+    #Known Issues:
+        don't support file/directory name with spaces
 
 '''
 import subprocess
@@ -52,10 +57,10 @@ def pyrsync(rsyncSrc_orig,rsyncDes,rsync_exec):
     #rsyncSrc='d:\\test\\data'
     #cygrsyncSrc='/cygdrive/d/test/data'
     #rsyncDes='armnas-rock64::test'
-    
-    #cygtmp=rsyncSrc_orig.replace('\\','/')
-    #cygtmp=cygtmp.replace(':','')
-    #cygrsyncSrc=cygrsyncPrefix+'/'+cygtmp
+    cygrsyncPrefix='/cygdrive'
+    cygtmp=rsyncSrc_orig.replace('\\','/')
+    cygtmp=cygtmp.replace(':','')
+    cygrsyncSrc=cygrsyncPrefix+'/'+cygtmp
     #rsyncSrc=rsyncSrc_orig.replace('\\','\\\\')
     rsyncSrc=rsyncSrc_orig
     #print(rsyncSrc_orig)
@@ -96,7 +101,7 @@ def pyrsync(rsyncSrc_orig,rsyncDes,rsync_exec):
                 #print(current_file)
                 #current_file='/cygdrive/e/test/data'
                 #cmd='cd '+rsyncSrc+' && '+'start /b '+rsync_exec+'\\rsync.exe -av -R -d --port=873  --progress '+current_file+' '+rsyncDes
-                cmd='cd '+rsyncSrc+' && '+'start /b '+rsync_exec+'\\rsync.exe -av -R -d --port=873  --progress '+current_file+' '+rsyncDes
+                cmd='cd '+rsyncSrc+' && '+'start /b '+rsync_exec+'\\rsync.exe -av -R -d --port=873  --progress '+cygrsyncSrc+' '+rsyncDes
                 #print(cmd)
                 #cmd=cmd.encode(locale.getdefaultlocale()[1])
                 touched=True
