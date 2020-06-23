@@ -27,8 +27,8 @@ waiting() {
         wait $pid
         tput rc
         tput ed
-	ctime=`date --date='0 days ago' +%H:%M:%S`
-	today=`date --date='0 days ago' +%Y%m%d`
+	ctime=`date  +%H:%M:%S`
+	today=`date  +%Y%m%d`
         echo "$today $ctime: $2 Task Has Done!"
         dt1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 #        echo "                   Finishing..."
@@ -45,8 +45,8 @@ procing() {
             for j in '-' '\\' '|' '/'
             do
                 tput sc
-                ptoday=`date --date='0 days ago' +%Y%m%d`
-                pctime=`date --date='0 days ago' +%H:%M:%S`
+                ptoday=`date  +%Y%m%d`
+                pctime=`date  +%H:%M:%S`
                 echo -ne  "$ptoday $pctime: $1...   $j"
                 sleep 0.2
                 tput rc

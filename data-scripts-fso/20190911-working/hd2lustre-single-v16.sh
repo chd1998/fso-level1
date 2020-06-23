@@ -29,11 +29,11 @@ waiting() {
   procing "$3" &
   local tmppid="$!"
   wait $pid
-#»Ö¸´¹â±êµ½×îºó±£´æµÄÎ»ÖÃ
+#ï¿½Ö¸ï¿½ï¿½ï¿½êµ½ï¿½ï¿½ó±£´ï¿½ï¿½Î»ï¿½ï¿½
 #  tput rc
 #  tput ed
-	wctime=`date --date='0 days ago' +%H:%M:%S`
-	wtoday=`date --date='0 days ago' +%Y%m%d`
+	wctime=`date  +%H:%M:%S`
+	wtoday=`date  +%Y%m%d`
                
  echo "$wtoday $wctime: $2 Task Has Done!"
 #  dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
@@ -43,15 +43,15 @@ waiting() {
   #echo "$dt1" > /home/chd/log/tmp
 }
 
-    #   Êä³ö½ø¶ÈÌõ, Ð¡¹÷ÐÍ
+    #   ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, Ð¡ï¿½ï¿½ï¿½ï¿½
 procing() {
   trap 'exit 0;' 6
   tput ed
   while [ 1 ]
    do
      sleep 1
-     ptoday=`date --date='0 days ago' +%Y%m%d`
-     pctime=`date --date='0 days ago' +%H:%M:%S`
+     ptoday=`date  +%Y%m%d`
+     pctime=`date  +%H:%M:%S`
      echo "$ptoday $pctime: $1, Please Wait...   "
    done
 }
@@ -64,9 +64,9 @@ function onCtrlC(){
     exit 1
 }
 
-cyear=`date --date='0 days ago' +%Y`
-today=`date --date='0 days ago' +%Y%m%d`
-ctime=`date --date='0 days ago' +%H:%M:%S`
+cyear=`date  +%Y`
+today=`date  +%Y%m%d`
+ctime=`date  +%H:%M:%S`
 syssep="/"
 devpre="/dev/"
 
@@ -145,7 +145,7 @@ do
   fi
   let s++
 done
-ctime=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
 echo "$today $ctime: $hdname selected"
 
 dev=${devpre}${hdname}
@@ -166,7 +166,7 @@ destfilenumtmp=0
 destsizetotal=0
 destfilenumtotal=0
 timetotal=0
-ctime=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
 t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
 #create destdir with datatype is missing
@@ -176,7 +176,7 @@ fi
 dest=${destdir}${ayear}${amonthday}
 src=${srcdir}${ayear}${amonthday}
 
-ctime1=`date --date='0 days ago' +%H:%M:%S`
+ctime1=`date  +%H:%M:%S`
 echo " "
 echo "==============================================================="
 echo "$today $ctime1: Archiving @datatype data from HD to lustre....."
@@ -192,14 +192,14 @@ tar cf - . | pv -s $(du -sb "$src" | cut -f1) | tar xf - -C "$dest"
 waiting "$!" "$datatype Data Copying" "Copying $datatype Data"
 
 if [ $? -ne 0 ];then
-  ctime1=`date --date='0 days ago' +%H:%M:%S`
+  ctime1=`date  +%H:%M:%S`
   echo "$today $ctime1: Archiving $src on $dev to $dest failed!"
   echo "                   please check!"
   umount $dev
   exit 1
 fi
 
-ctime1=`date --date='0 days ago' +%H:%M:%S`
+ctime1=`date  +%H:%M:%S`
 t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
 destsize=`du -sm $dest|awk '{print $1}'`
@@ -208,7 +208,7 @@ timetotal=`echo "$t1 $t2"|awk '{print($2-$1)}'`
 echo "$today $ctime1: Copying From $src To $dest Finished!....."
   
 #speed of copy 
-ctime2=`date --date='0 days ago' +%H:%M:%S`
+ctime2=`date  +%H:%M:%S`
 
 if [ $timetotal -eq 0 ]; then
 	speed=0

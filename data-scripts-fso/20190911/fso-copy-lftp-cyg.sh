@@ -31,8 +31,8 @@ waiting() {
 # restore cur pos
 #  tput rc
 #  tput ed
-	wctime=`date --date='0 days ago' +%H:%M:%S`
-	wtoday=`date --date='0 days ago' +%Y%m%d`
+	wctime=`date  +%H:%M:%S`
+	wtoday=`date  +%Y%m%d`
 	
 	echo -e "\n$wtoday $wctime: $2 Task Has Done!"
 	echo "                   Finishing..."
@@ -52,8 +52,8 @@ procing() {
           for j in '-' '\\' '|' '/'
           do
             tput sc
-            ptoday=`date --date='0 days ago' +%Y%m%d`
-            pctime=`date --date='0 days ago' +%H:%M:%S`
+            ptoday=`date  +%Y%m%d`
+            pctime=`date  +%H:%M:%S`
             echo -ne  "$ptoday $pctime: $1...   $j"
             sleep 1
             tput rc
@@ -68,10 +68,10 @@ function onCtrlC(){
     exit 1
 }
 
-cyear=`date --date='0 days ago' +%Y`
-today=`date --date='0 days ago' +%Y%m%d`
-ctime=`date --date='0 days ago' +%H:%M:%S`
-ctime0=`date --date='0 days ago' +%H:%M:%S`
+cyear=`date  +%Y`
+today=`date  +%Y%m%d`
+ctime=`date  +%H:%M:%S`
+ctime0=`date  +%H:%M:%S`
 if [ $# -ne 8 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to local HD under cygwin"
   echo "Example: ./fso-copy-lftp-cyg.sh 192.168.111.120 21 f 2019 0713 tio ynao246135 TIO"
@@ -135,7 +135,7 @@ else
   echo "$destdir already exist!"
 fi
 
-ctime=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
 echo "$today $ctime: Syncing $datatype data @ FSO..."
 echo "                   From: $srcdir "
 echo "                   To  : $destdir "
@@ -157,12 +157,12 @@ if [ ! -f "./log/$(basename $0)_${datatype}_tmpfs2.dat" ]; then
 fi
 fs1=$(cat ./log/$(basename $0)_${datatype}_tmpfs2.dat)
 
-ctime=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
 
 lftp $ftpserver -e "mirror  --only-missing --continue --parallel=40 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 if [ $? -ne 0 ];then
-  ctime1=`date --date='0 days ago' +%H:%M:%S`
+  ctime1=`date  +%H:%M:%S`
   echo "$today $ctime1: Failed in Syncing $datatype Data from $srcdir to $destdir"
   #cd /home/chd
   exit 1
@@ -170,7 +170,7 @@ fi
 
 ttmp=$(cat ./log/$(basename $0)_${datatype}_dtmp.dat)
 
-ctime1=`date --date='0 days ago' +%H:%M:%S`
+ctime1=`date  +%H:%M:%S`
 t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 #t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
@@ -178,7 +178,7 @@ targetdir=${destdir}
 ls -lR $targetdir | grep "^-" | wc -l > ./log/$(basename $0)_${datatype}_tmpfn2.dat &
 waiting "$!" "File Number Sumerizing for Synced $datatype Data" "Sumerizing File Number for Synced $datatype Data"
 if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  ctime3=`date  +%H:%M:%S`
   echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
   #cd /home/chd/
   exit 1
@@ -191,7 +191,7 @@ fn2=$(cat ./log/$(basename $0)_${datatype}_tmpfn2.dat)
 du -sm $targetdir|awk '{print $1}' > ./log/$(basename $0)_${datatype}_tmpfs2.dat &
 waiting "$!" "File Size Summerizing for Synced $datatype Data" "Sumerizing File Size for Synced $datatype Data"
 if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  ctime3=`date  +%H:%M:%S`
   echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
   #cd /home/chd/
   exit 1
@@ -207,7 +207,7 @@ fs2=$(cat ./log/$(basename $0)_${datatype}_tmpfs2.dat)
 #chmod 777 -R $destdir &
 #waiting "$!" "Permission Changing" "Changing Permission"
 #if [ $? -ne 0 ];then
-#  ctime3=`date --date='0 days ago' +%H:%M:%S`
+#  ctime3=`date  +%H:%M:%S`
 #  echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
 #  cd /home/chd/
 #  exit 1
@@ -226,7 +226,7 @@ fi
 speed=`echo "$filesize $timediff"|awk '{print($1/$2)}'`
 
 
-ctime3=`date --date='0 days ago' +%H:%M:%S`
+ctime3=`date  +%H:%M:%S`
 #t3=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 t4=`echo $ctime3|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 timediff1=`echo "$t1 $t4"|awk '{print($2-$1)}'`

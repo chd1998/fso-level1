@@ -19,8 +19,8 @@ waiting() {
   procing "$3" &                                                                                                                                  
   local tmppid="$!"                                                                                                                               
   wait $pid                                                                                                                                       
-  wctime=`date --date='0 days ago' +%H:%M:%S`                                                                                                     
-  wtoday=`date --date='0 days ago' +%Y%m%d`                                                                                                       
+  wctime=`date  +%H:%M:%S`                                                                                                     
+  wtoday=`date  +%Y%m%d`                                                                                                       
                                                                                                                                                   
   echo "$wtoday $wctime: $2 Task Has Done!"                                                                                                       
   #dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
@@ -35,8 +35,8 @@ procing() {
   while [ 1 ]                                                                                                                                     
   do                                                                                                                                              
     sleep 1                                                                                                                                       
-    ptoday=`date --date='0 days ago' +%Y%m%d`                                                                                                     
-    pctime=`date --date='0 days ago' +%H:%M:%S`                                                                                                   
+    ptoday=`date  +%Y%m%d`                                                                                                     
+    pctime=`date  +%H:%M:%S`                                                                                                   
     echo "$ptoday $pctime: $1, Please Wait...   "                                                                                                 
   done                                                                                                                                            
 }                                                                                                                                                 
@@ -57,8 +57,8 @@ dirpre="/cygdrive"
 syssep="/"
 logpath=$homepre/log
 
-today=`date --date='0 days ago' +%Y%m%d`
-ctime=`date --date='0 days ago' +%H:%M:%S`
+today=`date  +%Y%m%d`
+ctime=`date  +%H:%M:%S`
 cdir=$1
 datatype=$2
 fileformat=$3
@@ -101,7 +101,7 @@ if [ ! -d "$cdir" ];then
   echo "Please check..."
   exit 0
 fi
-ctime=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
 t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 echo " "
 echo "================================================================================"
@@ -143,8 +143,8 @@ waiting "$!" "Current wrong $datatype $fileformat file(s) adding" "Adding curren
 totalerror=`cat $totalerrorlist|wc -l`
 mv -f $listtmp $list
 curnum=$(cat $difflist|wc -l)
-today=`date --date='0 days ago' +%Y%m%d`
-ctime1=`date --date='0 days ago' +%H:%M:%S`
+today=`date  +%Y%m%d`
+ctime1=`date  +%H:%M:%S`
 t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
 if [ $timediff -lt 0 ]; then

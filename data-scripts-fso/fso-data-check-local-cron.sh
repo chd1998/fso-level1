@@ -21,8 +21,8 @@ waiting() {
   procing "$3" &                                                                                                                                  
   local tmppid="$!"                                                                                                                               
   wait $pid                                                                                                                                       
-  wctime=`date --date='0 days ago' +%H:%M:%S`                                                                                                     
-  wtoday=`date --date='0 days ago' +%Y%m%d`                                                                                                       
+  wctime=`date  +%H:%M:%S`                                                                                                     
+  wtoday=`date  +%Y%m%d`                                                                                                       
                                                                                                                                                   
   echo "$wtoday $wctime: $2 Task Has Done!"                                                                                                       
   #dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
@@ -37,8 +37,8 @@ procing() {
   while [ 1 ]                                                                                                                                     
   do                                                                                                                                              
     sleep 1                                                                                                                                       
-    ptoday=`date --date='0 days ago' +%Y%m%d`                                                                                                     
-    pctime=`date --date='0 days ago' +%H:%M:%S`                                                                                                   
+    ptoday=`date  +%Y%m%d`                                                                                                     
+    pctime=`date  +%H:%M:%S`                                                                                                   
     echo "$ptoday $pctime: $1, Please Wait...   "                                                                                                 
   done                                                                                                                                            
 }                                                                                                                                                 
@@ -51,8 +51,8 @@ if [ $# -ne 6 ];then
   exit 0
 fi
 
-today=`date --date='0 days ago' +%Y%m%d`
-ctime=`date --date='0 days ago' +%H:%M:%S`
+today=`date  +%Y%m%d`
+ctime=`date  +%H:%M:%S`
 
 destpre=$1
 year=$2
@@ -109,7 +109,7 @@ if [ ! -d $cdir ];then
   echo "Please check..."
   exit 0
 fi
-ctime=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
 #t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 t1=`date +%s`
 echo " "
@@ -145,7 +145,7 @@ awk 'NR==FNR{ a[$1]=$1 } NR>FNR{ if(a[$1] == ""){ print $1}}' $list $listtmp> $d
 waiting "$!" "new $datatype $fileformat file(s) getting" "Getting  new $datatype $fileformat file(s) "
 
 #count error number for this round
-ctime0=`date --date='0 days ago' +%H:%M:%S`
+ctime0=`date  +%H:%M:%S`
 echo "$today $ctime0: Checking local wrong size $datatype files, please waiting..."
 #cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $curerrorlist &
 if [ $datatype == "SP" ];then
@@ -199,8 +199,8 @@ mv -f ./mytmplist $localwrongsize
 
 mv -f $listtmp $list
 curnum=$(cat $difflist|wc -l)
-today=`date --date='0 days ago' +%Y%m%d`
-ctime1=`date --date='0 days ago' +%H:%M:%S`
+today=`date  +%Y%m%d`
+ctime1=`date  +%H:%M:%S`
 t2=`date +%s`
 #t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`

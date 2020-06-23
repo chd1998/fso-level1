@@ -12,8 +12,8 @@ waiting() {
   wait $pid
 #  tput rc
 #  tput ed
-  ctime=`date --date='0 days ago' +%H:%M:%S`
-  today=`date --date='0 days ago' +%Y%m%d`
+  ctime=`date  +%H:%M:%S`
+  today=`date  +%Y%m%d`
   echo "$today $ctime: $2 Task Has Done!"
   kill -6 $tmppid >/dev/null 1>&2
 }
@@ -26,8 +26,8 @@ procing() {
 #    for j in '-' '\\' '|' '/'
 #    do
 #    tput sc
-    ptoday=`date --date='0 days ago' +%Y%m%d`
-    pctime=`date --date='0 days ago' +%H:%M:%S`
+    ptoday=`date  +%Y%m%d`
+    pctime=`date  +%H:%M:%S`
     echo "$ptoday $pctime: $1, please wait... "
     sleep 1
 #    tput rc
@@ -43,9 +43,9 @@ function onCtrlC(){
 		exit 1
 }
 
-cyear=`date --date='0 days ago' +%Y`
-today=`date --date='0 days ago' +%Y%m%d`
-ctime=`date --date='0 days ago' +%H:%M:%S`
+cyear=`date  +%Y`
+today=`date  +%Y%m%d`
+ctime=`date  +%H:%M:%S`
 
 <<<<<<< HEAD
 if [ $# -ne 8 ]  ;then
@@ -158,27 +158,27 @@ ftpserver1=${ftpserver}:${remoteport}
 
 count=0
 size=0
-starttime=`date --date='0 days ago' +%H:%M:%S`
+starttime=`date  +%H:%M:%S`
 t1=`date +%s`
 echo "$today $starttime: Copying From $ftpserver1 "
 echo "  "
 #for each file in errlist
 for line in $(cat $errlist);
 do
-	ctime=`date --date='0 days ago' +%H:%M:%S`
+	ctime=`date  +%H:%M:%S`
 	rfile=$ftpserver1/$line
 	localfile=$destpre/$localdrive/$line
 	echo "$today $ctime: Copying $rfile"
 	wget -O $localfile --ftp-user=$ftpuser --ftp-password=$password --no-passive-ftp  $rfile >/dev/null 2>&1 &
 	waiting "$!" "$datatype file(s) in $errlist copying" "Copying $datatype $fileformat file(s) in $errlist"
 	#if [ $? -ne 0 ];then
-	#	ctime1=`date --date='0 days ago' +%H:%M:%S`
+	#	ctime1=`date  +%H:%M:%S`
 	#	echo "$today $ctime1: Failed in Copying $rfile..."
 	#	cd /home/chd
 	#	exit 1
 	#else
 	tmps=`du -sm $localfile|awk '{print $1}'`
-	ctime1=`date --date='0 days ago' +%H:%M:%S`
+	ctime1=`date  +%H:%M:%S`
 	if [ $tmps != $stdsize ]; then 
 	  echo "$today $ctime1: Copying Failed for  $localfile $tmps MB"
 	else 
@@ -194,7 +194,7 @@ do
 	fi
 	#fi  
 done
-endtime=`date --date='0 days ago' +%H:%M:%S`
+endtime=`date  +%H:%M:%S`
 #t1=`echo $starttime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 #t2=`echo $endtime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 t2=`date +%s`
@@ -205,8 +205,8 @@ else
 	speed=`echo "$size $timediff"|awk '{print($1/$2)}'`
 fi
 errleft=`cat $errlist|wc -l`
-ctime2=`date --date='0 days ago' +%H:%M:%S`
-today0=`date --date='0 days ago' +%Y%m%d`
+ctime2=`date  +%H:%M:%S`
+today0=`date  +%Y%m%d`
 echo " "
 echo "$today0 $ctime2: Succeeded in Data File(s) Error Correcting!"
 echo "          Copied : $count file(s)"

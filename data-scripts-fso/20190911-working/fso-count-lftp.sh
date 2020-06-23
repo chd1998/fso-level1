@@ -16,8 +16,8 @@ waiting() {
 #恢复光标到最后保存的位置
 #        tput rc
 #        tput ed
-  wctime=`date --date='0 days ago' +%H:%M:%S`
-	wtoday=`date --date='0 days ago' +%Y%m%d`
+  wctime=`date  +%H:%M:%S`
+	wtoday=`date  +%Y%m%d`
                
   echo "$wtoday $wctime: $2 Task Has Done!"
   dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
@@ -33,16 +33,16 @@ procing() {
   while [ 1 ]
   do
     sleep 1
-    ptoday=`date --date='0 days ago' +%Y%m%d`
-    pctime=`date --date='0 days ago' +%H:%M:%S`
+    ptoday=`date  +%Y%m%d`
+    pctime=`date  +%H:%M:%S`
     echo "$ptoday $pctime: $1, Please Wait...   "
   done
 }
 
 #procName="lftp"
-cyear=`date --date='0 days ago' +%Y`
-today=`date --date='0 days ago' +%Y%m%d`
-ctime=`date --date='0 days ago' +%H:%M:%S`
+cyear=`date  +%Y`
+today=`date  +%Y%m%d`
+ctime=`date  +%H:%M:%S`
 syssep="/"
 
 if [ $# -ne 5 ];then
@@ -94,15 +94,15 @@ echo " "
 srcdir=${syssep}${today}${syssep}${datatype}
 srcdir1=${srcpre0}
 
-ctime=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
 echo "$today $ctime: Starting to Count $datatype data @ $server1, Please wait..."
-ctime1=`date --date='0 days ago' +%H:%M:%S`
+ctime1=`date  +%H:%M:%S`
 mytime1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 server=ftp://$user:$password@$server
 lftp  $server -e "du -sm $srcdir; quit" | awk '{print $1}'>/home/chd/log/tmp-size-$datatype.dat &
 waiting "$!" "$datatype Size Counting @ $server1" "Counting $datatype Data Size @ $server1"
 if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  ctime3=`date  +%H:%M:%S`
   echo "$today $ctime3: Syncing $datatype Data @ FSO Failed!"
   cd /home/chd/
   exit 1
@@ -111,12 +111,12 @@ filetmp=${srcdir}${syssep}*.fits
 lftp  $server -e "find $srcdir |grep fits| wc -l ; quit" > /home/chd/log/tmp-number-$datatype.dat &
 waiting "$!" "$datatype Number Counting @ $server1" "Counting $datatype Data Number @ $server1"
 if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  ctime3=`date  +%H:%M:%S`
   echo "$today $ctime3: Syncing $datatype Data @ FSO Failed!"
   cd /home/chd/
   exit 1
 fi
-ctime2=`date --date='0 days ago' +%H:%M:%S`
+ctime2=`date  +%H:%M:%S`
 
 mytime2=$(cat /home/chd/log/$(basename $0)-$datatype-sdtmp.dat)
 size=$(cat /home/chd/log/tmp-size-$datatype.dat)
@@ -131,7 +131,7 @@ if [ $timediff -le 0 ]; then
 	timediff=1
 fi
 
-ctime4=`date --date='0 days ago' +%H:%M:%S`
+ctime4=`date  +%H:%M:%S`
 
 echo "$today $ctime4: Succeeded in Counting $datatype data size & number @ $server1!"
 echo "          Server : $server1"

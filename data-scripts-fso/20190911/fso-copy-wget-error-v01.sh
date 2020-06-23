@@ -15,8 +15,8 @@ waiting() {
 	wait $pid
 	tput rc
 	tput ed
-	ctime=`date --date='0 days ago' +%H:%M:%S`
-	today=`date --date='0 days ago' +%Y%m%d`
+	ctime=`date  +%H:%M:%S`
+	today=`date  +%Y%m%d`
 	echo "$today $ctime: $2 Task Has Done!"
 #  echo "                   Finishing..."
 	kill -6 $tmppid >/dev/null 1>&2
@@ -30,8 +30,8 @@ procing() {
 		for j in '-' '\\' '|' '/'
 			do
 				tput sc
-				ptoday=`date --date='0 days ago' +%Y%m%d`
-				pctime=`date --date='0 days ago' +%H:%M:%S`
+				ptoday=`date  +%Y%m%d`
+				pctime=`date  +%H:%M:%S`
 				echo -ne  "$ptoday $pctime: $1...   $j"
 				sleep 1
 				tput rc
@@ -47,9 +47,9 @@ function onCtrlC(){
 		exit 1
 }
 
-cyear=`date --date='0 days ago' +%Y`
-today=`date --date='0 days ago' +%Y%m%d`
-ctime=`date --date='0 days ago' +%H:%M:%S`
+cyear=`date  +%Y`
+today=`date  +%Y%m%d`
+ctime=`date  +%H:%M:%S`
 
 if [ $# -ne 5 ]  ;then
 	echo "Copy file of wrong size TIO/HA data on remote host to dest mannually"
@@ -109,31 +109,31 @@ ftpserver1=${ftpserver}:${remoteport}
 
 count=0
 size=0
-starttime=`date --date='0 days ago' +%H:%M:%S`
+starttime=`date  +%H:%M:%S`
 echo "$today $starttime: Copying From $ftpserver1 "
 echo "  "
 #for each file in errlist
 for line in $(cat $remotefile);
 do
-	ctime=`date --date='0 days ago' +%H:%M:%S`
+	ctime=`date  +%H:%M:%S`
 	rfile=$ftpserver1/$line
 	localfile=$destpre/$cyear/$line
 	echo "$today $ctime: Copying $rfile"
 	wget -O $localfile --ftp-user=$ftpuser --ftp-password=$password --no-passive-ftp  $rfile >/dev/null 2>&1
 	find $localfile ! -perm 777 -type f -exec chmod 777 {} \;
 	if [ $? -ne 0 ];then
-		ctime1=`date --date='0 days ago' +%H:%M:%S`
+		ctime1=`date  +%H:%M:%S`
 		echo "$today $ctime1: Failed in Syncing $datatype Data from $srcdir to $destdir"
 		cd /home/chd
 		exit 1
 	fi
-	ctime1=`date --date='0 days ago' +%H:%M:%S`
+	ctime1=`date  +%H:%M:%S`
 	tmps=`du -sm $localfile|awk '{print $1}'`
 	size=$((size+tmps))
 	echo "$today $ctime1: $localfile copied in $tmps MB"
 	((count++))
 done
-endtime=`date --date='0 days ago' +%H:%M:%S`
+endtime=`date  +%H:%M:%S`
 t1=`echo $starttime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 t2=`echo $endtime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
@@ -142,7 +142,7 @@ if [ $timediff -le 0 ]; then
 else
 	speed=`echo "$size $timediff"|awk '{print($1/$2)}'`
 fi
-ctime2=`date --date='0 days ago' +%H:%M:%S`
+ctime2=`date  +%H:%M:%S`
 echo " "
 echo "$today $ctime2: Succeeded in Data File Error Correcting!"
 echo "Synced file No.  : $count file(s)"

@@ -2,6 +2,16 @@
 '''
 @author: Chen Dong
 @institution: Yunnan Astronomical Observatory, CAS
+
+USAGE:
+        python rsync-watch-win-Revxx.py para1 para2 para3
+        -where
+            para1: local dir 
+            para2: remote dir
+            para3: rsync.exe dir
+
+        example:
+        python rsync-watch-win-Rev06.py e:\test halpha::test1 d:\rsync
 IMPORTANT：
     1. monitoring sorce directory and rsync to remote directory 
     2. works on windows platform only
@@ -29,6 +39,11 @@ IMPORTANT：
         using fire arguments instead of opt
     #Known Issues:
         don't support file/directory name with spaces
+20200623 Release 06:
+    #OPTIMIZE:
+        using fire arguments instead of opt and working now
+    #Known Issues:
+        don't support file/directory name with spaces
 
 '''
 import subprocess
@@ -52,10 +67,10 @@ def pyrsync(rsyncSrc_orig,rsyncDes,rsync_exec):
     #rsyncSrc='d:\\test\\data'
     #cygrsyncSrc='/cygdrive/d/test/data'
     #rsyncDes='armnas-rock64::test'
-    
-    #cygtmp=rsyncSrc_orig.replace('\\','/')
-    #cygtmp=cygtmp.replace(':','')
-    #cygrsyncSrc=cygrsyncPrefix+'/'+cygtmp
+    cygrsyncPrefix='/cygdrive'
+    cygtmp=rsyncSrc_orig.replace('\\','/')
+    cygtmp=cygtmp.replace(':','')
+    cygrsyncSrc=cygrsyncPrefix+'/'+cygtmp
     #rsyncSrc=rsyncSrc_orig.replace('\\','\\\\')
     rsyncSrc=rsyncSrc_orig
     #print(rsyncSrc_orig)
@@ -70,18 +85,13 @@ def pyrsync(rsyncSrc_orig,rsyncDes,rsync_exec):
         #print (line)
         lineArr=(line.decode('gbk')).split(' ')
         oper=lineArr[0]
-<<<<<<< HEAD
-        srcfile=lineArr[1]
-        #rsyncSrc_name=str(file.split('\\')[-1])
-=======
         file=lineArr[1]
         filename=file.split('\\')[-1]
->>>>>>> 4c6ec66fec1109ebee53053386b99e2af6e803fa
         #print(file)
         a_ok=False
         while not a_ok:
             try:
-                tmp_file=open(srcfile,"ab+")
+                tmp_file=open(file,"ab+")
                 a_ok=True
                 tmp_file.close()
             except:
@@ -91,30 +101,22 @@ def pyrsync(rsyncSrc_orig,rsyncDes,rsync_exec):
         touched=False
         print(' ')
         #if file.index(rsyncSrc_orig)==0:
-<<<<<<< HEAD
-        if srcfile.find(rsyncSrc_orig)==0:
-=======
         if file.find(rsyncSrc)==0:
->>>>>>> 4c6ec66fec1109ebee53053386b99e2af6e803fa
             if (oper=='MOVED_TO') or (oper=='CREATE'):
                 #_current_file=file.replace(rsyncSrc_orig,cygrsyncSrc)
                 #_current_file=_current_file.replace(':','')
                 #current_file=_current_file.replace('\\','/')
-<<<<<<< HEAD
-                filename=srcfile.split('\\')[-1]
-=======
                 #filename=file.split('\\')[-1]
->>>>>>> 4c6ec66fec1109ebee53053386b99e2af6e803fa
                 current_file=str(filename)
                 #print(current_file)
                 #current_file='/cygdrive/e/test/data'
                 #cmd='cd '+rsyncSrc+' && '+'start /b '+rsync_exec+'\\rsync.exe -av -R -d --port=873  --progress '+current_file+' '+rsyncDes
-                cmd='cd '+rsyncSrc+' && '+'start /b '+rsync_exec+'\\rsync.exe -av -R -d --port=873  --progress '+current_file+' '+rsyncDes
+                cmd='cd '+rsyncSrc+' && '+'start /b '+rsync_exec+'\\rsync.exe -av -R -d --port=873  --progress '+cygrsyncSrc+' '+rsyncDes
                 #print(cmd)
                 #cmd=cmd.encode(locale.getdefaultlocale()[1])
                 touched=True
         if touched:
-            print(Fore.RED+Back.WHITE+'%s --- Rsyncing: %s\n' %(time.ctime(),srcfile))
+            print(Fore.RED+Back.WHITE+'%s --- Rsyncing: %s\n' %(time.ctime(),file))
             start_time=time.time()
             #rsyncAction=subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
             rsyncAction=subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
@@ -130,7 +132,7 @@ def pyrsync(rsyncSrc_orig,rsyncDes,rsync_exec):
             end_time=time.time()
             used_time=end_time-start_time
             if 'speedup' in rsyncStat:
-                print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s --- Succeed: %s rsynced! " % (time.ctime(),srcfile))
+                print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s --- Succeed: %s rsynced! " % (time.ctime(),file))
                 print (Fore.LIGHTCYAN_EX+Back.BLACK+"Time Used: %.4f Secs... \n" %(used_time))
                 #print (rsyncStat+"\n")
             else:

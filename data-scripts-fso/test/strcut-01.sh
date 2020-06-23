@@ -1,5 +1,5 @@
 #!/bin/bash
-cyear=`date --date='0 days ago' +%Y`
+cyear=`date  +%Y`
 dir=$1
 dir1="/data"
 tmp=`echo ${dir#/lustre/data}`
