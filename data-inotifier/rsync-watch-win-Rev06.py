@@ -2,6 +2,16 @@
 '''
 @author: Chen Dong
 @institution: Yunnan Astronomical Observatory, CAS
+
+USAGE:
+        python rsync-watch-win-Revxx.py para1 para2 para3
+        -where
+            para1: local dir 
+            para2: remote dir
+            para3: rsync.exe dir
+
+        example:
+        python rsync-watch-win-Rev06.py e:\test halpha::test1 d:\rsync
 IMPORTANT：
     1. monitoring sorce directory and rsync to remote directory 
     2. works on windows platform only
