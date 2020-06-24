@@ -16,6 +16,7 @@ IMPORTANT：
     1. monitoring sorce directory and rsync to remote directory 
     2. works on windows platform only
     3. install cygwin with rsync module and python before running
+    4. inotifywait.exe must be in the same directory of this file
 
 2019/04/01 Release 01
     Prototype version
