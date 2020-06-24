@@ -131,12 +131,7 @@ rm -f $logpath/pingtmp
 ctime1=`date +%H:%M:%S`
 if [ $pingres -ne 0 ];then 
 #comparing remote and local file(s),creat local missing file(s)
-<<<<<<< HEAD
   ctime1=`date  +%H:%M:%S`
-=======
-  ctime1=`date --date='0 days ago' +%H:%M:%S`
-  today=`date +%Y%m%d`
->>>>>>> 90dc53a381d55a86e74160798a9eb986bdf66ca5
   echo "$today $ctime1: $server is online..."
   echo "$today $ctime1: Remote & Local $datatype File(s) Checking, please wait..."
   #/home/chd/fso-data-check-remote-cron.sh 192.168.111.120 21 tio ynao246135 2019 0913 TIO fits
