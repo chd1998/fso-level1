@@ -62,11 +62,6 @@ import fire
 from colorama import Fore,Back,Style
 from colorama import init
 
-#cygrsyncPrefix='/cygdrive'
-#rsync_exec='c:\\cygwin64\\bin'
-#rsyncSrc=''
-#rsyncDes=''
-
 def pyrsync(rsyncSrc_orig,rsyncDes,rsync_exec):
     init(autoreset=True)
     #rsyncSrc='d:\\test\\data'
@@ -106,7 +101,7 @@ def pyrsync(rsyncSrc_orig,rsyncDes,rsync_exec):
                 a_ok=True
                 tmp_file.close()
             except:
-                print(Fore.RED+Back.WHITE+"%s --- Waiting for %s\n" %(time.ctime(),file),end='\r')
+                print(Fore.RED+Back.WHITE+"%s --- Waiting for %s" %(time.ctime(),file))
                 sys.stdout.flush()
                 time.sleep(1)
         touched=False
@@ -127,7 +122,7 @@ def pyrsync(rsyncSrc_orig,rsyncDes,rsync_exec):
                 #cmd=cmd.encode(locale.getdefaultlocale()[1])
                 touched=True
         if touched:
-            print(Fore.RED+Back.WHITE+'%s --- Rsyncing: %s\n' %(time.ctime(),file))
+            print(Fore.RED+Back.WHITE+'%s --- Rsyncing: %s' %(time.ctime(),file))
             start_time=time.time()
             #rsyncAction=subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
             rsyncAction=subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
@@ -144,10 +139,10 @@ def pyrsync(rsyncSrc_orig,rsyncDes,rsync_exec):
             used_time=end_time-start_time
             if 'speedup' in rsyncStat:
                 print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s --- Succeed: %s rsynced! " % (time.ctime(),file))
-                print (Fore.LIGHTCYAN_EX+Back.BLACK+"Time Used: %.4f Secs... \n" %(used_time))
+                print (Fore.LIGHTCYAN_EX+Back.BLACK+"Time Used: %.4f Secs... " %(used_time))
                 #print (rsyncStat+"\n")
             else:
-                print (Fore.LIGHTYELLOW_EX+Back.RED+'Failed: '+file+' rsync failed!\n')
+                print (Fore.LIGHTYELLOW_EX+Back.RED+'Failed: '+file+' rsync failed!')
                 #print (rsyncStat+"\n")
 
             #sys.stdout.write(rsyncStat)
