@@ -59,15 +59,11 @@ import time
 import random
 import locale
 import fire
-#import getopt
 from colorama import Fore,Back,Style
 from colorama import init
 
 def pyrsync(rsyncSrc_orig,rsyncDes,rsync_exec):
     init(autoreset=True)
-    #rsyncSrc='d:\\test\\data'
-    #cygrsyncSrc='/cygdrive/d/test/data'
-    #rsyncDes='armnas-rock64::test'
     if not os.path.exists(rsyncSrc_orig):
         print ("Folder %s doesn't exist!  Pls Check..." %(rsyncSrc_orig))
         sys.exit(0)
@@ -78,7 +74,6 @@ def pyrsync(rsyncSrc_orig,rsyncDes,rsync_exec):
     cygtmp=rsyncSrc_orig.replace('\\','/')
     cygtmp=cygtmp.replace(':','')
     cygrsyncSrc=cygrsyncPrefix+'/'+cygtmp
-    #rsyncSrc=rsyncSrc_orig.replace('\\','\\\\')
     rsyncSrc=rsyncSrc_orig
     #print(rsyncSrc_orig)
     #print(rsyncDes)
@@ -93,7 +88,7 @@ def pyrsync(rsyncSrc_orig,rsyncDes,rsync_exec):
         lineArr=(line.decode('gbk')).split(' ')
         oper=lineArr[0]
         file=lineArr[1]
-        filename=file.split('\\')[-1]
+        #filename=file.split('\\')[-1]
         #print(file)
         a_ok=False
         while not a_ok:
@@ -114,7 +109,7 @@ def pyrsync(rsyncSrc_orig,rsyncDes,rsync_exec):
                 #_current_file=_current_file.replace(':','')
                 #current_file=_current_file.replace('\\','/')
                 #filename=file.split('\\')[-1]
-                current_file=str(filename)
+                #current_file=str(filename)
                 #print(current_file)
                 #current_file='/cygdrive/e/test/data'
                 #cmd='cd '+rsyncSrc+' && '+'start /b '+rsync_exec+'\\rsync.exe -av -R -d --port=873  --progress '+current_file+' '+rsyncDes
@@ -125,16 +120,9 @@ def pyrsync(rsyncSrc_orig,rsyncDes,rsync_exec):
         if touched:
             print(Fore.RED+Back.WHITE+'%s --- Rsyncing: %s' %(time.ctime(),file))
             start_time=time.time()
-            #rsyncAction=subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
             rsyncAction=subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
-            #while rsyncAction.poll()!=0:
-            #    if rsyncAction.poll():
-            #        break
-            #print(cmd)
-            #returncode=rsyncAction.poll()
-            #print(returncode)
             rsyncStat=rsyncAction.communicate()[0].decode()
-            rsyncErr=rsyncAction.communicate()[1].decode()
+            #rsyncErr=rsyncAction.communicate()[1].decode()
             #print(rsyncStat,rsyncErr)
             end_time=time.time()
             used_time=end_time-start_time
@@ -145,10 +133,6 @@ def pyrsync(rsyncSrc_orig,rsyncDes,rsync_exec):
             else:
                 print (Fore.LIGHTYELLOW_EX+Back.RED+'Failed: '+file+' rsync failed!')
                 #print (rsyncStat+"\n")
-
-            #sys.stdout.write(rsyncStat)
-            #rsyncAction=subprocess.check_output(cmd1)
-            #rsyncAction=subprocess.check_output(cmd,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,shell=True)
 
 if __name__ == '__main__':
     fire.Fire(pyrsync)
