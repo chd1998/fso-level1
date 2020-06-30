@@ -1,0 +1,10 @@
+{
+	"argv":[
+		"C:\\Program Files\\Wolfram Research\\Wolfram Engine\\12.1\\wolfram.exe",
+		"-script",
+		"C:\\Users\\加菲三藏\\AppData\\Roaming\\WolframEngine\\Paclets\\Repository\\WolframLanguageForJupyter-0.9.2\\Resources\\KernelForWolframLanguageForJupyter.wl",
+		"{connection_file}"
+	],
+	"display_name":"Wolfram Language 12.1",
+	"language":"Wolfram Language"
+}
