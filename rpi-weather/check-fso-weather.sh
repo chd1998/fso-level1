@@ -106,12 +106,13 @@ then
   if [ $? -eq 0 ];then
     echo "$day $ctime : Couldn't find pid of $pname..."
     exit 1
+  else
+    #echo $cpid
+    sudo kill -9 $cpid
+    echo "$day $ctime : $datafile modified @ $File_Time"
+    echo "$day $ctime : Modification time is $difft sec. >= required $standtime sec. --- Check Failed!"
+    echo "$day $ctime : $cpid process killed!"
   fi
-  #echo $cpid
-  kill -9 $cpid
-  echo "$day $ctime : $datafile modified @ $File_Time"
-  echo "$day $ctime : Modification time is $difft sec. >= required $standtime sec. --- Check Failed!"
-  echo "$day $ctime : $cpid process killed!"
 else
   echo "$day $ctime :  $datafile modified @ $File_Time"
   echo "$day $ctime : Modification time is $difft sec. < required $standtime sec. --- Check Passed!"    
