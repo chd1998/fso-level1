@@ -25,16 +25,10 @@ speed=0
 
 while true
 do 
-<<<<<<< HEAD
-  echo "$destdir size in MB: "
-  today=`date  +%Y%m%d`
-  ctime=`date  +%H:%M:%S`
-=======
   echo "For $destdir : "
   today=`date +%Y%m%d`
   today0=`date +%Y%m%d`
   ctime=`date +%H:%M:%S`
->>>>>>> 90dc53a381d55a86e74160798a9eb986bdf66ca5
 #  cursize=`du -sm $destdir`
   latestsize=`du -sm $destdir|awk '{print $1}'`
 #  echo $firsttime
