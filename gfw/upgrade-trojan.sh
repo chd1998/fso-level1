@@ -41,7 +41,7 @@ fi
 today1=`date  +%Y-%m-%d`
 ctime2=`date  +%H:%M:%S`
 echo "$today1 $ctime2 : Extracting  $vname binary files..."
-tar -xf ./trojan-$vdigi-linux-amd64.tar.xz
+tar -xf ./trojan-$vdigi-$3-$4.tar.xz
 cd ./trojan
 today1=`date  +%Y-%m-%d`
 ctime2=`date  +%H:%M:%S`
@@ -63,7 +63,7 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 cd ..
-rm -f ./trojan-$vdigi-linux-amd64.tar.xz
+rm -f ./trojan-$vdigi-$3-$4.tar.xz
 rm -rf ./trojan
 today1=`date  +%Y-%m-%d`
 ctime2=`date  +%H:%M:%S`

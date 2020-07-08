@@ -17,7 +17,7 @@ ctime0=`date  +%H:%M:%S`
 if [ $# -ne 4 ];then
   echo "Usage: upgrade-trojan.sh  owner project ostype arch"
   echo "Example: ./upgrade-trojan.sh trojan-gfw trojan linux amd64"
-  echo "press ctrl-c to break!"
+#  echo "press ctrl-c to break!"
   exit 0
 fi
 echo "$today0 $ctime0 : Getting latest version..."
