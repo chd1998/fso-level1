@@ -15,4 +15,4 @@ gluster volume set fso-data performance.client-io-threads on
 gluster volume set fso-data nfs.disable on
 gluster volume set fso-data storage.linux-aio on
 cpufreq-set -g performance
-#echo "deadline" > /sys/block/sda/queue/scheduler
+echo "deadline" > /sys/block/sda/queue/scheduler
