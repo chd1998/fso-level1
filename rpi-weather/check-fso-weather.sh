@@ -7,6 +7,8 @@
 #
 #Change History: 
 #		20200705	Release 0.1 : First working prototype 
+#   20200709  Release 0.2 : logics revised!
+#
 
 waiting() {
   local pid="$1"
@@ -57,7 +59,7 @@ delaytime=$2
 pname=$3
 
 #Version
-pver=0.1
+pver=0.2
 
 echo "*********************************************************************************************************************** "
 #prevent script from multiple running
@@ -100,18 +102,22 @@ difft=`echo "$difft"|awk '{print sqrt($1*$1)}'`
 #echo $Difftime
 day=$(date "+%Y-%m-%d")
 ctime=$(date "+%H:%M:%S")
-if [ $Difftime -ge $standtime ]		# 如果时间差大于输入时间，说明文件修改时间是在输入时间前，也就是最近输入时间内文件没有更新
-then
+if [ $Difftime -ge $standtime ];then	# 如果时间差大于输入时间，说明文件修改时间是在输入时间前，也就是最近输入时间内文件没有更新
+  echo "$day $ctime : $datafile modified @ $File_Time"
+  echo "$day $ctime : Modification time is $difft sec. >= required $standtime sec. --- Check Failed!"
   cpid=`pidof $pname`
-  if [ $? -eq 0 ];then
+  if [ $? -ne 0 ];then
     echo "$day $ctime : Couldn't find pid of $pname..."
+    echo "                    : Skip checking... "
     exit 1
   else
-    #echo $cpid
     sudo kill -9 $cpid
-    echo "$day $ctime : $datafile modified @ $File_Time"
-    echo "$day $ctime : Modification time is $difft sec. >= required $standtime sec. --- Check Failed!"
-    echo "$day $ctime : $cpid process killed!"
+    if [ $? -ne 0 ];then
+      echo "$day $ctime : Failed in killing $cpid"
+      exit 1
+    else
+      echo "$day $ctime : $cpid process killed!"
+    fi
   fi
 else
   echo "$day $ctime :  $datafile modified @ $File_Time"
