@@ -1,6 +1,6 @@
 #!/bin/bash
 #@author: chen dong 
-#purpose: check fso-weather.py's output data is modified in time-standard sec. or not.   
+#purpose: check wether data of fso-weather.py' is modified within time-standard sec. or not.   
 #         If not, restart it  If not, kill the zombie process and restart it via cron
 #usage: ./check-fso-weather.sh  time-standard(in sec.) delaytime(in sec.) programname
 #example: ./check-fso-weather.sh 10 40 python3
@@ -109,6 +109,7 @@ if [ $Difftime -ge $standtime ];then	# 如果时间差大于输入时间，说�
   if [ $? -ne 0 ];then
     echo "$day $ctime : Couldn't find pid of $pname..."
     echo "                    : Skip checking... "
+    echo " "
     exit 1
   else
     sudo kill -9 $cpid
