@@ -12,7 +12,7 @@ loop=$1
 for ((i=1;i<=$1;i++));
 do
     (
-        echo "Writing to GlusterFS...$i"
+        echo "Writing to GlusterFS $4...$i"
         dd if=/dev/zero bs=$2 count=$3 of=$4/$i-test.dat
     )&
 done
