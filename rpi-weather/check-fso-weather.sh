@@ -1,6 +1,6 @@
 #!/bin/bash
 #@author: chen dong 
-#purpose: check wether data of fso-weather.py' is modified within time-standard sec. or not.   
+#purpose: check wether data of fso-weather.py /home/pi/Desktop/communication/latest.csv is modified within time-standard sec. or not.   
 #         If not, restart it  If not, kill the zombie process and restart it via cron
 #usage: ./check-fso-weather.sh  time-standard(in sec.) delaytime(in sec.) programname
 #example: ./check-fso-weather.sh 10 40 python3
@@ -13,8 +13,9 @@
 waiting() {
   local pid="$1"
   taskname="$2"
-  procing "$3" &
+  procing "$3" "$4"&
   local tmppid="$!"
+  #local count="$4"
   wait $pid
 #  tput rc
 #  tput ed
@@ -31,12 +32,15 @@ waiting() {
 procing() {
   trap 'exit 0;' 6
 #  tput ed
+  local count="$2"
   while [ 1 ]
   do
-    sleep 1
+    #sleep 1
     ptoday=`date  +%Y-%m-%d`
     pctime=`date  +%H:%M:%S`
-    echo "$ptoday $pctime : $1, Please Wait...   "
+    echo "$ptoday $pctime : $1 in $count secs., Please Wait...   "
+    sleep 1
+    count=$[count-1]
   done
 }
 
@@ -47,7 +51,7 @@ day=$(date "+%Y-%m-%d")
 ctime=$(date "+%H:%M:%S")
 
 if [ $# -ne 3 ]  ;then
-  echo "purpose: check fso-weather.py's output data is modified in time-standard sec. or not."
+  echo "purpose: check fso-weather.py's output data /home/pi/Desktop/communication/latest.csv is modified in time-standard sec. or not."
   echo "         If not, kill the zombie process and restart it via cron"
   echo "usage: ./check-fso-weather.sh  time-standard(in sec.) delaytime(in sec.) programname"
   echo "example: ./check-fso-weather.sh 10 40 python3"
@@ -83,9 +87,11 @@ if [ ! -f $src/$year/fso-weather-$day.csv ];then
   exit 1
 fi
 #sleep input sec.  after started
-
+day=$(date "+%Y-%m-%d")
+ctime=$(date "+%H:%M:%S")
+#echo "$day $ctime : Waiting for $delaytime secs. ....."
 sleep $delaytime  & 
-waiting "$!" "Waiting" "Waiting for Data"
+waiting "$!" "Waiting" "Waiting for Data" "$delaytime"
 #latest data file
 datafile="/home/pi/Desktop/communication/latest.csv"
 
