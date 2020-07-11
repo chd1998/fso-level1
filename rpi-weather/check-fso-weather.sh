@@ -102,15 +102,15 @@ Current_Timestamp=`date +%s`		# 获取当前时间的 Unix 时间戳
 File_Modified_Time=`sudo stat -c %Y  $datafile`
 File_Time=`sudo stat -c %z  $src/$year/fso-weather-$day.csv`
 Difftime=`echo "$Current_Timestamp $File_Modified_Time"| awk '{print($1-$2)}'`
-difft=`echo "$Difftime $standtime"|awk '{print($1-$2)}'`
-difft=`echo "$difft"|awk '{print sqrt($1*$1)}'`
+#difft=`echo "$Difftime $standtime"|awk '{print($1-$2)}'`
+#difft=`echo "$difft"|awk '{print sqrt($1*$1)}'`
 #Difftime=`expr ${Current_Timestamp} - ${File_Modified_Timestamp}`	# 获取当前时间和文件修改时间的 Unix 时间戳时间差
 #echo $Difftime
 day=$(date "+%Y-%m-%d")
 ctime=$(date "+%H:%M:%S")
 if [ $Difftime -ge $standtime ];then	# 如果时间差大于输入时间，说明文件修改时间是在输入时间前，也就是最近输入时间内文件没有更新
   echo "$day $ctime : $datafile modified @ $File_Time"
-  echo "$day $ctime : Modification time is $difft sec. >= required $standtime sec. --- Check Failed!"
+  echo "$day $ctime : Modification time span  is $Difftime sec. >= required $standtime sec. --- Check Failed!"
   cpid=`pidof $pname`
   if [ $? -ne 0 ];then
     echo "$day $ctime : Couldn't find pid of $pname..."
@@ -128,7 +128,7 @@ if [ $Difftime -ge $standtime ];then	# 如果时间差大于输入时间，说�
   fi
 else
   echo "$day $ctime :  $datafile modified @ $File_Time"
-  echo "$day $ctime : Modification time is $difft sec. < required $standtime sec. --- Check Passed!"    
+  echo "$day $ctime : Modification time span is $Difftime sec. < required $standtime sec. --- Check Passed!"    
 fi
 
 #copy new data 
