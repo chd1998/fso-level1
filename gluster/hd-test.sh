@@ -12,8 +12,8 @@ loop=$1
 for ((i=1;i<=$1;i++));
 do
     (
-        echo "Writing to GlusterFS...$i"
-        dd if=/dev/zero bs=$2 count=$3 of=$4/$i-test.dat
+        echo "Writing to $4...$i"
+        dd if=/dev/zero bs=$2 count=$3 of=$4/$i-test.dat conv=fdatasync
     )&
 done
 wait
@@ -22,6 +22,9 @@ today=`date +%Y%m%d`
 ctime=`date +%H:%M:%S`
 timeused=`echo "$end $start"|awk '{print($1-$2)}'`
 writesize=`echo "$blocksize $blockcount $loop"|awk '{print($3*$1*$2/1000)}'`
-speed=`echo "$blocksize $blockcount $timeused"|awk '{print(($1*$2)/$3)}'`
+filesize=`echo "$blocksize $blockcount "|awk '{print($1*$2/1000)}'`
+speed=`echo "$blocksize $blockcount $loop $timeused"|awk '{print(($1*$2*$3)/($4*1000))}'`
 echo "$today $ctime : Writing $1 times with blocksize $2 blockcount $3 to $4 Finished!"
-echo "                 :  $writesize MB @ $speed MB/s"
+echo "                  : $filesize MB@$loop times "
+echo "                  : total write $writesize MB @ $speed MB/s"
+echo "                  : in $timeused secs. "
