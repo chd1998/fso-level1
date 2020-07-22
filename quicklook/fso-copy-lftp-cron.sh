@@ -161,11 +161,13 @@ echo "                   To  : $destdir "
 echo "                   Please Wait..."
 
 echo "$today $ctime: Testing $server is online or not... "
-ping $server -c 5 | grep ttl >> $logpre/pingtmp
-pingres=`cat $logpre/pingtmp | wc -l`
-rm -f $logpre/pingtmp
+ping $server -c 5 | grep ttl > pingtmp & 
+waiting "$!" "$server ping" "ping $server"
+pres=`cat pingtmp | wc -l`
+#rm -f $logpre/pingtmp
 ctime1=`date  +%H:%M:%S`
-if [ $pingres -eq 0 ];then
+#echo $pres
+if [ $pres -eq 0 ];then
   echo "$today $ctime1: $server is offline, skip syncing remote file(s)..." 
   exit 0
 fi
@@ -230,6 +232,9 @@ filenumber=`echo "$fn1 $fn2"|awk '{print($2-$1)}'`
 #echo "$fn2, $fn1, $filenumber"
 #read
 filesize=$(($fs2-$fs1))
+if [ $filesize -lt 0 ]; then
+  filesize=0
+fi
 timediff=$(($ttmp-$t1))
 #timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
 if [ $timediff -eq 0 ]; then

@@ -233,6 +233,9 @@ filenumber=`echo "$fn1 $fn2"|awk '{print($2-$1)}'`
 #echo "$fn2, $fn1, $filenumber"
 #read
 filesize=$(($fs2-$fs1))
+if [ $filesize -lt 0 ]; then
+  filesize=0
+fi
 timediff=$(($ttmp-$t1))
 #timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
 if [ $timediff -eq 0 ]; then
