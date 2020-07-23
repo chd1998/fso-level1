@@ -157,7 +157,7 @@ ctime=`date --date='0 days ago' +%H:%M:%S`
 #ctime0=`date --date='0 days ago' +%H:%M:%S`
 #t1=`date +%s`
 echo "$today $ctime: Syncing $datatype data @ FSO..."
-echo "                   From: $srcdir "
+echo "                   From: $srcdir@$server "
 echo "                   To  : $destdir "
 echo "                   Please Wait..."
 
@@ -233,6 +233,9 @@ filenumber=`echo "$fn1 $fn2"|awk '{print($2-$1)}'`
 #echo "$fn2, $fn1, $filenumber"
 #read
 filesize=$(($fs2-$fs1))
+if [ $filesize -lt 0 ]; then
+  filesize=0
+fi
 timediff=$(($ttmp-$t1))
 #timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
 if [ $timediff -eq 0 ]; then

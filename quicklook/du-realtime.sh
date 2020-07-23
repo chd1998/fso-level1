@@ -30,23 +30,26 @@ if [ ! -d "$destdir" ]; then
   echo "$today $ctime: $destsir doesn't exist, pls check...!"
   exit 1 
 fi
-
+echo "$destdir size in MB: "
+#latestsize=`du -sm $destdir|awk '{print $1}'`
+#echo "$today $ctime : $latestsize MB"
 while true
 do 
-  echo "$destdir size in MB: "
+  
   today=`date --date='0 days ago' +%Y%m%d`
   ctime=`date --date='0 days ago' +%H:%M:%S`
 #  cursize=`du -sm $destdir`
   latestsize=`du -sm $destdir|awk '{print $1}'`
+  #echo "$today $ctime : $latestsize MB"
 #  echo $firsttime
 #  echo "$today $ctime: $latestsize @ $speed MB/s"
   if [ $firsttime -ne 1 ]; then
     copied=`echo "$lastsize $latestsize"|awk '{print($2-$1)}'`
     speed=`echo "$copied $delaytime"|awk '{print($1/$2)}'` 
-    echo "$today $ctime: $latestsize MB"
-    echo "           Copied: $copied MB  @ $speed MB/s"
+    echo "$today $ctime : $latestsize MB"
+    echo "           Copied : $copied MB  @ $speed MB/s"
   else
-    echo "$today $ctime: $latestsize MB"
+    echo "$today $ctime : $latestsize MB"
     firsttime=0
   fi
   lastsize=$latestsize
