@@ -141,7 +141,7 @@ fi
 
 ctime=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime: Syncing $datatype data @ FSO..."
-echo "                   From: $srcdir "
+echo "                   From: $srcdir@$server "
 echo "                   To  : $destdir "
 echo "                   Please Wait..."
 

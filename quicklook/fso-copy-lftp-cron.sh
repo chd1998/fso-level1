@@ -156,7 +156,7 @@ ctime=`date  +%H:%M:%S`
 #ctime0=`date  +%H:%M:%S`
 #t1=`date +%s`
 echo "$today $ctime: Syncing $datatype data @ FSO..."
-echo "                   From: $srcdir "
+echo "                   From: $srcdir @$server "
 echo "                   To  : $destdir "
 echo "                   Please Wait..."
 
