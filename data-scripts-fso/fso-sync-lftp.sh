@@ -58,9 +58,9 @@ ctime=`date  +%H:%M:%S`
 syssep="/"
 
 if [ $# -ne 7 ];then
-  echo "Usage: ./fso-sync-lftp-v09.sh ip port  destdir user password datatype(TIO or HA) threadnumber"
-  echo "Example: ./fso-sync-lftp-v09.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40"
-  echo "         ./fso-sync-lftp-v09.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA 40"
+  echo "Usage: ./fso-sync-lftp.sh ip port  destdir user password datatype(TIO or HA) threadnumber"
+  echo "Example: ./fso-sync-lftp.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40"
+  echo "         ./fso-sync-lftp.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA 40"
   exit 1
 fi
 server1=$1

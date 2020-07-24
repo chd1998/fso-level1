@@ -70,8 +70,9 @@ t0=`date +%s`
 
 if [ $# -ne 9 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to local HD under cygwin"
-  echo "Usage: ./fso-copy-lftp-cyg-xx.sh srcip port dest year(4 digits)  monthday(4 digits) user password datatype(TIO/HA) procnum"
-  echo "Example: ./fso-copy-lftp-cyg-xx.sh 192.168.111.120 21 f 2019 0713 tio ynao246135 TIO 40"
+  echo "Usage: ./fso-copy-lftp-cyg-cron.sh srcip port dest year(4 digits)  monthday(4 digits) user password datatype(TIO/HA) procnum"
+  echo "Example: ./fso-copy-lftp-cyg-cron.sh 192.168.111.120 21 f 2019 0713 tio ynao246135 TIO 40"
+  echo "Example: ./fso-copy-lftp-cyg-cron.sh 192.168.111.122 21 e 2019 0713 ha ynao246135 HA 40"
   exit 1
 fi
 

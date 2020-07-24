@@ -67,8 +67,8 @@ starttime=`date  +%H:%M:%S`
 
 if [ $# -ne 9 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to /lustre/data mannually"
-  echo "Usage: ./fso-copy-wget.sh srcip port user passwd dest year(4 digits)  monthday(4 digits) datatype(TIO/HA) threadnumber"
-  echo "Example: ./fso-copy-wget.sh ftp://192.168.111.120 21 tio ynao246135 /lustre/data 2019 0703 TIO 5"
+  echo "Usage: ./fso-copy-wget-multi.sh srcip port user passwd dest year(4 digits)  monthday(4 digits) datatype(TIO/HA) threadnumber"
+  echo "Example: ./fso-copy-wget-multi.sh ftp://192.168.111.120 21 tio ynao246135 /lustre/data 2019 0703 TIO 5"
   exit 1
 fi
 

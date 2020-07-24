@@ -228,6 +228,7 @@ cat $errlist >> $tmplist
 
 echo "                   For $year$monthday  $datatype Data File(s)" > $logpath/errtmp-$datatype-$year$monthday
 echo "************************************************************************************************************">> $logpath/errtmp-$datatype-$year$monthday
+echo " $today $ctime0 : Start $datatype File(s) Checking... " >> $logpath/errtmp-$datatype-$year$monthday
 echo " $today $ctime3 : $totalfilenumber $datatype File(s) Checked... " >> $logpath/errtmp-$datatype-$year$monthday
 echo "                " >> $logpath/errtmp-$datatype-$year$monthday
 echo " $today $ctime3 : $tmp1 Local Missing File(s)" >> $logpath/errtmp-$datatype-$year$monthday
