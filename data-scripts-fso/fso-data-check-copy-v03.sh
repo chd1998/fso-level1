@@ -108,13 +108,15 @@ else
   echo $$>$lockfile
 fi
 
+pver=0.32
+pname=$(basename $0)
 ctime0=`date  +%H:%M:%S`
 #st1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 st1=`date +%s`
 echo "                                                       "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
-echo "              fso-data-check-copy.sh                   "
-echo "          (Release 0.32 20200420 11:32)                "
+echo "                $pname                                 "
+echo "          (Release $pver 20200420 11:32)               "
 echo "                                                       "
 echo "           Check $datatype data and copy               "
 echo "                                                       "
