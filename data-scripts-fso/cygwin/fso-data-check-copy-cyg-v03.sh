@@ -104,7 +104,7 @@ localwrongsize=$logpath/$datatype-local-wrongsize-$year$monthday-cyg.list
 #errlist=/cygdrive/d/chd/LFTP4WIN-master/home/chd/log/$datatype-$fileformat@$(date +\%Y\%m\%d)-error-total.list
 tmplist=$logpath/$datatype-$fileformat-$year$monthday-tmp.list
 
-totalfilenumberdat=$logpath/fso-copy-lftp-cyg-cron.sh_$datatype\_tmpfn2.dat
+totalfilenumberdat=$logpath/fso-copy-lftp-cyg-cron.sh\_$datatype\_$year$monthday\_tmpfn2.dat
 totalfilenumber=`cat $totalfilenumberdat | awk {'print $3'}`
 if [[ $totalfilenumber -eq 0 ]];then
   totalfilenumber=0
