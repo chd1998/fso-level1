@@ -125,7 +125,7 @@ echo "==========================================================================
 echo " "
 #cd $cdir
 #getting local file list
-find $localdir/ -type f -name '*.fits' |cut -d '/' -f 5-11> $locallist &
+find $localdir/ -type f -name '*.fits' -type f ! -name "*level*"  |cut -d '/' -f 5-11> $locallist &
 waiting "$!" "local $datatype $fileformat file(s) info getting" "Getting local $datatype $fileformat file(s) info"
 
 #getting remote file list

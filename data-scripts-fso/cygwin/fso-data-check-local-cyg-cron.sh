@@ -19,8 +19,8 @@ waiting() {
   procing "$3" &                                                                                                                                  
   local tmppid="$!"                                                                                                                               
   wait $pid                                                                                                                                       
-  wctime=`date  +%H:%M:%S`                                                                                                     
-  wtoday=`date  +%Y%m%d`                                                                                                       
+  wctime=`date --date='0 days ago' +%H:%M:%S`                                                                                                     
+  wtoday=`date --date='0 days ago' +%Y%m%d`                                                                                                       
                                                                                                                                                   
   echo "$wtoday $wctime: $2 Task Has Done!"                                                                                                       
   #dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
@@ -35,8 +35,8 @@ procing() {
   while [ 1 ]                                                                                                                                     
   do                                                                                                                                              
     sleep 1                                                                                                                                       
-    ptoday=`date  +%Y%m%d`                                                                                                     
-    pctime=`date  +%H:%M:%S`                                                                                                   
+    ptoday=`date --date='0 days ago' +%Y%m%d`                                                                                                     
+    pctime=`date --date='0 days ago' +%H:%M:%S`                                                                                                   
     echo "$ptoday $pctime: $1, Please Wait...   "                                                                                                 
   done                                                                                                                                            
 }                                                                                                                                                 
@@ -58,9 +58,9 @@ dirpre="/cygdrive"
 syssep="/"
 logpath=$homepre/log
 
-cyear=`date  +%Y`
-today=`date  +%Y%m%d`
-ctime=`date  +%H:%M:%S`
+cyear=`date --date='0 days ago' +%Y`
+today=`date --date='0 days ago' +%Y%m%d`
+ctime=`date --date='0 days ago' +%H:%M:%S`
 
 destpre=$dirpre/$1
 year=$2
@@ -81,20 +81,9 @@ curerrorlist=$logpath/$datatype-$fileformat-$year$monthday-error-cur.list
 totalerrorlist=$logpath/$datatype-$fileformat-$year$monthday-error-total.list
 localwrongsize=$logpath/$datatype-local-wrongsize-$year$monthday-cyg.list
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
 
->>>>>>> 5f84ad15b8331e3e9515f85b0cdbf36c892c2aed
 lockfile=$logpath/$(basename $0)-$datatype-$today.lock
-=======
-<<<<<<< HEAD
-lockfile=$logpath/$(basename $0)-$datatype-$cyear$today.lock
-=======
-lockfile=$logpath/$(basename $0)-$datatype-$today.lock
->>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
->>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
                                                                                    
 if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
@@ -126,7 +115,7 @@ if [ ! -d "$cdir" ];then
   echo "Please check..."
   exit 0
 fi
-ctime=`date  +%H:%M:%S`
+ctime=`date --date='0 days ago' +%H:%M:%S`
 t1=`date +%s`
 #t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 echo " "
@@ -145,7 +134,7 @@ echo " "
 #cd $cdir
 
 #getting file name & size
-find $cdir/ -type f -name '*.fits' -printf "%h/%f %s\n" > $listtmp &
+find $cdir/ -type f -name '*.fits' -type f ! -name "*level*"  -printf "%h/%f %s\n" > $listtmp &
 waiting "$!" "local $datatype $fileformat file(s) info getting" "Getting local $datatype $fileformat file(s) info"
 #cat $listtmp|wc -l
 #getting file number
@@ -177,19 +166,6 @@ curerror=`cat $curerrorlist|wc -l`
 
 #check new files
 if [ ! -f $totalerrorlist ]; then 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-  #if [ $datatype == "SP" ]; then 
-  #  cat $difflist |awk '{ if ($2!='''$stdsize''' && $2!='''$stdsize1''') {print $1"  "$2}}' > $totalerrorlist &
-  #  waiting "$!" "Total local wrong size $datatype $fileformat file(s) adding for first time" "Adding local wrong $datatype $fileformat file(s) to $totalerrorlist for first time"
-  #else
-  #  cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $totalerrorlist &
-  #  waiting "$!" "Total local wrong size $datatype $fileformat file(s) adding for first time" "Adding local wrong $datatype $fileformat file(s) to $totalerrorlist for first time"
-  #fi
-=======
->>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
->>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
   cp -f $curerrorlist $totalerrorlist
 fi
 #comm -23 $curerrorlist $totalerrorlist > ./curtmp &
@@ -216,8 +192,8 @@ mv ./localtmplist $localwrongsize
 totalerror=`cat $totalerrorlist|wc -l`
 mv -f $listtmp $list
 curnum=$(cat $difflist|wc -l)
-today=`date  +%Y%m%d`
-ctime1=`date  +%H:%M:%S`
+today=`date --date='0 days ago' +%Y%m%d`
+ctime1=`date --date='0 days ago' +%H:%M:%S`
 t2=`date +%s`
 #t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`

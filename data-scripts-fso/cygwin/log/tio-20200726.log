@@ -1,0 +1,102 @@
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20200726    10:21:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20200726/TIO/ already exist!
+20200726 10:21:01: Copying TIO data @ FSO...
+                   From: /20200726/TIO/ 
+                   To  : /cygdrive/e/20200726/TIO/ 
+                   Please Wait...
+20200726 10:21:01: TIO Syncing Task Has Done!
+                   Finishing...
+20200726 10:21:02: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20200726 10:21:02: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20200726 10:21:02: Succeeded in Syncing TIO data @ FSO!
+          Synced : 0 file(s)
+                 : 0 MB
+         @ Speed : 0 MB/s
+       Time Used : 1 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 1 secs.
+            From : 20200726 10:21:01 
+              To : 20200726 10:21:02 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20200726    10:22:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20200726/TIO/ already exist!
+20200726 10:22:01: Copying TIO data @ FSO...
+                   From: /20200726/TIO/ 
+                   To  : /cygdrive/e/20200726/TIO/ 
+                   Please Wait...
+20200726 10:22:02: TIO Syncing Task Has Done!
+                   Finishing...
+20200726 10:22:02: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20200726 10:22:02: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20200726 10:22:02: Succeeded in Syncing TIO data @ FSO!
+          Synced : 0 file(s)
+                 : 0 MB
+         @ Speed : 0 MB/s
+       Time Used : 1 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 1 secs.
+            From : 20200726 10:22:01 
+              To : 20200726 10:22:02 
+ 
+======== Welcome to FSO Data Copying System@FSO! ========
+                                                         
+                 fso-copy-lftp-cyg.sh                    
+                                                         
+             Relase 1.6     20190717  11:16              
+                                                         
+                                                         
+                  20200726    10:23:01                       
+                                                         
+=========================================================
+ 
+/cygdrive/e/20200726/TIO/ already exist!
+20200726 10:23:01: Copying TIO data @ FSO...
+                   From: /20200726/TIO/ 
+                   To  : /cygdrive/e/20200726/TIO/ 
+                   Please Wait...
+20200726 10:23:01: TIO Syncing Task Has Done!
+                   Finishing...
+20200726 10:23:02: File Number Sumerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+20200726 10:23:02: File Size Summerizing for Synced TIO Data Task Has Done!
+                   Finishing...
+ 
+20200726 10:23:02: Succeeded in Syncing TIO data @ FSO!
+          Synced : 0 file(s)
+                 : 0 MB
+         @ Speed : 0 MB/s
+       Time Used : 1 secs.
+    Total Synced : 0 file(s)
+                 : 0 MB
+ Total Time Used : 1 secs.
+            From : 20200726 10:23:01 
+              To : 20200726 10:23:02 

@@ -104,7 +104,7 @@ localwrongsize=$logpath/$datatype-local-wrongsize-$year$monthday-cyg.list
 #errlist=/cygdrive/d/chd/LFTP4WIN-master/home/chd/log/$datatype-$fileformat@$(date +\%Y\%m\%d)-error-total.list
 tmplist=$logpath/$datatype-$fileformat-$year$monthday-tmp.list
 
-totalfilenumberdat=$logpath/fso-copy-lftp-cyg-cron.sh_$datatype\_tmpfn2.dat
+totalfilenumberdat=$logpath/fso-copy-lftp-cyg-cron.sh\_$datatype\_$year$monthday\_tmpfn2.dat
 totalfilenumber=`cat $totalfilenumberdat | awk {'print $3'}`
 if [[ $totalfilenumber -eq 0 ]];then
   totalfilenumber=0
@@ -200,6 +200,7 @@ cat $localwrongsize >> $tmplist
 ctime3=`date  +%H:%M:%S`
 echo "                  For $year$monthday $datatype Data File(s)" > $logpath/errtmp-$year$monthday
 echo "***********************************************************************************************************************" >> $logpath/errtmp-$year$monthday
+echo "$today $ctime1 : Start $datatype File(s) Checking... " >> $logpath/errtmp-$year$monthday
 echo "$today $ctime3 : $totalfilenumber $datatype File(s) Checked... " >> $logpath/errtmp-$year$monthday
 echo "                " >> $logpath/errtmp-$year$monthday
 echo "$today $ctime3 : $errsize0 Error $datatype File(s) in Local Missing File(s) Checking" >> $logpath/errtmp-$year$monthday
