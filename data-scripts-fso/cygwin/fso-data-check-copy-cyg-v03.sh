@@ -200,6 +200,7 @@ cat $localwrongsize >> $tmplist
 ctime3=`date  +%H:%M:%S`
 echo "                  For $year$monthday $datatype Data File(s)" > $logpath/errtmp-$year$monthday
 echo "***********************************************************************************************************************" >> $logpath/errtmp-$year$monthday
+echo "$today $ctime1 : Start $datatype File(s) Checking... " >> $logpath/errtmp-$year$monthday
 echo "$today $ctime3 : $totalfilenumber $datatype File(s) Checked... " >> $logpath/errtmp-$year$monthday
 echo "                " >> $logpath/errtmp-$year$monthday
 echo "$today $ctime3 : $errsize0 Error $datatype File(s) in Local Missing File(s) Checking" >> $logpath/errtmp-$year$monthday
