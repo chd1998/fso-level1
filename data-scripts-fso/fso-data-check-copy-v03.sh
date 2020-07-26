@@ -83,7 +83,7 @@ errlist=$logpath/$datatype-local-wrongsize-$year$monthday.list
 targetdir=$destpre/$year/$year$monthday
 tmplist=$logpath/$datatype-$fileformat-$year$monthday-tmp.list
 
-totalfilenumberdat=$datatype-$year$monthday-$server-filenumber.dat
+totalfilenumberdat=$logpath/$datatype-$year$monthday-$server-filenumber.dat
 totalfilenumber=`cat $totalfilenumberdat | awk {'print $3'}`
 if [[ $totalfilenumber -eq 0 ]];then
   totalfilenumber=0
