@@ -134,7 +134,7 @@ echo " "
 #cd $cdir
 
 #getting file name & size
-find $cdir/ -type f -name '*.fits' -printf "%h/%f %s\n" > $listtmp &
+find $cdir/ -type f -name '*.fits' -type f ! -name "*level*"  -printf "%h/%f %s\n" > $listtmp &
 waiting "$!" "local $datatype $fileformat file(s) info getting" "Getting local $datatype $fileformat file(s) info"
 #cat $listtmp|wc -l
 #getting file number

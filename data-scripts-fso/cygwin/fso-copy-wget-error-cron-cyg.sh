@@ -134,7 +134,7 @@ for line in $(cat $errlist);
 do
 	ctime=`date --date='0 days ago' +%H:%M:%S`
 	rfile=$ftpserver1/$line
-	localfile=$destpre/$localdrive/$line
+	localfile=$destpre/$localdrive$line
 	echo "$today $ctime: Copying $rfile"
 	wget -O $localfile --ftp-user=$ftpuser --ftp-password=$password --no-passive-ftp  $rfile >/dev/null 2>&1 &
 	waiting "$!" "$datatype file(s) in $errlist copying" "Copying $datatype $fileformat file(s) in $errlist"

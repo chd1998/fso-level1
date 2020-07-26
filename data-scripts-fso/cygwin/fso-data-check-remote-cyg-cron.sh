@@ -129,7 +129,7 @@ if [ ! -d "$localdir" ];then
   echo "$today $ctime : local directory $localdir doesn't exist, pls check ..."
   exit 0
 else
-  find $localdir -type f -name '*.fits' |cut -d '/' -f 4-11> $locallist &
+  find $localdir -type f -name '*.fits'  -type f ! -name "*level*" |cut -d '/' -f 4-11> $locallist &
   waiting "$!" "local $datatype $fileformat file(s) info getting" "Getting local $datatype $fileformat file(s) info"
 fi
 
