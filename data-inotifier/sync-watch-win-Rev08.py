@@ -7,8 +7,6 @@ USAGE:
         python sync-watch-win-Revxx.py para1 para2 
             para1: src dir 
             para2: dest dir
-           
-
         example:
         python sync-watch-win-Rev08.py e:\test d:\test
 IMPORTANT：
@@ -43,12 +41,12 @@ IMPORTANT：
         using fire arguments instead of opt and working now
     #Known Issues:
         don't support file/directory name with spaces
-20200643 Release 07:
+20200623 Release 07:
     #OPTIMIZE:
         test 2 dirs exist or not
     #Known Issues:
         don't support file/directory name with spaces
-20200643 Release 08:
+20200727 Release 08:
     #REVISE:
         change dest to local/network dir under windows
         using robocopy inside windows system
