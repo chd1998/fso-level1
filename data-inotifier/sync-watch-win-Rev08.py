@@ -97,7 +97,7 @@ def pysync(syncSrc,syncDes):
         print(' ')
         #if file.index(rsyncSrc_orig)==0:
         if file.find(syncSrc)==0:
-            if (oper=='CREATE'):
+            if (oper=='CREATE') or (oper=='MOVE'):
             #if (oper=='MOVE') or (oper=='CREATE') or (oper=='DELETE') or (oper=='MODIFY'):
                 cmd='cd '+syncSrc+' && '+'start /b '+'robocopy  '+syncSrc+' '+syncDes+' /S /COPY:DT'
                 touched=True
