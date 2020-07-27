@@ -87,6 +87,8 @@ def pysync(syncSrc,syncDes):
                 tmp_file=open(r"file",'ab+')
                 a_ok=True
                 tmp_file.close()
+            except IOError as e:
+                print("I/O error({0}): {1}".format(e.errno, e.strerror))
             except:
                 print(Fore.RED+Back.BLACK+"%s --- Waiting for %s" %(time.ctime(),file))
                 sys.stdout.flush()
@@ -99,7 +101,7 @@ def pysync(syncSrc,syncDes):
                 cmd='cd '+syncSrc+' && '+'start /b '+'robocopy  '+syncSrc+' '+syncDes+' /S /COPY:DT'
                 touched=True
         if touched:
-            print(Fore.RED+'%s --- Syncing: %s' %(time.ctime(),file))
+            print(Fore.RED+'%s --- Syncing: %s to %s' %(time.ctime(),file,syncDes))
             start_time=time.time()
             syncAction=subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
             syncStat=syncAction.communicate()[0].decode('gbk')
