@@ -22,7 +22,7 @@ if [ $plist -le 0 ];then
   echo "No $1 processes found!"
   exit 0
 fi
-cat pidtmp|xargs kill
+cat pidlist|xargs kill
 #wait $!
 if [ $? -ne 0 ];then
   echo "Failed in kill $1 processes!"

@@ -13,6 +13,22 @@ from colorama import init
 import os
 import subprocess
 
+def pysync(syncSrc,syncDest):
+    #print(syncDest,syncSrc)
+    init(autoreset=True)
+    print(Fore.YELLOW+"%s Waiting for changes...\n" %(time.ctime()),end='\r')
+    #popen=subprocess.Popen(listen,stdout=subprocess.PIPE)
+    logging.basicConfig(level=logging.INFO,format='%(asctime)s - %(message)s',datefmt='%Y-%m-%d %H:%M:%S')
+    event_handler = MyHandler()
+    observer = Observer()
+    observer.schedule(event_handler, syncSrc, recursive=True)
+    observer.start()
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        observer.stop()
+    observer.join()
 class MyHandler(FileSystemEventHandler):
     def __init__(self):
         self.last_modified = datetime.now()
@@ -38,8 +54,9 @@ class MyHandler(FileSystemEventHandler):
             return
         else:
             self.last_modified = datetime.now()
-        #cmd='start /b '+'robocopy '+event.src_path+' '+syncDes+' /S'
-        #syncAction=subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
+        cmd='start /b '+'robocopy '+event.src_path+' z:\test /S /COPY:DT'
+        subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
+        print("copying...")
         print(f'Event type: {event.event_type}  path : {event.src_path}')
         print(event.is_directory) # This attribute is also available
 
@@ -51,22 +68,6 @@ class MyHandler(FileSystemEventHandler):
         print(f'Event type: {event.event_type}  path : {event.src_path}')
         print(event.is_directory) # This attribute is also available
 
-
-def pysync(syncSrc,syncDest):
-    init(autoreset=True)
-    print(Fore.YELLOW+"%s Waiting for changes...\n" %(time.ctime()),end='\r')
-    #popen=subprocess.Popen(listen,stdout=subprocess.PIPE)
-    logging.basicConfig(level=logging.INFO,format='%(asctime)s - %(message)s',datefmt='%Y-%m-%d %H:%M:%S')
-    event_handler = MyHandler()
-    observer = Observer()
-    observer.schedule(event_handler, syncSrc, recursive=True)
-    observer.start()
-    try:
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        observer.stop()
-    observer.join()
 
 if __name__ == '__main__':
     fire.Fire(pysync)

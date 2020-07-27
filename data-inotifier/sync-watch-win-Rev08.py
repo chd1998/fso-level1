@@ -51,7 +51,7 @@ IMPORTANT：
 20200643 Release 08:
     #REVISE:
         change dest to local/network dir under windows
-        using copy inside windows system
+        using robocopy inside windows system
     #Known Issues:
         don't support file/directory name with spaces
 '''
@@ -72,36 +72,25 @@ def pysync(syncSrc,syncDes):
         sys.exit(0)
     if not os.path.exists(syncDes):
         os.makedirs(syncDes)
-        #print ("Folder %s doesn't exist!  Pls Check..." %(syncDes))
-        #sys.exit(0)
-    #cygrsyncPrefix='/cygdrive'
-    #cygtmp=rsyncSrc_orig.replace('\\','/')
-    #cygtmp=cygtmp.replace(':','')
-    #cygrsyncSrc=cygrsyncPrefix+'/'+cygtmp
-    #rsyncSrc=rsyncSrc_orig
-    #print(rsyncSrc_orig)
-    #print(rsyncDes)
-    #print(cygrsyncSrc)
     listen='inotifywait -mrq --format "%%e %%w\%%f" "%s"' %(syncSrc)
     #listen='inotifywait -mrq --format "%%e %%w\%%f" "d:\\test\\data"'
     popen=subprocess.Popen(listen,stdout=subprocess.PIPE)
-    print(Fore.YELLOW+"%s Waiting for changes..." %(time.ctime()),end='\r')
+    print(Fore.CYAN+"Syncing Data for NVST")
+    print(Fore.CYAN+"Rev.08  2020-07-27")
+    print(Fore.YELLOW+"%s Waiting for changes..." %(time.ctime()))
     while True:
         line=popen.stdout.readline().strip()
-        #print (line)
         lineArr=(line.decode('gbk')).split(' ')
         oper=lineArr[0]
         file=lineArr[1]
-        #filename=file.split('\\')[-1]
-        #print(file)
         a_ok=False
         while not a_ok:
             try:
-                tmp_file=open(file,"ab+")
+                tmp_file=open(r"file",'ab+')
                 a_ok=True
                 tmp_file.close()
             except:
-                print(Fore.RED+Back.WHITE+"%s --- Waiting for %s" %(time.ctime(),file))
+                print(Fore.RED+Back.BLACK+"%s --- Waiting for %s" %(time.ctime(),file))
                 sys.stdout.flush()
                 time.sleep(1)
         touched=False
@@ -109,34 +98,25 @@ def pysync(syncSrc,syncDes):
         #if file.index(rsyncSrc_orig)==0:
         if file.find(syncSrc)==0:
             if (oper=='MOVED_TO') or (oper=='CREATE'):
-                #_current_file=file.replace(rsyncSrc_orig,cygrsyncSrc)
-                #_current_file=_current_file.replace(':','')
-                #current_file=_current_file.replace('\\','/')
-                #filename=file.split('\\')[-1]
-                #current_file=str(filename)
-                #print(current_file)
-                #current_file='/cygdrive/e/test/data'
-                #cmd='cd '+rsyncSrc+' && '+'start /b '+rsync_exec+'\\rsync.exe -av -R -d --port=873  --progress '+current_file+' '+rsyncDes
-                #cmd='cd '+rsyncSrc+' && '+'start /b '+rsync_exec+'\\rsync.exe -av -R -d --port=873  --progress '+cygrsyncSrc+' '+rsyncDes
-                cmd='cd '+syncSrc+' && '+'start /b '+'copy /Y '+syncSrc+' '+syncDes
-                #print(cmd)
-                #cmd=cmd.encode(locale.getdefaultlocale()[1])
+                cmd='cd '+syncSrc+' && '+'start /b '+'robocopy  '+syncSrc+' '+syncDes+' /S /COPY:DT'
                 touched=True
         if touched:
-            print(Fore.RED+Back.WHITE+'%s --- Syncing: %s' %(time.ctime(),file))
+            print(Fore.RED+'%s --- Syncing: %s' %(time.ctime(),file))
             start_time=time.time()
             syncAction=subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
-            syncStat=syncAction.communicate()[0].decode()
-            syncErr=syncAction.communicate()[1].decode()
-            print(syncStat,syncErr)
+            syncStat=syncAction.communicate()[0].decode('gbk')
+            syncErr=syncAction.communicate()[1].decode('gbk')
+            retcode=syncAction.returncode
+            #print(syncStat)
+            #print(syncErr)
             end_time=time.time()
             used_time=end_time-start_time
-            if 'speedup' in syncStat:
-                print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s --- Succeed: %s rsynced! " % (time.ctime(),file))
+            if retcode == 0:
+                print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s --- Succeed: %s synced! " % (time.ctime(),file))
                 print (Fore.LIGHTCYAN_EX+Back.BLACK+"Time Used: %.4f Secs... " %(used_time))
                 #print (rsyncStat+"\n")
             else:
-                print (Fore.LIGHTYELLOW_EX+Back.RED+'Failed: '+file+' rsync failed!')
+                print (Fore.LIGHTYELLOW_EX+Back.RED+'Failed: '+file+' sync failed!')
                 #print (rsyncStat+"\n")
 
 if __name__ == '__main__':
