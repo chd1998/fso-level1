@@ -49,15 +49,12 @@ IMPORTANT：
     #REVISE:
         change dest to local/network dir under windows
         using robocopy inside windows system
-    #Known Issues:
-        don't support file/directory name with spaces
 20200728 Release 08-01:
     #REVISE:
         add threadnumber for robocopy
         add size compare between src and dest
         add speed info
-    #Known Issues:
-        don't support file/directory name with spaces
+    
 '''
 from os import truncate
 import subprocess
