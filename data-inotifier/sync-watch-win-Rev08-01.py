@@ -52,11 +52,10 @@ IMPORTANT：
         using robocopy inside windows system
     #Known Issues:
         don't support file/directory name with spaces
-20200727 Release 08-01:
+20200728 Release 08-01:
     #REVISE:
-        change dest to local/network dir under windows
-        using robocopy inside windows system without monitoring src directory
         add threadnumber for robocopy
+        add size compare between src and dest
     #Known Issues:
         don't support file/directory name with spaces
 '''
@@ -70,6 +69,13 @@ import locale
 import fire
 from colorama import Fore,Back,Style
 from colorama import init
+
+def getFileSize(filePath, size=0):
+    for root, dirs, files in os.walk(filePath):
+        for f in files:
+            size += os.path.getsize(os.path.join(root, f))
+            #print(f)
+    return size
 
 def pysync(syncSrc,syncDes,threadNo):
     init(autoreset=True)
@@ -100,9 +106,13 @@ def pysync(syncSrc,syncDes,threadNo):
     syncErr=syncAction.communicate()[1].decode('gbk')
     retcode=syncAction.returncode
     end_time=time.time()
+    srcSize=getFileSize(syncSrc)
+    desSize=getFileSize(syncDes)
     used_time=end_time-start_time
     if retcode == 0:
         print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s --- Sync Suceeded! " % (time.ctime()))
+        print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s --- Src Size : %s KB" % (time.ctime(),str(srcSize/1000)))
+        print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s --- Dest Size : %s KB" % (time.ctime(),str(desSize/1000)))
         print (Fore.LIGHTCYAN_EX+Back.BLACK+"Time Used: %.4f Secs... " %(used_time))
         #print (rsyncStat+"\n")
     else:
