@@ -89,7 +89,7 @@ def pysync(syncSrc,syncDes,threadNo):
     print(Fore.YELLOW+"%s --- Syncing Started with %s Thread(s)..." %(time.ctime(),str(threadNo)))
     
     #while retcode != 0: 
-    cmd='cd '+syncSrc+' && '+'start /b '+'robocopy  '+syncSrc+' '+syncDes+' /S /COPY:DT /MT:'+str(threadNo)
+    cmd='cd '+syncSrc+' && '+'start /b '+'robocopy  '+syncSrc+' '+syncDes+' /E /COPY:DT /MT:'+str(threadNo)
     print(Fore.RED+'%s --- Syncing Data from %s to %s' %(time.ctime(),syncSrc,syncDes))
     start_time=time.time()
     try:
