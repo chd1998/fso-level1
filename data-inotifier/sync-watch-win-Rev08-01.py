@@ -81,9 +81,7 @@ def pysync(syncSrc,syncDes,threadNo):
         
     if not os.path.exists(syncDes):
         os.makedirs(syncDes)
-    #listen='inotifywait -mrq --format "%%e %%w\%%f" "%s"' %(syncSrc)
-    #listen='inotifywait -mrq --format "%%e %%w\%%f" "d:\\test\\data"'
-    #popen=subprocess.Popen(listen,stdout=subprocess.PIPE)
+
     print(Fore.CYAN+"Syncing Data for NVST")
     print(Fore.CYAN+"Rev.08  2020-07-27")
     print(Fore.YELLOW+"%s --- Syncing Started with %s Thread(s)..." %(time.ctime(),str(threadNo)))
@@ -109,8 +107,6 @@ def pysync(syncSrc,syncDes,threadNo):
         #print (rsyncStat+"\n")
     else:
         print (Fore.LIGHTYELLOW_EX+Back.RED+'Failed: Sync failed!')
-        #print (rsyncStat+"\n")
-        #time.sleep(1)
 
 if __name__ == '__main__':
     fire.Fire(pysync)
