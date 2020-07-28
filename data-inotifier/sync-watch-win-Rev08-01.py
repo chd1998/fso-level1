@@ -112,7 +112,7 @@ def pysync(syncSrc,syncDes,threadNo):
     if retcode == 0:
         print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s --- Sync Suceeded! " % (time.ctime()))
         print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s --- Src Size : %s KB" % (time.ctime(),str(srcSize/1000)))
-        print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s --- Dest Size : %s KB" % (time.ctime(),str(desSize/1000)))
+        print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s --- Des Size : %s KB" % (time.ctime(),str(desSize/1000)))
         print (Fore.LIGHTCYAN_EX+Back.BLACK+"Time Used: %.4f Secs... " %(used_time))
         #print (rsyncStat+"\n")
     else:
