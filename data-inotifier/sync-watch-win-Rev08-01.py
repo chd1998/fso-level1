@@ -8,11 +8,10 @@ USAGE:
             para1: src dir 
             para2: dest dir
         example:
-        python sync-watch-win-Rev08.py e:\test d:\test
+        python sync-watch-win-Rev08-01.py e:\test d:\test
 IMPORTANT：
-    1. monitoring sorce directory and copy to dest directory 
+    1. copy contents in sorce directory to dest directory 
     2. works on windows platform only
-    3. inotifywait.exe must be in the same directory of this file
 
 2019/04/01 Release 01
     Prototype version
@@ -56,6 +55,7 @@ IMPORTANT：
     #REVISE:
         add threadnumber for robocopy
         add size compare between src and dest
+        add speed info
     #Known Issues:
         don't support file/directory name with spaces
 '''
@@ -89,7 +89,7 @@ def pysync(syncSrc,syncDes,threadNo):
         os.makedirs(syncDes)
 
     print(Fore.CYAN+"Syncing Data for NVST")
-    print(Fore.CYAN+"Rev.08  2020-07-27")
+    print(Fore.CYAN+"Rev.08-01 2020-07-27")
     print(Fore.YELLOW+"%s --- Syncing Started with %s Thread(s)..." %(time.ctime(),str(threadNo)))
     
     #while retcode != 0: 
@@ -113,6 +113,7 @@ def pysync(syncSrc,syncDes,threadNo):
         print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s --- Sync Suceeded! " % (time.ctime()))
         print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s --- Src Size : %s KB" % (time.ctime(),str(srcSize/1000)))
         print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s --- Des Size : %s KB" % (time.ctime(),str(desSize/1000)))
+        print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s ---   @Speed : %.4f KB/sec." % (time.ctime(),(desSize/1000)/used_time))
         print (Fore.LIGHTCYAN_EX+Back.BLACK+"Time Used: %.4f Secs... " %(used_time))
         #print (rsyncStat+"\n")
     else:
