@@ -71,7 +71,7 @@ def pysync(syncSrc,syncDes,threadNo):
     if threadNo < 1 or threadNo > 128:
         threadNo=8
     if not os.path.exists(syncSrc):
-        print ("Folder %s  not ready, pls wait..." %(syncSrc))
+        print ("Folder %s  is not exist, pls check..." %(syncSrc))
         sys.exit(0)
         
     if not os.path.exists(syncDes):
