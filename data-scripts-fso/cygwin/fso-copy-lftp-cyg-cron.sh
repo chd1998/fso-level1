@@ -31,8 +31,8 @@ waiting() {
 # restore cur pos
 #  tput rc
 #  tput ed
-	wctime=`date  +%H:%M:%S`
-	wtoday=`date  +%Y%m%d`
+	wctime=`date --date='0 days ago' +%H:%M:%S`
+	wtoday=`date --date='0 days ago' +%Y%m%d`
   echo "$wtoday $wctime: $2 Task Has Done!"
   #dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
   echo "                   Finishing..."
@@ -46,8 +46,8 @@ procing() {
   while [ 1 ]
     do
       sleep 1
-      ptoday=`date  +%Y%m%d`
-      pctime=`date  +%H:%M:%S`
+      ptoday=`date --date='0 days ago' +%Y%m%d`
+      pctime=`date --date='0 days ago' +%H:%M:%S`
 #      echo -ne  "$ptoday $pctime: $1...   Please Wait..."
       echo "$ptoday $pctime: $1...   Please Wait..."
     done
@@ -60,18 +60,19 @@ function onCtrlC(){
     exit 1
 }
 
-cyear=`date  +%Y`
-today=`date  +%Y%m%d`
-ctime=`date  +%H:%M:%S`
-ctime0=`date  +%H:%M:%S`
+cyear=`date --date='0 days ago' +%Y`
+today=`date --date='0 days ago' +%Y%m%d`
+ctime=`date --date='0 days ago' +%H:%M:%S`
+ctime0=`date --date='0 days ago' +%H:%M:%S`
 
 #t0=`echo $ctime0|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 t0=`date +%s`
 
 if [ $# -ne 9 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to local HD under cygwin"
-  echo "Usage: ./fso-copy-lftp-cyg-xx.sh srcip port dest year(4 digits)  monthday(4 digits) user password datatype(TIO/HA) procnum"
-  echo "Example: ./fso-copy-lftp-cyg-xx.sh 192.168.111.120 21 f 2019 0713 tio ynao246135 TIO 40"
+  echo "Usage: ./fso-copy-lftp-cyg-cron.sh srcip port dest year(4 digits)  monthday(4 digits) user password datatype(TIO/HA) procnum"
+  echo "Example: ./fso-copy-lftp-cyg-cron.sh 192.168.111.120 21 f 2019 0713 tio ynao246135 TIO 40"
+  echo "Example: ./fso-copy-lftp-cyg-cron.sh 192.168.111.122 21 e 2019 0713 ha ynao246135 HA 40"
   exit 1
 fi
 
@@ -97,15 +98,7 @@ ftpserver=ftp://$ftpuser:$password@$ftpserver:$remoteport
 #echo "$ftpserver"
 #read
 
-<<<<<<< HEAD
 lockfile=$logpath/$(basename $0)_${datatype}-$today.lock
-=======
-<<<<<<< HEAD
-lockfile=$logpath/$(basename $0)_${datatype}-$cyear$today.lock
-=======
-lockfile=$logpath/$(basename $0)_${datatype}-$today.lock
->>>>>>> b1b3960921e4d0d15c04a99f3a3123de483be9c0
->>>>>>> 0f956503957fe885bfb5ea3c2ec34db5776bd402
 if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
   ps -p $mypid | grep $mypid &>/dev/null
@@ -148,36 +141,36 @@ echo " "
 
 if [ ! -d "$destdir" ]; then
   mkdir -p $destdir
-  echo "0" > $logpath/$(basename $0)_${datatype}_tmpfn2.dat
-  echo "0" > $logpath/$(basename $0)_${datatype}_tmpfs2.dat
+  echo "0" > $logpath/$(basename $0)_${datatype}_${today}_tmpfn2.dat
+  echo "0" > $logpath/$(basename $0)_${datatype}_${today}_tmpfs2.dat
 else
   echo "$destdir already exist!"
 fi
 
-ctime=`date  +%H:%M:%S`
+ctime=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime: Copying $datatype data @ FSO..."
 echo "                   From: $srcdir "
 echo "                   To  : $destdir "
 echo "                   Please Wait..."
 
 #count existed file number
-if [ ! -f "$logpath/$(basename $0)_${datatype}_tmpfn2.dat" ]; then
+if [ ! -f "$logpath/$(basename $0)_${datatype}_${today}_tmpfn2.dat" ]; then
 #  ls -lR $destdir | grep "^-" | wc -l > $logpath/$(basename $0)_${datatype}_tmpfn2.dat  & 
 #  waiting "$!" "Existed $datatype File Number @ Dest Counting" "Counting Existed $datatype File Number @ Dest"
-  echo "0" > $logpath/$(basename $0)_${datatype}_tmpfn2.dat
+  echo "0" > $logpath/$(basename $0)_${datatype}_${today}_tmpfn2.dat
 fi
-fn1=$(cat $logpath/$(basename $0)_${datatype}_tmpfn2.dat)
+fn1=$(cat $logpath/$(basename $0)_${datatype}_${today}_tmpfn2.dat)
 
 #count existed file size  
-if [ ! -f "$logpath/$(basename $0)_${datatype}_tmpfs2.dat" ]; then
+if [ ! -f "$logpath/$(basename $0)_${datatype}_${today}_tmpfs2.dat" ]; then
 #fs1=`du -sm $destdir | awk '{print $1}'` > $logpath/$(basename $0)_${datatype}_tmpfs2.dat &
 #waiting "$!" "Existed $datatype File Size @ Dest Counting" "Counting Existed $datatype Dest File Size"
-  echo "0">$logpath/$(basename $0)_${datatype}_tmpfs2.dat
+  echo "0">$logpath/$(basename $0)_${datatype}_${today}_tmpfs2.dat
 fi
-fs1=$(cat $logpath/$(basename $0)_${datatype}_tmpfs2.dat)
+fs1=$(cat $logpath/$(basename $0)_${datatype}_${today}_tmpfs2.dat)
 
 
-ctime=`date  +%H:%M:%S`
+ctime=`date --date='0 days ago' +%H:%M:%S`
 #t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 t1=`date +%s`
 
@@ -187,7 +180,7 @@ lftp $ftpserver -e "mirror --parallel=$threadnumber $srcdir2  $destdir1; quit" >
 #lftp $ftpserver -e "mirror  --ignore-time --continue --parallel=$threadnumber $srcdir2  $destdir1; quit" >/dev/null 2>&1 &
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 if [ $? -ne 0 ];then
-  ctime1=`date  +%H:%M:%S`
+  ctime1=`date --date='0 days ago' +%H:%M:%S`
   echo "$today $ctime1: Failed in Syncing $datatype Data from $srcdir to $destdir"
   #cd /home/chd
   exit 1
@@ -195,30 +188,30 @@ fi
 
 #ttmp=$(cat $logpath/$(basename $0)_${datatype}_dtmp.dat)
 
-ctime1=`date  +%H:%M:%S`
+ctime1=`date --date='0 days ago' +%H:%M:%S`
 
 #t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 t2=`date +%s`
 
 targetdir=${destdir}
 
-find $targetdir | grep fits | wc -l > $logpath/$(basename $0)_${datatype}_tmpfn2.dat &
+find $targetdir | grep fits | wc -l > $logpath/$(basename $0)_${datatype}_${today}_tmpfn2.dat &
 waiting "$!" "File Number Sumerizing for Synced $datatype Data" "Sumerizing File Number for Synced $datatype Data"
 if [ $? -ne 0 ];then
-  ctime3=`date  +%H:%M:%S`
+  ctime3=`date --date='0 days ago' +%H:%M:%S`
   echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
   #cd /home/chd/
   exit 1
 fi
 
 #fn1=$(cat /home/chd/log/tmpfn1.dat)
-fn2=$(cat $logpath/$(basename $0)_${datatype}_tmpfn2.dat)
+fn2=$(cat $logpath/$(basename $0)_${datatype}_${today}_tmpfn2.dat)
 
 
-du -sm $targetdir|awk '{print $1}' > $logpath/$(basename $0)_${datatype}_tmpfs2.dat &
+du -sm $targetdir|awk '{print $1}' > $logpath/$(basename $0)_${datatype}_${today}_tmpfs2.dat &
 waiting "$!" "File Size Summerizing for Synced $datatype Data" "Sumerizing File Size for Synced $datatype Data"
 if [ $? -ne 0 ];then
-  ctime3=`date  +%H:%M:%S`
+  ctime3=`date --date='0 days ago' +%H:%M:%S`
   echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
   #cd /home/chd/
   exit 1
@@ -226,12 +219,12 @@ fi
 
 
 #fs1=$(cat /home/chd/log/tmpfs1.dat)
-fs2=$(cat $logpath/$(basename $0)_${datatype}_tmpfs2.dat)
+fs2=$(cat $logpath/$(basename $0)_${datatype}_${today}_tmpfs2.dat)
 
 #chmod 777 -R $destdir &
 #waiting "$!" "Permission Changing" "Changing Permission"
 #if [ $? -ne 0 ];then
-#  ctime3=`date  +%H:%M:%S`
+#  ctime3=`date --date='0 days ago' +%H:%M:%S`
 #  echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
 #  cd /home/chd/
 #  exit 1
@@ -252,8 +245,8 @@ fi
   
 speed=`echo "$filesize $timediff"|awk '{print($1/$2)}'`
 
-today0=`date  +%Y%m%d`
-ctime3=`date  +%H:%M:%S`
+today0=`date --date='0 days ago' +%Y%m%d`
+ctime3=`date --date='0 days ago' +%H:%M:%S`
 #t3=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 #t4=`echo $ctime3|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 t4=`date +%s`

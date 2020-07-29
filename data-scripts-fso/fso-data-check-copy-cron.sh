@@ -11,6 +11,7 @@
 #       20191029   Release 0.31    Add more info to mail
 #       20200420   Release 0.32    Revised & Add more info to mail
 #       20200615   Release 0.33    Date revised
+#       20200725   Release 0.34    Output file revised
 # 
 
 #waiting pid taskname prompt
@@ -106,7 +107,7 @@ else
   echo $$>$lockfile
 fi
 
-progver=0.33
+progver=0.34
 today=`date +%Y%m%d`
 ctime0=`date +%H:%M:%S`
 
@@ -256,6 +257,7 @@ cat $errlist >> $tmplist
 
 echo "                  For $year$monthday  $datatype Data File(s)" > $logpath/errtmp-$datatype-$year$monthday
 echo "************************************************************************************************************">> $logpath/errtmp-$datatype-$year$monthday
+echo " $today $ctime0 : Start $datatype File(s) Checking... " >> $logpath/errtmp-$datatype-$year$monthday
 echo " $today $ctime3 : $totalfilenumber $datatype File(s) Checked... " >> $logpath/errtmp-$datatype-$year$monthday
 echo "                " >> $logpath/errtmp-$datatype-$year$monthday
 echo " $today $ctime3 : $tmp1 Local Missing File(s)" >> $logpath/errtmp-$datatype-$year$monthday

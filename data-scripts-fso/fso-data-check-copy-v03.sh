@@ -83,7 +83,7 @@ errlist=$logpath/$datatype-local-wrongsize-$year$monthday.list
 targetdir=$destpre/$year/$year$monthday
 tmplist=$logpath/$datatype-$fileformat-$year$monthday-tmp.list
 
-totalfilenumberdat=$datatype-$year$monthday-$server-filenumber.dat
+totalfilenumberdat=$logpath/$datatype-$year$monthday-$server-filenumber.dat
 totalfilenumber=`cat $totalfilenumberdat | awk {'print $3'}`
 if [[ $totalfilenumber -eq 0 ]];then
   totalfilenumber=0
@@ -108,13 +108,15 @@ else
   echo $$>$lockfile
 fi
 
+pver=0.32
+pname=$(basename $0)
 ctime0=`date  +%H:%M:%S`
 #st1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 st1=`date +%s`
 echo "                                                       "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
-echo "              fso-data-check-copy.sh                   "
-echo "          (Release 0.32 20200420 11:32)                "
+echo "                $pname                                 "
+echo "          (Release $pver 20200420 11:32)               "
 echo "                                                       "
 echo "           Check $datatype data and copy               "
 echo "                                                       "
@@ -228,6 +230,7 @@ cat $errlist >> $tmplist
 
 echo "                   For $year$monthday  $datatype Data File(s)" > $logpath/errtmp-$datatype-$year$monthday
 echo "************************************************************************************************************">> $logpath/errtmp-$datatype-$year$monthday
+echo " $today $ctime0 : Start $datatype File(s) Checking... " >> $logpath/errtmp-$datatype-$year$monthday
 echo " $today $ctime3 : $totalfilenumber $datatype File(s) Checked... " >> $logpath/errtmp-$datatype-$year$monthday
 echo "                " >> $logpath/errtmp-$datatype-$year$monthday
 echo " $today $ctime3 : $tmp1 Local Missing File(s)" >> $logpath/errtmp-$datatype-$year$monthday
