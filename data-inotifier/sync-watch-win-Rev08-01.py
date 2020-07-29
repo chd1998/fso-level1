@@ -4,47 +4,39 @@
 @institution: Yunnan Astronomical Observatory, CAS
 
 USAGE:
-        python sync-watch-win-Revxx.py para1 para2 
+        python sync-watch-win-Revxx.py para1 para2 para3
             para1: src dir 
             para2: dest dir
+            para3: thread no.
         example:
-        python sync-watch-win-Rev08-01.py e:\test d:\test
+        python sync-watch-win-Rev08-01.py e:\test d:\test 32
 IMPORTANT：
     1. copy contents in sorce directory to dest directory 
     2. works on windows platform only
+        
+#Known Issues:
+    1.  don't support file/directory name with spaces  
 
 2019/04/01 Release 01
     Prototype version
 2019/04/13 Release 02:
     #Function:
         First working with GBK encoding
-    #Known Issues:
-        don't support file/directory name with spaces
 2019/04/14 Release 03:
     #Function:
         add support to input source/destination from command prompt
-    Known Issues:
-        don't support file/directory name with spaces
 2019/04/14 Release 04:
     #OPTIMIZE:
         output and color scheme
-    #Known Issues:
-        don't support file/directory name with spaces
 20200622 Release 05:
     #OPTIMIZE:
         using fire arguments instead of opt
-    #Known Issues:
-        don't support file/directory name with spaces
 20200623 Release 06:
     #OPTIMIZE:
         using fire arguments instead of opt and working now
-    #Known Issues:
-        don't support file/directory name with spaces
 20200623 Release 07:
     #OPTIMIZE:
         test 2 dirs exist or not
-    #Known Issues:
-        don't support file/directory name with spaces
 20200727 Release 08:
     #REVISE:
         change dest to local/network dir under windows
@@ -54,7 +46,7 @@ IMPORTANT：
         add threadnumber for robocopy
         add size compare between src and dest
         add speed info
-    
+  
 '''
 from os import truncate
 import subprocess
