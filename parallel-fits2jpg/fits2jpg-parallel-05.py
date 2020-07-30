@@ -5,8 +5,8 @@ fits2jpg-parallel-xx.py
 purposes: generating the jpeg thumbnails of fits files in source SAVE_DIRECTORY
 Note: single --- using 1 process; parallel --- using specific number of processes via input
 
-Usage: python fits2jpg-parallel-xx.py --path=<str> --pn=<int> --tsize=int int --savedir=<str>
-Example: python fits2jpg-parallel-04.py --path=d:\\fso-data\\fso-test-data --pn=4 --tsize=256 256 --savedir=thumbs
+Usage: python fits2jpg-parallel-xx.py path pn (x,y) savedir
+Example: python fits2jpg-parallel-05.py d:\fso-data\fso-test-data 4  (256,256) thumbs
 
 
 Changlog:
