@@ -52,7 +52,8 @@ def parallel(path):
     rank = comm.Get_rank()
     size = comm.Get_size()
     totalStartTime = time.time()
-    noisyDir = os.path.join(path,'noisy')
+    #noisyDir = os.path.join(path,'noisy')
+    noisyDir=path
     if not os.path.isdir(os.path.join(noisyDir)):
         print ("Source image dir %s doesn't exist!  Pls Check..." % noisyDir)
         sys.exit(0)
@@ -64,6 +65,9 @@ def parallel(path):
     filenum = 0
     for img in imgFiles:
         filenum = filenum + 1
+    if filenum == 0:
+        print ("No jpg file(s) found in %s, pls check..." % path)
+        sys.exit(1)
     numFiles = np.int(filenum/size) #number of files this process will handle
     #imgFiles = ["%.4d.jpg"%x for x in range(rank*numFiles+1, (rank+1)*numFiles+1)] # Fix this line to distribute imgFiles
     ntmp = 0
