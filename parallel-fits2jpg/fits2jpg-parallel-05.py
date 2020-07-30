@@ -39,6 +39,7 @@ def f2jp(path,pn,tsize,savedir):
     folder = os.path.realpath(path)
     if not os.path.isdir(os.path.join(folder)):
         print ("Folder %s doesn't exist!  Pls Check..." % path)
+        sys.exit(0)
     else:
         if not os.path.isdir(os.path.join(folder, savedir)):
             os.makedirs(os.path.join(folder, savedir))
