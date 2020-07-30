@@ -32,7 +32,7 @@ from astropy.io import fits
 TSIZE=(256,256)
 SAVEDIR="thumbs"
 
-def f2j-p(path,pn,tsize,savedir):
+def f2jp(path,pn,tsize,savedir):
     TSIZE=tsize
     SAVEDIR=savedir
 
@@ -86,4 +86,4 @@ def create_thumbnail(filename):
     im.save(save_path)
 
 if __name__ == '__main__':
-    fire.Fire(f2j-p)
+    fire.Fire(f2jp)
