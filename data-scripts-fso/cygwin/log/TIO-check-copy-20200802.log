@@ -1,0 +1,66 @@
+                                                       
+======= Welcome to Data Archiving System @ FSO! =======
+              fso-data-check-copy.sh                   
+          (Release 0.32 20200420 13:34)                
+                                                       
+              Check TIO data and copy            
+                                                       
+                20200802 19:00:02                         
+=======================================================
+ 
+20200802 19:00:02: Testing 192.168.111.120 is online or not, please wait...
+20200802 19:00:21: 192.168.111.120 is offline, skipping remote & local comparison...
+20200802 19:00:21: 0 local missing TIO file(s) copied from remote
+20200802 19:00:21: Local TIO File(s) Size Checking, please wait...
+20200802 19:00:23: Checking Local TIO File(s) Size, Please Wait...   
+20200802 19:00:24: Checking Local TIO File(s) Size, Please Wait...   
+20200802 19:00:25: Checking Local TIO File(s) Size, Please Wait...   
+20200802 19:00:26: Local TIO File(s) Size Checking Task Has Done!
+                   Finishing....
+20200802 : Skipping Copying Local Wrong Size TIO File(s) from Remote...
+20200802 19:00:28: Sending notification email to Observation Assistant...
+20200802 19:00:30: Checking & Copying TIO data @ FSO finished!
+   Total Checked : 0 TIO File(s) 
+                 : 0 file(s) left
+                 : see /home/chd/log/TIO-fits-20200802-tmp.list for all file(s) details
+                 : 0 file(s) found in remote local comparison
+                 : see /home/chd/log/TIO-fits-20200802-diff-cyg.list for details 
+                 : 0 file(s) found in local wrong size checking
+                 : see /home/chd/log/TIO-local-wrongsize-20200802-cyg.list for details
+       Time Used : 28 secs.
+            From : 20200802 19:00:02
+              To : 20200802 19:00:30
+=================================================================================
+                                                       
+======= Welcome to Data Archiving System @ FSO! =======
+              fso-data-check-copy.sh                   
+          (Release 0.32 20200420 13:34)                
+                                                       
+              Check TIO data and copy            
+                                                       
+                20200802 19:15:02                         
+=======================================================
+ 
+20200802 19:15:02: Testing 192.168.111.120 is online or not, please wait...
+20200802 19:15:21: 192.168.111.120 is offline, skipping remote & local comparison...
+20200802 19:15:21: 0 local missing TIO file(s) copied from remote
+20200802 19:15:21: Local TIO File(s) Size Checking, please wait...
+20200802 19:15:22: Checking Local TIO File(s) Size, Please Wait...   
+20200802 19:15:24: Checking Local TIO File(s) Size, Please Wait...   
+20200802 19:15:25: Checking Local TIO File(s) Size, Please Wait...   
+20200802 19:15:25: Local TIO File(s) Size Checking Task Has Done!
+                   Finishing....
+20200802 : Skipping Copying Local Wrong Size TIO File(s) from Remote...
+20200802 19:15:27: Sending notification email to Observation Assistant...
+20200802 19:15:30: Checking & Copying TIO data @ FSO finished!
+   Total Checked : 0 TIO File(s) 
+                 : 0 file(s) left
+                 : see /home/chd/log/TIO-fits-20200802-tmp.list for all file(s) details
+                 : 0 file(s) found in remote local comparison
+                 : see /home/chd/log/TIO-fits-20200802-diff-cyg.list for details 
+                 : 0 file(s) found in local wrong size checking
+                 : see /home/chd/log/TIO-local-wrongsize-20200802-cyg.list for details
+       Time Used : 28 secs.
+            From : 20200802 19:15:02
+              To : 20200802 19:15:30
+=================================================================================

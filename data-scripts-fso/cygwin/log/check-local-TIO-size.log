@@ -1,0 +1,33 @@
+ 
+================================================================================
+                                                                                
+               fso-data-check utility for TIO data @ fso                  
+                       Release 20190721-0931                                    
+                                                                                
+20200802 19:15:21 : Checking the fits file numbers & size                    
+                    @ /cygdrive/e/20200802/TIO                                                     
+                    Please wait...                                              
+                    Press ctrl-c to break!                                      
+                                                                                
+================================================================================
+ 
+20200802 19:15:22: local TIO fits file(s) info getting Task Has Done!
+                   Finishing....
+20200802 19:15:22: new TIO fits file(s) getting Task Has Done!
+                   Finishing....
+20200802 19:15:22: Wrong TIO fits file(s) checking Task Has Done!
+                   Finishing....
+20200802 19:15:23: New current wrong TIO fits file(s) finding Task Has Done!
+                   Finishing....
+20200802 19:15:23: Current wrong TIO fits file(s) adding Task Has Done!
+                   Finishing....
+20200802 19:15:24: Wrong TIO fits files list generating Task Has Done!
+                   Finishing....
+20200802 19:15:25: For TIO fits Data File(s) @ /cygdrive/e/20200802/TIO 
+     File Checked: 0 file(s)
+ This Round Found: 0 file(s) in wrong size
+      Total Found: 0 file(s) in wrong size
+        Time Used: 3 secs.
+  Error File List: /home/chd/log/TIO-fits-20200802-error-total.list
+ 
+================================================================================

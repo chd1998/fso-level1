@@ -107,13 +107,14 @@ fi
 #touch $localwrongsize
 #touch $tmplist
 
+pver=0.32
 ctime1=`date  +%H:%M:%S`
 #st1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 st1=`date +%s`
 echo "                                                       "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
 echo "              fso-data-check-copy.sh                   "
-echo "          (Release 0.32 20200420 13:34)                "
+echo "          (Release $pver 20200420 13:34)                "
 echo "                                                       "
 echo "              Check $datatype data and copy            "
 echo "                                                       "
@@ -189,17 +190,17 @@ cat $remotelocaldifflist > $tmplist
 cat $localwrongsize >> $tmplist
 ctime3=`date  +%H:%M:%S`
 ctime3=`date  +%H:%M:%S`
-echo "                  For $year$monthday $datatype Data File(s)" > $logpath/errtmp-$year$monthday
-echo "***********************************************************************************************************************" >> $logpath/errtmp-$year$monthday
-echo "$today $ctime1 : Start $datatype File(s) Checking... " >> $logpath/errtmp-$year$monthday
-echo "$today $ctime3 : $totalfilenumber $datatype File(s) Checked... " >> $logpath/errtmp-$year$monthday
-echo "                " >> $logpath/errtmp-$year$monthday
-echo "$today $ctime3 : $errsize0 Local Missing $datatype File(s) " >> $logpath/errtmp-$year$monthday
-cat $remotelocaldifflist >> $logpath/errtmp-$year$monthday
-echo "                " >> $logpath/errtmp-$year$monthday
+echo "                  For $year$monthday $datatype Data File(s)" > $logpath/errtmp-$datatype-$year$monthday
+echo "***********************************************************************************************************************" >> $logpath/errtmp-$datatype-$year$monthday
+echo "$today $ctime1 : Start $datatype File(s) Checking... " >> $logpath/errtmp-$datatype-$year$monthday
+echo "$today $ctime3 : $totalfilenumber $datatype File(s) Checked... " >> $logpath/errtmp-$datatype-$year$monthday
+echo "                " >> $logpath/errtmp-$datatype-$year$monthday
+echo "$today $ctime3 : $errsize0 Local Missing $datatype File(s) " >> $logpath/errtmp-$datatype-$year$monthday
+cat $remotelocaldifflist >> $logpath/errtmp-$datatype-$year$monthday
+echo "                " >> $logpath/errtmp-$datatype-$year$monthday
 ctime3=`date  +%H:%M:%S`
-echo "$today $ctime3 : $errsize2 Local Wrong Size $datatype File(s)" >> $logpath/errtmp-$year$monthday
-cat $localwrongsize >> $logpath/errtmp-$year$monthday
+echo "$today $ctime3 : $errsize2 Local Wrong Size $datatype File(s)" >> $logpath/errtmp-$datatype-$year$monthday
+cat $localwrongsize >> $logpath/errtmp-$datatype-$year$monthday
 
 
 #cat $remotelocaldifflist $errlist > $tmplist 
@@ -208,8 +209,8 @@ errsize5=`cat $tmplist|wc -l`
 ctime3=`date  +%H:%M:%S`
 echo "$today $ctime3: Sending notification email to Observation Assistant..."
 #sending email to observers
-email -s "$year$monthday-$datatype@fso-data: $errsize5 Error $datatype File(s) Found" nvst_obs@ynao.ac.cn < $logpath/errtmp-$year$monthday
-email -s "$year$monthday-$datatype@fso-data: $errsize5 Error $datatype File(s) Found" chd@ynao.ac.cn < $logpath/errtmp-$year$monthday
+email -s "$year$monthday-$datatype@fso-data: $errsize5 Error $datatype File(s) Found" nvst_obs@ynao.ac.cn < $logpath/errtmp-$datatype-$year$monthday
+email -s "$year$monthday-$datatype@fso-data: $errsize5 Error $datatype File(s) Found" chd@ynao.ac.cn < $logpath/errtmp-$datatype-$year$monthday
 
 
 
@@ -233,7 +234,7 @@ echo "            From : $today $ctime1"
 echo "              To : $today0 $ctime4"
 echo "================================================================================="
 rm -rf $lockfile
-rm -f $logpath/errtmp-$year$monthday
+rm -f $logpath/errtmp-$datatype-$year$monthday
 
 
 

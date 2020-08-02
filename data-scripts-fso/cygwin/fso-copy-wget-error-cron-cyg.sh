@@ -94,13 +94,14 @@ if [ -f $lockfile ];then
 else
 	echo $$>$lockfile
 fi
-
+pver=0.1
+pname=$(basename $0)
 echo " "
 echo "======== Welcome to FSO Data Copying System@FSO! ========"
 echo "                                                         "
 echo "                 fso-copy-wget-error.sh                  "
 echo "                                                         "
-echo "             Relase 0.1     20190723  21:57              "
+echo "             Relase $pver     20190723  21:57              "
 echo "          Copy the TiO/HA data file of wrong size        "
 echo "                    from remote to local                 "
 echo "                                                         "
