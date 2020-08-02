@@ -6,7 +6,7 @@ purposes: demo image processing using mpi
 Note: 
 
 Usage: mpiexec -n x python mpi-pic-xx.py --path=<path>
-Example: mpiexec -n 2 python mpi-pic-xx.py --path=d:\\fso-data
+Example: mpiexec -n 2 python mpi-pic-xx.py d:\fso-data
 
 
 Changlog:
