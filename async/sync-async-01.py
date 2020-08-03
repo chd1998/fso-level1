@@ -26,7 +26,7 @@ def slow_func():
 
 @asyncio.coroutine
 def supervisor():
-    spinner = asyncio._async(spin('thinking!')) # 协程 spin 通过 asyncio.async 调用
+    spinner = asyncio.create_task(spin('thinking!')) # 协程 spin 通过 asyncio.creat_task 调用
     print('spinner object:', spinner)  # Task 对象，类似 Thread 对象
     result = yield from slow_func()  # 协程 slow_func 通过 yield from 调用
     spinner.cancel()
