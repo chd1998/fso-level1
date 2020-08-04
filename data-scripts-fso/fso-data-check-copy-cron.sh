@@ -255,7 +255,7 @@ tmp2=`cat $errlist|wc -l`
 cat $remoteerrlist  > $tmplist
 cat $errlist >> $tmplist
 
-echo "                  For $year$monthday  $datatype Data File(s)" > $logpath/errtmp-$datatype-$year$monthday
+echo "                  For $year$monthday  $datatype Data File(s)@lustre" > $logpath/errtmp-$datatype-$year$monthday
 echo "************************************************************************************************************">> $logpath/errtmp-$datatype-$year$monthday
 echo " $today $ctime0 : Start $datatype File(s) Checking... " >> $logpath/errtmp-$datatype-$year$monthday
 echo " $today $ctime3 : $totalfilenumber $datatype File(s) Checked... " >> $logpath/errtmp-$datatype-$year$monthday
