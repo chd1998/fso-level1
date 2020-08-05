@@ -23,7 +23,7 @@
 #        20200430       Release 1.43  add ping to test server online and other minor correction
 #        20200520       Release 1.44  fixed minor errors in displaying
 #        20200604       Release 1.45  exclude flat & dark to speed up  processing
-#        20200805       Release 1.46  exclude *_redata in syncing
+#        20200805       Release 1.46  exclude *redata in syncing
 #
 #
 #waiting pid taskname prompt
@@ -98,25 +98,14 @@ datatype=$8
 #ftpuser=$(echo $datatype|tr '[A-Z]' '[a-z]')
 
 server=$1
-logpre=./log
+logpre=/root/chd/log
 
 ftpserver=ftp://$ftpuser:$password@$ftpserver:$remoteport
-#ping $ftpserver -c 5 | grep ttl >> $logpre/pingtmp
-#pingres=`cat $logpre/pingtmp | wc -l`
-#rm -f $logpre/pingtmp
-#ctime1=`date  +%H:%M:%S`
-#if [ $pingres -eq 0 ];then 
-#  echo "$today $ctime1: $ftpserver is offline, skip syncing remote file(s)..." >>
-#  exit 0
-#fi
-  
-#echo "$ftpserver"
-#read
 
 lockfile=$logpre/$(basename $0)-$srcyear$srcmonthday.lock
 if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
-  ps -p $mypid | grep $mypid &>/dev/null
+  ps -p $mypid | grep $mypid >/dev/null
   if [ $? -eq 0 ];then
     echo "$today $ctime: $(basename $0) is running" && exit 1
   else
@@ -130,11 +119,11 @@ progname=$(basename $0)
 pversion=1.46
 
 echo " "
-echo "======== Welcome to FSO Data Copying System@FSO! ========"
+echo "============ Welcome to FSO Data System@FSO! ============"
 echo "                                                         "
 echo "              $progname                                  "  
 echo "                                                         "
-echo "            Relase $pversion     20200520  14:22         "
+echo "            Relase $pversion     20200805  13:50         "
 echo "                                                         "
 echo "                $today    $ctime                         "
 echo "                                                         "
@@ -162,25 +151,11 @@ echo "                   From: $srcdir @$server "
 echo "                   To  : $destdir "
 echo "                   Please Wait..."
 
-echo "$today $ctime: Testing $server is online or not... "
-ping $server -c 5 | grep ttl > pingtmp & 
-waiting "$!" "$server ping" "ping $server"
-pres=`cat pingtmp | wc -l`
-#rm -f $logpre/pingtmp
-ctime1=`date  +%H:%M:%S`
-#echo $pres
-if [ $pres -eq 0 ];then
-  echo "$today $ctime1: $server is offline, skip syncing remote file(s)..." 
-  exit 0
-fi
-
-echo "$today $ctime1: $server is online, syncing remote file(s)..."
-
 fn1=`ls -lR $destdir | grep "^-" | wc -l`
 fs1=`du -sm $destdir | awk '{print $1}'`
 ctime=`date  +%H:%M:%S`
 t1=`date +%s`
-lftp $ftpserver -e "mirror -X dark/* -X flat/* -X Dark/* -X FLAT*/* -X *_redata/* --only-missing --parallel=20 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
+lftp $ftpserver -e "mirror -x '^FLAT*' -x '^Dark*' -x '^\..(redata)$' --only-missing --parallel=4 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 if [ $? -ne 0 ];then
   ctime1=`date  +%H:%M:%S`
@@ -262,7 +237,6 @@ echo " Total Time Used : $timediff1 secs."
 echo "            From : $today0 $ctime0 "
 echo "              To : $today1 $ctime3 "
 rm -rf $lockfile
-#cd /home/chd/
 exit 0
 
 

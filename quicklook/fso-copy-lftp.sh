@@ -22,7 +22,7 @@
 #        20200103       Release 1.42  modified to use for ha levle quicklook
 #        20200430       Release 1.43  add ping to test server online and other minor correction
 #        20200520       Release 1.44  fixed minor errors in displaying
-#        20200805       Release 1.45  exclude *_redata in syncing
+#        20200805       Release 1.45  exclude *redata/* in syncing
 #
 #waiting pid taskname prompt
 waiting() {
@@ -94,7 +94,7 @@ password=$7
 datatype=$8
 #ftpuser=$(echo $datatype|tr '[A-Z]' '[a-z]')
 
-logpre=./log
+logpre=/root/chd/log
 
 ftpserver=ftp://$ftpuser:$password@$ftpserver:$remoteport
 #echo "$ftpserver"
@@ -103,7 +103,7 @@ ftpserver=ftp://$ftpuser:$password@$ftpserver:$remoteport
 lockfile=$logpre/$(basename $0)-$srcyear$srcmonthday.lock
 if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
-  ps -p $mypid | grep $mypid &>/dev/null
+  ps -p $mypid | grep $mypid >/dev/null
   if [ $? -eq 0 ];then
     echo "$todday $ctime: $(basename $0) is running" && exit 1
   else
@@ -115,7 +115,7 @@ fi
 progname=$(basename $0)
 pversion=1.45
 echo " "
-echo "======== Welcome to FSO Data Copying System@FSO! ========"
+echo "============ Welcome to FSO Data System@FSO! ============"
 echo "                                                         "
 echo "              $progname                                  "
 echo "                                                         "
@@ -150,7 +150,7 @@ fn1=`ls -lR $destdir | grep "^-" | wc -l`
 fs1=`du -sm $destdir | awk '{print $1}'`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 
-lftp $ftpserver -e "mirror -X dark/* -X flat/* -X Dark/* -X FLAT*/* -X *_redata/*  --only-missing --parallel=20 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
+lftp $ftpserver -e "mirror -x '^FLAT*' -x '^Dark*' -x '^\..(redata)$' --only-missing --parallel=4 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
 #lftp $ftpserver -e "mirror --parallel=40 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 if [ $? -ne 0 ];then

@@ -85,7 +85,6 @@ srcsize=/home/chd/log/$datatype-$today-$server1-filesize.dat
 srcnumber=/home/chd/log/$datatype-$today-$server1-filenumber.dat
 
 lockfile=/home/chd/log/$(basename $0)-$datatype-$today.lock
-
 if [ ! -f $filenumber ];then
   echo "0">$filenumber
 fi
