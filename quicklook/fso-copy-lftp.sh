@@ -22,6 +22,7 @@
 #        20200103       Release 1.42  modified to use for ha levle quicklook
 #        20200430       Release 1.43  add ping to test server online and other minor correction
 #        20200520       Release 1.44  fixed minor errors in displaying
+#        20200805       Release 1.45  exclude *_redata in syncing
 #
 #waiting pid taskname prompt
 waiting() {
@@ -112,7 +113,7 @@ else
   echo $$>$lockfile
 fi
 progname=$(basename $0)
-pversion=1.44
+pversion=1.45
 echo " "
 echo "======== Welcome to FSO Data Copying System@FSO! ========"
 echo "                                                         "
@@ -149,7 +150,8 @@ fn1=`ls -lR $destdir | grep "^-" | wc -l`
 fs1=`du -sm $destdir | awk '{print $1}'`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 
-lftp $ftpserver -e "mirror --parallel=40 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
+lftp $ftpserver -e "mirror -X dark/* -X flat/* -X Dark/* -X FLAT*/* -X *_redata/*  --only-missing --parallel=20 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
+#lftp $ftpserver -e "mirror --parallel=40 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 if [ $? -ne 0 ];then
   ctime1=`date --date='0 days ago' +%H:%M:%S`

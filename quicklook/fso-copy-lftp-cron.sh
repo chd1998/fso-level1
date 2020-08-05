@@ -23,6 +23,8 @@
 #        20200430       Release 1.43  add ping to test server online and other minor correction
 #        20200520       Release 1.44  fixed minor errors in displaying
 #        20200604       Release 1.45  exclude flat & dark to speed up  processing
+#        20200805       Release 1.46  exclude *_redata in syncing
+#
 #
 #waiting pid taskname prompt
 waiting() {
@@ -125,7 +127,7 @@ else
 fi
 
 progname=$(basename $0)
-pversion=1.45
+pversion=1.46
 
 echo " "
 echo "======== Welcome to FSO Data Copying System@FSO! ========"
@@ -178,7 +180,7 @@ fn1=`ls -lR $destdir | grep "^-" | wc -l`
 fs1=`du -sm $destdir | awk '{print $1}'`
 ctime=`date  +%H:%M:%S`
 t1=`date +%s`
-lftp $ftpserver -e "mirror -X dark/* -X flat/* -X Dark/* -X FLAT*/* --only-missing --parallel=20 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
+lftp $ftpserver -e "mirror -X dark/* -X flat/* -X Dark/* -X FLAT*/* -X *_redata/* --only-missing --parallel=20 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 if [ $? -ne 0 ];then
   ctime1=`date  +%H:%M:%S`
