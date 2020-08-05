@@ -190,7 +190,7 @@ cat $remotelocaldifflist > $tmplist
 cat $localwrongsize >> $tmplist
 ctime3=`date  +%H:%M:%S`
 ctime3=`date  +%H:%M:%S`
-echo "                  For $year$monthday $datatype Data File(s)" > $logpath/errtmp-$datatype-$year$monthday
+echo "                  For $year$monthday $datatype Data File(s) @fso-data" > $logpath/errtmp-$datatype-$year$monthday
 echo "***********************************************************************************************************************" >> $logpath/errtmp-$datatype-$year$monthday
 echo "$today $ctime1 : Start $datatype File(s) Checking... " >> $logpath/errtmp-$datatype-$year$monthday
 echo "$today $ctime3 : $totalfilenumber $datatype File(s) Checked... " >> $logpath/errtmp-$datatype-$year$monthday
