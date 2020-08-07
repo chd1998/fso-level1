@@ -150,7 +150,7 @@ fn1=`ls -lR $destdir | grep "^-" | wc -l`
 fs1=`du -sm $destdir | awk '{print $1}'`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 
-lftp $ftpserver -e "mirror -x '^FLAT*' -x '^Dark*' -x '^\..(redata)$' --only-missing --parallel=4 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
+lftp $ftpserver -e "mirror -x '^FLAT*' -x '^Dark*' -x 'redata$' --only-missing --parallel=4 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
 #lftp $ftpserver -e "mirror --parallel=40 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 if [ $? -ne 0 ];then
