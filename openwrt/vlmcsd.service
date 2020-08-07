@@ -1,0 +1,15 @@
+START=99
+start(){
+        /usr/bin/vlmcsd -i /etc/vlmcsd.ini
+}
+stop(){
+        kill -9 `ps | grep 'vlmcsd -i'|grep -v 'grep'|awk '{print $1}'`
+}
+restart(){
+        kill -9 `ps | grep 'vlmcsd -i'|grep -v 'grep'|awk '{print $1}'`
+        /usr/bin/vlmcsd -i /etc/vlmcsd.ini
+}
+#chmod +x /etc/init.d/mystart #设置可执行权限
+#/etc/init.d/mystart enable
+#/etc/init.d/mystart start/restart/stop
+#/etc/init.d/mystart disable
