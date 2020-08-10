@@ -7,6 +7,7 @@
 # Change History:
 #                20200704 20:50  Release 0.1 : first working prototype
 #                20200708 18:18  Release 0.2 : revised
+#                20200810 20:55  Release 0.3 : add choice function
 #
 cyear=`date  +%Y`
 today=`date  +%Y-%m-%d`
@@ -26,7 +27,13 @@ vdigi=`echo ${vname}| cut -c 2-`
 #echo $vname
 #echo $vdigi
 
-pver=0.2
+trojan -v &>trojan-local-v
+localvdigi=`cat trojan-local-v|awk 'NR==1{print}' info.log| awk '{print $4}'`
+
+
+
+
+pver=0.3
 durl="https://github.com/$1/$2/releases/download/$vname/trojan-$vdigi-$3-$4.tar.xz"
 echo "$today0 $ctime0 : Getting $durl..."
 wget -q $durl &

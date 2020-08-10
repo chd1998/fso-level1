@@ -49,6 +49,9 @@ IMPORTANT：
 20200810 Release py-robocopy-Rev01:
     #REVISE:
         change file name to py-robocopy-Rev01.py 
+        Release py-robocopy-Rev02:
+    #REVISE:
+        revised exception handling
 '''
 from os import truncate
 import subprocess
@@ -81,7 +84,7 @@ def pysync(syncSrc,syncDes,threadNo):
         os.makedirs(syncDes)
 
     print(Fore.CYAN+"Syncing Data for NVST")
-    print(Fore.CYAN+"Rev.08-01 2020-07-27")
+    print(Fore.CYAN+"Rev.02 2020-08-10")
     print(Fore.YELLOW+"%s --- Syncing Started with %s Thread(s)..." %(time.ctime(),str(threadNo)))
     
     #while retcode != 0: 
