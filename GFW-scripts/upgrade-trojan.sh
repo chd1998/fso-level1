@@ -53,6 +53,7 @@ upgradetrojan=0
 if test "$(echo "$localvdigi $vdigi" | tr " " "\n" | sort -V | head -n 1)" != "$localvdigi" 
 then
   echo "$today1 $ctime1 : Remote $vdigi is newer than local $localvdigi"
+  echo "                      Proceed to upgrade..."
   upgradetrojan=1
 else
   echo "$today1 $ctime1 : Remote $vdigi is not newer than local $localvdigi"
