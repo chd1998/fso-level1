@@ -73,10 +73,11 @@ def pysync(syncSrc,syncDes,threadNo):
     if threadNo < 1 or threadNo > 128:
         threadNo=8
     if not os.path.exists(syncSrc):
-        print ("Folder %s  is not exist, pls check..." %(syncSrc))
+        print ("Src Folder %s  does not exist, pls check..." %(syncSrc))
         sys.exit(0)
         
     if not os.path.exists(syncDes):
+        print ("Making Dest Folder %s ..." %(syncDes))
         os.makedirs(syncDes)
 
     print(Fore.CYAN+"Syncing Data for NVST")
@@ -89,7 +90,7 @@ def pysync(syncSrc,syncDes,threadNo):
     start_time=time.time()
     try:
         syncAction=subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
-        syncAction.wait()
+#        syncAction.wait()
     except KeyboardInterrupt:
         print("Ctrl-C Breaked!")
         sys.exit(1)
