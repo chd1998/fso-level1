@@ -29,6 +29,13 @@ if [ $# -ne 4 ];then
 #  echo "press ctrl-c to break!"
   exit 0
 fi
+echo "==================================================================================="
+echo "                        Trojan-gfw upgrade Program                                 "
+echo "                               Release $pver                                       "
+echo "                            $today0 $ctime0                                        "
+echo "==================================================================================="
+today1=`date  +%Y-%m-%d`
+ctime1=`date  +%H:%M:%S`
 echo "$today0 $ctime0 : Getting latest remote version number..."
 vname=`wget -qO- -t1 -T2 "https://api.github.com/repos/$1/$2/releases/latest"|grep "tag_name" |sed -E 's/.*"([^"]+)".*/\1/'`
 vdigi=`echo ${vname}| cut -c 2-`
@@ -38,7 +45,7 @@ today1=`date  +%Y-%m-%d`
 ctime1=`date  +%H:%M:%S`
 
 trojan -v >./trojan-local-v 2>&1
-localvdigi=`cat ./trojan-local-v|awk 'NR==1{print}' info.log| awk '{print $4}'`
+localvdigi=`cat ./trojan-local-v|awk 'NR==1{print}' | awk '{print $4}'`
 echo "$today1 $ctime1 : Getting latest local version number..."
 today1=`date  +%Y-%m-%d`
 ctime1=`date  +%H:%M:%S`
