@@ -92,6 +92,7 @@ if [ $upgradetrojan -eq 1 ];then
     echo "$today2 $ctime3: Failed in upgrading $vname $3 $4 trojan file..."
     exit 1
   fi
+fi
 cd ..
 rm -f ./trojan-$vdigi-$3-$4.tar.xz
 rm -rf ./trojan
