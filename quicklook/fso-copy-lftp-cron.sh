@@ -155,7 +155,7 @@ fn1=`ls -lR $destdir | grep "^-" | wc -l`
 fs1=`du -sm $destdir | awk '{print $1}'`
 ctime=`date  +%H:%M:%S`
 t1=`date +%s`
-lftp $ftpserver -e "mirror -x '^FLAT*' -x '^Dark*' -x '^\..(redata)$' --only-missing --parallel=4 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
+lftp $ftpserver -e "mirror -x '^FLAT*' -x '^Dark*' -x 'redata$' --only-missing --parallel=4 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 if [ $? -ne 0 ];then
   ctime1=`date  +%H:%M:%S`
