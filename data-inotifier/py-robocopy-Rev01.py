@@ -97,6 +97,9 @@ def pysync(syncSrc,syncDes,threadNo):
     except KeyboardInterrupt:
         print("Ctrl-C Breaked!")
         sys.exit(1)
+    except :
+        print("Some Error(s) happened!")
+        sys.exit(1)
     syncStat=syncAction.communicate()[0].decode('gbk')
     syncErr=syncAction.communicate()[1].decode('gbk')
     retcode=syncAction.returncode
@@ -105,11 +108,11 @@ def pysync(syncSrc,syncDes,threadNo):
     desSize=getFileSize(syncDes)
     used_time=end_time-start_time
     if retcode == 0:
-        print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s --- Sync Suceeded! " % (time.ctime()))
-        print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s --- Src Size : %s KB" % (time.ctime(),str(srcSize/1000)))
-        print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s --- Des Size : %s KB" % (time.ctime(),str(desSize/1000)))
-        print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s ---   @Speed : %.4f KB/sec." % (time.ctime(),(desSize/1000)/used_time))
-        print (Fore.LIGHTCYAN_EX+Back.BLACK+"Time Used: %.4f Secs... " %(used_time))
+        print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s ---  Sync Suceeded! " % (time.ctime()))
+        print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s ---  Src Size : %s KB" % (time.ctime(),str(srcSize/1000)))
+        print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s ---  Des Size : %s KB" % (time.ctime(),str(desSize/1000)))
+        print (Fore.LIGHTCYAN_EX+Back.BLACK+"%s ---    @Speed : %.4f KB/sec." % (time.ctime(),(desSize/1000)/used_time))
+        print (Fore.LIGHTCYAN_EX+Back.BLACK+"                            Time Used : %.4f Secs... " %(used_time))
         #print (rsyncStat+"\n")
     else:
         print (Fore.LIGHTYELLOW_EX+Back.RED+'Failed: Sync failed!')
