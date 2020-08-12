@@ -50,7 +50,7 @@ echo "$today1 $ctime1 : Getting latest local version number..."
 today1=`date  +%Y-%m-%d`
 ctime1=`date  +%H:%M:%S`
 upgradetrojan=0
-if test "$(echo "$localvdigi $vdigi" | tr " " "\n" | sort -V | head -n 1)" != "$localvdigi" 
+if test "$(echo "$localvdigi $vdigi" | tr " " "\n" | sort -V | head -n 1)" != "$localvdigi"
 then
   echo "$today1 $ctime1 : Remote $vdigi is newer than local $localvdigi"
   echo "                      Proceed to upgrade..."
@@ -93,12 +93,11 @@ if [ $upgradetrojan -eq 1 ];then
     echo "$today2 $ctime3: Failed in upgrading $vname $3 $4 trojan file..."
     exit 1
   fi
+  cd ..
+  rm -f ./trojan-$vdigi-$3-$4.tar.xz
+  rm -rf ./trojan
+  today1=`date  +%Y-%m-%d`
+  ctime2=`date  +%H:%M:%S`
+  echo "$today1 $ctime2 : Succeeded in upgrading trojan to $vname..."
+  rm -f ./trojan-local-v
 fi
-cd ..
-rm -f ./trojan-$vdigi-$3-$4.tar.xz
-rm -rf ./trojan
-today1=`date  +%Y-%m-%d`
-ctime2=`date  +%H:%M:%S`
-echo "$today1 $ctime2 : Succeeded in upgrading trojan to $vname..."
-rm -f ./trojan-local-v
-
