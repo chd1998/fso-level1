@@ -98,7 +98,7 @@ def pysync(syncSrc,syncDes,threadNo):
         print("Ctrl-C Breaked!")
         sys.exit(1)
     except :
-        print("Some Error(s) happened!")
+        print("Error(s) found, pls check...")
         sys.exit(1)
     syncStat=syncAction.communicate()[0].decode('gbk')
     syncErr=syncAction.communicate()[1].decode('gbk')
