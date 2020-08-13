@@ -93,7 +93,7 @@ def pysync(syncSrc,syncDes,threadNo):
     start_time=time.time()
     try:
         syncAction=subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
-#        syncAction.wait()
+        syncAction.wait()
     except KeyboardInterrupt:
         print("Ctrl-C Breaked!")
         sys.exit(1)

@@ -43,10 +43,11 @@ vdigi=`echo ${vname}| cut -c 2-`
 #echo $vdigi
 today1=`date  +%Y-%m-%d`
 ctime1=`date  +%H:%M:%S`
-
+echo "$today1 $ctime1 : Getting latest local version number..."
 trojan -v >./trojan-local-v 2>&1
 localvdigi=`cat ./trojan-local-v|awk 'NR==1{print}' | awk '{print $4}'`
-echo "$today1 $ctime1 : Getting latest local version number..."
+echo "$today1 $ctime1 : Local version number is $localvdigi"
+echo "$today1 $ctime1 : Remote version number is $vdigi"
 today1=`date  +%Y-%m-%d`
 ctime1=`date  +%H:%M:%S`
 upgradetrojan=0
