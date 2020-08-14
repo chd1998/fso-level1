@@ -99,6 +99,6 @@ if [ $upgradetrojan -eq 1 ];then
   rm -rf ./trojan
   today1=`date  +%Y-%m-%d`
   ctime2=`date  +%H:%M:%S`
-  echo "$today1 $ctime2 : Succeeded in upgrading trojan to $vname..."
+  echo "$today1 $ctime2 : Succeeded in upgrading trojan from $localvdigi to $vdigi..."
   rm -f ./trojan-local-v
 fi
