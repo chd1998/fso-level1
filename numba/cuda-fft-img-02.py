@@ -18,13 +18,6 @@ def my_kernel(io_array,data):
     pyculib.fft.ifft(im,io_array)
     
 # Host code   
-<<<<<<< HEAD
-print ("FFT Started.....")
-imdata = ((fits.open('1.fits')[0].data)).astype(np.float64)
-io_array = np.empty(imdata.shape[0],dtype=np.complex128)
-=======
-
->>>>>>> 7789f8e1690e4b39f5b49f80b27a3e8bb01e82ff
 #data = numpy.ones(256)
 threadsperblock = 256
 blockspergrid = math.ceil(imdata.shape[0] / threadsperblock)
