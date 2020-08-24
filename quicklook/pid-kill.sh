@@ -28,7 +28,8 @@ if [ $? -ne 0 ];then
   echo "Failed in kill $1 processes!"
   exit 1
 else
-  echo "All $1 processes killed!"
+  cat pidlist
+  echo "$plist $1 processes killed!"
 fi
 rm -f pidtmp
 rm -f pidlist
