@@ -1,0 +1,11 @@
+yum remove lftp
+wget http://lftp.yar.ru/ftp/lftp-4.6.4.tar.gz
+tar -xvf lftp-4.6.4.tar.gz
+cd lftp-4.6.4
+yum install readline-devel
+yum install gnutls-devel
+./configure
+make
+sudo make install
+ln -s /usr/local/bin/lftp /usr/bin/lftp
+lftp -v

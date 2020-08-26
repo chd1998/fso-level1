@@ -1,0 +1,15 @@
+1.安装环境
+yum install libgnomeui-devel
+yum install fuse-devel
+yum install libcurl-devel
+2.编译curlftpfs
+./configure
+make 
+make install
+
+3.挂载FTP服务器
+1 curlftpfs ftp://username:password@192.168.1.1 /ftp
+ 
+
+4.卸载挂载
+fusermount -u /ftp
