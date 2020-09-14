@@ -1,0 +1,15 @@
+[Unit]
+Description=NVST AllSky
+After=network.target 
+
+[Service]
+PIDFile=/tmp/allsky.pid
+ExecStart=/usr/bin/ffmpeg -i "rtsp://admin:admin123@192.168.100.211:554/h264/ch1/main/av_stream" -f flv  -r 15 -s 1920*1080 -an "rtmp://localhost:1935/fso/allsky" 
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s QUIT $MAINPID
+KillMode=process
+Restart=on-abnormal
+RestartPreventExitStatus=255
+  
+[Install]
+WantedBy=multi-user.target
