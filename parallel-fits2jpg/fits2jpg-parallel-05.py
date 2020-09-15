@@ -23,7 +23,7 @@ import os
 import PIL
 import datetime
 import numpy as np
-import sys,click
+import sys
 import fire
 
 from PIL import Image
