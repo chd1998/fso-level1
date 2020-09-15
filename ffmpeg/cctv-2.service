@@ -1,0 +1,15 @@
+[Unit]
+Description=NVST CCTV-2
+After=network.target 
+
+[Service]
+PIDFile=/tmp/cctv-2.pid
+ExecStart=/usr/bin/ffmpeg -i "rtsp://admin:admin123@192.168.100.23:554/h264/ch1/main/av_stream" -f flv  -r 15 -s 1920*1080 -an "rtmp://localhost:1935/fso/nvst-cctv-2" 
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s QUIT $MAINPID
+KillMode=process
+Restart=on-abnormal
+RestartPreventExitStatus=255
+  
+[Install]
+WantedBy=multi-user.target

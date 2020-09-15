@@ -1,0 +1,39 @@
+1. 下载sshfs
+https://github.com/libfuse/sshfs/releases
+
+2.解压：
+ tar xvf sshfs-3.7.0.tar.xz
+ 
+3.编译：
+$ mkdir build; cd build
+$ meson ..
+Normally, the default build options will work fine. If you nevertheless want to adjust them, you can do so with the mesonconf command:
+
+$ mesonconf                  # list options
+$ mesonconf -D strip=true    # set an option
+To build, test and install SSHFS, you then use Ninja (running the tests requires the py.test Python module):
+
+$ ninja
+$ python3 -m pytest test/    # optional, but recommended
+$ sudo ninja install
+
+中途可能会：
+yum install fuse3-devel
+pip install ninja
+
+4.挂载/卸载
+sshfs user@hostname:path /mnt/data
+fusermount -u /mnt/data
+
+5.免密码登录
+5-1.生成密匙对
+ssh-keygen -t rsa
+
+#ssh-keygen -t rsa
+//一路回车在当前用户的根目录下的.ssh目录生成id_rsa.pub公钥
+
+5-2.将公钥放到服务器上（注意存放目录位置）
+
+#scp ~/.ssh/id_rsa.pub 用户名@你的服务器的ip:~/.ssh/authorized_keys
+//将本地生成的公钥拷贝到远程服务器的下并改名为authorized_keys
+
