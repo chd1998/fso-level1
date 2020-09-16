@@ -2,7 +2,8 @@ import cv2
 import numpy as np
 
 def sift_kp(image):
-    gray_image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+#    gray_image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+    gray_image = image
     sift = cv2.xfeatures2d_SIFT.create()
     kp,des = sift.detectAndCompute(image,None)
     kp_image = cv2.drawKeypoints(gray_image,kp,None)

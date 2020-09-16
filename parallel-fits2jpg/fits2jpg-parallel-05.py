@@ -29,11 +29,11 @@ import fire
 from PIL import Image
 from multiprocessing import Pool
 from astropy.io import fits
-TSIZE=(256,256)
-SAVEDIR="thumbs"
+#TSIZE=(1024,1024)
+#SAVEDIR="thumbs"
 
-def f2jp(path,pn,tsize,savedir):
-    TSIZE=tsize
+def f2jp(path,pn,tsx,tsy,savedir):
+    TSIZE=(tsx,tsy)
     SAVEDIR=savedir
 
     folder = os.path.realpath(path)
