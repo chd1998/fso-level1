@@ -20,15 +20,13 @@ import datetime
 import numpy as np
 import fire
 import cv2
-import Utility
+import Utility01
 
 from PIL import Image
 from multiprocessing import Pool
 from astropy.io import fits
 
 def siftcv(path,savedir):
-    SAVEDIR=savedir
-
     folder = os.path.realpath(path)
     if not os.path.isdir(os.path.join(folder)):
         print ("Folder %s doesn't exist!  Pls Check..." % path)
@@ -101,15 +99,12 @@ def fits_write(header,imdata,destname):
     hudlist=fits.HDUList([hud])
     hudlist.writeto(destname,overwrite=True)
 
-
-
-
 def align_fits(imgname1,imgname2):
 #    img1 = cv2.imread(img1)
 #    img2 = cv2.imread(img2)
     img1,img11,h1=fits_open(imgname1)
     img2,img21,h2=fits_open(imgname2)
-    result,_,_ = Utility.siftImageAlignment(img11,img21)
+    result,_,_ = Utility01.siftImageAlignment(img11,img21)
     #allImg = np.concatenate((img1,img2,result),axis=1)
     tmpName="tmp.fits"
 #    cv2.imwrite(tmpName,result)
