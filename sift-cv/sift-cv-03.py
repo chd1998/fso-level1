@@ -14,7 +14,7 @@ Changlog:
 
 '''
 
-import os
+import os,sys
 import PIL
 import datetime
 import numpy as np
@@ -36,23 +36,17 @@ def siftcv(path,savedir):
             os.makedirs(os.path.join(folder, savedir))
 
         images = get_image_paths(folder)
-        lenImg=0
+        #lenImg=0
         arrayImg=[]
         for image in images:
-            if lenImg==0:
-                refImg=image
-            else:
-                arrayImg.append(image)
-            lenImg=lenImg+1
-            #print (image)
-#        tmp1=cv2.imread(arrayImg[1])
-#        dimx=tmp1.shape[0]
-#        dimy=tmp1.shape[1]
-        imdata1,imtmp1,htmp=fits_open(arrayImg[1])
+            arrayImg.append(image)
+        #print(len(arrayImg))
+        refImg=arrayImg[0]
+        imdata1,imtmp1,htmp=fits_open(refImg)
+        #print(arrayImg[0])
         finalImg=np.zeros(shape=imdata1.shape)
         a = datetime.datetime.now()
         #print(lenImg)
-        print(len(arrayImg))
         i=1
         for i in range(len(arrayImg)):
             print("Aligning %s to %s..." %(arrayImg[i],refImg))
@@ -95,9 +89,11 @@ def fits_write(header,imdata,destname):
     #while len(header)<(36*4-1):
     #    header.append()
     #header.tofile(destname,overwrite=True)
-    hud=fits.PrimaryHDU(data=imdata)
+    hud=fits.PrimaryHDU(imdata)
     hudlist=fits.HDUList([hud])
+    #hudlist.append(hud)
     hudlist.writeto(destname,overwrite=True)
+ 
 
 def align_fits(imgname1,imgname2):
 #    img1 = cv2.imread(img1)

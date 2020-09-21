@@ -49,8 +49,6 @@ def siftcv(path,savedir):
         delta = b - a
         print("Time Used with %d thread : %d ms" %(pn, int(delta.total_seconds() * 1000)))
 
-def concate_jpg(filename):
-
 def get_image_paths(folder):
     return (os.path.join(folder, f)
             for f in os.listdir(folder)
