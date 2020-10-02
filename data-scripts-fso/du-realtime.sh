@@ -30,7 +30,8 @@ do
   today0=`date +%Y%m%d`
   ctime=`date +%H:%M:%S`
 #  cursize=`du -sm $destdir`
-  latestsize=`du -sm $destdir|awk '{print $1}'`
+  //latestsize=`du -sm $destdir|awk '{print $1}'`
+  latestsize=`find $destdir -name *.fits -type f | xargs ls -al|awk '{sum += $5} END {print sum/(1024*1024)}'`
 #  echo $firsttime
 #  echo "$today $ctime: $latestsize @ $speed MB/s"
   if [ $firsttime -ne 1 ]; then

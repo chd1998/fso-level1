@@ -111,7 +111,7 @@ else
   echo $$>$lockfile
 fi
 
-progversion=0.94
+progversion=0.93
 
 
 #st1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
@@ -120,7 +120,7 @@ ctime=`date  +%H:%M:%S`
 echo "                                                       "
 echo "============ Welcome to Data System @ FSO! ==========="
 echo "                 $(basename $0)                        "
-echo "         (Release $progversion 20200928 16:36)       "
+echo "         (Release $progversion 20200607 08:13)       "
 echo "                                                       "
 echo "         sync $datatype data to $destpre0              "
 echo "                                                       "
@@ -225,11 +225,8 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 
-if [ ! -d "$targetdir" ]; then
-  echo "0.0" > $filesize1
-  echo "0" > $filenumber1
-fi
 //du -sm $targetdir|awk '{print $1}' > $filesize1 &
+//cd $targetdir
 find $targetdir -name *.fits -type f | xargs -I {} ls -al|awk '{sum += $5} END {print sum/(1024*1024)}' > $filesize1 &
 waiting "$!" "$datatype File Size Summerizing" "Sumerizing $datatype File Size"
 if [ $? -ne 0 ];then
@@ -237,6 +234,11 @@ if [ $? -ne 0 ];then
   echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
   cd /home/chd/
   exit 1
+fi
+
+if [ ! -d "$targetdir" ]; then
+  echo "0" > $filesize1
+  echo "0" > $filenumber1
 fi
 
 find $targetdir ! -perm 777 -type d -exec chmod 777 {} \; &
