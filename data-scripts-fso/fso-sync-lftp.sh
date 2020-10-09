@@ -229,8 +229,8 @@ if [ ! -d "$targetdir" ]; then
   echo "0.0" > $filesize1
   echo "0" > $filenumber1
 fi
-//du -sm $targetdir|awk '{print $1}' > $filesize1 &
-find $targetdir -name *.fits -type f | xargs -I {} ls -al|awk '{sum += $5} END {print sum/(1024*1024)}' > $filesize1 &
+du -sm $targetdir|awk '{print $1}' > $filesize1 &
+//find $targetdir -name *.fits -type f | xargs -I {} ls -al|awk '{sum += $5} END {print sum/(1024*1024)}' > $filesize1 &
 waiting "$!" "$datatype File Size Summerizing" "Sumerizing $datatype File Size"
 if [ $? -ne 0 ];then
   ctime3=`date  +%H:%M:%S`
