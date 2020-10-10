@@ -1,7 +1,7 @@
 #!/bin/bash
 #author: chen dong @fso
 #purposes: summerize data file number and size(MiB) daily with regard to datatype
-#
+#        : from start date to end date
 #changlog: 
 #       20201010    Release 0.1     first working version 
 

@@ -13,9 +13,9 @@ ctime=`date  +%H:%M:%S`
 syssep="/"
 
 if [ $# -ne 5 ];then
-  echo "Usage: ./data-sum.sh destdir year monthday datatype(TIO or HA) sendmail(0/1)"
-  echo "Example: ./data-sum.sh  /lustre/data 2020 0928 TIO 1"
-  echo "         ./data-sum.sh  /lustre/data 2020 0928 HA 0"
+  echo "Usage: ./data-sum.sh destdir year monthday datatype(TIO or HA) mail(0-not send/1-send)"
+  echo "Example: ./data-sum-daily.sh  /lustre/data 2020 0928 TIO 1"
+  echo "         ./data-sum-daily.sh  /lustre/data 2020 0928 HA 0"
   exit 1
 fi
 
