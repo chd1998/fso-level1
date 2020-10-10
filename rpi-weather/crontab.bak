@@ -1,0 +1,57 @@
+# Edit this file to introduce tasks to be run by cron.
+# 
+# Each task to run has to be defined through a single line
+# indicating with different fields when the task will be run
+# and what command to run for the task
+# 
+# To define the time you can provide concrete values for
+# minute (m), hour (h), day of month (dom), month (mon),
+# and day of week (dow) or use '*' in these fields (for 'any').
+# 
+# Notice that tasks will be started based on the cron's system
+# daemon's notion of time and timezones.
+# 
+# Output of the crontab jobs (including errors) is sent through
+# email to the user the crontab file belongs to (unless redirected).
+# 
+# For example, you can run a backup of all your user accounts
+# at 5 a.m every week with:
+# 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/
+# 
+# For more information see the manual pages of crontab(5) and cron(8)
+# 
+# m h  dom mon dow   command
+#LC_CTYPE="zh_CN.utf-8"
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/python3.7
+*/1 * * * * lockf -s -t 0 /fso-cache/server.lock sudo /usr/local/bin/node /home/pi/Desktop/fuxianhu/task/server.js >> /fso-cache/server.log 2>&1
+*/1 * * * * lockf -s -t 0 /fso-cache/stats.lock /usr/bin/python /home/pi/Desktop/devicestatus/stats_backuo.py >> /fso-cache/stats.log 2>&1
+#* * * * * python3 /home/pi/Desktop/communication/data_source.py > /home/pi/Desktop/data_source.log 2>&1
+*/1 * * * * lockf -s -t 0 /fso-cache/fso-weather.lock sudo /usr/bin/python3 /home/pi/Desktop/communication/fso-weather.py >> /fso-cache/fso-weather.log 2>&1
+*/1 * * * * lockf -s -t 0 /fso-cache/rtspIMG.lock /usr/bin/python2 /home/pi/Desktop/communication/rtspIMG.py >> /fso-cache/rtspIMG.log 2>&1
+*/1 * * * * lockf -s -t 0 /fso-cache/draw.lock sudo /usr/bin/python /home/pi/Desktop/communication/fso_draw.py >> /fso-cache/draw.log 2>&1
+*/1 * * * * lockf -s -t 0 /fso-cache/warning.lock /usr/bin/python /home/pi/Desktop/communication/warning.py >> /fso-cache/warning.log 2>&1 
+*/1 * * * * lockf -s -t 0 /fso-cache/ToSql.lock sudo /usr/bin/python /home/pi/ToSql.py >> /fso-cache/ToSql.log 2>&1
+*/1 * * * * lockf -s -t 0 /fso-cache/R0.lock sudo /usr/bin/python /home/pi/Desktop/fuxianhu/R0parse.py >> /fso-cache/R0.log 2>&1
+#*/1 6-23 * * * sudo /home/pi/savefile.sh $(date +%Y-%m-%d) >> /fso-cache/savefile.log 2>&1
+#2 0 * * * sudo /home/pi/savefile.sh $(date +%Y-%m-%d -d -1day) >> /fso-cache/savefile.log 2>&1
+#*/1 6-23 * * * sudo /home/pi/savefile.sh >> /fso-cache/savefile.log 2>&1
+#2 0 * * * sudo /home/pi/savefile-last.sh  >> /fso-cache/savefile.log 2>&1
+*/1 6-23 * * * sudo /home/pi/savefile-02.sh 0 >> /fso-cache/savefile.log 2>&1
+2 0 * * * sudo /home/pi/savefile-02.sh 1  >> /fso-cache/savefile.log 2>&1
+*/1 6-23 * * * sudo /home/pi/check-fso-weather.sh 30 10 python3 >> /fso-cache/check-fso-weather.log 2>&1
+0 1 * * * sudo rm -f /var/log/*.gz
+0 1 * * * sudo rm -f /var/log/*.1
+0 1 * * * sudo rm -f /var/log/*.old
+0 1 * * * sudo rm -f /var/log/*.log
+0 1 * * * sudo rm -rf /dev/shm/*
+1 0 * * * sudo find / -name "*.pyc" -delete
+0 1 1 1 * sudo /home/pi/cleanhd.sh >> /fso-cache/cleanhd.log 2>&1
+#0 2 * * 1 sudo reboot
+#0 2 * * * sudo reboot
+*/1 * * * * /home/pi/temp-monitor.sh 10 >> /dev/null 2>&1
+0 5 * * * sudo /home/pi/clean-cache.sh > /var/log/clean-cache.log
+0 2 * * * sudo /etc/init.d/dphys-swapfile restart
+#*/1 * * * date >> /fso-cache/date.log
+#*/1 * * * * /home/pi/crontest.sh $(date)
+2 0 * * * sudo rm -f /home/pi/Desktop/fuxianhu/r0.txt

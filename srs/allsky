@@ -1,0 +1,3 @@
+#!/bin/sh
+ffmpeg -i "rtsp://admin:admin123@192.168.100.211:554/h264/ch1/main/av_stream" -f flv  -r 15 -s 1920x1080 -an "rtmp://localhost/fso/allsky" > /dev/null 2>&1 &
+exit 0

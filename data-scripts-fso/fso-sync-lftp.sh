@@ -15,6 +15,7 @@
 #       20191015    Release 0.91    correct the time calculating
 #       20200607    Release 0.92    correct minor errors
 #       20200615    Release 0.93    add ping test
+#       20200928    Release 0.94    using ls -alR to get real size of files
 # 
 #waiting pid taskname prompt
 waiting() {
@@ -53,14 +54,14 @@ procing() {
 #procName="lftp"
 cyear=`date  +%Y`
 today=`date  +%Y%m%d`
-today0=`date  +%Y-%m-%d`
+today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
 syssep="/"
 
 if [ $# -ne 7 ];then
-  echo "Usage: ./fso-sync-lftp.sh ip port  destdir user password datatype(TIO or HA) threadnumber"
-  echo "Example: ./fso-sync-lftp.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40"
-  echo "         ./fso-sync-lftp.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA 40"
+  echo "Usage: ./fso-sync-lftp-v09.sh ip port  destdir user password datatype(TIO or HA) threadnumber"
+  echo "Example: ./fso-sync-lftp-v09.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40"
+  echo "         ./fso-sync-lftp-v09.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA 40"
   exit 1
 fi
 server1=$1
@@ -85,6 +86,7 @@ srcsize=/home/chd/log/$datatype-$today-$server1-filesize.dat
 srcnumber=/home/chd/log/$datatype-$today-$server1-filenumber.dat
 
 lockfile=/home/chd/log/$(basename $0)-$datatype-$today.lock
+
 if [ ! -f $filenumber ];then
   echo "0">$filenumber
 fi
@@ -113,14 +115,13 @@ fi
 
 progversion=0.94
 
-
 #st1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 tstart=`date +%s`
 ctime=`date  +%H:%M:%S`
 echo "                                                       "
 echo "============ Welcome to Data System @ FSO! ==========="
 echo "                 $(basename $0)                        "
-echo "         (Release $progversion 20200928 16:36)       "
+echo "         (Release $progversion 20200607 08:13)       "
 echo "                                                       "
 echo "         sync $datatype data to $destpre0              "
 echo "                                                       "
@@ -177,7 +178,7 @@ else
   syncstart=`date +%s`
   server=ftp://$user:$password@$server
   #lftp  $server -e "mirror --ignore-time --continue  --parallel=$pnum  $srcdir $targetdir; quit">/dev/null 2>&1 &
-  lftp  $server -e "mirror  --parallel=$pnum  $srcdir0 $destdir; quit">/dev/null 2>&1 &
+  lftp  $server -e "mirror  -x '^\.' --parallel=$pnum  $srcdir0 $destdir; quit">/dev/null 2>&1 &
   #lftp -p 2121 -u tio,ynao246135 -e "mirror --only-missing --continue  --parallel=40  /20190704/TIO /lustre/data/2019/20190704/TIO; quit" ftp://192.168.111.120 >/dev/null 2>&1 &
   #wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir1
 
@@ -225,11 +226,8 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 
-if [ ! -d "$targetdir" ]; then
-  echo "0.0" > $filesize1
-  echo "0" > $filenumber1
-fi
 du -sm $targetdir|awk '{print $1}' > $filesize1 &
+//cd $targetdir
 //find $targetdir -name *.fits -type f | xargs -I {} ls -al|awk '{sum += $5} END {print sum/(1024*1024)}' > $filesize1 &
 waiting "$!" "$datatype File Size Summerizing" "Sumerizing $datatype File Size"
 if [ $? -ne 0 ];then
@@ -237,6 +235,11 @@ if [ $? -ne 0 ];then
   echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
   cd /home/chd/
   exit 1
+fi
+
+if [ ! -d "$targetdir" ]; then
+  echo "0" > $filesize1
+  echo "0" > $filenumber1
 fi
 
 find $targetdir ! -perm 777 -type d -exec chmod 777 {} \; &
@@ -287,25 +290,25 @@ ctime4=`date  +%H:%M:%S`
 #st2=`echo $ctime4|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 tend=`date +%s`
 tdiff=`echo "$tstart $tend"|awk '{print($2-$1)}'`
-today1=`date +%Y-%m-%d`
+today1=`date +%Y%m%d`
 echo "$today1 $ctime4: Succeeded in Syncing $datatype data @ $server1!"
 echo "======================================================="
 echo "$srcday $srctime: @ $server1             "
-echo "      Source Dir : $srcdir"
-echo "   Source Number : $srcn file(s)"
-echo "     Source Data : $srcs MB "
-echo "*******************************************************"
+echo "       Source Dir: $srcdir"
+echo "    Source Number: $srcn file(s)"
+echo "      Source Data: $srcs MB "
+echo "********************************************************"
 echo "$today1 $ctime4: @ $targetdir          "
-echo "          Synced : $sn file(s)"
-echo "          Synced : $ss MB "
-echo "  Sync Time Used : $synctime secs."
-echo "        @  Speed : $speed MB/s"
-echo "    Total Synced : $n2 File(s)"
+echo "           Synced: $sn file(s)"
+echo "                 : $ss MB "
+echo "   Sync Time Used: $synctime secs."
+echo "         @  Speed: $speed MB/s"
+echo "     Total Synced: $n2 File(s)"
 echo "                 : $s2 MB"
-echo " Total Time Used : $tdiff secs."
-echo "            From : $today0 $ctime"
-echo "              To : $today1 $ctime4"
-echo "======================================================="
+echo "  Total Time Used: $tdiff secs."
+echo "             From: $today0 $ctime"
+echo "               To: $today1 $ctime4"
+echo "====++==================================================="
 rm -rf $lockfile
 cd /home/chd/
 exit 0
