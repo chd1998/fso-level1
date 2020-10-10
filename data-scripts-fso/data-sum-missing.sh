@@ -97,7 +97,7 @@ done
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
 echo "$today0 $ctime : $i days $datatype Data  Summerized..."
-echo "            From : $sdate"
-echo "              To : $edate"
+echo "             From : $sdate"
+echo "               To : $edate"
 
 
