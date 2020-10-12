@@ -14,8 +14,8 @@ syssep="/"
 
 if [ $# -ne 2 ];then
   echo "Usage: ./data-sum.sh destdir year datatype(TIO or HA)"
-  echo "Example: ./data-sum.sh   2020  TIO"
-  echo "         ./data-sum.sh   2020  HA"
+  echo "Example: ./data-sum-year.sh   2020  TIO"
+  echo "         ./data-sum-year.sh   2020  HA"
   exit 1
 fi
 
