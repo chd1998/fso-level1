@@ -1,0 +1,5 @@
+sudo su
+apt install ssmtp
+apt install mailutils
+nano /etc/ssmtp/ssmtp.conf
+nano /etc/ssmtp/revaliases
