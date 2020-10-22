@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=mydesktop
+NoDisplay=true
+Exec=chromium-browser -kiosk --incognito 'http://localhost:8080'
