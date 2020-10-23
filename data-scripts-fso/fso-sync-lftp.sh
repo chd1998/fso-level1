@@ -170,7 +170,7 @@ if [ $pingres -eq 0 ];then
   echo "$today $ctime1: $server1 is offline, skip syncing remote file(s)..." 
   #exit 0
 else
-  echo "$today $ctime1: $server1 is online, proceeding syncing remote file(s)..."
+  echo "$today $ctime1: $server1 is online, proceed to sync remote file(s)..."
   #echo "                 : pls wait....."
   echo "$today $ctime1: Sync Task Started, Please Wait ... "
   #cd $destdir
@@ -210,8 +210,8 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 du -sm $targetdir/|awk '{print $1}' > $filesize1 &
-//cd $targetdir
-//find $targetdir -name *.fits -type f | xargs -I {} ls -al|awk '{sum += $5} END {print sum/(1024*1024)}' > $filesize1 &
+#cd $targetdir
+#find $targetdir -name *.fits -type f | xargs -I {} ls -al|awk '{sum += $5} END {print sum/(1024*1024)}' > $filesize1 &
 waiting "$!" "$datatype File Size Summerizing" "Sumerizing $datatype File Size"
 if [ $? -ne 0 ];then
   ctime3=`date  +%H:%M:%S`

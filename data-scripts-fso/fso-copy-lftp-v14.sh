@@ -1,27 +1,27 @@
 #!/bin/bash
 #author: chen dong @fso
 #Copy specified date TIO/HA data on remote host to /lustre/data mannually
-#Usage: ./fso-copy-lftp-v14.sh srcip port  dest year(4 digits) monthday(4 digits) user password datatype(TIO/HA)
-#Example: ./fso-copy-lftp-v14.sh 192.168.111.120 21 /lustre/data 2019 0427 tio ynao246135 TIO
-#Example: ./fso-copy-lftp-v14.sh 192.168.111.122 21 /lustre/data 2019 0427 ha ynao246135 HA 10"
+#Usage: ./fso-copy-lftp-v14.sh srcip port  dest year(4 digits) monthday(4 digits) user password datatype(TIO/HA) threadnumber
+#Example: ./fso-copy-lftp-v14.sh 192.168.111.120 21 /lustre/data 2019 0427 tio ynao246135 TIO 10
+#Example: ./fso-copy-lftp-v14.sh 192.168.111.122 21 /lustre/data 2019 0427 ha ynao246135 HA 10
 #changlog: 
-#        20190420       Release 0.1   first prototype release 0.1
-#        20190421       Release 0.2   fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
-#        20190423       Release 0.3   fix errors
-#        20190426       Release 0.4   fix errors
-#        20190428       Release 0.5   add monthday to the src dir
-#                       Release 0.6   datatype is an option now
-#        20190603       Release 0.7   using lftp instead of wget
-#        20190604       Release 0.8   add progress bar to lftp
-#        20190608       Release 0.9   fixed error in directory
-#                       Release 1.0   improve display info
-#        20190702       Release 1.1   revise some logical relations
-#        20190704       Release 1.2   using lftp & add input args
-#        20190705       Release 1.3   logics revised
-#                       Release 1.4   revise timing logics
-#        20191015       Release 1.41  revised time calculation
-#        20200615       Release 1.42  fixed some minor errors
-#                                     add ping test
+#        20190420       Release 0.1.0   first prototype release 0.1
+#        20190421       Release 0.2.0   fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
+#        20190423       Release 0.3.0   fix errors
+#        20190426       Release 0.4.0   fix errors
+#        20190428       Release 0.5.0   add monthday to the src dir
+#                       Release 0.6.0   datatype is an option now
+#        20190603       Release 0.7.0   using lftp instead of wget
+#        20190604       Release 0.8.0   add progress bar to lftp
+#        20190608       Release 0.9.0   fixed error in directory
+#                       Release 1.0.0   improve display info
+#        20190702       Release 1.1.0   revise some logical relations
+#        20190704       Release 1.2.0   using lftp & add input args
+#        20190705       Release 1.3.0   logics revised
+#                       Release 1.4.0   revise timing logics
+#        20191015       Release 1.4.1   revised time calculation
+#        20200615       Release 1.4.2   fixed some minor errors
+#                                       add ping test
 #
 #waiting pid taskname prompt
 waiting() {
@@ -113,7 +113,7 @@ else
   echo $$>$lockfile
 fi
 
-progver=1.42
+progver=1.4.2
 starttime=`date +%s`
 
 echo " "
@@ -156,7 +156,7 @@ if [ $pingres -eq 0 ];then
   echo "$today $ctime1: $server is offline, skip syncing remote file(s)..." 
   exit 0
 else
-  echo "$today $ctime1: $server is online, proceeding syncing remote file(s)..."
+  echo "$today $ctime1: $server is online, proceed to sync remote file(s)..."
   echo "                 : pls wait....."
 fi
 
