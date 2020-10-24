@@ -1,31 +1,10 @@
 #!/bin/bash
 #author: chen dong @fso
 #purposes: manually syncing TIO/HA data in specified year(eg., 2019...) from remoteip to local lustre storage via lftp
-<<<<<<< HEAD
-#Usage: ./fso-copy-lftp.cyg.sh srcip dest year(4 digits)  monthday(4 digits) user passwd datatype(TIO/HA)
-#Example: ./fso-copy-lftp-cyg.sh ftp://192.168.111.120 e 2019 0907 tio ynao246135 TIO
-=======
-#Usage: ./fso-copy-lftp-wsl.sh srcip dest year(4 digits)  monthday(4 digits) user passwd datatype(TIO/HA)
-#Example: ./fso-copy-lftp-cyg.sh 192.168.111.120 21 e 2020 1020 tio ynao246135 TIO"
-#         ./fso-copy-lftp-cyg.sh 192.168.111.122 21 f 2020 1020 ha ynao246135 HA"
->>>>>>> 1be539e39b3377e93cae113b48242ea3868f0e9c
+#Usage: ./fso-copy-log-cyg.sh srcip dest year(4 digits)  monthday(4 digits) user passwd datatype(TIO/HA)
+#Example: ./fso-copy-log-cyg.sh ftp://192.168.111.120 e 2019 0907 tio ynao246135 TIO
 #changlog: 
-#        20190420       Release 0.1.0 first prototype release 0.1
-#        20190421       Release 0.2.0 fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
-#        20190423       Release 0.3.0 fix errors
-#        20190426       Release 0.4.0 fix errors
-#        20190428       Release 0.5.0 add monthday to the src dir
-#                       Release 0.6.0 datatype is an option now
-#        20190603       Release 0.7.0 using lftp instead of wget
-#        20190604       Release 0.8.0 add progress bar to lftp
-#        20190608       Release 0.9.0 fixed error in directory
-#                       Release 1.0.0 improve display info
-#        20190702       Release 1.1.0 revise some logical relations
-#        20190704       Release 1.2.0 using lftp & add input args
-#        20190705       Release 1.3.0 logics revised
-#                       Release 1.4.0 revise timing logics
-#        20190713       Release 1.5.0 modified to use under cygwin
-#        20201020       Release 1.5.1 modified to use under wsl on win10 
+#        20200521       Relaase 0.1 	first version under cygwin
 #
 #waiting pid taskname prompt
 waiting() {
@@ -82,21 +61,17 @@ ctime=`date --date='0 days ago' +%H:%M:%S`
 ctime0=`date --date='0 days ago' +%H:%M:%S`
 
 if [ $# -ne 8 ]  ;then
-  echo "Copy specified date TIO/HA data on remote host to local HD under cygwin"
-  echo "Usage: ./fso-copy-lftp-cyg.sh srcip port dest year(4 digits)  monthday(4 digits) user password datatype(TIO/HA)"
-<<<<<<< HEAD
-  echo "Example: ./fso-copy-lftp-cyg.sh 192.168.111.120 21 f 2019 0713 tio ynao246135 TIO"
-=======
-  echo "Example: ./fso-copy-lftp-cyg.sh 192.168.111.120 21 e 2020 1020 tio ynao246135 TIO"
-  echo "         ./fso-copy-lftp-cyg.sh 192.168.111.122 21 f 2020 1020 ha ynao246135 HA"
->>>>>>> 1be539e39b3377e93cae113b48242ea3868f0e9c
+  echo "Copy specified date TIO/HA data log on remote host to local HD under cygwin"
+  echo "Usage: ./fso-copy-log-cyg.sh srcip port dest year(4 digits)  monthday(4 digits) user password datatype(TIO/HA)"
+  echo "Example: ./fso-copy-log-cyg.sh 192.168.111.120 21 f 2019 0713 tio ynao246135 TIO"
   exit 1
 fi
 
-#procName="lftp"
+procName=$(basename $0)
+pversion=0.1
 
 syssep="/"
-dest00="/mnt/"
+dest00="/cygdrive/"
 ftpserver=$1
 remoteport=$2
 destpre=${dest00}$3
@@ -126,20 +101,14 @@ if [ -f $lockfile ];then
 else
   echo $$>$lockfile
 fi
-pver=1.5.1
-<<<<<<< HEAD
-pname="fso-copy-lftp-wsl.sh"
-=======
-pname=$(basename $0)
->>>>>>> 1be539e39b3377e93cae113b48242ea3868f0e9c
 
 echo " "
-echo "============ Welcome to FSO Data System@FSO! ============"
+echo "======== Welcome to FSO Data Copying System@FSO! ========"
 echo "                                                         "
-echo "                 $pname                   "  
+echo "                 $procName                               "  
 echo "                                                         "
-echo "             Release $pver     20191020  10:20           "
-echo "     Sync $datatype data from $1 to $destpre  "
+echo "             Relase $pversion     20200521  13:24        "
+echo "         Copy the $datatype data log from remote         "
 echo "                                                         "
 echo "                $today    $ctime                         "
 echo "                                                         "
@@ -149,9 +118,9 @@ echo " "
 #pid=$(ps x|grep -w $procName|grep -v grep|awk '{print $1}')
 #if [ $procCmd -le 0 ];then
 #destdir=${destpre}${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
-destdir=${destpre}${syssep}${srcyear}${srcmonthday}${syssep}
-#remotesrcdir=${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
-srcdir=${ftpserver1}${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
+destdir=${destpre}${syssep}${syssep}${datatype}-log${syssep}
+#remotesrcdir=${syssep}${srcyear}${srcmonthday}${syssep}${datatype}$
+srcdir=${ftpserver1}${syssep}${srcyear}${srcmonthday}${syssep}ftpuser_${srcyear}${srcmonthday}_log.txt
 #srcdir1=${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
 srcdir1=${syssep}${srcyear}${srcmonthday}${syssep}
 
@@ -162,26 +131,10 @@ else
 fi
 
 ctime=`date --date='0 days ago' +%H:%M:%S`
-echo "$today $ctime: Syncing $datatype data @ FSO..."
+echo "$today $ctime: Copying $datatype data log @ FSO..."
 echo "                   From: $srcdir1 "
 echo "                   To  : $destdir "
 echo "                   Please Wait..."
-
-#count existed file number
-if [ ! -f "$logpath/$(basename $0)_${datatype}_tmpfn2.dat" ]; then
-  #ls -lR $destdir | grep "^-" | wc -l > $logpath/$(basename $0)_${datatype}_tmpfn2.dat  & 
-  #waiting "$!" "Existed $datatype File Number @ Dest Counting" "Counting Existed $datatype File Number @ Dest"
-  echo "0" > $logpath/$(basename $0)_${datatype}_tmpfn2.dat
-fi
-fn1=$(cat $logpath/$(basename $0)_${datatype}_tmpfn2.dat)
-
-#count existed file size  
-if [ ! -f "$logpath/$(basename $0)_${datatype}_tmpfs2.dat" ]; then
-  #fs1=`du -sm $destdir | awk '{print $1}'` > $logpath/$(basename $0)_${datatype}_tmpfs2.dat &
-  #waiting "$!" "Existed $datatype File Size @ Dest Counting" "Counting Existed $datatype Dest File Size"
-  echo "0" > $logpath/$(basename $0)_${datatype}_tmpfs2.dat
-fi
-fs1=$(cat $logpath/$(basename $0)_${datatype}_tmpfs2.dat)
 
 ctime=`date --date='0 days ago' +%H:%M:%S`
 t1=`date +%s`

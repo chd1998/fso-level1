@@ -170,7 +170,7 @@ if [ $pingres -eq 0 ];then
   echo "$today $ctime1: $server1 is offline, skip syncing remote file(s)..." 
   #exit 0
 else
-  echo "$today $ctime1: $server1 is online, proceeding syncing remote file(s)..."
+  echo "$today $ctime1: $server1 is online, proceed to sync remote file(s)..."
   #echo "                 : pls wait....."
   echo "$today $ctime1: Sync Task Started, Please Wait ... "
   #cd $destdir

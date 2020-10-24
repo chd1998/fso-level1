@@ -34,4 +34,3 @@ fi
 rm -f pidtmp
 rm -f pidlist
 rm -f mypidtmp
-exit 0
