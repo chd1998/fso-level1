@@ -4,26 +4,26 @@
 #Usage: ./fso-copy-lftp-cron.sh srcip port  dest year(4 digits) monthday(4 digits) user password datatype(TIO/HA)
 #Example: ./fso-copy-lftp-cron.sh 192.168.111.120 21 /lustre/data 2019 0427 tio ynao246135 TIO
 #changlog: 
-#        20190420       Release 0.1   first prototype release 0.1
-#        20190421       Release 0.2   fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
-#        20190423       Release 0.3   fix errors
-#        20190426       Release 0.4   fix errors
-#        20190428       Release 0.5   add monthday to the src dir
-#                       Release 0.6   datatype is an option now
-#        20190603       Release 0.7   using lftp instead of wget
-#        20190604       Release 0.8   add progress bar to lftp
-#        20190608       Release 0.9   fixed error in directory
-#                       Release 1.0   improve display info
-#        20190702       Release 1.1   revise some logical relations
-#        20190704       Release 1.2   using lftp & add input args
-#        20190705       Release 1.3   logics revised
-#                       Release 1.4   revise timing logics
-#        20191015               1.41  revised time calculation
-#        20200103       Release 1.42  modified to use for ha levle quicklook
-#        20200430       Release 1.43  add ping to test server online and other minor correction
-#        20200520       Release 1.44  fixed minor errors in displaying
-#        20200604       Release 1.45  exclude flat & dark to speed up  processing
-#        20200805       Release 1.46  exclude *redata in syncing
+#        20190420       Release 0.1.0   first prototype release 0.1
+#        20190421       Release 0.2.0   fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
+#        20190423       Release 0.3.0   fix errors
+#        20190426       Release 0.4.0   fix errors
+#        20190428       Release 0.5.0   add monthday to the src dir
+#                       Release 0.6.0   datatype is an option now
+#        20190603       Release 0.7.0   using lftp instead of wget
+#        20190604       Release 0.8.0   add progress bar to lftp
+#        20190608       Release 0.9.0   fixed error in directory
+#                       Release 1.0.0   improve display info
+#        20190702       Release 1.1.0   revise some logical relations
+#        20190704       Release 1.2.0   using lftp & add input args
+#        20190705       Release 1.3.0   logics revised
+#                       Release 1.4.0   revise timing logics
+#        20191015               1.4.1  revised time calculation
+#        20200103       Release 1.4.2  modified to use for ha levle quicklook
+#        20200430       Release 1.4.3  add ping to test server online and other minor correction
+#        20200520       Release 1.4.4  fixed minor errors in displaying
+#        20200604       Release 1.4.5  exclude flat & dark to speed up  processing
+#        20200805       Release 1.4.6  exclude *redata in syncing
 #
 #
 #waiting pid taskname prompt
@@ -80,7 +80,7 @@ tstart=`date +%s`
 if [ $# -ne 8 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to /lustre/data mannually"
   echo "Usage: ./fso-copy-lftp-cron.sh srcip port  dest year(4 digits) monthday(4 digits) user password datatype(TIO/HA)"
-  echo "Example: ./fso-copy-lftp-cron.sh 192.168.100.238 21 /home/user/data 2020 0103 ha ynao246135 HA"
+  echo "Example: ./fso-copy-lftp-cron.sh 192.168.100.238 21 /Data 2020 0103 ha ynao246135 HA"
   exit 1
 fi
 
@@ -115,15 +115,15 @@ else
   echo $$>$lockfile
 fi
 
-progname=$(basename $0)
-pversion=1.46
+pname=$(basename $0)
+pver=1.4.6
 
 echo " "
 echo "============ Welcome to FSO Data System@FSO! ============"
 echo "                                                         "
-echo "              $progname                                  "  
+echo "                 $pname                                  "  
 echo "                                                         "
-echo "            Relase $pversion     20200805  13:50         "
+echo "            Relase $pver     20200805  13:50             "
 echo "                                                         "
 echo "                $today    $ctime                         "
 echo "                                                         "
@@ -148,14 +148,14 @@ ctime=`date  +%H:%M:%S`
 #t1=`date +%s`
 echo "$today $ctime: Syncing $datatype data @ FSO..."
 echo "                   From: $srcdir @$server "
-echo "                   To  : $destdir "
+echo "                     To: $destdir "
 echo "                   Please Wait..."
 
 fn1=`ls -lR $destdir | grep "^-" | wc -l`
 fs1=`du -sm $destdir | awk '{print $1}'`
 ctime=`date  +%H:%M:%S`
 t1=`date +%s`
-lftp $ftpserver -e "mirror -x '^FLAT*' -x '^Dark*' -x 'redata$' --only-missing --parallel=4 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
+lftp $ftpserver -e "mirror -x '^FLAT*' -x '^Dark*' -x 'redata$' --only-missing --parallel=200 $srcdir1  $destdir; quit" >/dev/null 2>&1 &
 waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 if [ $? -ne 0 ];then
   ctime1=`date  +%H:%M:%S`
