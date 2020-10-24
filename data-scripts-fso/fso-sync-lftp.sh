@@ -88,18 +88,18 @@ srcnumber=/home/chd/log/$datatype-$today-$server1-filenumber.dat
 lockfile=/home/chd/log/$(basename $0)-$datatype-$today.lock
 
 
-#if [ ! -f $filenumber ];then
-#  echo "0">$filenumber
-#fi
-#if [ ! -f $filesize ];then 
-#  echo "0">$filesize
-#fi
-#if [ ! -f $filenumber1 ];then
-#  echo "0">$filenumber1
-#fi
-#if [ ! -f $filesize1 ];then
-#  echo "0">$filesize1
-#fi
+if [ ! -f $filenumber ];then
+  echo "0">$filenumber
+fi
+if [ ! -f $filesize ];then 
+  echo "0">$filesize
+fi
+if [ ! -f $filenumber1 ];then
+  echo "0">$filenumber1
+fi
+if [ ! -f $filesize1 ];then
+ echo "0">$filesize1
+fi
 
 if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
@@ -109,17 +109,9 @@ if [ -f $lockfile ];then
     exit 1
   else
     echo $$>$lockfile
-    echo "0">$filenumber
-    echo "0">$filesize
-    echo "0">$filenumber1
-    echo "0">$filesize1
   fi
 else
   echo $$>$lockfile
-  echo "0">$filenumber
-  echo "0">$filesize
-  echo "0">$filenumber1
-  echo "0">$filesize1
 fi
 
 progversion=0.9.4
@@ -167,10 +159,12 @@ pingres=`cat $logpre/pingtmp | wc -l`
 rm -f $logpre/pingtmp
 ctime1=`date  +%H:%M:%S`
 if [ $pingres -eq 0 ];then
-  echo "$today $ctime1: $server1 is offline, skip syncing remote file(s)..." 
+  echo "$today $ctime1: $server1 is offline..."
+  echo "                   Skip syncing remote file(s)..." 
   #exit 0
 else
-  echo "$today $ctime1: $server1 is online, proceed to sync remote file(s)..."
+  echo "$today $ctime1: $server1 is online..."
+  echo "                   Proceed to sync remote file(s)..."
   #echo "                 : pls wait....."
   echo "$today $ctime1: Sync Task Started, Please Wait ... "
   #cd $destdir
