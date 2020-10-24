@@ -122,7 +122,7 @@ ctime=`date  +%H:%M:%S`
 echo "                                                       "
 echo "============ Welcome to Data System @ FSO! ==========="
 echo "                 $(basename $0)                        "
-echo "         (Release $progversion 20200607 08:13)       "
+echo "         (Release $progversion 20201024 09:25)       "
 echo "                                                       "
 echo "         sync $datatype data to $destpre0              "
 echo "                                                       "
@@ -151,7 +151,7 @@ cd $targetdir
 ctime=`date  +%H:%M:%S`
 echo "$today $ctime: Syncing $datatype data @ FSO..."
 echo "             From: $server$srcdir "
-echo "             To  : $targetdir "
+echo "               To: $targetdir "
 
 echo "$today $ctime: Testing $server1 is online or not... "
 ping $server1 -c 5 | grep ttl >> $logpre/pingtmp
