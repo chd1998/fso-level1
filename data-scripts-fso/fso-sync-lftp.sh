@@ -3,19 +3,19 @@
 #purposes: periodically syncing data from remoteip to local lustre storage via lftp
 #
 #changlog: 
-#       20190603    Release 0.1     first version for tio-sync.sh
-#       20190625    Release 0.2     revised lftp performance & multi-thread
-#       20190703    Release 0.3     fix some errors 
-#       20190705    Release 0.4     timing logic revised
-#       20190715    Release 0.5     reduce time of changing permission
-#       20190716    Release 0.6     add parallel permission changing
-#                   Release 0.7     input parallel lftp thread number
-#       20190718    Release 0.8     add remote data info 
-#       20190914    Release 0.9     revised display info and some minor errors
-#       20191015    Release 0.91    correct the time calculating
-#       20200607    Release 0.92    correct minor errors
-#       20200615    Release 0.93    add ping test
-#       20200928    Release 0.94    using ls -alR to get real size of files
+#       20190603    Release 0.1.0     first version for tio-sync.sh
+#       20190625    Release 0.2.0     revised lftp performance & multi-thread
+#       20190703    Release 0.3.0     fix some errors 
+#       20190705    Release 0.4.0     timing logic revised
+#       20190715    Release 0.5.0     reduce time of changing permission
+#       20190716    Release 0.6.0     add parallel permission changing
+#                   Release 0.7.0     input parallel lftp thread number
+#       20190718    Release 0.8.0     add remote data info 
+#       20190914    Release 0.9.0     revised display info and some minor errors
+#       20191015    Release 0.9.1    correct the time calculating
+#       20200607    Release 0.9.2    correct minor errors
+#       20200615    Release 0.9.3    add ping test
+#       20200928    Release 0.9.4    using ls -alR to get real size of files
 # 
 #waiting pid taskname prompt
 waiting() {
@@ -59,9 +59,9 @@ ctime=`date  +%H:%M:%S`
 syssep="/"
 
 if [ $# -ne 7 ];then
-  echo "Usage: ./fso-sync-lftp-v09.sh ip port  destdir user password datatype(TIO or HA) threadnumber"
-  echo "Example: ./fso-sync-lftp-v09.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40"
-  echo "         ./fso-sync-lftp-v09.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA 40"
+  echo "Usage: ./fso-sync-lftp.sh ip port  destdir user password datatype(TIO or HA) threadnumber"
+  echo "Example: ./fso-sync-lftp.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40"
+  echo "         ./fso-sync-lftp.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA 40"
   exit 1
 fi
 server1=$1
@@ -122,7 +122,7 @@ else
   echo "0">$filesize1
 fi
 
-progversion=0.94
+progversion=0.9.4
 
 #st1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 tstart=`date +%s`
@@ -210,8 +210,8 @@ if [ $? -ne 0 ];then
   exit 1
 fi
 du -sm $targetdir/|awk '{print $1}' > $filesize1 &
-//cd $targetdir
-//find $targetdir -name *.fits -type f | xargs -I {} ls -al|awk '{sum += $5} END {print sum/(1024*1024)}' > $filesize1 &
+#cd $targetdir
+#find $targetdir -name *.fits -type f | xargs -I {} ls -al|awk '{sum += $5} END {print sum/(1024*1024)}' > $filesize1 &
 waiting "$!" "$datatype File Size Summerizing" "Sumerizing $datatype File Size"
 if [ $? -ne 0 ];then
   ctime3=`date  +%H:%M:%S`
@@ -298,9 +298,5 @@ echo "====++==================================================="
 rm -rf $lockfile
 cd /home/chd/
 exit 0
-#else
-#  echo "$today $ctime: $procName  is running..."
-#  echo "              PID: $pid                    "
-#  exit 0
-#fi
+
 
