@@ -3,8 +3,7 @@
 #purposes: Annual Report of Data Info with regard to datatype @fso
 #
 #changlog: 
-#       20200928    Release 0.1.0     first working version 
-#       20201025    Release 0.1.1     add observation time
+#       20200928    Release 0.1     first working version 
 
 
 cyear=`date  +%Y`
@@ -36,13 +35,12 @@ fi
 cd $targetdir
 num=`cat $datatype*.sum|awk '{sum += $2} END {print sum}'`
 size=`cat $datatype*.sum|awk '{sum += $3} END {print sum}'`
-obstime=`cat $datatype*.sum|awk '{sum += $6} END {print sum/3600}'`
 echo "$year $datatype Summary @fso" >$suminfo
-echo "Date       No.          Size(MiB)           Total Obs. Time(hrs)" >$suminfo
+echo "Date       No.          Size(MiB)" >$suminfo
 echo "*****************************************************">>$suminfo
 cat $datatype*.sum >> $suminfo
 echo "*****************************************************">>$suminfo
-echo "Sum:       $num          $size               $obstime" >> $suminfo
+echo "Sum:       $num          $size" >> $suminfo
 mail -s "$year Annual Summary of $datatype @fso" chd@ynao.ac.cn < $suminfo
 #mail -s "$year Annual Summary of $datatype @fso" nvst_obs@ynao.ac.cn < $suminfo
 

@@ -3,7 +3,8 @@
 #purposes: summerize data file number and size(MiB) daily with regard to datatype
 #        : from start date to end date
 #changlog: 
-#       20201010    Release 0.1     first working version 
+#       20201010    Release 0.1.0    first working version
+#       20201025    Release 0.1.1    add observation time
 
 waiting() {
   local pid="$1"
@@ -87,16 +88,16 @@ do
     if [ ! -f $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum ];then
 	today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S` 
-	echo "$today0 $ctime : Start $checkdate $datatype  Data Summerizing @fso"
-  /home/chd/data-sum-daily.sh $datapre $checkyear $checkmonthday $datatype 0&
-	waiting "$!" "$datatype Summerizing" "Summerizing $datatype Data @$checkdate"
+	echo "$today0 $ctime : Start $checkdate $datatype  Data Sumerizing @fso"
+  /home/chd/data-sum-daily.sh $datapre $checkyear $checkmonthday $datatype 0 &
+	waiting "$!" "$datatype Sumerizing" "Sumerizing $datatype Data @$checkdate"
 	#    echo "$i $checkdate"
     fi
     let i++
 done
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
-echo "$today0 $ctime : $i days $datatype Data  Summerized..."
+echo "$today0 $ctime : $i days $datatype Data  Sumerized..."
 echo "             From : $sdate"
 echo "               To : $edate"
 
