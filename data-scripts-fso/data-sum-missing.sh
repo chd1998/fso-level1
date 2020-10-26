@@ -18,7 +18,7 @@ waiting() {
   wctime=`date  +%H:%M:%S`
   wtoday=`date  +%Y%m%d`
                
-  echo "$wtoday $wctime: $2 Task Has Done!"
+  echo "$wtoday $wctime : $2 Task Has Done!"
   #dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
   dt1=`date +%s`
   echo "                   Finishing...."
@@ -35,7 +35,7 @@ procing() {
     sleep 1
     ptoday=`date  +%Y%m%d`
     pctime=`date  +%H:%M:%S`
-    echo "$ptoday $pctime: $1, Please Wait...   "
+    echo "$ptoday $pctime : $1, Please Wait...   "
   done
 }
 
