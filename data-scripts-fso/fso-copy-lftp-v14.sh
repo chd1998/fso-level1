@@ -19,7 +19,7 @@
 #        20190704       Release 1.2.0   using lftp & add input args
 #        20190705       Release 1.3.0   logics revised
 #                       Release 1.4.0   revise timing logics
-#        20191015       Release 1.4.1   revised time calculation
+#        20191015       Release 1.4.1   revise time calculation
 #        20200615       Release 1.4.2   fixed some minor errors
 #                                       add ping test
 #

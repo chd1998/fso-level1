@@ -9,7 +9,7 @@
 
 cyear=`date  +%Y`
 today=`date  +%Y%m%d`
-today0=`date  +%Y%m%d`
+today0=`date  +%Y-%m-%d`
 ctime=`date  +%H:%M:%S`
 syssep="/"
 
@@ -38,27 +38,25 @@ sumdir=$homepre/$year
 suminfo=$sumdir/$datatype-$year-$monthday.sum
 
 device="lustre"
-dataprefix=`echo $datatype|echo ${datatype:0:1}`
-t0=`date  +%Y%m%d`
-d0=`date +%H:%M:%S`
-dt0=`date +%s`
 if [ ! -d "$sumdir" ]; then
   mkdir -m 777 -p $sumdir
 fi
+
 
 if [ -d "$targetdir" ]; then
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
   cd $targetdir
   echo "$today0 $ctime : Start Counting $year$monthday $datatype @$device File Numbers & Size..."
-  num=`find ./ -name $datatype*.fits -type f | wc -l`
+  num=`find ./ -name *.fits -type f | wc -l`
   if [ $num -gt "0" ];then
-    size=`find $targetdir -name *.fits -type f | xargs ls -I {} -al|awk '{sum += $5} END {print sum/(1000*1024*1024)}'` 
+    size=`find ./ -path "*redata*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name "$dataprefix*.fits" -print | xargs ls -I {} -al|awk '{sum += $5} END {print sum/(1000*1024*1024)}'` 
   fi
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
   echo "$today0 $ctime : Start Calculating  $year$monthday $datatype @$device Observing Time..."
   cd $targetdir
+  dataprefix=`echo $datatype|echo ${datatype:0:1}`
   find ./   -path "*redata*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name "$dataprefix*.fits" -print >$datatype-$year-$monthday-flist
   sort $datatype-$year-$monthday-flist>$datatype-$year-$monthday-flist-sorted
   start=`head -n +1 $datatype-$year-$monthday-flist-sorted | xargs stat |grep Change|awk '{print $2 " " $3}'`
@@ -78,12 +76,7 @@ if [ -d "$targetdir" ]; then
   rm -f $datatype-$year-$monthday-flist-sorted
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
-  t1=`date  +%Y%m%d`
-  d1=`date +%H:%M:%S`
-  dt1=`date +%s`
-  dt=`echo $dt0 $dt1|awk '{print($2-$1)'}`
   echo "$today0 $ctime : All Summary Tasks for $year$monthday $datatype @$device Ended..."
-  echo "               in : $dt secs."
 else
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
