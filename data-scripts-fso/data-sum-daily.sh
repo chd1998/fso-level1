@@ -5,6 +5,7 @@
 #changlog: 
 #       20200928    Release 0.1.0     first working version 
 #       20201025    Release 0.1.1     add observation time and revised
+#       20201028    Release 0.1.2     observation time logics revised
 
 
 cyear=`date  +%Y`
@@ -26,7 +27,7 @@ monthday=$3
 datatype=$4
 mailornot=$5
 
-pver=0.1
+pver=0.1.2
 num=0
 size=0.0
 interval=0.0
@@ -42,6 +43,7 @@ dataprefix=`echo $datatype|echo ${datatype:0:1}`
 t0=`date  +%Y%m%d`
 d0=`date +%H:%M:%S`
 dt0=`date +%s`
+echo "$today0 $ctime : Start  $year$monthday $datatype Data @$device Summerizing, Pls Wait..."
 if [ ! -d "$sumdir" ]; then
   mkdir -m 777 -p $sumdir
 fi
@@ -50,19 +52,23 @@ if [ -d "$targetdir" ]; then
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
   cd $targetdir
-  echo "$today0 $ctime : Start Counting $year$monthday $datatype @$device File Numbers & Size..."
-  num=`find ./ -name $datatype*.fits -type f | wc -l`
+  #echo "$today0 $ctime : Start Counting $year$monthday $datatype @$device File Numbers & Size..."
+  num=`find ./ -name $dataprefix*.fits -type f | wc -l`
   if [ $num -gt "0" ];then
-    size=`find $targetdir -name *.fits -type f | xargs ls -I {} -al|awk '{sum += $5} END {print sum/(1000*1024*1024)}'` 
+    size=`find ./ -name $dataprefix*.fits -type f | xargs ls -I {} -al|awk '{sum += $5} END {print sum/(1000*1024*1024)}'` 
   fi
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
-  echo "$today0 $ctime : Start Calculating  $year$monthday $datatype @$device Observing Time..."
+  #echo "$today0 $ctime : Start Calculating  $year$monthday $datatype @$device Observing Time..."
   cd $targetdir
-  find ./   -path "*redata*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name "$dataprefix*.fits" -print >$datatype-$year-$monthday-flist
-  sort $datatype-$year-$monthday-flist>$datatype-$year-$monthday-flist-sorted
-  start=`head -n +1 $datatype-$year-$monthday-flist-sorted | xargs stat |grep Change|awk '{print $2 " " $3}'`
-  end=`tail -n -1 $datatype-$year-$monthday-flist-sorted | xargs stat |grep Change|awk '{print $2 " " $3}'`
+  #find ./   -path "*redata*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name "$dataprefix*.fits" -print >$datatype-$year-$monthday-flist
+  #sort $datatype-$year-$monthday-flist>$datatype-$year-$monthday-flist-sorted
+  #start=`head -n +1 $datatype-$year-$monthday-flist-sorted | xargs stat |grep Change|awk '{print $2 " " $3}'`
+  #end=`tail -n -1 $datatype-$year-$monthday-flist-sorted | xargs stat |grep Change|awk '{print $2 " " $3}'`
+  #get earliest file's time
+  start=`find ./   -path "*redata*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name "$dataprefix*.fits" -print |xargs ls -ltr 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat|grep Change|awk '{print( $2" "$3)}'`
+  #get latest file's time
+  end=`find ./  -path "*redata*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name "$dataprefix*.fits" -print |xargs ls -lt 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat|grep Change|awk '{print( $2" "$3)}'`
   s=`date -d "$start" +%s`
   e=`date -d "$end" +%s`
   interval=`echo "$s $e"|awk '{print(($2-$1)/3600)}'`

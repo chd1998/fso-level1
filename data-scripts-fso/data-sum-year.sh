@@ -23,11 +23,12 @@ fi
 year=$1
 datatype=$2
 
-pver=0.1
+pver=0.1.1
 num=0
 size=0.0
+obstime=0.0
 homepre=/home/chd/data-info
-suminfo=$homepre/$datatype-$year@fso.year
+suminfo=$homepre/$datatype-$year@fso.info
 targetdir=$homepre/$year
 if [ ! -d "$targetdir" ]; then
   echo "$targetdir is not exist, pls check..."
@@ -36,11 +37,11 @@ fi
 cd $targetdir
 num=`cat $datatype*.sum|awk '{sum += $2} END {print sum}'`
 size=`cat $datatype*.sum|awk '{sum += $3} END {print sum}'`
-obstime=`cat $datatype*.sum|awk '{sum += $6} END {print sum/3600}'`
+obstime=`cat $datatype*.sum|awk '{sum += $8} END {print sum/3600}'`
 echo "$year $datatype Summary @fso" >$suminfo
 echo "Date       No.          Size(MiB)           Total Obs. Time(hrs)" >$suminfo
 echo "*****************************************************">>$suminfo
-cat $datatype*.sum >> $suminfo
+cat $datatype*.sum | awk '{print $1"      "$2"           "$3"             "$8}' >> $suminfo
 echo "*****************************************************">>$suminfo
 echo "Sum:       $num          $size               $obstime" >> $suminfo
 mail -s "$year Annual Summary of $datatype @fso" chd@ynao.ac.cn < $suminfo
