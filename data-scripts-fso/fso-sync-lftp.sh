@@ -3,20 +3,19 @@
 #purposes: periodically syncing data from remoteip to local lustre storage via lftp
 #
 #changlog: 
-#       20190603    Release 0.1.0     first version for tio-sync.sh
-#       20190625    Release 0.2.0     revised lftp performance & multi-thread
-#       20190703    Release 0.3.0     fix some errors 
-#       20190705    Release 0.4.0     timing logic revised
-#       20190715    Release 0.5.0     reduce time of changing permission
-#       20190716    Release 0.6.0     add parallel permission changing
-#                   Release 0.7.0     input parallel lftp thread number
-#       20190718    Release 0.8.0     add remote data info 
-#       20190914    Release 0.9.0     revised display info and some minor errors
-#       20191015    Release 0.9.1     correct the time calculating
-#       20200607    Release 0.9.2     correct minor errors
-#       20200615    Release 0.9.3     add ping test
-#       20200928    Release 0.9.4     using ls -alR to get real size of files
-#       20201024    Release 0.9.5     revised and corrected minor errors
+#       20190603    Release 0.1     first version for tio-sync.sh
+#       20190625    Release 0.2     revised lftp performance & multi-thread
+#       20190703    Release 0.3     fix some errors 
+#       20190705    Release 0.4     timing logic revised
+#       20190715    Release 0.5     reduce time of changing permission
+#       20190716    Release 0.6     add parallel permission changing
+#                   Release 0.7     input parallel lftp thread number
+#       20190718    Release 0.8     add remote data info 
+#       20190914    Release 0.9     revised display info and some minor errors
+#       20191015    Release 0.91    correct the time calculating
+#       20200607    Release 0.92    correct minor errors
+#       20200615    Release 0.93    add ping test
+#       20200928    Release 0.94    using ls -alR to get real size of files
 # 
 #waiting pid taskname prompt
 waiting() {
@@ -60,9 +59,9 @@ ctime=`date  +%H:%M:%S`
 syssep="/"
 
 if [ $# -ne 7 ];then
-  echo "Usage: ./fso-sync-lftp.sh ip port  destdir user password datatype(TIO or HA) threadnumber"
-  echo "Example: ./fso-sync-lftp.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40"
-  echo "         ./fso-sync-lftp.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA 40"
+  echo "Usage: ./fso-sync-lftp-v09.sh ip port  destdir user password datatype(TIO or HA) threadnumber"
+  echo "Example: ./fso-sync-lftp-v09.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40"
+  echo "         ./fso-sync-lftp-v09.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA 40"
   exit 1
 fi
 server1=$1
@@ -89,18 +88,18 @@ srcnumber=/home/chd/log/$datatype-$today-$server1-filenumber.dat
 lockfile=/home/chd/log/$(basename $0)-$datatype-$today.lock
 
 
-if [ ! -f $filenumber ];then
-  echo "0">$filenumber
-fi
-if [ ! -f $filesize ];then 
-  echo "0">$filesize
-fi
-if [ ! -f $filenumber1 ];then
-  echo "0">$filenumber1
-fi
-if [ ! -f $filesize1 ];then
- echo "0">$filesize1
-fi
+#if [ ! -f $filenumber ];then
+#  echo "0">$filenumber
+#fi
+#if [ ! -f $filesize ];then 
+#  echo "0">$filesize
+#fi
+#if [ ! -f $filenumber1 ];then
+#  echo "0">$filenumber1
+#fi
+#if [ ! -f $filesize1 ];then
+#  echo "0">$filesize1
+#fi
 
 if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
@@ -110,12 +109,20 @@ if [ -f $lockfile ];then
     exit 1
   else
     echo $$>$lockfile
+    echo "0">$filenumber
+    echo "0">$filesize
+    echo "0">$filenumber1
+    echo "0">$filesize1
   fi
 else
   echo $$>$lockfile
+  echo "0">$filenumber
+  echo "0">$filesize
+  echo "0">$filenumber1
+  echo "0">$filesize1
 fi
 
-progversion=0.9.5
+progversion=0.94
 
 #st1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 tstart=`date +%s`
@@ -123,7 +130,7 @@ ctime=`date  +%H:%M:%S`
 echo "                                                       "
 echo "============ Welcome to Data System @ FSO! ==========="
 echo "                 $(basename $0)                        "
-echo "         (Release $progversion 20201024 09:25)       "
+echo "         (Release $progversion 20200607 08:13)       "
 echo "                                                       "
 echo "         sync $datatype data to $destpre0              "
 echo "                                                       "
@@ -152,7 +159,7 @@ cd $targetdir
 ctime=`date  +%H:%M:%S`
 echo "$today $ctime: Syncing $datatype data @ FSO..."
 echo "             From: $server$srcdir "
-echo "               To: $targetdir "
+echo "             To  : $targetdir "
 
 echo "$today $ctime: Testing $server1 is online or not... "
 ping $server1 -c 5 | grep ttl >> $logpre/pingtmp
@@ -160,12 +167,10 @@ pingres=`cat $logpre/pingtmp | wc -l`
 rm -f $logpre/pingtmp
 ctime1=`date  +%H:%M:%S`
 if [ $pingres -eq 0 ];then
-  echo "$today $ctime1: $server1 is offline..."
-  echo "                   Skip syncing remote file(s)..." 
+  echo "$today $ctime1: $server1 is offline, skip syncing remote file(s)..." 
   #exit 0
 else
-  echo "$today $ctime1: $server1 is online..."
-  echo "                   Proceed to sync remote file(s)..."
+  echo "$today $ctime1: $server1 is online, proceed to sync remote file(s)..."
   #echo "                 : pls wait....."
   echo "$today $ctime1: Sync Task Started, Please Wait ... "
   #cd $destdir
@@ -190,7 +195,7 @@ else
 fi
   
 ctime2=`date  +%H:%M:%S`
-echo "$today $ctime2: Sumerizing $datatype File Numbers & Size..."
+echo "$today $ctime2: Summerizing $datatype File Numbers & Size..."
 #n2=`ls -lR $targetdir | grep "^-" | wc -l` 
 #s2=`du -sm $targetdir|awk '{print $1}'` 
 
@@ -293,5 +298,9 @@ echo "====++==================================================="
 rm -rf $lockfile
 cd /home/chd/
 exit 0
-
+#else
+#  echo "$today $ctime: $procName  is running..."
+#  echo "              PID: $pid                    "
+#  exit 0
+#fi
 

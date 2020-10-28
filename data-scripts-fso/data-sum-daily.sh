@@ -51,18 +51,22 @@ if [ -d "$targetdir" ]; then
   ctime=`date  +%H:%M:%S`
   cd $targetdir
   echo "$today0 $ctime : Start Counting $year$monthday $datatype @$device File Numbers & Size..."
-  num=`find ./ -name $datatype*.fits -type f | wc -l`
+  num=`find ./ -name $dataprefix*.fits -type f | wc -l`
   if [ $num -gt "0" ];then
-    size=`find $targetdir -name *.fits -type f | xargs ls -I {} -al|awk '{sum += $5} END {print sum/(1000*1024*1024)}'` 
+    size=`find ./ -name $dataprefix*.fits -type f | xargs ls -I {} -al|awk '{sum += $5} END {print sum/(1000*1024*1024)}'` 
   fi
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
   echo "$today0 $ctime : Start Calculating  $year$monthday $datatype @$device Observing Time..."
   cd $targetdir
-  find ./   -path "*redata*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name "$dataprefix*.fits" -print >$datatype-$year-$monthday-flist
-  sort $datatype-$year-$monthday-flist>$datatype-$year-$monthday-flist-sorted
-  start=`head -n +1 $datatype-$year-$monthday-flist-sorted | xargs stat |grep Change|awk '{print $2 " " $3}'`
-  end=`tail -n -1 $datatype-$year-$monthday-flist-sorted | xargs stat |grep Change|awk '{print $2 " " $3}'`
+  #find ./   -path "*redata*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name "$dataprefix*.fits" -print >$datatype-$year-$monthday-flist
+  #sort $datatype-$year-$monthday-flist>$datatype-$year-$monthday-flist-sorted
+  #start=`head -n +1 $datatype-$year-$monthday-flist-sorted | xargs stat |grep Change|awk '{print $2 " " $3}'`
+  #end=`tail -n -1 $datatype-$year-$monthday-flist-sorted | xargs stat |grep Change|awk '{print $2 " " $3}'`
+  #get earliest file's time
+  start=`find ./   -path "*redata*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name "$dataprefix*.fits" -print |xargs ls -ltr 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat|grep Change|awk '{print( $2" "$3)}'`
+  #get latest file's time
+  end=`find ./  -path "*redata*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name "$dataprefix*.fits" -print |xargs ls -lt 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat|grep Change|awk '{print( $2" "$3)}'`
   s=`date -d "$start" +%s`
   e=`date -d "$end" +%s`
   interval=`echo "$s $e"|awk '{print(($2-$1)/3600)}'`
