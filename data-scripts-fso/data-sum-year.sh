@@ -23,9 +23,10 @@ fi
 year=$1
 datatype=$2
 
-pver=0.1
+pver=0.1.1
 num=0
 size=0.0
+obstime=0.0
 homepre=/home/chd/data-info
 suminfo=$homepre/$datatype-$year@fso.info
 targetdir=$homepre/$year

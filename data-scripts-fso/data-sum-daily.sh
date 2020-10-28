@@ -5,6 +5,7 @@
 #changlog: 
 #       20200928    Release 0.1.0     first working version 
 #       20201025    Release 0.1.1     add observation time and revised
+#       20201028    Release 0.1.2     observation time logics revised
 
 
 cyear=`date  +%Y`
@@ -26,7 +27,7 @@ monthday=$3
 datatype=$4
 mailornot=$5
 
-pver=0.1
+pver=0.1.2
 num=0
 size=0.0
 interval=0.0
@@ -42,6 +43,7 @@ dataprefix=`echo $datatype|echo ${datatype:0:1}`
 t0=`date  +%Y%m%d`
 d0=`date +%H:%M:%S`
 dt0=`date +%s`
+echo "$today0 $ctime : Start  $year$monthday $datatype Data @$device Summerizing, Pls Wait..."
 if [ ! -d "$sumdir" ]; then
   mkdir -m 777 -p $sumdir
 fi
@@ -50,14 +52,18 @@ if [ -d "$targetdir" ]; then
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
   cd $targetdir
+<<<<<<< HEAD
   echo "$today0 $ctime : Start Counting $year$monthday $datatype @$device File Numbers & Size..."
+=======
+  #echo "$today0 $ctime : Start Counting $year$monthday $datatype @$device File Numbers & Size..."
+>>>>>>> 40447c1394a70eb6b33877c9201b811984f93e0d
   num=`find ./ -name $dataprefix*.fits -type f | wc -l`
   if [ $num -gt "0" ];then
     size=`find ./ -name $dataprefix*.fits -type f | xargs ls -I {} -al|awk '{sum += $5} END {print sum/(1000*1024*1024)}'` 
   fi
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
-  echo "$today0 $ctime : Start Calculating  $year$monthday $datatype @$device Observing Time..."
+  #echo "$today0 $ctime : Start Calculating  $year$monthday $datatype @$device Observing Time..."
   cd $targetdir
   #find ./   -path "*redata*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name "$dataprefix*.fits" -print >$datatype-$year-$monthday-flist
   #sort $datatype-$year-$monthday-flist>$datatype-$year-$monthday-flist-sorted
