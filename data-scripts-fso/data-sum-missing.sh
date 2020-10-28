@@ -108,32 +108,20 @@ do
     if [ ! -f $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum ];then
 	today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S` 
-<<<<<<< HEAD
-	echo "$today0 $ctime : Start $checkdate $datatype  Data Summerizing @fso"
-  /home/chd/data-sum-daily.sh $datapre $checkyear $checkmonthday $datatype 0&
-	waiting "$!" "$datatype Summerizing" "Summerizing $datatype Data @$checkdate"
-=======
 	#echo "$today0 $ctime : Start $checkdate $datatype  Data Summerizing @fso"
   /home/chd/data-sum-daily.sh $datapre $checkyear $checkmonthday $datatype 0&
 	waiting "$!" "$datatype Date Summerizing on $checkdate @$device" "Summerizing $datatype Data on $checkdate @$device"
->>>>>>> 40447c1394a70eb6b33877c9201b811984f93e0d
 	#    echo "$i $checkdate"
     fi
     let i++
 done
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
-<<<<<<< HEAD
-echo "$today0 $ctime : $i days $datatype Data  Summerized..."
-echo "             From : $sdate"
-echo "               To : $edate"
-=======
 t1=`date +%s`
 dt=`echo $t0 $t1|awk '{print($2-$1)}'`
 echo "$today0 $ctime : $i days $datatype Data  Summerized..."
 echo "             From : $sdate"
 echo "               To : $edate"
 echo "             Used : $dt secs."
->>>>>>> 40447c1394a70eb6b33877c9201b811984f93e0d
 
 

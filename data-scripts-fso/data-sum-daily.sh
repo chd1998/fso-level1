@@ -52,11 +52,7 @@ if [ -d "$targetdir" ]; then
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
   cd $targetdir
-<<<<<<< HEAD
-  echo "$today0 $ctime : Start Counting $year$monthday $datatype @$device File Numbers & Size..."
-=======
   #echo "$today0 $ctime : Start Counting $year$monthday $datatype @$device File Numbers & Size..."
->>>>>>> 40447c1394a70eb6b33877c9201b811984f93e0d
   num=`find ./ -name $dataprefix*.fits -type f | wc -l`
   if [ $num -gt "0" ];then
     size=`find ./ -name $dataprefix*.fits -type f | xargs ls -I {} -al|awk '{sum += $5} END {print sum/(1000*1024*1024)}'` 
@@ -82,6 +78,7 @@ if [ -d "$targetdir" ]; then
   echo "$year$monthday   $num             $size         $start              $end               $interval" > $suminfo
   if [ $mailornot -eq "1" ];then 
     echo "$today0 $ctime : Send Summary  for $year$monthday $datatype @$device to Users..."
+    mail -s "Summary of $year$monthday $datatype @$device" nvst_obs@ynao.ac.cn < $suminfo
     mail -s "Summary of $year$monthday $datatype @$device" chd@ynao.ac.cn < $suminfo
   fi
   rm -f $datatype-$year-$monthday-flist
