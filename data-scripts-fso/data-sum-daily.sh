@@ -78,6 +78,7 @@ if [ -d "$targetdir" ]; then
   echo "$year$monthday   $num             $size         $start              $end               $interval" > $suminfo
   if [ $mailornot -eq "1" ];then 
     echo "$today0 $ctime : Send Summary  for $year$monthday $datatype @$device to Users..."
+    mail -s "Summary of $year$monthday $datatype @$device" nvst_obs@ynao.ac.cn < $suminfo
     mail -s "Summary of $year$monthday $datatype @$device" chd@ynao.ac.cn < $suminfo
   fi
   rm -f $datatype-$year-$monthday-flist
