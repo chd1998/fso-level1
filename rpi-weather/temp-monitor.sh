@@ -34,9 +34,16 @@ fi
 
 temp=$(/opt/vc/bin/vcgencmd measure_temp)
 day=$(date "+%Y-%m-%d %H:%M:%S")
+cpup=`top -b -n 1 | grep Cpu | awk '{print $2}' | cut -f 1 -d "%"`
+cpul=`uptime | awk '{print $9}' | cut -f 1 -d ','`
+cputl=`vmstat -n 1 1 | sed -n 3p | awk '{print $1}'`
 while :
 do 
   day=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "$day : $temp" >> /fso-cache/temp.dat
+  temp=$(/opt/vc/bin/vcgencmd measure_temp)
+  cpup=`top -b -n 1 | grep Cpu | awk '{print $2}' | cut -f 1 -d "%"`
+  cpul=`uptime | awk '{print $11}' | cut -f 1 -d ','`
+  cputl=`vmstat -n 1 1 | sed -n 3p | awk '{print $1}'`
+  echo "$day : $temp  cpu_usage=$cpup%   cpu_load=$cpul     cpu_task_length=$cputl">> /fso-cache/temp.dat
   sleep  $delaytime
 done
