@@ -3,8 +3,12 @@
 #purposes: summerize data file number and size(MiB) daily with regard to datatype
 #        : from start date to end date
 #changlog: 
+<<<<<<< HEAD
+#       20201010    Release 0.1     first working version 
+=======
 #       20201010    Release 0.1.0     first working version 
 #       20201028    Release 0.1.1     revised logics
+>>>>>>> 40447c1394a70eb6b33877c9201b811984f93e0d
 
 waiting() {
   local pid="$1"
@@ -19,7 +23,11 @@ waiting() {
   echo "$wtoday $wctime : $2 Task Has Done!"
 #  dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
   dt1=`date +%s`
+<<<<<<< HEAD
+  echo "                   Finishing...."
+=======
 #  echo "                   Finishing..."
+>>>>>>> 40447c1394a70eb6b33877c9201b811984f93e0d
   kill -6 $tmppid >/dev/null 1>&2
   echo "$dt1" > /home/chd/log/dtmp
 }
@@ -29,6 +37,12 @@ procing() {
   tput ed
   while [ 1 ]
   do
+<<<<<<< HEAD
+    sleep 1
+    ptoday=`date  +%Y%m%d`
+    pctime=`date  +%H:%M:%S`
+    echo "$ptoday $pctime: $1, Please Wait...   "
+=======
     for j in '-' '\\' '|' '/'
     do
       tput sc
@@ -38,6 +52,7 @@ procing() {
       sleep 0.2
       tput rc
     done
+>>>>>>> 40447c1394a70eb6b33877c9201b811984f93e0d
   done
 }
 

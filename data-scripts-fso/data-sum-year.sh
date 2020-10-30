@@ -39,11 +39,11 @@ num=`cat $datatype*.sum|awk '{sum += $2} END {print sum}'`
 size=`cat $datatype*.sum|awk '{sum += $3} END {print sum}'`
 obstime=`cat $datatype*.sum|awk '{sum += $8} END {print sum/3600}'`
 echo "$year $datatype Summary @fso" >$suminfo
-echo "Date       No.          Size(MiB)           Total Obs. Time(hrs)" >$suminfo
+echo "Date       No.          Size(GiB)           Total Obs. Time(hrs)" >$suminfo
 echo "*****************************************************">>$suminfo
 cat $datatype*.sum | awk '{print $1"      "$2"           "$3"             "$8}' >> $suminfo
 echo "*****************************************************">>$suminfo
 echo "Sum:       $num          $size               $obstime" >> $suminfo
 mail -s "$year Annual Summary of $datatype @fso" chd@ynao.ac.cn < $suminfo
-#mail -s "$year Annual Summary of $datatype @fso" nvst_obs@ynao.ac.cn < $suminfo
+mail -s "$year Annual Summary of $datatype @fso" nvst_obs@ynao.ac.cn < $suminfo
 
