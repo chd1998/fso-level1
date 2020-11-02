@@ -31,8 +31,9 @@ pver=0.1.2
 num=0
 size=0.0
 interval=0.0
-start="null"
-end="null"
+start="00000000 00:00:00.000"
+end="00000000 00:00:00.000"
+
 homepre=/home/chd/data-info
 targetdir=$progpre/$year/$year$monthday/$datatype
 sumdir=$homepre/$year
@@ -61,16 +62,24 @@ if [ -d "$targetdir" ]; then
   ctime=`date  +%H:%M:%S`
   #echo "$today0 $ctime : Start Calculating  $year$monthday $datatype @$device Observing Time..."
   cd $targetdir
-  #find ./   -path "*redata*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name "$dataprefix*.fits" -print >$datatype-$year-$monthday-flist
-  #sort $datatype-$year-$monthday-flist>$datatype-$year-$monthday-flist-sorted
-  #start=`head -n +1 $datatype-$year-$monthday-flist-sorted | xargs stat |grep Change|awk '{print $2 " " $3}'`
-  #end=`tail -n -1 $datatype-$year-$monthday-flist-sorted | xargs stat |grep Change|awk '{print $2 " " $3}'`
-  #get earliest file's time
   start=`find ./   -path "*redata*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name "$dataprefix*.fits" -print |xargs ls -ltr 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat|grep Change|awk '{print( $2" "$3)}'`
-  #get latest file's time
+  if [ -z "$start" ]; then
+    start="19700101 08:00:00.000"
+    s=`date -d "$start" +%s`
+    start=0
+  else
+    s=`date -d "$start" +%s`
+  fi
   end=`find ./  -path "*redata*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name "$dataprefix*.fits" -print |xargs ls -lt 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat|grep Change|awk '{print( $2" "$3)}'`
-  s=`date -d "$start" +%s`
-  e=`date -d "$end" +%s`
+  if [ -z "$end" ]; then
+    end="19700101 08:00:00.000"
+    e=`date -d "$end" +%s`
+    end=0
+  else
+    e=`date -d "$end" +%s`
+  fi
+  
+  
   interval=`echo "$s $e"|awk '{print(($2-$1)/3600)}'`
 
   today0=`date  +%Y%m%d`
