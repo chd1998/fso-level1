@@ -66,7 +66,7 @@ if [ -d "$targetdir" ]; then
   if [ -z "$start" ]; then
     start="19700101 08:00:00.000"
     s=`date -d "$start" +%s`
-    start=0
+    start="00000000 00:00:00.000"
   else
     s=`date -d "$start" +%s`
   fi
@@ -74,7 +74,7 @@ if [ -d "$targetdir" ]; then
   if [ -z "$end" ]; then
     end="19700101 08:00:00.000"
     e=`date -d "$end" +%s`
-    end=0
+    end="00000000 00:00:00.000"
   else
     e=`date -d "$end" +%s`
   fi
