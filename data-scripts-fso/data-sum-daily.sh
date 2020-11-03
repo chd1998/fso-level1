@@ -53,7 +53,9 @@ if [ -d "$targetdir" ]; then
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
   cd $targetdir
-  #echo "$today0 $ctime : Start Counting $year$monthday $datatype @$device File Numbers & Size..."
+  if [ $mailornot -eq "1" ];then
+    echo "$today0 $ctime : Start Counting $year$monthday $datatype @$device File Numbers & Size..."
+  fi 
   num=`find ./ -name $dataprefix*.fits -type f | wc -l`
   if [ $num -gt "0" ];then
     size=`find ./ -name $dataprefix*.fits -type f | xargs ls -I {} -al|awk '{sum += $5} END {print sum/(1000*1024*1024)}'` 
@@ -68,7 +70,7 @@ if [ -d "$targetdir" ]; then
   ctime=`date  +%H:%M:%S`
   #echo "$today0 $ctime : Start Calculating  $year$monthday $datatype @$device Observing Time..."
   cd $targetdir
-  start=`find ./   -path "*redata*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name "$dataprefix*.fits" -print |xargs ls -ltr 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat|grep Change|awk '{print( $2" "$3)}'`
+  start=`find ./   -path "*redata*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name "$dataprefix*.fits" -print |xargs ls -ltr 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat >/dev/null 2>&1|grep Change|awk '{print( $2" "$3)}'`
   if [ -z "$start" ]; then
     start="19700101 08:00:00.000"
     s=`date -d "$start" +%s`
@@ -76,7 +78,7 @@ if [ -d "$targetdir" ]; then
   else
     s=`date -d "$start" +%s`
   fi
-  end=`find ./  -path "*redata*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name "$dataprefix*.fits" -print |xargs ls -lt 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat|grep Change|awk '{print( $2" "$3)}'`
+  end=`find ./  -path "*redata*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name "$dataprefix*.fits" -print |xargs ls -lt 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat >/dev/null 2>&1|grep Change|awk '{print( $2" "$3)}'`
   if [ -z "$end" ]; then
     end="19700101 08:00:00.000"
     e=`date -d "$end" +%s`
@@ -93,16 +95,16 @@ if [ -d "$targetdir" ]; then
   echo "$year$monthday   $num              $size               $start                       $end               $interval " > $suminfo
   if [ $mailornot -eq "1" ];then 
     echo "$today0 $ctime : Send Summary  for $year$monthday $datatype @$device to Users..."
-    echo "                      $datatype Data Summary $year$monthday @fso                                  "> ./mailtmp
-    echo "Date       Nums.                 Size(GiB)                  StartTime                                           EndTime                                     Obs. Time(hrs)" >>./mailtmp
-    echo "**********************************************************************************************************************************************************************************">> ./mailtmp
-    cat $suminfo >> ./mailtmp
-    mail -s "Summary of $year$monthday $datatype @$device" nvst_obs@ynao.ac.cn < ./mailtmp
-    mail -s "Summary of $year$monthday $datatype @$device" chd@ynao.ac.cn < ./mailtmp
+    echo "                      $datatype Data Summary $year$monthday @fso                                  "> ./$datatype-mailtmp
+    echo "Date       Nums.                 Size(GiB)                  StartTime                                           EndTime                                     Obs. Time(hrs)" >>./$datatype-mailtmp
+    echo "**********************************************************************************************************************************************************************************">> ./$datatype-mailtmp
+    cat $suminfo >> ./$datatype-mailtmp
+    mail -s "Summary of $year$monthday $datatype @$device" nvst_obs@ynao.ac.cn < ./$datatype-mailtmp
+    mail -s "Summary of $year$monthday $datatype @$device" chd@ynao.ac.cn < ./$datatype-mailtmp
   fi
   rm -f $datatype-$year-$monthday-flist
   rm -f $datatype-$year-$monthday-flist-sorted
-  rm -f ./mailtmp
+  rm -f ./$datatype-mailtmp
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
   t1=`date  +%Y%m%d`
@@ -110,8 +112,10 @@ if [ -d "$targetdir" ]; then
   dt1=`date +%s`
   dt=`echo $dt0 $dt1|awk '{print($2-$1)'}`
   #sleep 1
-  echo "$today0 $ctime : All Summary Tasks for $year$monthday $datatype @$device Ended..."
-  echo "               in : $dt secs."
+  if [ $mailornot -eq "1" ];then
+    echo "$today0 $ctime : All Summary Tasks for $year$monthday $datatype @$device Ended..."
+    echo "               in : $dt secs."
+  fi
 else
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`

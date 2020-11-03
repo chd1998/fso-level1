@@ -27,7 +27,7 @@ waiting() {
 }
 
 procing() {
-  trap 'echo " ";exit 0;' 6
+  trap 'tput ed;tput rc;exit 0;' 6
   tput ed
   while [ 1 ]
   do
@@ -106,11 +106,11 @@ do
     ctime=`date  +%H:%M:%S` 
 	  echo "$today0 $ctime : Start $checkdate $datatype  Data Summerizing @fso"
     #sleep 1
-    /home/chd/data-sum-daily.sh $datapre $checkyear $checkmonthday $datatype 0&
+    /home/chd/data-sum-daily.sh $datapre $checkyear $checkmonthday $datatype 0 &
 	  waiting "$!" "$datatype Date Summerizing on $checkdate @$device" "Summerizing $datatype Data on $checkdate @$device"
     today0=`date  +%Y%m%d`
     ctime=`date  +%H:%M:%S` 
-    echo "$today0 $ctime : Task of $datatype Date Summerizing on $checkdate @$device Has Done!"
+    echo "$today0 $ctime : Task of $datatype Date Summerizing on $checkdate @$device Has been Done!"
     if [ $report -eq "1" ];then 
         cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum >>  $suminfo
     fi
