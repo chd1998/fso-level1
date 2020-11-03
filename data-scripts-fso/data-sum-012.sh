@@ -67,9 +67,9 @@ report=$7
 mail=$8
 
 pver=0.1.1
-num=0
-size=0.0
-obstime=0.0
+num="00000000"
+size="0000000.0000"
+obstime="0000.000000"
 device=lustre
 homepre=/home/chd/data-info
 suminfo=$homepre/$datatype-$syear$smothday-$eyear$emonthday@fso.sum
@@ -89,8 +89,8 @@ i=0
 t0=`date +%s`
 tmpdate=$sdate
 echo "                      $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  ">$suminfo
-echo "Date       No.            Size(GiB)         StartTime                                          EndTime                                    Obs. Time(hrs)" >>$suminfo
-echo "*********************************************************************************************************************************************************************">> $suminfo
+echo "Date       No.                   Size(GiB)                  StartTime                                           EndTime                                     Obs. Time(hrs)" >>$suminfo
+echo "**********************************************************************************************************************************************************************************">> $suminfo
 while [ $i -le $checkdays ]
 do
     echo
@@ -125,16 +125,19 @@ if [ $report -eq "1" ];then
         eobstime=`cat $datatype*.sum|awk '{sum += $8} END {print sum}'`
         #eobstime=`echo $etime|awk '{print($1/3600)}'`
     else
-        enum=0
-        esize=0
-        eobstime=0
+        enum="00000000"
+        esize="0000000.0000"
+        eobstime="0000.000000"
     fi
     num=`echo $snum $enum|awk '{print($1+$2)}'`
     size=`echo $ssize $esize|awk '{print($1+$2)}'`
     obstime=`echo $sobstime $eobstime|awk '{print($1+$2)}'`
-    echo "*****************************************************************************************************************************************************************">> $suminfo
-    echo "Start          End           No.            Size(GiB)          Total Obs. Time(hrs)" >>$suminfo
-    echo "$syear$smonthday      $eyear$emonthday      $num            $size            $obstime" >>$suminfo
+    num=`printf "%08d" $num`
+    size=`printf "%012.4f" $size`
+    obstime=`printf "%011.6f" $obstime`
+    echo "******************************************************************************************************************************************************************************">> $suminfo
+    echo "Start         End           No.                 Size(GiB)               Total Obs. Time(hrs)" >>$suminfo
+    echo "$syear$smonthday      $eyear$emonthday      $num            $size            $obstime " >>$suminfo
 fi
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`

@@ -1,6 +1,5 @@
-#*/1 8-20 * * *  /home/chd/tio-sync.sh >> /home/chd/log/tio-sync.log
-#*/1 8-18 * * * /home/chd/fso-sync-lftp-v09.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40 >> /home/chd/log/fso-sync-tio.log
-#*/1 8-18 * * * /home/chd/fso-sync-lftp-v09.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA 100 >> /home/chd/log/fso-sync-ha.log
+#crontest
+#*/1 * * * * /home/chd/crontest.sh
 # Winter->Spring
 */1 8-17 * 1-3 * /home/chd/fso-sync-lftp.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40 >> /home/chd/log/fso-sync-tio-$(date +\%Y\%m\%d).log
 */1 8-17 * 1-3 * /home/chd/fso-sync-lftp.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA 100 >> /home/chd/log/fso-sync-ha-$(date +\%Y\%m\%d).log
@@ -10,22 +9,23 @@
 #Autumn->Winter
 */1 8-17 * 11-12 * /home/chd/fso-sync-lftp.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40 >> /home/chd/log/fso-sync-tio-$(date +\%Y\%m\%d).log
 */1 8-17 * 11-12 * /home/chd/fso-sync-lftp.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA 100 >> /home/chd/log/fso-sync-ha-$(date +\%Y\%m\%d).log
+#count data info 
 */1 7-18 * * * /home/chd/fso-count-lftp.sh  192.168.111.120 21  tio ynao246135 TIO >> /home/chd/log/fso-remote-info-tio-$(date +\%Y\%m\%d).log
 */1 7-18 * * * /home/chd/fso-count-lftp.sh  192.168.111.122 21  ha ynao246135 HA >> /home/chd/log/fso-remote-info-ha-$(date +\%Y\%m\%d).log
-00,15 19 * * *  /home/chd/fso-data-check-copy-cron.sh  192.168.111.120 21 /lustre/data tio ynao246135 $(date +\%Y) $(date +\%m\%d) fits 11062080 >> /home/chd/log/check-TIO-copy-$(date +\%Y\%m\%d).log
-00,15 19 * * *  /home/chd/fso-data-check-copy-cron.sh  192.168.111.122 21 /lustre/data ha ynao246135  $(date +\%Y) $(date +\%m\%d) fits 2111040 >> /home/chd/log/check-HA-copy-$(date +\%Y\%m\%d).log
+#check data integrity 
+10,25 19 * * *  /home/chd/fso-data-check-copy-cron.sh  192.168.111.120 21 /lustre/data tio ynao246135 $(date +\%Y) $(date +\%m\%d) fits 11062080 >> /home/chd/log/check-TIO-copy-$(date +\%Y\%m\%d).log
+10,25 19 * * *  /home/chd/fso-data-check-copy-cron.sh  192.168.111.122 21 /lustre/data ha ynao246135  $(date +\%Y) $(date +\%m\%d) fits 2111040 >> /home/chd/log/check-HA-copy-$(date +\%Y\%m\%d).log
+#vnc check
 */10 * * * * /home/chd/checkxvnc.sh >> /home/chd/log/xvnc.log
-#02 20 * * * /home/chd/fso-data-check-cron.sh /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/TIO TIO fits 11062080 >> /home/chd/log/check-TIO-size-$(date +\%Y\%m\%d).log
-#02 20 * * * /home/chd/fso-data-check-cron.sh /lustre/data/$(date +\%Y)/$(date +\%Y\%m\%d)/HA HA fits 2111040  >> /home/chd/log/check-HA-size-$(date +\%Y\%m\%d).log
-#30 20 * * * /home/chd/fso-copy-wget-error-cron-v02.sh ftp://192.168.111.120 21 tio ynao246135 /home/chd/log/size-error-of-TIO-fits@$(date +\%Y\%m\%d)-total.list
-#30 20 * * * /home/chd/fso-copy-wget-error-cron-v02.sh ftp://192.168.111.122 21 HA ynao246135 /home/chd/log/size-error-of-HA-fits@$(date +\%Y\%m\%d)-total.list
-30 19 * * * /home/chd/data-sum-daily.sh  /lustre/data $(date +\%Y) $(date +\%m\%d) HA 1&
-30 19 * * * /home/chd/data-sum-daily.sh  /lustre/data $(date +\%Y) $(date +\%m\%d) TIO 1&
-2 0 1 1 * /home/chd/data-sum-year.sh  $(date  -d "last year" +\%Y) HA &
-2 0 1 1 * /home/chd/data-sum-year.sh  $(date  -d "last year" +\%Y) TIO &
+#vsftp check
+*/1 * * * * /home/chd/check-vsftpd.sh >> /home/chd/log/check-vsftpd.log
+#summerize data info daily & annually
+05 19 * * * /home/chd/data-sum-daily.sh  /lustre/data $(date +\%Y) $(date +\%m\%d) HA 1 &
+05 19 * * * /home/chd/data-sum-daily.sh  /lustre/data $(date +\%Y) $(date +\%m\%d) TIO 1 &
+2 0 1 1 * /home/chd/data-sum-012.sh  /lustre/data $(date  -d "last year" +\%Y) 0101  $(date  -d "last year" +\%Y) 1231 HA 1 1 &
+2 0 1 1 * /home/chd/data-sum-012.sh  /lustre/data $(date  -d "last year" +\%Y) 0101  $(date  -d "last year" +\%Y) 1231 TIO 1 1 &
+#release data space
 0 6 * * 1 rm -f /home/chd/log/*
-#1 5 * * * rm -f /home/chd/log/*.dat
-#2 6 * * * rm -f /home/chd/log/*.list
-#5 5 * * * rm -f /root/.lftp/transfer_log*
 0 8 * * * /home/chd/clean-cache-v2.sh > /dev/null 2>&1
-9 0 * * * "/root/.acme.sh"/acme.sh --cron --home "/root/.acme.sh" > /dev/null
+#data certificate renew
+8 0 * * * "/root/.acme.sh"/acme.sh --cron --home "/root/.acme.sh" > /dev/null

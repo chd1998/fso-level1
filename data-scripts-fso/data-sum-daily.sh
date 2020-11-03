@@ -28,9 +28,9 @@ datatype=$4
 mailornot=$5
 
 pver=0.1.2
-num=0
-size=0.0
-interval=0.0
+num="00000000"
+size="0000000.0000"
+interval="0000.000000"
 start="0000-00-00 00:00:00.000000000"
 end="0000-00-00 00:00:00.000000000"
 
@@ -44,7 +44,7 @@ dataprefix=`echo $datatype|echo ${datatype:0:1}`
 t0=`date  +%Y%m%d`
 d0=`date +%H:%M:%S`
 dt0=`date +%s`
-echo "$today0 $ctime : Start  $year$monthday $datatype Data @$device Summerizing, Pls Wait..."
+#echo "$today0 $ctime : Start  $year$monthday $datatype Data @$device Summerizing, Pls Wait..."
 if [ ! -d "$sumdir" ]; then
   mkdir -m 777 -p $sumdir
 fi
@@ -57,6 +57,12 @@ if [ -d "$targetdir" ]; then
   num=`find ./ -name $dataprefix*.fits -type f | wc -l`
   if [ $num -gt "0" ];then
     size=`find ./ -name $dataprefix*.fits -type f | xargs ls -I {} -al|awk '{sum += $5} END {print sum/(1000*1024*1024)}'` 
+    num=`printf "%08d" $num`
+    size=`printf "%012.4f" $size`
+  else
+    num="00000000"
+    size="0000000.0000"
+    interval="0000.000000"
   fi
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
@@ -80,10 +86,11 @@ if [ -d "$targetdir" ]; then
   fi
   
   interval=`echo "$s $e"|awk '{print(($2-$1)/3600)}'`
+  interval=`printf "%011.6f" $interval`
 
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
-  echo "$year$monthday   $num              $size               $start                       $end               $interval" > $suminfo
+  echo "$year$monthday   $num              $size               $start                       $end               $interval " > $suminfo
   if [ $mailornot -eq "1" ];then 
     echo "$today0 $ctime : Send Summary  for $year$monthday $datatype @$device to Users..."
     mail -s "Summary of $year$monthday $datatype @$device" nvst_obs@ynao.ac.cn < $suminfo
