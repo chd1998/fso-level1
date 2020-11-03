@@ -31,8 +31,8 @@ pver=0.1.2
 num=0
 size=0.0
 interval=0.0
-start="00000000 00:00:00.000"
-end="00000000 00:00:00.000"
+start="0000-00-00 00:00:00.000000000"
+end="0000-00-00 00:00:00.000000000"
 
 homepre=/home/chd/data-info
 targetdir=$progpre/$year/$year$monthday/$datatype
@@ -66,7 +66,7 @@ if [ -d "$targetdir" ]; then
   if [ -z "$start" ]; then
     start="19700101 08:00:00.000"
     s=`date -d "$start" +%s`
-    start="00000000 00:00:00.000"
+    start="0000-00-00 00:00:00.000000000"
   else
     s=`date -d "$start" +%s`
   fi
@@ -74,17 +74,16 @@ if [ -d "$targetdir" ]; then
   if [ -z "$end" ]; then
     end="19700101 08:00:00.000"
     e=`date -d "$end" +%s`
-    end="00000000 00:00:00.000"
+    end="0000-00-00 00:00:00.000000000"
   else
     e=`date -d "$end" +%s`
   fi
-  
   
   interval=`echo "$s $e"|awk '{print(($2-$1)/3600)}'`
 
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
-  echo "$year$monthday   $num             $size         $start              $end               $interval" > $suminfo
+  echo "$year$monthday   $num              $size               $start                       $end               $interval" > $suminfo
   if [ $mailornot -eq "1" ];then 
     echo "$today0 $ctime : Send Summary  for $year$monthday $datatype @$device to Users..."
     mail -s "Summary of $year$monthday $datatype @$device" nvst_obs@ynao.ac.cn < $suminfo
