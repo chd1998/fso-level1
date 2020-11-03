@@ -13,11 +13,12 @@ waiting() {
   procing "$3" &
   local tmppid="$!"
   wait $pid
+  #sleep 1
   tput rc
   tput ed
   wctime=`date  +%H:%M:%S`
   wtoday=`date  +%Y%m%d`
-  echo "$wtoday $wctime : $2 Task Has Done!"
+  #echo "$wtoday $wctime : $2 Task Has Done!"
 #  dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
   dt1=`date +%s`
 #  echo "                   Finishing..."
@@ -26,7 +27,7 @@ waiting() {
 }
 
 procing() {
-  trap 'exit 0;' 6
+  trap 'echo " ";exit 0;' 6
   tput ed
   while [ 1 ]
   do
@@ -88,6 +89,9 @@ ctime=`date  +%H:%M:%S`
 i=0
 t0=`date +%s`
 tmpdate=$sdate
+echo " "
+echo " "
+echo "                      $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  "
 echo "                      $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  ">$suminfo
 echo "Date       Nums.                 Size(GiB)                  StartTime                                           EndTime                                     Obs. Time(hrs)" >>$suminfo
 echo "**********************************************************************************************************************************************************************************">> $suminfo
@@ -98,11 +102,15 @@ do
     checkyear=${checkdate:0:4}
     checkmonthday=${checkdate:4:4}
     #if [ ! -f $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum ];then
-	today0=`date  +%Y%m%d`
+	  today0=`date  +%Y%m%d`
     ctime=`date  +%H:%M:%S` 
-	#echo "$today0 $ctime : Start $checkdate $datatype  Data Summerizing @fso"
+	  echo "$today0 $ctime : Start $checkdate $datatype  Data Summerizing @fso"
+    #sleep 1
     /home/chd/data-sum-daily.sh $datapre $checkyear $checkmonthday $datatype 0&
-	waiting "$!" "$datatype Date Summerizing on $checkdate @$device" "Summerizing $datatype Data on $checkdate @$device"
+	  waiting "$!" "$datatype Date Summerizing on $checkdate @$device" "Summerizing $datatype Data on $checkdate @$device"
+    today0=`date  +%Y%m%d`
+    ctime=`date  +%H:%M:%S` 
+    echo "$today0 $ctime : Task of $datatype Date Summerizing on $checkdate @$device Has Done!"
     if [ $report -eq "1" ];then 
         cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum >>  $suminfo
     fi

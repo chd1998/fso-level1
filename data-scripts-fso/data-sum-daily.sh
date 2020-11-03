@@ -96,7 +96,7 @@ if [ -d "$targetdir" ]; then
     echo "                      $datatype Data Summary $year$monthday @fso                                  "> ./mailtmp
     echo "Date       Nums.                 Size(GiB)                  StartTime                                           EndTime                                     Obs. Time(hrs)" >>./mailtmp
     echo "**********************************************************************************************************************************************************************************">> ./mailtmp
-    cat suminfo >> ./mailtmp
+    cat $suminfo >> ./mailtmp
     mail -s "Summary of $year$monthday $datatype @$device" nvst_obs@ynao.ac.cn < ./mailtmp
     mail -s "Summary of $year$monthday $datatype @$device" chd@ynao.ac.cn < ./mailtmp
   fi
@@ -109,6 +109,7 @@ if [ -d "$targetdir" ]; then
   d1=`date +%H:%M:%S`
   dt1=`date +%s`
   dt=`echo $dt0 $dt1|awk '{print($2-$1)'}`
+  #sleep 1
   echo "$today0 $ctime : All Summary Tasks for $year$monthday $datatype @$device Ended..."
   echo "               in : $dt secs."
 else
