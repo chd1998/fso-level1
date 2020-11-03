@@ -93,11 +93,16 @@ if [ -d "$targetdir" ]; then
   echo "$year$monthday   $num              $size               $start                       $end               $interval " > $suminfo
   if [ $mailornot -eq "1" ];then 
     echo "$today0 $ctime : Send Summary  for $year$monthday $datatype @$device to Users..."
-    mail -s "Summary of $year$monthday $datatype @$device" nvst_obs@ynao.ac.cn < $suminfo
-    mail -s "Summary of $year$monthday $datatype @$device" chd@ynao.ac.cn < $suminfo
+    echo "                      $datatype Data Summary $year$monthday @fso                                  "> ./mailtmp
+    echo "Date       Nums.                 Size(GiB)                  StartTime                                           EndTime                                     Obs. Time(hrs)" >>./mailtmp
+    echo "**********************************************************************************************************************************************************************************">> ./mailtmp
+    cat suminfo >> ./mailtmp
+    mail -s "Summary of $year$monthday $datatype @$device" nvst_obs@ynao.ac.cn < ./mailtmp
+    mail -s "Summary of $year$monthday $datatype @$device" chd@ynao.ac.cn < ./mailtmp
   fi
   rm -f $datatype-$year-$monthday-flist
   rm -f $datatype-$year-$monthday-flist-sorted
+  rm -f ./mailtmp
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
   t1=`date  +%Y%m%d`

@@ -89,7 +89,7 @@ i=0
 t0=`date +%s`
 tmpdate=$sdate
 echo "                      $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  ">$suminfo
-echo "Date       No.                   Size(GiB)                  StartTime                                           EndTime                                     Obs. Time(hrs)" >>$suminfo
+echo "Date       Nums.                 Size(GiB)                  StartTime                                           EndTime                                     Obs. Time(hrs)" >>$suminfo
 echo "**********************************************************************************************************************************************************************************">> $suminfo
 while [ $i -le $checkdays ]
 do
@@ -136,7 +136,7 @@ if [ $report -eq "1" ];then
     size=`printf "%012.4f" $size`
     obstime=`printf "%011.6f" $obstime`
     echo "******************************************************************************************************************************************************************************">> $suminfo
-    echo "Start         End           No.                 Size(GiB)               Total Obs. Time(hrs)" >>$suminfo
+    echo "Start         End           Nums.               Size(GiB)               Total Obs. Time(hrs)" >>$suminfo
     echo "$syear$smonthday      $eyear$emonthday      $num            $size            $obstime " >>$suminfo
 fi
 today0=`date  +%Y%m%d`
