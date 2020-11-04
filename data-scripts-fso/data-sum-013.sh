@@ -6,6 +6,7 @@
 #       20201010    Release 0.1.0     first working version 
 #       20201028    Release 0.1.1     revised logics
 #       20201103    Release 0.1.2     unify check & report & mail
+#       20201104    Release 0.1.3     add obs days
 
 waiting() {
   local pid="$1"
@@ -115,11 +116,11 @@ do
     tput ed
     tput rc
     echo "$today0 $ctime : Task of $datatype Date Summerizing on $checkdate @$site Has been Done..."
-    echo "                  : $i day(s) Processed..."
     if [ $report -eq "1" ];then 
         cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum >>  $suminfo
     fi
     let i++
+    echo "                  : $i day(s) Processed..."
 done
 if [ $report -eq "1" ];then
     targetdir=$homepre/$syear

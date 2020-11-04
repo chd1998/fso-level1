@@ -40,6 +40,7 @@ sumdir=$homepre/$year
 suminfo=$sumdir/$datatype-$year-$monthday.sum
 
 device="lustre"
+site="fso"
 dataprefix=`echo $datatype|echo ${datatype:0:1}`
 t0=`date  +%Y%m%d`
 d0=`date +%H:%M:%S`
@@ -70,18 +71,20 @@ if [ -d "$targetdir" ]; then
   ctime=`date  +%H:%M:%S`
   #echo "$today0 $ctime : Start Calculating  $year$monthday $datatype @$device Observing Time..."
   cd $targetdir
-  start=`find ./   -path "*redata*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name "$dataprefix*.fits" -print |xargs ls -ltr 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat >/dev/null 2>&1|grep Change|awk '{print( $2" "$3)}'`
+  start=`find ./   -path "*redata*" -o -path "*Dark*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name $dataprefix*.fits -print |xargs ls -ltr 2>/dev/null |head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print($2" "$3)}'`
   if [ -z "$start" ]; then
-    start="19700101 08:00:00.000"
-    s=`date -d "$start" +%s`
+    #start="19700101 08:00:00.000"
+    #s=`date -d "$start" +%s`
+    s=0
     start="0000-00-00 00:00:00.000000000"
   else
     s=`date -d "$start" +%s`
   fi
-  end=`find ./  -path "*redata*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name "$dataprefix*.fits" -print |xargs ls -lt 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat >/dev/null 2>&1|grep Change|awk '{print( $2" "$3)}'`
+  end=`find ./  -path "*redata*" -o -path "*Dark*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name $dataprefix*.fits -print |xargs ls -lt 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print( $2" "$3)}'`
   if [ -z "$end" ]; then
-    end="19700101 08:00:00.000"
-    e=`date -d "$end" +%s`
+    #end="19700101 08:00:00.000"
+    #e=`date -d "$end" +%s`
+    e=0
     end="0000-00-00 00:00:00.000000000"
   else
     e=`date -d "$end" +%s`
