@@ -50,8 +50,6 @@ today0=`date  +%Y-%m-%d`
 ctime=`date  +%H:%M:%S`
 syssep="/"
 
-
-
 if [ $# -ne 8 ];then
   echo "Usage: ./data-sum.sh datadir startyear startmonthday endyear endmonthday datatype(TIO or HA) report(1-report/0-no report) mail(1 mail/0-no mail)"
   echo "Example: ./data-sum-xx.sh  /lustre/data 2020 0928  2020 1001 TIO 1 1"
@@ -104,11 +102,9 @@ do
     checkdate=`date +%Y%m%d -d "+$i days $sdate"`
     checkyear=${checkdate:0:4}
     checkmonthday=${checkdate:4:4}
-    #if [ ! -f $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum ];then
 	  today0=`date  +%Y%m%d`
     ctime=`date  +%H:%M:%S` 
 	  echo "$today0 $ctime : Start $checkdate $datatype  Data Summerizing @fso"
-    #sleep 1
     /home/chd/data-sum-daily.sh $datapre $checkyear $checkmonthday $datatype 0 &
     waiting "$!" "$datatype Date Summerizing on $checkdate @$device" "Summerizing $datatype Data on $checkdate @$device"
     today0=`date  +%Y%m%d`
@@ -128,16 +124,14 @@ if [ $report -eq "1" ];then
     snum=`cat $datatype*.sum|awk '{sum += $2} END {print sum}'`
     ssize=`cat $datatype*.sum|awk '{sum += $3} END {print sum}'`
     sobstime=`cat $datatype*.sum|awk '{sum += $8} END {print sum}'`
-    sobsday=`cat $datatype*.sum|awk 'i=$8;BEGIN{if (i > 0.5) print i;}'|wc -l`
-    #sobstime=`echo $stime|awk '{print($1/3600)}'`
+    sobsday=`cat $datatype*.sum|awk 'i=$8;j=$2;BEGIN{if (i>0.5 && j>1000) print i;}'|wc -l`
     if [ "$eyear" != "$syear" ];then
         targetdir=$homepre/$eyear
         cd $targetdir
         enum=`cat $datatype*.sum|awk '{sum += $2} END {print sum}'`
         esize=`cat $datatype*.sum|awk '{sum += $3} END {print sum}'`
         eobstime=`cat $datatype*.sum|awk '{sum += $8} END {print sum}'`
-        eobsday=`cat $datatype*.sum|awk 'i=$8;BEGIN{if (i > 0.5) print i;}'|wc -l`
-        #eobstime=`echo $etime|awk '{print($1/3600)}'`
+        eobsday=`cat $datatype*.sum|awk 'BEGIN{i=$8;j=$2;BEGIN{if (i>0.5 && j>1000) print i;}'|wc -l`
     else
         enum="00000000"
         esize="0000000.0000"
@@ -152,8 +146,9 @@ if [ $report -eq "1" ];then
     size=`printf "%012.4f" $size`
     obstime=`printf "%011.6f" $obstime`
     obsday=`printf "%04d" $obsday`
+    checkdays=`echo $checkdays|awk '{ print($1+1)}'`
     echo "******************************************************************************************************************************************************************************">> $suminfo
-    echo "Start         End           Nums.               Size(GiB)               Total Obs. Time(hrs)     Total Obs. Day(s)   Total Cal. Day(s)" >>$suminfo
+    echo "Start         End           Nums.               Size(GiB)               Total Obs. Time(hrs)     Total Obs. Day(s)    Total Cal. Day(s)" >>$suminfo
     echo "$syear$smonthday      $eyear$emonthday      $num            $size            $obstime              $obsday                 $checkdays" >>$suminfo
 fi
 today0=`date  +%Y%m%d`
