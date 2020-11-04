@@ -51,7 +51,7 @@ ctime=`date  +%H:%M:%S`
 syssep="/"
 
 if [ $# -ne 8 ];then
-  echo "Usage: ./data-sum.sh datadir startyear startmonthday endyear endmonthday datatype(TIO or HA) report(1-report/0-no report) mail(1 mail/0-no mail)"
+  echo "Usage: ./data-sum-xx.sh datadir startyear startmonthday endyear endmonthday datatype(TIO or HA) report(1-report/0-no report) mail(1 mail/0-no mail)"
   echo "Example: ./data-sum-xx.sh  /lustre/data 2020 0928  2020 1001 TIO 1 1"
   echo "         ./data-sum-xx.sh  /lustre/data 2020 0928  2020 1001 HA 0 0"
   exit 1
@@ -66,7 +66,7 @@ datatype=$6
 report=$7
 mail=$8
 
-pver=0.1.1
+pver=0.1.3
 num="00000000"
 size="0000000.0000"
 obstime="0000.000000"
