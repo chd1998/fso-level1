@@ -162,7 +162,7 @@ today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
 t1=`date +%s`
 dt=`echo $t0 $t1|awk '{print($2-$1)}'`
-echo "$today0 $ctime : $i days $datatype Data  Summerized..."
+echo "$today0 $ctime : $checkdays days $datatype Data  Summerized..."
 echo "             From : $sdate"
 echo "               To : $edate"
 echo "             Used : $dt secs."
