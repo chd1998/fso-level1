@@ -1,12 +1,13 @@
 #!/bin/bash
 #author: chen dong @fso
 #purposes: summerize data file number and size(MiB) daily with regard to datatype
-#        : from start date to end date
+#        : from start date to end date 
 #changlog: 
 #       20201010    Release 0.1.0     first working version 
 #       20201028    Release 0.1.1     revised logics
 #       20201103    Release 0.1.2     unify check & report & mail
 #       20201104    Release 0.1.3     add obs days
+#       20201105    Release 0.1.4     deal with multiple years
 
 waiting() {
   local pid="$1"
@@ -66,11 +67,11 @@ datatype=$6
 report=$7
 mail=$8
 
-pver=0.1.3
+pver=0.1.4
 num="00000000"
 size="0000000.0000"
 obstime="0000.000000"
-obsday=0000
+obsday="0000"
 site=fso
 device=lustre
 homepre=/home/chd/data-info
@@ -93,7 +94,11 @@ tmpdate=$sdate
 echo " "
 echo " "
 echo "                      $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  "
+echo "                                              $pver                                                                     "
 echo "                      $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  ">$suminfo
+echo "                                              $pver                                                                     ">>$suminfo
+echo " "
+echo " ">>$suminfo
 echo "Date       Nums.                 Size(GiB)                  StartTime                                           EndTime                                     Obs. Time(hrs)" >>$suminfo
 echo "**********************************************************************************************************************************************************************************">> $suminfo
 while [ $i -le $checkdays ]
@@ -101,9 +106,9 @@ do
     checkdate=`date +%Y%m%d -d "+$i days $sdate"`
     checkyear=${checkdate:0:4}
     checkmonthday=${checkdate:4:4}
-	  today0=`date  +%Y%m%d`
+	today0=`date  +%Y%m%d`
     ctime=`date  +%H:%M:%S` 
-	  echo "$today0 $ctime : Start $checkdate $datatype  Data Summerizing @fso"
+	echo "$today0 $ctime : Start $checkdate $datatype  Data Summerizing @fso"
     /home/chd/data-sum-daily.sh $datapre $checkyear $checkmonthday $datatype 0 &
     waiting "$!" "$datatype Date Summerizing on $checkdate @$device" "Summerizing $datatype Data on $checkdate @$device"
     today0=`date  +%Y%m%d`
@@ -116,40 +121,29 @@ do
     fi
     let i++
     echo "                  : $i day(s) Processed..."
-done
-if [ $report -eq "1" ];then
-    targetdir=$homepre/$syear
-    cd $targetdir
-    snum=`cat $datatype*.sum|awk '{sum += $2} END {print sum}'`
-    ssize=`cat $datatype*.sum|awk '{sum += $3} END {print sum}'`
-    sobstime=`cat $datatype*.sum|awk '{sum += $8} END {print sum}'`
-    sobsday=`cat $datatype*.sum|awk 'i=$8;j=$2;BEGIN{if (i>0.5 && j>1000) print i;}'|wc -l`
-    if [ "$eyear" != "$syear" ];then
-        targetdir=$homepre/$eyear
-        cd $targetdir
-        enum=`cat $datatype*.sum|awk '{sum += $2} END {print sum}'`
-        esize=`cat $datatype*.sum|awk '{sum += $3} END {print sum}'`
-        eobstime=`cat $datatype*.sum|awk '{sum += $8} END {print sum}'`
-        eobsday=`cat $datatype*.sum|awk 'BEGIN{i=$8;j=$2;BEGIN{if (i>0.5 && j>1000) print i;}'|wc -l`
-    else
-        enum="00000000"
-        esize="0000000.0000"
-        eobstime="0000.000000"
-        eobsday="0000"
+    #targetdir=$homepre/$checkyear
+    #cd $targetdir
+    snum=`cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum|awk '{print $2}'`
+    ssize=`cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum|awk '{print $3}'`
+    sobstime=`cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum|awk '{print $8}'`
+    i=`cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum|awk '{print $8}'`
+    j=`cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum|awk '{print $2}'`
+    num=`echo $num $snum|awk '{print($1+$2)}'`
+    size=`echo $szie $ssize|awk '{print($1+$2)}'`
+    if [ $i > 0.5 ] && [ $j > 1000 ];then 
+        obstime=`echo $obstime $sobstime|awk '{print($1+$2)}'`
+        obsday=`echo $obsday $sobsday|awk '{print($1+$2)}'`
     fi
-    num=`echo $snum $enum|awk '{print($1+$2)}'`
-    size=`echo $ssize $esize|awk '{print($1+$2)}'`
-    obstime=`echo $sobstime $eobstime|awk '{print($1+$2)}'`
-    obsday=`echo $sobsday $eobsday|awk '{print($1+$2)}'`
-    num=
-    size=`printf "%012.4f" $size`
-    obstime=`printf "%011.6f" $obstime`
-    obsday=`printf "%04d" $obsday`
-    checkdays=`echo $checkdays|awk '{ print($1+1)}'`
-    echo "******************************************************************************************************************************************************************************">> $suminfo
-    echo "Start         End           Nums.               Size(GiB)               Total Obs. Time(hrs)     Total Obs. Day(s)    Total Cal. Day(s)" >>$suminfo
-    echo "$syear$smonthday      $eyear$emonthday      $num            $size            $obstime              $obsday                 $checkdays" >>$suminfo
-fi
+done
+num=`printf "%08d" $num`
+size=`printf "%012.4f" $size`
+obstime=`printf "%011.6f" $obstime`
+obsday=`printf "%04d" $obsday`
+checkdays=`echo $checkdays|awk '{ print($1+1)}'`
+echo "******************************************************************************************************************************************************************************">> $suminfo
+echo "Start         End           Nums.               Size(GiB)               Total Obs. Time(hrs)     Total Obs. Day(s)    Total Cal. Day(s)" >>$suminfo
+echo "$syear$smonthday      $eyear$emonthday      $num            $size            $obstime              $obsday                 $checkdays" >>$suminfo
+
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
 if [ $mail -eq "1" ];then 
