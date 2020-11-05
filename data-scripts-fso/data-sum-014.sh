@@ -126,7 +126,7 @@ do
     ssize=`cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum|awk '{print $3}'`
     sobstime=`cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum|awk '{print $8}'`
   else
-    echo "$checkdate   00000000              000000.0000               0000-00-00 00:00:00.000000000                       0000-00-00 00:00:00.000000000               0000.000000" >>$suminfo
+    echo "$checkdate   00000000              0000000.0000               0000-00-00 00:00:00.000000000                       0000-00-00 00:00:00.000000000               0000.000000" >>$suminfo
     snum=0
     ssize=0
     sobstime=0
