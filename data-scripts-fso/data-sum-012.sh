@@ -6,7 +6,10 @@
 #       20201010    Release 0.1.0     first working version 
 #       20201028    Release 0.1.1     revised logics
 #       20201103    Release 0.1.2     unify check & report & mail
+<<<<<<< HEAD
 #       20201104    Release 0.1.3     add obs days
+=======
+>>>>>>> 49ca1614530a12ba2e57af613dafd4d1fde12efe
 
 waiting() {
   local pid="$1"
@@ -72,11 +75,17 @@ pver=0.1.1
 num="00000000"
 size="0000000.0000"
 obstime="0000.000000"
+<<<<<<< HEAD
 obsday=0000
 site=fso
 device=lustre
 homepre=/home/chd/data-info
 suminfo=$homepre/$syear$smonthday-$eyear$emonthday-$datatype@fso.sum
+=======
+device=lustre
+homepre=/home/chd/data-info
+suminfo=$homepre/$datatype-$syear$smothday-$eyear$emonthday@fso.sum
+>>>>>>> 49ca1614530a12ba2e57af613dafd4d1fde12efe
 
 if [ ! -d "$homepre" ];then
     mkdir -m 777 -p $homepre
@@ -110,6 +119,7 @@ do
 	  echo "$today0 $ctime : Start $checkdate $datatype  Data Summerizing @fso"
     #sleep 1
     /home/chd/data-sum-daily.sh $datapre $checkyear $checkmonthday $datatype 0 &
+<<<<<<< HEAD
     waiting "$!" "$datatype Date Summerizing on $checkdate @$device" "Summerizing $datatype Data on $checkdate @$device"
     today0=`date  +%Y%m%d`
     ctime=`date  +%H:%M:%S` 
@@ -120,6 +130,17 @@ do
     if [ $report -eq "1" ];then 
         cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum >>  $suminfo
     fi
+=======
+	  waiting "$!" "$datatype Date Summerizing on $checkdate @$device" "Summerizing $datatype Data on $checkdate @$device"
+    today0=`date  +%Y%m%d`
+    ctime=`date  +%H:%M:%S` 
+    echo "$today0 $ctime : Task of $datatype Date Summerizing on $checkdate @$device Has been Done!"
+    if [ $report -eq "1" ];then 
+        cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum >>  $suminfo
+    fi
+	#    echo "$i $checkdate"
+    #fi
+>>>>>>> 49ca1614530a12ba2e57af613dafd4d1fde12efe
     let i++
 done
 if [ $report -eq "1" ];then
@@ -128,7 +149,10 @@ if [ $report -eq "1" ];then
     snum=`cat $datatype*.sum|awk '{sum += $2} END {print sum}'`
     ssize=`cat $datatype*.sum|awk '{sum += $3} END {print sum}'`
     sobstime=`cat $datatype*.sum|awk '{sum += $8} END {print sum}'`
+<<<<<<< HEAD
     sobsday=`cat $datatype*.sum|awk 'i=$1;BEGIN{if (i > 0.5) print i;}'|wc -l`
+=======
+>>>>>>> 49ca1614530a12ba2e57af613dafd4d1fde12efe
     #sobstime=`echo $stime|awk '{print($1/3600)}'`
     if [ "$eyear" != "$syear" ];then
         targetdir=$homepre/$eyear
@@ -136,17 +160,24 @@ if [ $report -eq "1" ];then
         enum=`cat $datatype*.sum|awk '{sum += $2} END {print sum}'`
         esize=`cat $datatype*.sum|awk '{sum += $3} END {print sum}'`
         eobstime=`cat $datatype*.sum|awk '{sum += $8} END {print sum}'`
+<<<<<<< HEAD
         eobsday=`cat $datatype*.sum|awk 'i=$1;BEGIN{if (i > 0.5) print i;}'|wc -l`
+=======
+>>>>>>> 49ca1614530a12ba2e57af613dafd4d1fde12efe
         #eobstime=`echo $etime|awk '{print($1/3600)}'`
     else
         enum="00000000"
         esize="0000000.0000"
         eobstime="0000.000000"
+<<<<<<< HEAD
         eobsday="0000"
+=======
+>>>>>>> 49ca1614530a12ba2e57af613dafd4d1fde12efe
     fi
     num=`echo $snum $enum|awk '{print($1+$2)}'`
     size=`echo $ssize $esize|awk '{print($1+$2)}'`
     obstime=`echo $sobstime $eobstime|awk '{print($1+$2)}'`
+<<<<<<< HEAD
     obsday=`echo $sobsday $eobsday|awk '{print($1+$2)}'`
     num=`printf "%08d" $num`
     size=`printf "%012.4f" $size`
@@ -155,6 +186,14 @@ if [ $report -eq "1" ];then
     echo "******************************************************************************************************************************************************************************">> $suminfo
     echo "Start         End           Nums.               Size(GiB)               Total Obs. Time(hrs)     Total Obs. Day(s)      Total Cal. Day(s)" >>$suminfo
     echo "$syear$smonthday      $eyear$emonthday      $num            $size            $obstime              $obsday                 $checkdays" >>$suminfo
+=======
+    num=`printf "%08d" $num`
+    size=`printf "%012.4f" $size`
+    obstime=`printf "%011.6f" $obstime`
+    echo "******************************************************************************************************************************************************************************">> $suminfo
+    echo "Start         End           Nums.               Size(GiB)               Total Obs. Time(hrs)" >>$suminfo
+    echo "$syear$smonthday      $eyear$emonthday      $num            $size            $obstime " >>$suminfo
+>>>>>>> 49ca1614530a12ba2e57af613dafd4d1fde12efe
 fi
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
@@ -162,7 +201,11 @@ if [ $mail -eq "1" ];then
     echo "$today0 $ctime : Send Summary  for $year$monthday $datatype @$device to Users..."
     mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" nvst_obs@ynao.ac.cn < $suminfo
     mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" chd@ynao.ac.cn < $suminfo
+<<<<<<< HEAD
 fi
+=======
+  fi
+>>>>>>> 49ca1614530a12ba2e57af613dafd4d1fde12efe
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
 t1=`date +%s`
@@ -171,3 +214,8 @@ echo "$today0 $ctime : $i days $datatype Data  Summerized..."
 echo "             From : $sdate"
 echo "               To : $edate"
 echo "             Used : $dt secs."
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 49ca1614530a12ba2e57af613dafd4d1fde12efe
