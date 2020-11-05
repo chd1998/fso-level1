@@ -94,46 +94,51 @@ tmpdate=$sdate
 echo " "
 echo " "
 echo "                      $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  "
-echo "                                              $pver                                                                     "
+echo "                                          $pver                                                                     "
 echo "                      $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  ">$suminfo
-echo "                                              $pver                                                                     ">>$suminfo
-echo " "
-echo " ">>$suminfo
+echo "                                          $pver                                                                     ">>$suminfo
+echo "**********************************************************************************************************************************************************************************"
+echo "**********************************************************************************************************************************************************************************">>$suminfo
 echo "Date       Nums.                 Size(GiB)                  StartTime                                           EndTime                                     Obs. Time(hrs)" >>$suminfo
 echo "**********************************************************************************************************************************************************************************">> $suminfo
 while [ $i -le $checkdays ]
 do
-    checkdate=`date +%Y%m%d -d "+$i days $sdate"`
-    checkyear=${checkdate:0:4}
-    checkmonthday=${checkdate:4:4}
+  checkdate=`date +%Y%m%d -d "+$i days $sdate"`
+  checkyear=${checkdate:0:4}
+  checkmonthday=${checkdate:4:4}
 	today0=`date  +%Y%m%d`
-    ctime=`date  +%H:%M:%S` 
+  ctime=`date  +%H:%M:%S` 
 	echo "$today0 $ctime : Start $checkdate $datatype  Data Summerizing @fso"
-    /home/chd/data-sum-daily.sh $datapre $checkyear $checkmonthday $datatype 0 &
-    waiting "$!" "$datatype Date Summerizing on $checkdate @$device" "Summerizing $datatype Data on $checkdate @$device"
-    today0=`date  +%Y%m%d`
-    ctime=`date  +%H:%M:%S` 
-    tput ed
-    tput rc
-    echo "$today0 $ctime : Task of $datatype Date Summerizing on $checkdate @$site Has been Done..."
+  /home/chd/data-sum-daily.sh $datapre $checkyear $checkmonthday $datatype 0 &
+  waiting "$!" "$datatype Date Summerizing on $checkdate @$device" "Summerizing $datatype Data on $checkdate @$device"
+  today0=`date  +%Y%m%d`
+  ctime=`date  +%H:%M:%S` 
+  tput ed
+  tput rc
+  echo "$today0 $ctime : Task of $datatype Date Summerizing on $checkdate @$site Has been Done..."
+  if [ -f "$homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum" ];then 
     if [ $report -eq "1" ];then 
-        cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum >>  $suminfo
+      cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum >>  $suminfo
     fi
-    let i++
-    echo "                  : $i day(s) Processed..."
-    #targetdir=$homepre/$checkyear
-    #cd $targetdir
     snum=`cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum|awk '{print $2}'`
     ssize=`cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum|awk '{print $3}'`
     sobstime=`cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum|awk '{print $8}'`
-    i=`cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum|awk '{print $8}'`
-    j=`cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum|awk '{print $2}'`
-    num=`echo $num $snum|awk '{print($1+$2)}'`
-    size=`echo $szie $ssize|awk '{print($1+$2)}'`
-    if [ $i > 0.5 ] && [ $j > 1000 ];then 
-        obstime=`echo $obstime $sobstime|awk '{print($1+$2)}'`
-        obsday=`echo $obsday $sobsday|awk '{print($1+$2)}'`
-    fi
+  else
+    echo "$checkdate   00000000              000000.0000               0000-00-00 00:00:00.000000000                       0000-00-00 00:00:00.000000000               0000.000000" >>$suminfo
+    snum=0
+    ssize=0
+    sobstime=0
+    j=0
+    k=0
+  fi
+  num=`echo $num $snum|awk '{print($1+$2)}'`
+  size=`echo $szie $ssize|awk '{print($1+$2)}'`
+  if [ $sobstime > 0.5 ] && [ $snum > 1000 ];then 
+    obstime=`echo $obstime $sobstime|awk '{print($1+$2)}'`
+    obsday=`echo $obsday $sobsday|awk '{print($1+$2)}'`
+  fi
+  let i++
+  echo "                  : $i day(s) Processed..."
 done
 num=`printf "%08d" $num`
 size=`printf "%012.4f" $size`
@@ -147,9 +152,9 @@ echo "$syear$smonthday      $eyear$emonthday      $num            $size         
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
 if [ $mail -eq "1" ];then 
-    echo "$today0 $ctime : Send Summary  for $year$monthday $datatype @$device to Users..."
-    mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" nvst_obs@ynao.ac.cn < $suminfo
-    mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" chd@ynao.ac.cn < $suminfo
+  echo "$today0 $ctime : Send Summary  for $year$monthday $datatype @$device to Users..."
+  mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" nvst_obs@ynao.ac.cn < $suminfo
+  mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" chd@ynao.ac.cn < $suminfo
 fi
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
