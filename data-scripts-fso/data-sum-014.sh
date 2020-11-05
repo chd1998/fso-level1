@@ -68,10 +68,10 @@ report=$7
 mail=$8
 
 pver=0.1.4
-num="00000000"
-size="0000000.0000"
-obstime="0000.000000"
-obsday="0000"
+num=0
+size=0.0
+obstime=0.0
+obsday=0
 site=fso
 device=lustre
 homepre=/home/chd/data-info
@@ -94,9 +94,11 @@ tmpdate=$sdate
 echo " "
 echo " "
 echo "                      $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  "
-echo "                                          $pver                                                                     "
+echo "                                          Version: $pver                                                                     "
+echo "                                         $today $ctime                  "
 echo "                      $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  ">$suminfo
-echo "                                          $pver                                                                     ">>$suminfo
+echo "                                          Version: $pver                                                                     ">>$suminfo
+echo "                                         $today $ctime                  ">>$suminfo
 echo "**********************************************************************************************************************************************************************************"
 echo "**********************************************************************************************************************************************************************************">>$suminfo
 echo "Date       Nums.                 Size(GiB)                  StartTime                                           EndTime                                     Obs. Time(hrs)" >>$suminfo
