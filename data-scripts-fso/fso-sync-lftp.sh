@@ -241,14 +241,9 @@ n2=$(cat $filenumber1)
 s2=$(cat $filesize1)
 
 sn=`echo "$n1 $n2"|awk '{print($2-$1)}'`
-<<<<<<< HEAD
 if [ $sn -le 0 ];then
   ss=0
   sn=0
-=======
-if [ $sn -eq 0 ];then
-  ss=0
->>>>>>> 8df67062650330952695939c3fe8e2442a53ab15
 else
   ss=`echo "$s1 $s2"|awk '{print($2-$1)}'`
 fi 
@@ -266,10 +261,7 @@ fi
 echo $n2>$filenumber
 if [ $n2 -eq 0 ];then
   s2=0
-<<<<<<< HEAD
   synctime=0
-=======
->>>>>>> 8df67062650330952695939c3fe8e2442a53ab15
 fi
 echo $s2>$filesize
 
