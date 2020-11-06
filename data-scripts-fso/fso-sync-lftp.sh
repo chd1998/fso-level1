@@ -11,12 +11,12 @@
 #       20190716    Release 0.6.0     add parallel permission changing
 #                   Release 0.7.0     input parallel lftp thread number
 #       20190718    Release 0.8.0     add remote data info 
-#       20190914    Release 0.9.0    revised display info and some minor errors
-#       20191015    Release 0.9.1    correct the time calculating
-#       20200607    Release 0.9.2    correct minor errors
-#       20200615    Release 0.9.3    add ping test
-#       20200928    Release 0.9.4    using ls -alR to get real size of files
-#       20201106    Release 0.9.5
+#       20190914    Release 0.9.0     revised display info and some minor errors
+#       20191015    Release 0.9.1     correct the time calculating
+#       20200607    Release 0.9.2     correct minor errors
+#       20200615    Release 0.9.3     add ping test
+#       20200928    Release 0.9.4     using ls -alR to get real size of files
+#       20201106    Release 0.9.5     fixed display info errors
 # 
 #waiting pid taskname prompt
 waiting() {
