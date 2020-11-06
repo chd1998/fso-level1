@@ -3,19 +3,20 @@
 #purposes: periodically syncing data from remoteip to local lustre storage via lftp
 #
 #changlog: 
-#       20190603    Release 0.1     first version for tio-sync.sh
-#       20190625    Release 0.2     revised lftp performance & multi-thread
-#       20190703    Release 0.3     fix some errors 
-#       20190705    Release 0.4     timing logic revised
-#       20190715    Release 0.5     reduce time of changing permission
-#       20190716    Release 0.6     add parallel permission changing
-#                   Release 0.7     input parallel lftp thread number
-#       20190718    Release 0.8     add remote data info 
-#       20190914    Release 0.9     revised display info and some minor errors
-#       20191015    Release 0.91    correct the time calculating
-#       20200607    Release 0.92    correct minor errors
-#       20200615    Release 0.93    add ping test
-#       20200928    Release 0.94    using ls -alR to get real size of files
+#       20190603    Release 0.1.0     first version for tio-sync.sh
+#       20190625    Release 0.2.0     revised lftp performance & multi-thread
+#       20190703    Release 0.3.0     fix some errors 
+#       20190705    Release 0.4.0     timing logic revised
+#       20190715    Release 0.5.0     reduce time of changing permission
+#       20190716    Release 0.6.0     add parallel permission changing
+#                   Release 0.7.0     input parallel lftp thread number
+#       20190718    Release 0.8.0     add remote data info 
+#       20190914    Release 0.9.0    revised display info and some minor errors
+#       20191015    Release 0.9.1    correct the time calculating
+#       20200607    Release 0.9.2    correct minor errors
+#       20200615    Release 0.9.3    add ping test
+#       20200928    Release 0.9.4    using ls -alR to get real size of files
+#       20201106    Release 0.9.5
 # 
 #waiting pid taskname prompt
 waiting() {
@@ -122,19 +123,19 @@ else
   echo "0">$filesize1
 fi
 
-progversion=0.94
+pver=0.9.5
 
 #st1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 tstart=`date +%s`
 ctime=`date  +%H:%M:%S`
 echo "                                                       "
-echo "============ Welcome to Data System @ FSO! ==========="
+echo "============ Welcome to Data System @ FSO! ============"
 echo "                 $(basename $0)                        "
-echo "         (Release $progversion 20200607 08:13)       "
+echo "            (Release $pver 20201106 16:18)             "
 echo "                                                       "
-echo "         sync $datatype data to $destpre0              "
+echo "              sync $datatype data to $destpre0         "
 echo "                                                       "
-echo "            Started @ $today $ctime                    "
+echo "               Started @ $today $ctime                 "
 echo "======================================================="
 echo " "
 #procCmd=`ps ef|grep -w $procName|grep -v grep|wc -l`
@@ -161,38 +162,38 @@ echo "$today $ctime: Syncing $datatype data @ FSO..."
 echo "             From: $server$srcdir "
 echo "             To  : $targetdir "
 
-echo "$today $ctime: Testing $server1 is online or not... "
-ping $server1 -c 5 | grep ttl >> $logpre/pingtmp
-pingres=`cat $logpre/pingtmp | wc -l`
-rm -f $logpre/pingtmp
+#echo "$today $ctime: Testing $server1 is online or not... "
+#ping $server1 -c 5 | grep ttl >> $logpre/pingtmp
+#pingres=`cat $logpre/pingtmp | wc -l`
+#rm -f $logpre/pingtmp
 ctime1=`date  +%H:%M:%S`
-if [ $pingres -eq 0 ];then
-  echo "$today $ctime1: $server1 is offline, skip syncing remote file(s)..." 
+today=`date  +%Y%m%d`
+#if [ $pingres -eq 0 ];then
+#  echo "$today $ctime1: $server1 is offline, skip syncing remote file(s)..." 
   #exit 0
-else
-  echo "$today $ctime1: $server1 is online, proceed to sync remote file(s)..."
-  #echo "                 : pls wait....."
-  echo "$today $ctime1: Sync Task Started, Please Wait ... "
-  #cd $destdir
-  ctime1=`date  +%H:%M:%S`
-  #mytime1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-  syncstart=`date +%s`
-  server=ftp://$user:$password@$server
-  #lftp  $server -e "mirror --ignore-time --continue  --parallel=$pnum  $srcdir $targetdir; quit">/dev/null 2>&1 &
-  lftp  $server -e "mirror  -x '^\.' --parallel=$pnum  $srcdir0 $destdir; quit">/dev/null 2>&1 &
-  #lftp -p 2121 -u tio,ynao246135 -e "mirror --only-missing --continue  --parallel=40  /20190704/TIO /lustre/data/2019/20190704/TIO; quit" ftp://192.168.111.120 >/dev/null 2>&1 &
-  #wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir1
-  waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
-  ctime3=`date  +%H:%M:%S`
-  if [ $? -ne 0 ];then
-    echo "$today $ctime3: Syncing $datatype Data @ FSO Failed!"
-    cd /home/chd/
-    exit 1
-  fi
-  ctime2=`date  +%H:%M:%S`
-
-  syncend=`date +%s`
+#else
+#echo "$today $ctime1: $server1 is online, proceed to sync remote file(s)..."
+#echo "                 : pls wait....."
+#echo "$today $ctime1: Sync Task Started, Please Wait ... "
+#cd $destdir
+#ctime1=`date  +%H:%M:%S`
+ #mytime1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+syncstart=`date +%s`
+server=ftp://$user:$password@$server
+#lftp  $server -e "mirror --ignore-time --continue  --parallel=$pnum  $srcdir $targetdir; quit">/dev/null 2>&1 &
+lftp  $server -e "mirror  -x '^\.' --parallel=$pnum  $srcdir0 $destdir; quit">/dev/null 2>&1 &
+#lftp -p 2121 -u tio,ynao246135 -e "mirror --only-missing --continue  --parallel=40  /20190704/TIO /lustre/data/2019/20190704/TIO; quit" ftp://192.168.111.120 >/dev/null 2>&1 &
+#wget  --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir1
+waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
+ctime3=`date  +%H:%M:%S`
+if [ $? -ne 0 ];then
+  echo "$today $ctime3: Syncing $datatype Data @ FSO Failed!"
+  cd /home/chd/
+  exit 1
 fi
+ctime2=`date  +%H:%M:%S`
+syncend=`date +%s`
+#fi
   
 ctime2=`date  +%H:%M:%S`
 echo "$today $ctime2: Summerizing $datatype File Numbers & Size..."
@@ -231,18 +232,28 @@ n2=$(cat $filenumber1)
 s2=$(cat $filesize1)
 
 sn=`echo "$n1 $n2"|awk '{print($2-$1)}'`
-ss=`echo "$s1 $s2"|awk '{print($2-$1)}'`
+if [ $sn -le 0 ];then
+  ss=0
+  sn=0
+else
+  ss=`echo "$s1 $s2"|awk '{print($2-$1)}'`
+fi 
 
 synctime=`echo "$syncstart $syncend"|awk '{print($2-$1)}'`
 if [ $synctime -le 0 ];then
   synctime=0
   speed=0
   ss=0
+  sn=0
 else
   speed=`echo "$ss $synctime"|awk '{print($1/$2)}'`
 fi
 
 echo $n2>$filenumber
+if [ $n2 -eq 0 ];then
+  s2=0
+  synctime=0
+fi
 echo $s2>$filesize
 
 if [ -f $srcsize ]; then 
@@ -294,7 +305,7 @@ echo "                 : $s2 MB"
 echo "  Total Time Used: $tdiff secs."
 echo "             From: $today0 $ctime"
 echo "               To: $today1 $ctime4"
-echo "====++==================================================="
+echo "========================================================="
 rm -rf $lockfile
 cd /home/chd/
 exit 0

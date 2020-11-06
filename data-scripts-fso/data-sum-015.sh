@@ -8,6 +8,7 @@
 #       20201103    Release 0.1.2     unify check & report & mail
 #       20201104    Release 0.1.3     add obs days
 #       20201105    Release 0.1.4     deal with multiple years
+#       20201106    Release 0.1.5     speed optimized
 
 waiting() {
   local pid="$1"
@@ -52,7 +53,7 @@ ctime=`date  +%H:%M:%S`
 syssep="/"
 
 if [ $# -ne 8 ];then
-  echo "Usage: ./data-sum.sh datadir startyear startmonthday endyear endmonthday datatype(TIO or HA) report(1-report/0-no report) mail(1 mail/0-no mail)"
+  echo "Usage: ./data-sum-xx.sh datadir startyear startmonthday endyear endmonthday datatype(TIO or HA) report(1-report/0-no report) mail(1 mail/0-no mail)"
   echo "Example: ./data-sum-xx.sh  /lustre/data 2020 0928  2020 1001 TIO 1 1"
   echo "         ./data-sum-xx.sh  /lustre/data 2020 0928  2020 1001 HA 0 0"
   exit 1
@@ -67,7 +68,7 @@ datatype=$6
 report=$7
 mail=$8
 
-pver=0.1.4
+pver=0.1.5
 num=0
 size=0.0
 obstime=0.0
