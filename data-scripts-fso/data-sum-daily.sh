@@ -122,6 +122,8 @@ if [ -d "$targetdir" ]; then
 else
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
+  tput rc
+  tput ed
   echo "$today0 $ctime : $targetdir doesn't exist, pls check..."
 fi
 
