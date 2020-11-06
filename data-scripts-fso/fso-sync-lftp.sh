@@ -11,12 +11,21 @@
 #       20190716    Release 0.6.0     add parallel permission changing
 #                   Release 0.7.0     input parallel lftp thread number
 #       20190718    Release 0.8.0     add remote data info 
+<<<<<<< HEAD
 #       20190914    Release 0.9.0     revised display info and some minor errors
 #       20191015    Release 0.9.1     correct the time calculating
 #       20200607    Release 0.9.2     correct minor errors
 #       20200615    Release 0.9.3     add ping test
 #       20200928    Release 0.9.4     using ls -alR to get real size of files
 #       20201106    Release 0.9.5     fixed display info errors
+=======
+#       20190914    Release 0.9.0    revised display info and some minor errors
+#       20191015    Release 0.9.1    correct the time calculating
+#       20200607    Release 0.9.2    correct minor errors
+#       20200615    Release 0.9.3    add ping test
+#       20200928    Release 0.9.4    using ls -alR to get real size of files
+#       20201106    Release 0.9.5
+>>>>>>> 8df67062650330952695939c3fe8e2442a53ab15
 # 
 #waiting pid taskname prompt
 waiting() {
@@ -232,9 +241,14 @@ n2=$(cat $filenumber1)
 s2=$(cat $filesize1)
 
 sn=`echo "$n1 $n2"|awk '{print($2-$1)}'`
+<<<<<<< HEAD
 if [ $sn -le 0 ];then
   ss=0
   sn=0
+=======
+if [ $sn -eq 0 ];then
+  ss=0
+>>>>>>> 8df67062650330952695939c3fe8e2442a53ab15
 else
   ss=`echo "$s1 $s2"|awk '{print($2-$1)}'`
 fi 
@@ -252,7 +266,10 @@ fi
 echo $n2>$filenumber
 if [ $n2 -eq 0 ];then
   s2=0
+<<<<<<< HEAD
   synctime=0
+=======
+>>>>>>> 8df67062650330952695939c3fe8e2442a53ab15
 fi
 echo $s2>$filesize
 
