@@ -11,21 +11,12 @@
 #       20190716    Release 0.6.0     add parallel permission changing
 #                   Release 0.7.0     input parallel lftp thread number
 #       20190718    Release 0.8.0     add remote data info 
-<<<<<<< HEAD
 #       20190914    Release 0.9.0     revised display info and some minor errors
 #       20191015    Release 0.9.1     correct the time calculating
 #       20200607    Release 0.9.2     correct minor errors
 #       20200615    Release 0.9.3     add ping test
 #       20200928    Release 0.9.4     using ls -alR to get real size of files
 #       20201106    Release 0.9.5     fixed display info errors
-=======
-#       20190914    Release 0.9.0    revised display info and some minor errors
-#       20191015    Release 0.9.1    correct the time calculating
-#       20200607    Release 0.9.2    correct minor errors
-#       20200615    Release 0.9.3    add ping test
-#       20200928    Release 0.9.4    using ls -alR to get real size of files
-#       20201106    Release 0.9.5
->>>>>>> 8df67062650330952695939c3fe8e2442a53ab15
 # 
 #waiting pid taskname prompt
 waiting() {
@@ -119,17 +110,9 @@ if [ -f $lockfile ];then
     exit 1
   else
     echo $$>$lockfile
-    echo "0">$filenumber
-    echo "0">$filesize
-    echo "0">$filenumber1
-    echo "0">$filesize1
   fi
 else
   echo $$>$lockfile
-  echo "0">$filenumber
-  echo "0">$filesize
-  echo "0">$filenumber1
-  echo "0">$filesize1
 fi
 
 pver=0.9.5

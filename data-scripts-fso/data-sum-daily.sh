@@ -6,6 +6,7 @@
 #       20200928    Release 0.1.0     first working version 
 #       20201025    Release 0.1.1     add observation time and revised
 #       20201028    Release 0.1.2     observation time logics revised
+#       20201108    Release 0.1.3     exclude reduced, flat and dark data from counting
 
 
 cyear=`date  +%Y`
@@ -27,7 +28,7 @@ monthday=$3
 datatype=$4
 mailornot=$5
 
-pver=0.1.2
+pver=0.1.3
 num="00000000"
 size="0000000.0000"
 interval="0000.000000"
@@ -57,9 +58,9 @@ if [ -d "$targetdir" ]; then
   if [ $mailornot -eq "1" ];then
     echo "$today0 $ctime : Start Counting $year$monthday $datatype @$device File Numbers & Size..."
   fi 
-  num=`find ./ -name $dataprefix*.fits -type f | wc -l`
+  num=`find ./   -path "*redata*" -o -path "*Dark*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name $dataprefix*.fits -print | wc -l`
   if [ $num -gt "0" ];then
-    size=`find ./ -name $dataprefix*.fits -type f | xargs ls -I {} -al|awk '{sum += $5} END {print sum/(1000*1024*1024)}'` 
+    size=`find ./   -path "*redata*" -o -path "*Dark*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name $dataprefix*.fits -print | xargs ls -I {} -al|awk '{sum += $5} END {print sum/(1000*1024*1024)}'` 
     num=`printf "%08d" $num`
     size=`printf "%012.4f" $size`
   else
