@@ -227,19 +227,22 @@ sn=`echo "$n1 $n2"|awk '{print($2-$1)}'`
 if [ $sn -le 0 ];then
   ss=0
   sn=0
-else
-  ss=`echo "$s1 $s2"|awk '{print($2-$1)}'`
-fi 
-
-synctime=`echo "$syncstart $syncend"|awk '{print($2-$1)}'`
-if [ $synctime -le 0 ];then
   synctime=0
   speed=0
-  ss=0
-  sn=0
 else
-  speed=`echo "$ss $synctime"|awk '{print($1/$2)}'`
-fi
+  ss=`echo "$s1 $s2"|awk '{print($2-$1)}'`
+  synctime=`echo "$syncstart $syncend"|awk '{print($2-$1)}'`
+  if [ $synctime -le 0 ];then
+    synctime=0
+    speed=0
+    ss=0
+    sn=0
+  else
+    speed=`echo "$ss $synctime"|awk '{print($1/$2)}'`
+  fi
+fi 
+
+
 
 echo $n2>$filenumber
 if [ $n2 -eq 0 ];then
