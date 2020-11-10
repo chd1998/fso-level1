@@ -72,6 +72,11 @@ num=0
 size=0.0
 obstime=0.0
 obsday=0
+
+snum=0
+ssize=0.0
+sobstime=0.0
+
 site=fso
 device=lustre
 homepre=/home/chd/data-info
@@ -128,16 +133,16 @@ do
   else
     echo "$checkdate   00000000              0000000.0000               0000-00-00 00:00:00.000000000                       0000-00-00 00:00:00.000000000               0000.000000" >>$suminfo
     snum=0
-    ssize=0
-    sobstime=0
+    ssize=0.0
+    sobstime=0.0
     j=0
     k=0
   fi
   num=`echo $num $snum|awk '{print($1+$2)}'`
   size=`echo $szie $ssize|awk '{print($1+$2)}'`
-  if [ $sobstime > 0.5 ] && [ $snum > 1000 ];then 
+  if [ $sobstime > 0.5 ] || [ $snum > 1000 ];then 
     obstime=`echo $obstime $sobstime|awk '{print($1+$2)}'`
-    obsday=`echo $obsday $sobsday|awk '{print($1+$2)}'`
+    obsday=`echo $obsday|awk '{print($1+1)}'`
   fi
   let i++
   echo "                  : $i day(s) Processed..."
@@ -147,6 +152,7 @@ size=`printf "%012.4f" $size`
 obstime=`printf "%011.6f" $obstime`
 obsday=`printf "%04d" $obsday`
 checkdays=`echo $checkdays|awk '{ print($1+1)}'`
+checkdays=`printf "%04d" $checkdays`
 echo "******************************************************************************************************************************************************************************">> $suminfo
 echo "Start         End           Nums.               Size(GiB)               Total Obs. Time(hrs)     Total Obs. Day(s)    Total Cal. Day(s)" >>$suminfo
 echo "$syear$smonthday      $eyear$emonthday      $num            $size            $obstime              $obsday                 $checkdays" >>$suminfo
