@@ -8,6 +8,7 @@
 #       20201103    Release 0.1.2     unify check & report & mail
 #       20201104    Release 0.1.3     add obs days
 #       20201105    Release 0.1.4     deal with multiple years
+#       20201106    Release 0.1.5     speed optimized
 
 waiting() {
   local pid="$1"
@@ -52,7 +53,7 @@ ctime=`date  +%H:%M:%S`
 syssep="/"
 
 if [ $# -ne 8 ];then
-  echo "Usage: ./data-sum.sh datadir startyear startmonthday endyear endmonthday datatype(TIO or HA) report(1-report/0-no report) mail(1 mail/0-no mail)"
+  echo "Usage: ./data-sum-xx.sh datadir startyear startmonthday endyear endmonthday datatype(TIO or HA) report(1-report/0-no report) mail(1 mail/0-no mail)"
   echo "Example: ./data-sum-xx.sh  /lustre/data 2020 0928  2020 1001 TIO 1 1"
   echo "         ./data-sum-xx.sh  /lustre/data 2020 0928  2020 1001 HA 0 0"
   exit 1
@@ -67,7 +68,7 @@ datatype=$6
 report=$7
 mail=$8
 
-pver=0.1.4
+pver=0.1.5
 num=0
 size=0.0
 obstime=0.0
@@ -98,7 +99,7 @@ t0=`date +%s`
 tmpdate=$sdate
 echo " "
 echo " "
-echo "                      $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  "
+echo "                           $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  "
 echo "                                          Version: $pver                                                                     "
 echo "                                         $today $ctime                  "
 echo "                      $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  ">$suminfo
@@ -116,8 +117,10 @@ do
 	today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S` 
 	echo "$today0 $ctime : Start $checkdate $datatype  Data Summerizing @fso"
-  /home/chd/data-sum-daily.sh $datapre $checkyear $checkmonthday $datatype 0 &
-  waiting "$!" "$datatype Date Summerizing on $checkdate @$device" "Summerizing $datatype Data on $checkdate @$device"
+  if [ ! -f "$homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum" ];then 
+    /home/chd/data-sum-daily.sh $datapre $checkyear $checkmonthday $datatype 0 &
+    waiting "$!" "$datatype Date Summerizing on $checkdate @$device" "Summerizing $datatype Data on $checkdate @$device"
+  fi
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S` 
   tput ed
@@ -135,18 +138,17 @@ do
     snum=0
     ssize=0.0
     sobstime=0.0
-    j=0
-    k=0
   fi
   num=`echo $num $snum|awk '{print($1+$2)}'`
-  size=`echo $szie $ssize|awk '{print($1+$2)}'`
-  if [ $sobstime > 0.5 ] || [ $snum > 1000 ];then 
+  size=`echo $size $ssize|awk '{print($1+$2)}'`
+  if (echo ${sobstime} 0.5 | awk '!($1>=$2){exit 1}') || (echo ${snum} 1000 | awk '!($1>$2){exit 1}') then 
     obstime=`echo $obstime $sobstime|awk '{print($1+$2)}'`
     obsday=`echo $obsday|awk '{print($1+1)}'`
   fi
   let i++
   echo "                  : $i day(s) Processed..."
 done
+
 num=`printf "%08d" $num`
 size=`printf "%012.4f" $size`
 obstime=`printf "%011.6f" $obstime`
