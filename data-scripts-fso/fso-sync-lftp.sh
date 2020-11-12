@@ -195,20 +195,20 @@ echo "$today $ctime2: Summerizing $datatype File Numbers & Size..."
 #filetmp=${target}${syssep}*.fits
 cd $targetdir
 find $targetdir -name *.fits -type f | wc -l > $filenumber1 &
-waiting "$!" "$datatype File Number Sumerizing" "Sumerizing $datatype File Number"
+waiting "$!" "$datatype File Number Summerizing" "Summerizing $datatype File Number"
 if [ $? -ne 0 ];then
   ctime3=`date  +%H:%M:%S`
-  echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
+  echo "$today $ctime3: Summerizing File Number of $datatype Failed!"
   cd /home/chd/
   exit 1
 fi
 du -sm $targetdir/|awk '{print $1}' > $filesize1 &
 #cd $targetdir
 #find $targetdir -name *.fits -type f | xargs -I {} ls -al|awk '{sum += $5} END {print sum/(1024*1024)}' > $filesize1 &
-waiting "$!" "$datatype File Size Summerizing" "Sumerizing $datatype File Size"
+waiting "$!" "$datatype File Size Summerizing" "Summerizing $datatype File Size"
 if [ $? -ne 0 ];then
   ctime3=`date  +%H:%M:%S`
-  echo "$today $ctime3: Sumerizing File Size of $datatype Failed!"
+  echo "$today $ctime3: Summerizing File Size of $datatype Failed!"
   cd /home/chd/
   exit 1
 fi
@@ -293,13 +293,13 @@ echo "********************************************************"
 echo "$today1 $ctime4: @ $targetdir          "
 echo "           Synced: $sn file(s)"
 echo "                 : $ss MB "
-echo "   Sync Time Used: $synctime secs."
+echo "               in: $synctime secs."
 echo "         @  Speed: $speed MB/s"
-echo "     Total Synced: $n2 File(s)"
-echo "                 : $s2 MB"
-echo "  Total Time Used: $tdiff secs."
+echo "  This Round Used: $tdiff secs."
 echo "             From: $today0 $ctime"
 echo "               To: $today1 $ctime4"
+echo "     Total Synced: $n2 File(s)"
+echo "                 : $s2 MB"
 echo "========================================================="
 rm -rf $lockfile
 cd /home/chd/
