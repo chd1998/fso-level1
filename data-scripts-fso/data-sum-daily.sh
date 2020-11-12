@@ -73,7 +73,7 @@ if [ -d "$targetdir" ]; then
   #echo "$today0 $ctime : Start Calculating  $year$monthday $datatype @$device Observing Time..."
   cd $targetdir
   #start=`find ./   -path "*redata*" -o -path "*Dark*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name $dataprefix*.fits -print |xargs ls -ltr 2>/dev/null |head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print($2" "$3)}'`
-  start=`find ./  -type f -name $dataprefix*.fits -print |xargs ls -ltr 2>/dev/null |head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print($2" "$3)}'`
+  start=`find ./  -path "*FLAT*" -o -path "*redata*" -o -path "*DARK*" -o -path "*Dark*" -o -path "*dark*" -prune -o -type f -name $dataprefix*.fits -print |xargs ls -ltr 2>/dev/null |head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print($2" "$3)}'`
   if [ -z "$start" ]; then
     #start="19700101 08:00:00.000"
     #s=`date -d "$start" +%s`
@@ -83,7 +83,7 @@ if [ -d "$targetdir" ]; then
     s=`date -d "$start" +%s`
   fi
   #end=`find ./  -path "*redata*" -o -path "*Dark*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name $dataprefix*.fits -print |xargs ls -lt 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print( $2" "$3)}'`
-  end=`find ./  -type f -name $dataprefix*.fits -print |xargs ls -lt 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print( $2" "$3)}'`
+  end=`find ./  -path "*FLAT*" -o -path "*redata*" -o -path "*DARK*" -o -path "*Dark*" -o -path "*dark*" -prune -o -type f -name $dataprefix*.fits -print |xargs ls -lt 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print( $2" "$3)}'`
   if [ -z "$end" ]; then
     #end="19700101 08:00:00.000"
     #e=`date -d "$end" +%s`
