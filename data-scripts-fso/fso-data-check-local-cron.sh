@@ -6,8 +6,8 @@
 #example: ./fso-data-check-local-cron.sh /lustre/data/ 2019 0913 HA fits 2111040
 #press ctrl-c to break the script
 #change log:
-#           Release 20190721-0931: First working prototype
-#           Release 20190915-0835: Revised file(s) lists comparison
+#           Release 0.1.0: First working prototype
+#           Release 0.1.1: Revised file(s) lists comparison
 
 trap 'onCtrlC' INT
 function onCtrlC(){
@@ -109,6 +109,7 @@ if [ ! -d $cdir ];then
   echo "Please check..."
   exit 0
 fi
+pver=0.1.1
 ctime=`date  +%H:%M:%S`
 #t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 t1=`date +%s`
@@ -116,7 +117,7 @@ echo " "
 echo "================================================================================"
 echo "                                                                                "
 echo "               fso-data-check utility for $datatype data @ fso                  "
-echo "                       Release 20190915-0835(for Cron)                          "
+echo "                       Release $pver(for Cron)                          "
 echo "                                                                                "
 echo "$today $ctime : Checking the $fileformat file numbers & size                    "
 echo "                    @ $cdir/$datatype/                                          "
@@ -127,7 +128,8 @@ echo "==========================================================================
 echo " "
 #cd $cdir
 #getting file name & size
-find $cdir/$datatype/ -type f -name '*.fits' -type f ! -name "*level*"  -printf "%h/%f %s\n" > $listtmp &
+#find $cdir/$datatype/ -type f -name '*.fits' -type f ! -name "*level*"  -printf "%h/%f %s\n" > $listtmp &
+find $cdir/$datatype/  -type f -name '*.fits' -not -path "*redata*"  -printf "%h/%f %s\n" > $listtmp &
 waiting "$!" "local $datatype $fileformat file(s) info getting" "Getting  local $datatype $fileformat file(s) info"
 
 #getting file number

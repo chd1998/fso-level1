@@ -5,9 +5,9 @@
 #example: ./fso-data-check-remote-cron.sh 192.168.111.122 21 ha ynao246135 2019 0907 HA fits"
 #press ctrl-c to break the script
 #change log:
-#           Release 20190721-0931: First working prototype
-#           Release 20190908-1435: Revised remote & local file lists comparison
-#           Release 20190915-0832: Using comm -23 for file lists comparison
+#           Release 0.1.0: First working prototype
+#           Release 0.1.1: Revised remote & local file lists comparison
+#           Release 0.1.2: Using comm -23 for file lists comparison
 
 trap 'onCtrlC' INT
 function onCtrlC(){
@@ -107,6 +107,7 @@ if [ ! -d $localdir ];then
   exit 1
 fi
 
+pver=0.1.2
 
 ctime=`date  +%H:%M:%S`
 t1=`date +%s`
@@ -115,7 +116,7 @@ echo " "
 echo "================================================================================"
 echo "                                                                                "
 echo "               fso-data-check for remote and local files                        "
-echo "                       Release 20190915-0832(for Cron)                          "
+echo "                       Release $pver(for Cron)                          "
 echo "                                                                                "
 echo "$today $ctime : Checking the $fileformat file between $server & local           "
 echo "                    Please wait...                                              "
@@ -125,7 +126,8 @@ echo "==========================================================================
 echo " "
 #cd $cdir
 #getting local file list
-find $localdir/ -type f -name '*.fits' -type f ! -name "*level*"  |cut -d '/' -f 5-11> $locallist &
+#find $localdir/ -type f -name '*.fits' -type f ! -name "*level*"  |cut -d '/' -f 5-11> $locallist &
+find $localdir/ -type f -name '*.fits' -not -path "*redata*"  |cut -d '/' -f 5-11> $locallist &  |cut -d '/' -f 5-11> $locallist &
 waiting "$!" "local $datatype $fileformat file(s) info getting" "Getting local $datatype $fileformat file(s) info"
 
 #getting remote file list

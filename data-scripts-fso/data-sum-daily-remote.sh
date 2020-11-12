@@ -26,7 +26,7 @@ monthday=$3
 datatype=$4
 mailornot=$5
 
-pver=0.1
+pver=0.1.1
 num=0
 size=0.0
 interval=0.0
