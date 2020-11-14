@@ -58,17 +58,9 @@ if [ -d "$targetdir" ]; then
   if [ $mailornot -eq "1" ];then
     echo "$today0 $ctime : Start Counting $year$monthday $datatype @$device File Numbers & Size..."
   fi 
-<<<<<<< HEAD
   num=`find ./   -type f -name ''$dataprefix*.fits'' -not -path "*redata*" | wc -l`
   if [ $num -gt "0" ];then
     size=`find ./   -type f -name ''$dataprefix*.fits'' -not -path "*redata*"  | xargs ls -I {} -al|awk '{sum += $5} END {print sum/(1000*1024*1024)}'` 
-=======
-  #num=`find ./   -path "*redata*" -o -path "*Dark*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name $dataprefix*.fits -print | wc -l`
-  num=`find ./   -path "*redata*" -prune -o -type f -name *.fits -print | wc -l`
-  if [ $num -gt "0" ];then
-    #size=`find ./   -path "*redata*" -o -path "*Dark*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name $dataprefix*.fits -print | xargs ls -I {} -al|awk '{sum += $5} END {print sum/(1000*1024*1024)}'`
-    size=`find ./   -path "*redata*" -prune -o -type f -name $dataprefix*.fits -print | xargs ls -I {} -al|awk '{sum += $5} END {print sum/(1000*1024*1024)}'` 
->>>>>>> 81355ff20406e98c20c6c5227a425b7a76b22f31
     num=`printf "%08d" $num`
     size=`printf "%012.4f" $size`
   else
@@ -81,13 +73,8 @@ if [ -d "$targetdir" ]; then
   #echo "$today0 $ctime : Start Calculating  $year$monthday $datatype @$device Observing Time..."
   cd $targetdir
   #start=`find ./   -path "*redata*" -o -path "*Dark*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name $dataprefix*.fits -print |xargs ls -ltr 2>/dev/null |head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print($2" "$3)}'`
-<<<<<<< HEAD
   #start=`find ./ -type f -name ''$dataprefix*.fits'' -not -path "*redata*"  -print |xargs ls -ltr 2>/dev/null |head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print($2" "$3)}'`
-  start=` find ./   -type f -name ''$dataprefix*.fits'' -not -path "*redata*" -print|xargs stat|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1|head -n +1`
-=======
-  #start=`find ./  -path "*FLAT*" -o -path "*redata*" -o -path "*DARK*" -o -path "*Dark*" -o -path "*dark*" -prune -o -type f -name $dataprefix*.fits -print |xargs ls -ltr 2>/dev/null |head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print($2" "$3)}'`
-  start=`find ./  -path "*redata*" -prune -o -type f -name *.fits -print |xargs ls -ltr 2>/dev/null |head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print($2" "$3)}'`
->>>>>>> 81355ff20406e98c20c6c5227a425b7a76b22f31
+  start=` find ./   -type f -name ''$dataprefix*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1|head -n +1`
   if [ -z "$start" ]; then
     #start="19700101 08:00:00.000"
     #s=`date -d "$start" +%s`
@@ -97,13 +84,8 @@ if [ -d "$targetdir" ]; then
     s=`date -d "$start" +%s`
   fi
   #end=`find ./  -path "*redata*" -o -path "*Dark*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name $dataprefix*.fits -print |xargs ls -lt 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print( $2" "$3)}'`
-<<<<<<< HEAD
   #end=`find ./ -type f -name ''$dataprefix*.fits'' -not -path "*redata*"  -print |xargs ls -lt 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print( $2" "$3)}'`
-  end=` find ./   -type f -name ''$dataprefix*.fits'' -not -path "*redata*" -print|xargs stat|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 -r|head -n +1`
-=======
-  #end=`find ./  -path "*FLAT*" -o -path "*redata*" -o -path "*DARK*" -o -path "*Dark*" -o -path "*dark*" -prune -o -type f -name $dataprefix*.fits -print |xargs ls -lt 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print( $2" "$3)}'`
-  end=`find ./  -o -path -prune -o -type f -name *.fits -print |xargs ls -lt 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print( $2" "$3)}'`
->>>>>>> 81355ff20406e98c20c6c5227a425b7a76b22f31
+  end=` find ./   -type f -name ''$dataprefix*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 -r|head -n +1`
   if [ -z "$end" ]; then
     #end="19700101 08:00:00.000"
     #e=`date -d "$end" +%s`
