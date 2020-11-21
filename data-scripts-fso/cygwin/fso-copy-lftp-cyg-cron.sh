@@ -70,8 +70,9 @@ t0=`date +%s`
 
 if [ $# -ne 9 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to local HD under cygwin"
-  echo "Usage: ./fso-copy-lftp-cyg-xx.sh srcip port dest year(4 digits)  monthday(4 digits) user password datatype(TIO/HA) procnum"
-  echo "Example: ./fso-copy-lftp-cyg-xx.sh 192.168.111.120 21 f 2019 0713 tio ynao246135 TIO 40"
+  echo "Usage: ./fso-copy-lftp-cyg-cron.sh srcip port dest year(4 digits)  monthday(4 digits) user password datatype(TIO/HA) procnum"
+  echo "Example: ./fso-copy-lftp-cyg-cron.sh 192.168.111.122 21 f 2020 1121 ha ynao246135 HA 100"
+  echo "Example: ./fso-copy-lftp-cyg-cron.sh 192.168.111.120 21 e 2019 0713 tio ynao246135 TIO 40"
   exit 1
 fi
 
@@ -127,7 +128,7 @@ srcdir2=${syssep}${srcyear}${srcmonthday}${syssep}
 
 pver=1.6.0
 echo " "
-echo "============ Welcome to FSO Data  System@FSO! ==========="
+echo "============ Welcome to FSO Data System @FSO ============"
 echo "                                                         "
 echo "                 $(basename $0)                          "  
 echo "                                                         "
@@ -173,8 +174,6 @@ fs1=$(cat $logpath/$(basename $0)_${datatype}_${today}_tmpfs2.dat)
 ctime=`date --date='0 days ago' +%H:%M:%S`
 #t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 t1=`date +%s`
-
-
 
 lftp $ftpserver -e "mirror --parallel=$threadnumber $srcdir2  $destdir1; quit" >/dev/null 2>&1 &
 #lftp $ftpserver -e "mirror  --ignore-time --continue --parallel=$threadnumber $srcdir2  $destdir1; quit" >/dev/null 2>&1 &
@@ -257,10 +256,10 @@ echo "$today0 $ctime3: Succeeded in Syncing $datatype data @ FSO!"
 echo "          Synced : $filenumber file(s)"
 echo "                 : $filesize MB"
 echo "         @ Speed : $speed MB/s"
-echo "       Time Used : $timediff secs."
-echo "    Total Synced : $fn2 file(s)"
+echo "            Used : $timediff secs."
+echo "          Synced : $fn2 file(s)"
 echo "                 : $fs2 MB"
-echo " Total Time Used : $timediff1 secs."
+echo "      Total Used : $timediff1 secs."
 echo "            From : $today0 $ctime0 "
 echo "              To : $today0 $ctime3 "
 #rm -rf $logpath/$lockfile
