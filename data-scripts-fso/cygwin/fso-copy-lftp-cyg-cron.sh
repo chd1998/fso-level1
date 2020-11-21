@@ -4,22 +4,22 @@
 #Usage: ./fso-copy-lftp-cyg-xx.sh srcip port dest year(4 digits)  monthday(4 digits) user password datatype(TIO/HA)
 #Example: ./fso-copy-lftp-cyg-xx.sh 192.168.111.120 21 f 2019 0713 tio ynao246135 TIO
 #changlog: 
-#        20190420       Release 0.1 first prototype release 0.1
-#        20190421       Release 0.2 fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
-#        20190423       Release 0.3 fix errors
-#        20190426       Release 0.4 fix errors
-#        20190428       Release 0.5 add monthday to the src dir
-#                       Release 0.6 datatype is an option now
-#        20190603       Release 0.7 using lftp instead of wget
-#        20190604       Release 0.8 add progress bar to lftp
-#        20190608       Release 0.9 fixed error in directory
-#                       Release 1.0 improve display info
-#        20190702       Release 1.1 revise some logical relations
-#        20190704       Release 1.2 using lftp & add input args
-#        20190705       Release 1.3 logics revised
-#                       Release 1.4 revise timing logics
-#        20190713       Relaase 1.5 modified to use under cygwin with
-#        20190717       Release 1.6 fixed error in counting file no. & size
+#        20190420       Release 0.1.0 first prototype release 0.1
+#        20190421       Release 0.2.0 fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
+#        20190423       Release 0.3.0 fix errors
+#        20190426       Release 0.4.0 fix errors
+#        20190428       Release 0.5.0 add monthday to the src dir
+#                       Release 0.6.0 datatype is an option now
+#        20190603       Release 0.7.0 using lftp instead of wget
+#        20190604       Release 0.8.0 add progress bar to lftp
+#        20190608       Release 0.9.0 fixed error in directory
+#                       Release 1.0.0 improve display info
+#        20190702       Release 1.1.0 revise some logical relations
+#        20190704       Release 1.2.0 using lftp & add input args
+#        20190705       Release 1.3.0 logics revised
+#                       Release 1.4.0 revise timing logics
+#        20190713       Relaase 1.5.0 modified to use under cygwin with
+#        20190717       Release 1.6.0 fixed error in counting file no. & size
 #
 #waiting pid taskname prompt
 waiting() {
@@ -125,17 +125,18 @@ srcdir=${ftpserver1}${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${sysse
 srcdir1=${syssep}${srcyear}${srcmonthday}${syssep}${datatype}${syssep}
 srcdir2=${syssep}${srcyear}${srcmonthday}${syssep}
 
+pver=1.6.0
 echo " "
-echo "======== Welcome to FSO Data Copying System@FSO! ========"
+echo "============ Welcome to FSO Data  System@FSO! ==========="
 echo "                                                         "
-echo "                 fso-copy-lftp-cyg.sh                    "  
+echo "                 $(basename $0)                          "  
 echo "                                                         "
-echo "             Relase 1.6     20190717  11:16              "
+echo "                    Release $pver                        "
 echo "                                                         "
-echo "                                                         "
-echo "                  $today    $ctime                       "
+echo "                $today    $ctime                         "
 echo "                                                         "
 echo "========================================================="
+echo " "
 echo " "
 
 if [ ! -d "$destdir" ]; then

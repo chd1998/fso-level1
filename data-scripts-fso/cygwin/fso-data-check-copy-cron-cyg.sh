@@ -6,11 +6,11 @@
 #Example: ./fso-data-check-copy-cron-cyg.sh  192.168.111.122 21 f ha ynao246135 2019 0918 fits 2111040
 #Example: ./fso-data-check-copy-cron-cyg.sh  192.168.111.122 21 g sp ynao246135 2019 0918 fits 5359680
 #changlog: 
-#       20190725   Release 0.1     first working version.sh
-#       20190914   Release 0.2     revised and add comparison of remote & local file(s)
-#                  Release 0.3     add sp data check with 2 stdsize
-#                  Release 0.31    add more info to output mail
-#       20200420   Release 0.32    revised & add more info to output mail
+#       20190725   Release 0.1.0     first working version.sh
+#       20190914   Release 0.2.0     revised and add comparison of remote & local file(s)
+#                  Release 0.3.0     add sp data check with 2 stdsize
+#                  Release 0.3.1    add more info to output mail
+#       20200420   Release 0.3.2    revised & add more info to output mail
 # 
 
 #waiting pid taskname prompt
@@ -107,14 +107,14 @@ fi
 #touch $localwrongsize
 #touch $tmplist
 
-pver=0.32
+pver=0.3.2
 ctime1=`date  +%H:%M:%S`
 #st1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 st1=`date +%s`
 echo "                                                       "
-echo "======= Welcome to Data Archiving System @ FSO! ======="
-echo "              fso-data-check-copy.sh                   "
-echo "          (Release $pver 20200420 13:34)                "
+echo "=========== Welcome to Data System @ FSO! ============="
+echo "                  $(basename $0)                       "
+echo "               Release $pver                           "
 echo "                                                       "
 echo "              Check $datatype data and copy            "
 echo "                                                       "
