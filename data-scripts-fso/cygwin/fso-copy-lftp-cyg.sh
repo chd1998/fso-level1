@@ -77,8 +77,8 @@ ctime0=`date --date='0 days ago' +%H:%M:%S`
 if [ $# -ne 8 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to local HD under cygwin"
   echo "Usage: ./fso-copy-lftp-cyg-cron.sh srcip port dest year(4 digits)  monthday(4 digits) user password datatype(TIO/HA) procnum"
-  echo "Example: ./fso-copy-lftp-cyg-cron.sh 192.168.111.122 21 f 2020 1121 ha ynao246135 HA 100"
-  echo "Example: ./fso-copy-lftp-cyg-cron.sh 192.168.111.120 21 e 2019 0713 tio ynao246135 TIO 40"
+  echo "Example: ./fso-copy-lftp-cyg-cron.sh 192.168.111.122 21 f 2020 1121 ha ynao246135 HA"
+  echo "Example: ./fso-copy-lftp-cyg-cron.sh 192.168.111.120 21 e 2019 0713 tio ynao246135 TIO"
   exit 1
 fi
 
@@ -225,9 +225,13 @@ fs2=$(cat $logpath/$(basename $0)_${datatype}_tmpfs2.dat)
 #fi
 
 filenumber=`echo "$fn1 $fn2"|awk '{print($2-$1)}'`
-#echo "$fn2, $fn1, $filenumber"
-#read
+if [ $filenumber -lt 0 ]; then
+  filenumber=0
+fi
 filesize=$(($fs2-$fs1))
+if [ $filesize -lt 0 ]; then
+  filesize=0
+fi
 timediff=$(($ttmp-$t1))
 #timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
 if [ $timediff -le 0 ]; then
@@ -244,7 +248,7 @@ t4=`date +%s`
 timediff1=`echo "$t1 $t4"|awk '{print($2-$1)}'`
 
 echo " " 
-echo "$today0 $ctime3: Succeeded in Syncing $datatype data @ FSO!"
+echo "$today0 $ctime3: Succeeded in Syncing $datatype data @FSO!"
 echo "          Synced : $filenumber file(s)"
 echo "                 : $filesize MB"
 echo "         @ Speed : $speed MB/s"

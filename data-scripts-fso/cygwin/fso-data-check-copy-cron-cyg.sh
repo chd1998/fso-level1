@@ -52,6 +52,7 @@ function onCtrlC(){
 
 cyear=`date  +%Y`
 today=`date  +%Y%m%d`
+today0=`date  +%Y%m%d`
 mday=`date  +%m%d`
 ctime=`date  +%H:%M:%S`
 syssep="/"
@@ -190,9 +191,10 @@ cat $remotelocaldifflist > $tmplist
 cat $localwrongsize >> $tmplist
 ctime3=`date  +%H:%M:%S`
 ctime3=`date  +%H:%M:%S`
+today=`date  +%Y%m%d`
 echo "                  For $year$monthday $datatype Data File(s) @fso-data" > $logpath/errtmp-$datatype-$year$monthday
 echo "***********************************************************************************************************************" >> $logpath/errtmp-$datatype-$year$monthday
-echo "$today $ctime1 : Start $datatype File(s) Checking... " >> $logpath/errtmp-$datatype-$year$monthday
+echo "$today0 $ctime1 : Start $datatype File(s) Checking... " >> $logpath/errtmp-$datatype-$year$monthday
 echo "$today $ctime3 : $totalfilenumber $datatype File(s) Checked... " >> $logpath/errtmp-$datatype-$year$monthday
 echo "                " >> $logpath/errtmp-$datatype-$year$monthday
 echo "$today $ctime3 : $errsize0 Local Missing $datatype File(s) " >> $logpath/errtmp-$datatype-$year$monthday
@@ -215,7 +217,7 @@ email -s "$year$monthday-$datatype@fso-data: $errsize5 Error $datatype File(s) F
 
 
 ctime4=`date  +%H:%M:%S`
-today0=`date  +%Y%m%d`
+today=`date  +%Y%m%d`
 #st2=`echo $ctime4|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 st2=`date +%s`
 stdiff=`echo "$st1 $st2"|awk '{print($2-$1)}'`
@@ -230,8 +232,8 @@ echo "                 : see $remotelocaldifflist for details "
 echo "                 : $errsize2 file(s) found in local wrong size checking"
 echo "                 : see $localwrongsize for details"
 echo "       Time Used : $stdiff secs."
-echo "            From : $today $ctime1"
-echo "              To : $today0 $ctime4"
+echo "            From : $today0 $ctime1"
+echo "              To : $today $ctime4"
 echo "================================================================================="
 rm -rf $lockfile
 rm -f $logpath/errtmp-$datatype-$year$monthday
