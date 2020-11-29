@@ -142,8 +142,8 @@ do
 
   srcsize=`du -sm $srcdir|awk '{print $1}'`
   srcfilenum=`ls -lR $srcdir| grep "^-" | wc -l`
-  srcfntotal=`echo $srcfntotal $srcfilenum|awk 'print{$1+$2}'`
-  srcfstotal=`echo $srcfstotal $srcsize|awk 'print{$1+$2}'`
+  srcfntotal=`echo $srcfntotal $srcfilenum|awk '{print($1+$2)}'`
+  srcfstotal=`echo $srcfstotal $srcsize|awk '{print($1+$2)}'`
 
   ctime=`date  +%H:%M:%S`
   echo "================================================================"
@@ -170,8 +170,8 @@ do
 
   destfilenum=`ls -lR $destdir| grep "^-" | wc -l`
   destsize=`du -sm $destdir|awk '{print $1}'`
-  destfntotal=`echo $destfntotal $destfilenum|awk 'print{$1+$2}'`
-  destfstotal=`echo $destfstotal $destsize|awk 'print{$1+$2}'`
+  destfntotal=`echo $destfntotal $destfilenum|awk '{print($1+$2)}'`
+  destfstotal=`echo $destfstotal $destsize|awk '{print($1+$2)}'`
 
   timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
   if [ $timediff -le 0 ]; then
