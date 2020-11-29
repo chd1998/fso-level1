@@ -4,22 +4,22 @@
 #Usage: ./hd2lustre-single-v16.sh srcdir destdir year(4 digits) monthday(4 digits) datatype(TIO or HA)
 #Example: ./hd2lustre-single-v16.sh  /data  /lustre/data 2019 0707 TIO
 #Changelog:
-#         20190420 Release 0.1, first working script
-#         20190421 Release 0.2, fixed minor errors, and using cp instead of rsync
-#         20190423 Release 0.3, fixed error in reading parameters inputed
-#         20190423 Release 0.4, judge the srcdir is empty or not
-#         20190424 Release 0.5, fixed some error in copying 
-#         20190424 Release 0.6, add datatype as input to improve speed for chmoding
-#         20190425 Release 0.7, add more info for chmod
-#		               Release 0.8, sum of the data copied in MB
-#                  Release 0.9, sum of file numbers both in src and dest
-#	        20190625 Release 1.0, add speed info 
-#         20190708 Release 1.1, add checking dest dir in year specified
-#                               add datatype to destdir if missing in src
-#                  Release 1.2, copy data of single day only
-#         20190710 Release 1.4, copy process indicator added
-#         20190711 Release 1.5, using tar & pv to copy data with all dirs  
-#                  Release 1.6, revised for copying only single dir	
+#         20190420 Release 0.1.0 first working script
+#         20190421 Release 0.2.0 fixed minor errors, and using cp instead of rsync
+#         20190423 Release 0.3.0 fixed error in reading parameters inputed
+#         20190423 Release 0.4.0 judge the srcdir is empty or not
+#         20190424 Release 0.5.0 fixed some error in copying 
+#         20190424 Release 0.6.0 add datatype as input to improve speed for chmoding
+#         20190425 Release 0.7.0 add more info for chmod
+#		               Release 0.8.0 sum of the data copied in MB
+#                  Release 0.9.0 sum of file numbers both in src and dest
+#	        20190625 Release 1.0.0 add speed info 
+#         20190708 Release 1.1.0 add checking dest dir in year specified
+#                                add datatype to destdir if missing in src
+#                  Release 1.2.0 copy data of single day only
+#         20190710 Release 1.4.0 copy process indicator added
+#         20190711 Release 1.5.0 using tar & pv to copy data with all dirs  
+#                  Release 1.6.0 revised for copying only single dir	
 #
 
 
@@ -29,7 +29,6 @@ waiting() {
   procing "$3" &
   local tmppid="$!"
   wait $pid
-#�ָ���굽��󱣴��λ��
 #  tput rc
 #  tput ed
 	wctime=`date  +%H:%M:%S`
@@ -43,7 +42,6 @@ waiting() {
   #echo "$dt1" > /home/chd/log/tmp
 }
 
-    #   ���������, С����
 procing() {
   trap 'exit 0;' 6
   tput ed
@@ -70,10 +68,11 @@ ctime=`date  +%H:%M:%S`
 syssep="/"
 devpre="/dev/"
 
+pver=1.6.0
 echo " "
 echo " "
-echo "====== Welcome to HD-->Lustre data Archiving System @FSO ======"
-echo "                 Release 1.6 2019711 21:10                     "
+echo "=============== Welcome to Data System @FSO ==================="
+echo "                    Release $pver                              "
 echo "                                                               "
 echo "              Syncing data from local HD to Lustre             "
 echo "                                                               "

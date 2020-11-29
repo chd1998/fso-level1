@@ -4,20 +4,20 @@
 #Usage: ./fso-copy.sh srcip dest year(4 digits)  monthday(4 digits) datatype(TIO/HA)
 #Example: ./fso-copy.sh ftp://192.168.111.120 /lustre/data 2019 0427 TIO
 #changlog: 
-#        20190420       Release 0.1 first prototype release 0.1
-#        20190421       Release 0.2 fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
-#        20190423       Release 0.3 fix errors
-#        20190426       Release 0.4 fix errors
-#        20190428       Release 0.5 add monthday to the src dir
-#                       Release 0.6 datatype is an option now
-#        20190603       Release 0.7 using lftp instead of wget
-#        20190604       Release 0.8 add progress bar to lftp
-#        20190608       Release 0.9 fixed error in directory
-#                       Release 1.0 improve display info
-#        20190702       Release 1.1 revise some logical relations
-#        20190703       Release 1.2 using wget in case of lftp failure
-#                       Release 1.3 using multiple wget
-#        20190719       Release 1.4 revised multi wget performance
+#        20190420       Release 0.1.0 first prototype release 0.1
+#        20190421       Release 0.2.0 fix bugs,using pid as lock to prevent script from multiple starting, release 0.2
+#        20190423       Release 0.3.0 fix errors
+#        20190426       Release 0.4.0 fix errors
+#        20190428       Release 0.5.0 add monthday to the src dir
+#                       Release 0.6.0 datatype is an option now
+#        20190603       Release 0.7.0 using lftp instead of wget
+#        20190604       Release 0.8.0 add progress bar to lftp
+#        20190608       Release 0.9.0 fixed error in directory
+#                       Release 1.0.0 improve display info
+#        20190702       Release 1.1.0 revise some logical relations
+#        20190703       Release 1.2.0 using wget in case of lftp failure
+#                       Release 1.3.0 using multiple wget
+#        20190719       Release 1.4.0 revised multi wget performance
 #
 #waiting pid taskname prompt
 waiting() {
@@ -101,11 +101,11 @@ else
 fi
 
 echo " "
-echo "======== Welcome to FSO Data Copying System@FSO! ========"
+echo "=========== Welcome to FSO Data System @FSO ============="
 echo "                                                         "
-echo "                 fso-copy-wget.sh                        "  
+echo "                 $(basename $0)                          "  
+echo "                   Release $pver                         "
 echo "                                                         "
-echo "             Relase 1.4     20190719  19:16              "
 echo " Copy the $datatype data from remote to lustre manually  "
 echo "                                                         "
 echo "                $today    $ctime                         "

@@ -4,20 +4,20 @@
 #Usage: ./hd2lustre-all-v15.sh srcdir destdir year(in 4 digits) datatype(TIO or HA)
 #Example: ./hd2lustre-all-v15.sh  /data  /lustre/data 2019 TIO
 #Changelog:
-#         20190420 Release 0.1, first working script
-#         20190421 Release 0.2, fixed minor errors, and using cp instead of rsync
-#         20190423 Release 0.3, fixed error in reading parameters inputed
-#         20190423 Release 0.4, judge the srcdir is empty or not
-#         20190424 Release 0.5, fixed some error in copying 
-#         20190424 Release 0.6, add datatype as input to improve speed for chmoding
-#         20190425 Release 0.7, add more info for chmod
-#                  Release 0.8, sum of the data copied in MB
-#                  Release 0.9, sum of file numbers both in src and dest
-#         20190625 Release 1.0, add speed info 
-#         20190708 Release 1.1, add checking dest dir in year specified
-#                               add datatype to destdir if missing in src
-#         20190710 Release 1.3, add multithreading to copy process
-#         20190711 Release 1.5, using tar & pv to copy data
+#         20190420 Release 0.1.0  first working script
+#         20190421 Release 0.2.0  fixed minor errors, and using cp instead of rsync
+#         20190423 Release 0.3.0  fixed error in reading parameters inputed
+#         20190423 Release 0.4.0  judge the srcdir is empty or not
+#         20190424 Release 0.5.0  fixed some error in copying 
+#         20190424 Release 0.6.0  add datatype as input to improve speed for chmoding
+#         20190425 Release 0.7.0  add more info for chmod
+#                  Release 0.8.0  sum of the data copied in MB
+#                  Release 0.9.0  sum of file numbers both in src and dest
+#         20190625 Release 1.0.0  add speed info 
+#         20190708 Release 1.1.0  add checking dest dir in year specified
+#                                 add datatype to destdir if missing in src
+#         20190710 Release 1.3.0  add multithreading to copy process
+#         20190711 Release 1.5.0  using tar & pv to copy data
 
 trap 'onCtrlC' INT
 function onCtrlC(){
