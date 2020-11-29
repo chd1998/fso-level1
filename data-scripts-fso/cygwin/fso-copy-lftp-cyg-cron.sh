@@ -128,7 +128,11 @@ srcdir2=${syssep}${srcyear}${srcmonthday}${syssep}
 
 pver=1.6.0
 echo " "
+<<<<<<< HEAD
 echo "============== Welcome to Data System @FSO =============="
+=======
+echo "============ Welcome to FSO Data System @FSO ============"
+>>>>>>> 8113fa32367369145b3f04caeae624ffabecb352
 echo "                                                         "
 echo "                 $(basename $0)                          "  
 echo "                                                         "
