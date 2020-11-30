@@ -141,7 +141,7 @@ do
   fi
   num=`echo $num $snum|awk '{print($1+$2)}'`
   size=`echo $size $ssize|awk '{print($1+$2)}'`
-  if (echo ${sobstime} 0.5 | awk '!($1>=$2){exit 1}') || (echo ${snum} 1000 | awk '!($1>$2){exit 1}') then 
+  if (echo ${sobstime} 0.5 | awk '!($1>=$2){exit 1}') && (echo ${snum} 1000 | awk '!($1>$2){exit 1}') then 
     obstime=`echo $obstime $sobstime|awk '{print($1+$2)}'`
     obsday=`echo $obsday|awk '{print($1+1)}'`
   fi
