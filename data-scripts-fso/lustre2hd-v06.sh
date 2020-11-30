@@ -5,12 +5,13 @@
 #Usage: ./lustre2hd-v06.sh srcdir mountpoint destdir 
 #Example: ./lustre2hd-v06.sh /lustre/data/result/2017  /data /result
 #Changelog:
-#         20190420 	Release 0.1	first working script
-#         20190421 	Release 0.2	fixed minor errors, and using cp instead of rsync
-#         20190426 	Release 0.3	fixed minor display problems
-# 		   	Release 0.4	sum the file num and size both in src and dest
-#         20190625      Release 0.5     calculate speed of copying 
-#         20191003      Release 0.6     copy defined dir to hd
+#         20190420 	    Release 0.1.0	    first working script
+#         20190421 	    Release 0.2.0	    fixed minor errors, and using cp instead of rsync
+#         20190426 	    Release 0.3.0	    fixed minor display problems
+# 		   	              Release 0.4.0	    sum the file num and size both in src and dest
+#         20190625      Release 0.5.0     calculate speed of copying 
+#         20191003      Release 0.6.0     copy defined dir to hd
+#
 
 trap 'onCtrlC' INT
 function onCtrlC(){
@@ -25,10 +26,10 @@ cyear=`date  +%Y`
 today=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
 syssep="/"
-
+pver=0.6.0
 echo " "
-echo "====== Welcome to Lustre-->HD data Archiving System @ FSO ======"
-echo "                Release 0.6  20191003 13:45                     "
+echo "=============== Welcome to Data System @FSO ===================="
+echo "                    Release $pver                               "
 echo "                                                                "
 echo "             Copying data on lustre to Local HD                 "
 echo "                                                                "

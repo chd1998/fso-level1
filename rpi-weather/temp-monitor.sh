@@ -24,7 +24,7 @@ if [ -f $lockfile ];then
   mypid=$(cat $lockfile)
   ps -p $mypid | grep $mypid &>/dev/null
   if [ $? -eq 0 ];then
-#    echo "$day : $(basename $0) is running for reading temperature data of rpi2 @ FSO..."
+    echo "$day : $(basename $0) is running for reading temp & cpu data of rpi2 @FSO..."
     exit 1
   else
     echo $$>$lockfile
