@@ -9,6 +9,7 @@
 #       20201104    Release 0.1.3     add obs days
 #       20201105    Release 0.1.4     deal with multiple years
 #       20201106    Release 0.1.5     speed optimized
+#       20201202    Release 0.1.6     disp info revised
 
 waiting() {
   local pid="$1"
@@ -68,7 +69,6 @@ datatype=$6
 report=$7
 mail=$8
 
-pver=0.1.5
 num=0
 size=0.0
 obstime=0.0
@@ -91,16 +91,18 @@ fi
 sdate=$syear$smonthday
 edate=$eyear$emonthday
 checkdays=$((($(date +%s -d $edate) - $(date +%s -d $sdate))/86400));
+totaldays=`echo $checkdays 1|awk '{print($1+$2)}'`
 today=`date  +%Y%m%d`
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
 i=0
+pver=0.1.6
 t0=`date +%s`
 tmpdate=$sdate
 echo " "
 echo " "
 echo "                           $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  "
-echo "                                          Version: $pver                                                                     "
+echo "                                          Version $pver                                                                     "
 echo "                                         $today $ctime                  "
 echo "                      $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  ">$suminfo
 echo "                                          Version: $pver                                                                     ">>$suminfo
@@ -146,7 +148,7 @@ do
     obsday=`echo $obsday|awk '{print($1+1)}'`
   fi
   let i++
-  echo "                  : $i day(s) Processed..."
+  echo "                  : $i of $totaldays Day(s) Processed..."
 done
 
 num=`printf "%08d" $num`
@@ -156,8 +158,13 @@ obsday=`printf "%04d" $obsday`
 checkdays=`echo $checkdays|awk '{ print($1+1)}'`
 checkdays=`printf "%04d" $checkdays`
 echo "******************************************************************************************************************************************************************************">> $suminfo
-echo "Start         End           Nums.               Size(GiB)               Total Obs. Time(hrs)     Total Obs. Day(s)    Total Cal. Day(s)" >>$suminfo
-echo "$syear$smonthday      $eyear$emonthday      $num            $size            $obstime              $obsday                 $checkdays" >>$suminfo
+if [ "$datatype"=="HA" ]; then
+  DT=" HA"
+else
+  DT=$datatype
+fi
+echo "Data Type      Start         End           Nums.               Size(GiB)               Total Obs. Time(hrs)     Total Obs. Day(s)    Total Cal. Day(s)" >>$suminfo
+echo "$DT            $syear$smonthday      $eyear$emonthday      $num            $size            $obstime              $obsday                 $checkdays" >>$suminfo
 
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
