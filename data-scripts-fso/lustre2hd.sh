@@ -10,22 +10,67 @@
 #         20190426 	Release 0.3.0	    fixed minor display problems
 # 		   	          Release 0.4.0	    sum the file num and size both in src and dest
 #         20190625  Release 0.5.0     calculate speed of copying 
-#         20201129  Release 0.5.1     add time span to copy 
+#         20201129  Release 0.5.1     add time span to copy
+#         20201130  Release 0.5.2     add progress info to copy 
 
 trap 'onCtrlC' INT
 function onCtrlC(){
     echo "Ctrl-C Captured! "
     echo "Breaking..."
-    umount $dev
+    wctime=`date  +%H:%M:%S`
+    wtoday=`date  +%Y%m%d`
+    if [ -n "$dev" ]; then
+    	umount $dev
+      if [ $? -ne 0 ];then
+        echo "$wtoday $wctime: umount $dev to $destdir1 failed!"
+        echo "                   please check!"
+      fi
+    fi
     sleep 5
     exit 1
+}
+
+waiting() {
+  local pid="$1"
+  taskname="$2"
+  procing "$3" &
+  local tmppid="$!"
+  wait $pid
+  #sleep 1
+  tput rc
+  tput ed
+  wctime=`date  +%H:%M:%S`
+  wtoday=`date  +%Y%m%d`
+  #echo "$wtoday $wctime : $2 Task Has Done!"
+#  dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+  dt1=`date +%s`
+#  echo "                   Finishing..."
+  kill -6 $tmppid >/dev/null 1>&2
+  echo "$dt1" > /home/chd/log/dtmp
+}
+
+procing() {
+  trap 'tput ed;tput rc;exit 0;' 6
+  tput ed
+  while [ 1 ]
+  do
+    for j in '-' '\\' '|' '/'
+    do
+      tput sc
+      ptoday=`date  +%Y%m%d`
+      pctime=`date  +%H:%M:%S`
+      echo -ne  "$ptoday $pctime : $1...   $j"
+      sleep 0.2
+      tput rc
+    done
+  done
 }
 
 cyear=`date  +%Y`
 today=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
 syssep="/"
-pver=0.5.1
+pver=0.5.2
 
 echo " "
 echo "=============== Welcome to Data System @FSO ===================="
@@ -59,7 +104,7 @@ IFS=" "
 hdlist=($out)
 IFS="$OLD_IFS"
 len1=0
-echo "Please select target drive to archiving..."
+echo "Please select target drive to archive..."
 echo "Available devices:"
 for i in ${hdlist[@]}
 do
@@ -103,6 +148,7 @@ fi
 sdate=$ayear$amonthday
 edate=$byear$bmonthday
 checkdays=$((($(date +%s -d $edate) - $(date +%s -d $sdate))/86400));
+totaldays=`echo $checkdays 1|awk '{print($1+$2)}'`
 today=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
 today0=`date  +%Y%m%d`
@@ -128,38 +174,57 @@ do
   if [ ! -d "$dir2" ]; then
     mkdir $dir1
     mkdir $dir2
+    if [ $? -ne 0 ];then
+      today=`date  +%Y%m%d`
+      ctime=`date  +%H:%M:%S`
+      echo "$today $ctime : create directory $dir2 failed!"
+      echo "                   please check!"
+      if [ -n "$dev" ]; then
+        umount $dev
+        if [ $? -ne 0 ];then
+          today=`date  +%Y%m%d`
+          ctime=`date  +%H:%M:%S`
+          echo "$today $ctime: umount $dev from $destdir1 failed!"
+          echo "                   please check!"
+        fi
+      fi
+      sleep 5
+      exit 1
+    fi
   else
-    echo "$dir2 already exist!"
-  fi
-
-  if [ $? -ne 0 ];then
-    echo "$today $ctime : create directory $dir2 failed!"
-    echo "                   please check!"
-    umount $dev
-    sleep 5
-    exit 1
+    echo "  "
+    echo "$today $ctime: $dir2 already exist!"
   fi
 
   srcsize=`du -sm $srcdir|awk '{print $1}'`
   srcfilenum=`ls -lR $srcdir| grep "^-" | wc -l`
   srcfntotal=`echo $srcfntotal $srcfilenum|awk '{print($1+$2)}'`
   srcfstotal=`echo $srcfstotal $srcsize|awk '{print($1+$2)}'`
-
+  today=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
-  echo "================================================================"
-  echo "$today $ctime: Archiving data from lustre to HD....."
-  echo "                   From: $srcdir"
-  echo "                   To  : $dir1 @ $dev"
-  echo "                   Please Wait..."
-  echo "                   Copying..."
-  echo "================================================================"
   echo " "
-  cp -ruvf  $srcdir $destdir
+  echo "================================================================"
+  echo "$today $ctime : Archiving data from lustre to HD....."
+  echo "                    From $srcdir"
+  echo "                    To   $dir1 @$dev"
+  echo "                    Please Wait..."
+  cp -runf  $srcdir $destdir &
+  waiting "$!" " $datatype Data Archiving of $checkyear$checkdate from $srcdir to $dir1 @$dev" "Archiving $datatype Data of $checkyear$checkdate from $srcdir to $dir1 @$dev"
+  
   if [ $? -ne 0 ]; then
-    ctime1=`date  +%H:%M:%S`
-    echo "$today $ctime1: Archiving $datatype data to $dev from $srcdir failed!"
+    today=`date  +%Y%m%d`
+    ctime=`date  +%H:%M:%S`
+    echo "$today $ctime: Archiving $datatype data to $dir1 @$dev from $srcdir failed!"
     echo "                   please check!"
-    umount $dev
+    if [ -n "$dev" ]; then
+      umount $dev
+      if [ $? -ne 0 ];then
+        today=`date  +%Y%m%d`
+        ctime=`date  +%H:%M:%S`
+        echo "$today $ctime: umount $dev from $destdir1 failed!"
+        echo "                   please check!"
+      fi
+    fi 
     sleep 5
     exit 1
   fi
@@ -182,28 +247,33 @@ do
     speed=`echo "$destsize $timediff"|awk '{print($1/$2)}'`
   fi
   let i++
-  echo "                  : $datatype data @$checkyear$checkmonthday  Copied..."
-  echo "                  : $i of $checkdays day(s) Processed..."
+  echo "                   $datatype data @$checkyear$checkmonthday  Copied..."
+  echo "                   $i of $totaldays day(s) Processed..."
+  echo "================================================================"
 done
 
-umount $dev
-sleep 5
+if [ -n "$dev" ]; then  
+  umount $dev
+  if [ $? -ne 0 ];then
+    today=`date  +%Y%m%d`
+    ctime=`date  +%H:%M:%S`
+    echo "$today $ctime: umount $dev from $destdir1 failed!"
+    echo "                   please check!"
+  fi
+fi
 #srcsize=`du -sh $srcdir`
 #destfilenum=`ls -lR $destdir| grep "^-" | wc -l`
 #destsize=`du -sm $destdir`
 today=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
-echo "================================================================"
+#echo "================================================================"
 echo "$today $ctime : Succeeded in Archiving:"  
 echo "             From : $today0 $ctime0"
 echo "               To : $today $ctime"
 echo "     Src File No. : $srcfntotal"
-echo "        File Size : $srcfstotal"
+echo "             Size : $srcfstotal"
 echo "    Dest File No. : $destfntotal"
-echo "        File Size : $destfstotal"
-echo "             Used : $timediff secs. "
+echo "             Size : $destfstotal"
+echo "               in : $timediff secs. "
 echo "================================================================="
 exit 0
-
-
-
