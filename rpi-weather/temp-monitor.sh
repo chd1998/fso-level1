@@ -48,13 +48,13 @@ do
   echo "$day : $temp  cpu_usage=$cpup%   cpu_load=$cpul     cpu_task_length=$cputl"
   if (echo ${cpul} upper_cpuload | awk '!($1>$2){exit 1}') then
   	echo "$day : CPU Load is too high...Killing Processes....." 
-        /home/pi/pid-kill.sh ToSql > /dev/null 
-	/home/pi/pid-kill.sh rtspIMG > /dev/null 
-	/home/pi/pid-kill.sh curl > /dev/null 
-	#/home/pi/pid-kill.sh temp-monitor > /dev/null 
-	/home/pi/pid-kill.sh fso_draw > /dev/null 
-	/home/pi/pid-kill.sh stats_backuo> /dev/null 
-	/home/pi/pid-kill.sh warning> /dev/null 
+    /home/pi/pid-kill.sh ToSql > /dev/null 
+	  /home/pi/pid-kill.sh rtspIMG > /dev/null 
+	  /home/pi/pid-kill.sh curl > /dev/null 
+	  #/home/pi/pid-kill.sh temp-monitor > /dev/null 
+	  /home/pi/pid-kill.sh fso_draw > /dev/null 
+	  /home/pi/pid-kill.sh stats_backuo> /dev/null 
+	  /home/pi/pid-kill.sh warning> /dev/null 
   fi
   sleep  $delaytime
 done
