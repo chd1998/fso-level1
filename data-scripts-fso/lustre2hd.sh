@@ -175,6 +175,8 @@ do
     mkdir $dir1
     mkdir $dir2
     if [ $? -ne 0 ];then
+      today=`date  +%Y%m%d`
+      ctime=`date  +%H:%M:%S`
       echo "$today $ctime : create directory $dir2 failed!"
       echo "                   please check!"
       if [ -n "$dev" ]; then
@@ -190,7 +192,8 @@ do
       exit 1
     fi
   else
-    echo "$dir2 already exist!"
+    echo "  "
+    echo "$today $ctime: $dir2 already exist!"
   fi
 
   srcsize=`du -sm $srcdir|awk '{print $1}'`
@@ -201,13 +204,13 @@ do
   ctime=`date  +%H:%M:%S`
   echo " "
   echo "================================================================"
-  echo "$today $ctime: Archiving data from lustre to HD....."
-  echo "                   From: $srcdir"
-  echo "                   To  : $dir1 @$dev"
-  echo "                   Please Wait..."
-  echo "================================================================"
-  cp -rf  $srcdir $destdir &
+  echo "$today $ctime : Archiving data from lustre to HD....."
+  echo "                    From $srcdir"
+  echo "                    To   $dir1 @$dev"
+  echo "                    Please Wait..."
+  cp -runf  $srcdir $destdir &
   waiting "$!" " $datatype Data Archiving of $checkyear$checkdate from $srcdir to $dir1 @$dev" "Archiving $datatype Data of $checkyear$checkdate from $srcdir to $dir1 @$dev"
+  
   if [ $? -ne 0 ]; then
     today=`date  +%Y%m%d`
     ctime=`date  +%H:%M:%S`
@@ -244,8 +247,9 @@ do
     speed=`echo "$destsize $timediff"|awk '{print($1/$2)}'`
   fi
   let i++
-  echo "                  : $datatype data @$checkyear$checkmonthday  Copied..."
-  echo "                  : $i of $totaldays day(s) Processed..."
+  echo "                   $datatype data @$checkyear$checkmonthday  Copied..."
+  echo "                   $i of $totaldays day(s) Processed..."
+  echo "================================================================"
 done
 
 if [ -n "$dev" ]; then  
@@ -262,17 +266,14 @@ fi
 #destsize=`du -sm $destdir`
 today=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
-echo "================================================================"
-echo "$today $ctime : Succeeded in Archiving:"  
-echo "             From : $today0 $ctime0"
-echo "               To : $today $ctime"
+#echo "================================================================"
+echo "$today $ctime : Succeeded in Archiving $datatype data from $sdate to $edate"
 echo "     Src File No. : $srcfntotal"
 echo "             Size : $srcfstotal"
 echo "    Dest File No. : $destfntotal"
 echo "             Size : $destfstotal"
+echo "             From : $today0 $ctime0"
+echo "               To : $today $ctime"
 echo "             Used : $timediff secs. "
 echo "================================================================="
 exit 0
-
-
-

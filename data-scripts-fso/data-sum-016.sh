@@ -82,7 +82,6 @@ site=fso
 device=lustre
 homepre=/home/chd/data-info
 suminfo=$homepre/$syear$smonthday-$eyear$emonthday-$datatype@fso.sum
-obslog=$homepre/$year/$datatype-obs-log-$year$monthday
 
 if [ ! -d "$homepre" ];then
     mkdir -m 777 -p $homepre
@@ -110,19 +109,24 @@ echo "                                          Version: $pver                  
 echo "                                         $today $ctime                  ">>$suminfo
 echo "**********************************************************************************************************************************************************************************"
 echo "**********************************************************************************************************************************************************************************">>$suminfo
-echo "DataType      Date       Nums.                 Size(GiB)                  StartTime                                           EndTime                                     Obs. Time(hrs)" >>$suminfo
+echo "Date       Nums.                 Size(GiB)                  StartTime                                           EndTime                                     Obs. Time(hrs)" >>$suminfo
 echo "**********************************************************************************************************************************************************************************">> $suminfo
 while [ $i -le $checkdays ]
 do
   checkdate=`date +%Y%m%d -d "+$i days $sdate"`
   checkyear=${checkdate:0:4}
   checkmonthday=${checkdate:4:4}
-
-  today0=`date  +%Y%m%d`
+  if [ "$datatype"=="HA" ]; then
+    DT=" HA"
+  fi
+  if [ "$datatype"=="TIO" ]; then
+    DT=$datatype
+  fi
+	today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S` 
 	echo "$today0 $ctime : Start $checkdate $datatype  Data Summerizing @fso"
   if [ ! -f "$homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum" ];then 
-    /home/chd/data-sum-daily-014.sh $datapre $checkyear $checkmonthday $datatype 0 &
+    /home/chd/data-sum-daily.sh $datapre $checkyear $checkmonthday $datatype 0 &
     waiting "$!" "$datatype Date Summerizing on $checkdate @$device" "Summerizing $datatype Data on $checkdate @$device"
   fi
   today0=`date  +%Y%m%d`
@@ -138,7 +142,7 @@ do
     ssize=`cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum|awk '{print $4}'`
     sobstime=`cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum|awk '{print $9}'`
   else
-    echo "$datatype            $checkdate   00000000              0000000.0000               0000-00-00 00:00:00.000000000                       0000-00-00 00:00:00.000000000               0000.000000" >>$suminfo
+    echo "$DT            $checkdate   00000000              0000000.0000               0000-00-00 00:00:00.000000000                       0000-00-00 00:00:00.000000000               0000.000000" >>$suminfo
     snum=0
     ssize=0.0
     sobstime=0.0
@@ -149,10 +153,6 @@ do
     obstime=`echo $obstime $sobstime|awk '{print($1+$2)}'`
     obsday=`echo $obsday|awk '{print($1+1)}'`
   fi
-  obslog=$homepre/$checkyear/$datatype-obs-log-$checkyear$checkmonthday
-  if [ ! -f "$obslog" ];then
-    /home/chd/obs-log-info.sh $datapre $checkyear $checkmonthday $datatype 0
-  fi        
   let i++
   echo "                  : $i of $totaldays Day(s) Processed..."
 done
@@ -166,7 +166,7 @@ checkdays=`printf "%04d" $checkdays`
 echo "******************************************************************************************************************************************************************************">> $suminfo
 
 echo "Data Type      Start         End           Nums.               Size(GiB)               Total Obs. Time(hrs)     Total Obs. Day(s)    Total Cal. Day(s)" >>$suminfo
-echo "$datatype             $syear$smonthday      $eyear$emonthday      $num            $size            $obstime              $obsday                 $checkdays" >>$suminfo
+echo "$DT            $syear$smonthday      $eyear$emonthday      $num            $size            $obstime              $obsday                 $checkdays" >>$suminfo
 
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
@@ -176,8 +176,8 @@ if [ $mail -eq "1" ];then
   mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" chd@ynao.ac.cn < $suminfo
   mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" xiangyy@ynao.ac.cn < $suminfo
   mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" yanxl@ynao.ac.cn < $suminfo
-  #mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" kim@ynao.ac.cn < $suminfo
-  #mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" lz@ynao.ac.cn < $suminfo
+  mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" kim@ynao.ac.cn < $suminfo
+  mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" lz@ynao.ac.cn < $suminfo
 fi
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`

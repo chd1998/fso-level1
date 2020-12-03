@@ -26,7 +26,7 @@ progpre=$1
 year=$2
 monthday=$3
 datatype=$4
-mailornot=$5
+mail=$5
 
 pver=0.1.3
 num="00000000"
@@ -39,6 +39,7 @@ homepre=/home/chd/data-info
 targetdir=$progpre/$year/$year$monthday/$datatype
 sumdir=$homepre/$year
 suminfo=$sumdir/$datatype-$year-$monthday.sum
+obslog=$homepre/$year/$datatype-obs-log-$year$monthday
 
 device="lustre"
 site="fso"
@@ -55,7 +56,7 @@ if [ -d "$targetdir" ]; then
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
   cd $targetdir
-  if [ $mailornot -eq "1" ];then
+  if [ $mail -eq "1" ];then
     echo "$today0 $ctime : Start Counting $year$monthday $datatype @$device File Numbers & Size..."
   fi 
   num=`find ./   -type f -name ''$dataprefix*.fits'' -not -path "*redata*" | wc -l`
@@ -74,7 +75,7 @@ if [ -d "$targetdir" ]; then
   cd $targetdir
   #start=`find ./   -path "*redata*" -o -path "*Dark*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name $dataprefix*.fits -print |xargs ls -ltr 2>/dev/null |head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print($2" "$3)}'`
   #start=`find ./ -type f -name ''$dataprefix*.fits'' -not -path "*redata*"  -print |xargs ls -ltr 2>/dev/null |head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print($2" "$3)}'`
-  start=` find ./   -type f -name ''$dataprefix*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1|head -n +1`
+  start=` find $targetdir/   -type f -name ''$dataprefix*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1|head -n +1`
   if [ -z "$start" ]; then
     #start="19700101 08:00:00.000"
     #s=`date -d "$start" +%s`
@@ -85,7 +86,7 @@ if [ -d "$targetdir" ]; then
   fi
   #end=`find ./  -path "*redata*" -o -path "*Dark*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name $dataprefix*.fits -print |xargs ls -lt 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print( $2" "$3)}'`
   #end=`find ./ -type f -name ''$dataprefix*.fits'' -not -path "*redata*"  -print |xargs ls -lt 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print( $2" "$3)}'`
-  end=` find ./   -type f -name ''$dataprefix*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 -r|head -n +1`
+  end=` find $targetdir/   -type f -name ''$dataprefix*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 -r|head -n +1`
   if [ -z "$end" ]; then
     #end="19700101 08:00:00.000"
     #e=`date -d "$end" +%s`
@@ -94,51 +95,42 @@ if [ -d "$targetdir" ]; then
   else
     e=`date -d "$end" +%s`
   fi
+
   
+
   interval=`echo "$s $e"|awk '{print(($2-$1)/3600)}'`
   interval=`printf "%011.6f" $interval`
-
-  if [ "$datatype"=="HA" ]; then
-    DT=" HA"
-    find ./ -path "*redata*" -o -path "*Dark*" -o -path "*DARK*" -o -path "*FLAT*" -o -name "*FLAT*" -prune -false  -o  -type d -name  "CENT*" -print|awk -F "/" '{print $NF}'|uniq > centtmp-$datatype
-    find ./ -path "*redata*" -o -path "*Dark*" -o -path "*DARK*" -o -path "*FLAT*" -o -name "*FLAT*" -prune -false  -o  -type d -name  "B*" -print|awk -F "/" '{print $NF}'|uniq > bofftmp-$datatype
-    find ./ -path "*redata*" -o -path "*Dark*" -o -path "*DARK*" -o -path "*FLAT*" -o -name "*FLAT*" -prune -false  -o  -type d -name  "R*" -print|awk -F "/" '{print $NF}'|uniq > rofftmp-$datatype
-  fi 
-  if [ "$datatype"=="TIO" ]; then
-    DT=$datatype
-    echo " ">centtmp-$datatype
-    echo " ">bofftmp-$datatype
-    echo " ">rofftmp-$datatype
-  fi
+  
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
-  echo "$DT           $year$monthday   $num              $size               $start                       $end               $interval " > $suminfo
+  echo "$datatype           $year$monthday   $num              $size               $start                       $end               $interval " > $suminfo
   #echo "$DT           $year$monthday   $num              $size               $start                       $end               $interval " 
-  if [ $mailornot -eq "1" ];then 
+  if [ $mail -eq "1" ];then 
     echo "$today0 $ctime : Send Summary  for $year$monthday $datatype @$device to Users..."
     echo "                      $datatype Data Summary - $year$monthday @fso                                  "> ./$datatype-mailtmp
     echo "DataType      Date       Nums.                 Size(GiB)                  StartTime                                           EndTime                                     Obs. Time(hrs)" >>./$datatype-mailtmp
     echo "******************************************************************************************************************************************************************************************">> ./$datatype-mailtmp
     cat $suminfo >> ./$datatype-mailtmp
     echo "******************************************************************************************************************************************************************************************">> ./$datatype-mailtmp
-    echo "$DT Obs. Wavelength:">> ./$datatype-mailtmp
-    cat  centtmp-$datatype >> ./$datatype-mailtmp
-    cat  bofftmp-$datatype >> ./$datatype-mailtmp
-    cat  rofftmp-$datatype >> ./$datatype-mailtmp
-
+    today0=`date  +%Y%m%d`
+    ctime=`date  +%H:%M:%S`
+    echo "$today0 $ctime : Add Obs. Log..."
+    if [ -f "$obslog" ];then
+      cat $obslog >> ./$datatype-mailtmp
+    else 
+      /home/chd/obs-log-info.sh $progpre $year $monthday $datatype 0
+      cat $obslog >> ./$datatype-mailtmp
+    fi        
     mail -s "Summary of $year$monthday $datatype @$device" nvst_obs@ynao.ac.cn < ./$datatype-mailtmp
     mail -s "Summary of $year$monthday $datatype @$device" chd@ynao.ac.cn < ./$datatype-mailtmp
-    mail -s "Summary of $year$monthday $datatype @$device" xiangyy@ynao.ac.cn < ./$datatype-mailtmp
-    mail -s "Summary of $year$monthday $datatype @$device" yanxl@ynao.ac.cn < ./$datatype-mailtmp
-    mail -s "Summary of $year$monthday $datatype @$device" kim@ynao.ac.cn < ./$datatype-mailtmp
-    mail -s "Summary of $year$monthday $datatype @$device" lz@ynao.ac.cn < ./$datatype-mailtmp
+    #mail -s "Summary of $year$monthday $datatype @$device" xiangyy@ynao.ac.cn < ./$datatype-mailtmp
+    #mail -s "Summary of $year$monthday $datatype @$device" yanxl@ynao.ac.cn < ./$datatype-mailtmp
+    #mail -s "Summary of $year$monthday $datatype @$device" kim@ynao.ac.cn < ./$datatype-mailtmp
+    #mail -s "Summary of $year$monthday $datatype @$device" lz@ynao.ac.cn < ./$datatype-mailtmp
   fi
   rm -f $datatype-$year-$monthday-flist
   rm -f $datatype-$year-$monthday-flist-sorted
   rm -f ./$datatype-mailtmp
-  rm -f centtmp-$datatype
-  rm -f bofftmp-$datatype
-  rm -f rofftmp-$datatype
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
   t1=`date  +%Y%m%d`
@@ -146,7 +138,7 @@ if [ -d "$targetdir" ]; then
   dt1=`date +%s`
   dt=`echo $dt0 $dt1|awk '{print($2-$1)'}`
   #sleep 1
-  if [ $mailornot -eq "1" ];then
+  if [ $mail -eq "1" ];then
     echo "$today0 $ctime : All Summary Tasks for $year$monthday $datatype @$device Ended..."
     echo "               in : $dt secs."
   fi
