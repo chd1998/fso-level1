@@ -7,7 +7,7 @@
 #       20201025    Release 0.1.1     add observation time and revised
 #       20201028    Release 0.1.2     observation time logics revised
 #       20201108    Release 0.1.3     exclude reduced, flat and dark data from counting
-
+#	20201203    Release 0.1.4     add obs log
 
 cyear=`date  +%Y`
 today=`date  +%Y%m%d`
@@ -118,15 +118,15 @@ if [ -d "$targetdir" ]; then
     if [ -f "$obslog" ];then
       cat $obslog >> ./$datatype-mailtmp
     else 
-      /home/chd/obs-log-info.sh $progpre $year $monthday $datatype 0
+      /home/chd/obs-log-info-01.sh $progpre $year $monthday $datatype 0
       cat $obslog >> ./$datatype-mailtmp
     fi        
     mail -s "Summary of $year$monthday $datatype @$device" nvst_obs@ynao.ac.cn < ./$datatype-mailtmp
     mail -s "Summary of $year$monthday $datatype @$device" chd@ynao.ac.cn < ./$datatype-mailtmp
-    #mail -s "Summary of $year$monthday $datatype @$device" xiangyy@ynao.ac.cn < ./$datatype-mailtmp
-    #mail -s "Summary of $year$monthday $datatype @$device" yanxl@ynao.ac.cn < ./$datatype-mailtmp
-    #mail -s "Summary of $year$monthday $datatype @$device" kim@ynao.ac.cn < ./$datatype-mailtmp
-    #mail -s "Summary of $year$monthday $datatype @$device" lz@ynao.ac.cn < ./$datatype-mailtmp
+    mail -s "Summary of $year$monthday $datatype @$device" xiangyy@ynao.ac.cn < ./$datatype-mailtmp
+    mail -s "Summary of $year$monthday $datatype @$device" yanxl@ynao.ac.cn < ./$datatype-mailtmp
+    mail -s "Summary of $year$monthday $datatype @$device" kim@ynao.ac.cn < ./$datatype-mailtmp
+    mail -s "Summary of $year$monthday $datatype @$device" lz@ynao.ac.cn < ./$datatype-mailtmp
   fi
   rm -f $datatype-$year-$monthday-flist
   rm -f $datatype-$year-$monthday-flist-sorted

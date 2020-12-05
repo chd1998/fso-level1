@@ -151,7 +151,7 @@ do
   fi
   obslog=$homepre/$checkyear/$datatype-obs-log-$checkyear$checkmonthday
   if [ ! -f "$obslog" ];then
-    /home/chd/obs-log-info.sh $datapre $checkyear $checkmonthday $datatype 0
+    /home/chd/obs-log-info-01.sh $datapre $checkyear $checkmonthday $datatype 0
   fi        
   let i++
   echo "                  : $i of $totaldays Day(s) Processed..."

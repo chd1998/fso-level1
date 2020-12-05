@@ -86,13 +86,12 @@ if [ -d "$datadir" ]; then
             #echo " $line    $rstime         $retime"
             echo " $line    $rstime         $retime">>$obslog
         done 
-    
-        rm -f ./clist-$datatype
-        rm -f ./blist-$datatype
-        rm -f ./rlist-$datatype
     fi
 fi    
 #mail -s "Summary of $year$monthday $datatype @$device" nvst_obs@ynao.ac.cn < ./$datatype-mailtmp
 if [ $mail -eq "1" ];then 
     mail -s "Summary of $year$monthday $datatype @$device" chd@ynao.ac.cn < $obslog
 fi
+rm -f ./clist-$datatype
+rm -f ./blist-$datatype
+rm -f ./rlist-$datatype
