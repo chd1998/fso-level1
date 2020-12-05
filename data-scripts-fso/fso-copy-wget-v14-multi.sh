@@ -140,7 +140,7 @@ itmp=$threadnumber
 while  [ $itmp -gt 0 ]
 do
   ctimet=`date --date='0 days ago' +%H:%M:%S`
-  echo "$today $ctimet: Starting wget process: $itmp..."
+  echo "$today $ctimet: Starting wget process $itmp of $threadnumber..."
   wget  -q --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=$ftpuser --ftp-password=$password --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob --preserve-permissions $srcdir > /dev/null 2>&1 &
   itmp=$((itmp-1))
 done

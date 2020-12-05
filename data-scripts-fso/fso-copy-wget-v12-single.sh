@@ -129,6 +129,7 @@ else
   echo "$destdir already exist!"
 fi
 
+ctime0=`date --date='0 days ago' +%H:%M:%S`
 ctime=`date --date='0 days ago' +%H:%M:%S`
 echo "$today $ctime: Syncing $datatype data @ FSO..."
 echo "                   From: $srcdir "
@@ -196,7 +197,7 @@ echo "Synced file No.  : $filenumber file(s)"
 echo "Synced data size : $filesize MB"
 echo "           Speed : $speed MB/s"
 echo "       Time Used : $timediff1 secs."
-echo "       Time From : $ctime  "
+echo "       Time From : $ctime0  "
 echo "              To : $ctime3 "
 rm -rf $lockfile
 cd /home/chd/

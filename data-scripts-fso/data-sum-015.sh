@@ -155,6 +155,7 @@ do
   fi        
   let i++
   echo "                  : $i of $totaldays Day(s) Processed..."
+  echo " "
 done
 
 num=`printf "%08d" $num`
