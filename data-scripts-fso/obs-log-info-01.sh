@@ -8,9 +8,12 @@
 
 
 cyear=`date  +%Y`
-today=`date  +%Y%m%d`
+
 today0=`date  +%Y%m%d`
+ctime0=`date  +%H:%M:%S`
+today=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
+
 syssep="/"
 
 if [ $# -ne 5 ];then
@@ -40,8 +43,11 @@ cent=" "
 boff=" "
 roff=" "
 pver=0.1.1
+
+today=`date  +%Y%m%d`
+ctime=`date  +%H:%M:%S`
 echo "$datatype Obs. Log of $year$monthday @fso:"> $obslog
-echo "$datatype Obs. Log of $year$monthday @fso:"
+echo "$today $ctime : $datatype Obs. Log of $year$monthday @fso:"
 
 if [ "$datatype"=="HA" ]; then
     if [ -d "$datadir" ]; then
@@ -59,10 +65,14 @@ if [ "$datatype"=="HA" ]; then
             echo "$bt : ">>$obslog
             for line in $(cat ./clist-$datatype);
             do
-                cstime=`find $line/ -path "*redata*" -o -path "*Dark*" -o -path "*DARK*" -o -path "*FLAT*"  -prune -false  -o  -type d -name  "CENT*" -print|xargs -I '{}' find {}/  -type f -name ''H*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1|head -n +1`
-                cetime=`find $line/ -path "*redata*" -o -path "*Dark*" -o -path "*DARK*" -o -path "*FLAT*"  -prune -false  -o  -type d -name  "CENT*" -print|xargs -I '{}' find {}/  -type f -name ''H*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 -r|head -n +1`
-                echo " $line : $cstime         $cetime"
-                echo " $line : $cstime         $cetime">>$obslog
+                result=$(echo $line|grep "${bt}")
+                if [[ "$result" != "" ]]
+                then 
+                    cstime=`find $line/ -path "*redata*" -o -path "*Dark*" -o -path "*DARK*" -o -path "*FLAT*"  -prune -false  -o  -type d -name  "CENT*" -print|xargs -I '{}' find {}/  -type f -name ''H*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1|head -n +1`
+                    cetime=`find $line/ -path "*redata*" -o -path "*Dark*" -o -path "*DARK*" -o -path "*FLAT*"  -prune -false  -o  -type d -name  "CENT*" -print|xargs -I '{}' find {}/  -type f -name ''H*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 -r|head -n +1`
+                    echo " $line : $cstime         $cetime"
+                    echo " $line : $cstime         $cetime">>$obslog
+                fi
             done
         done 
         for bt in $(echo "$boff");
@@ -71,10 +81,14 @@ if [ "$datatype"=="HA" ]; then
             echo "$bt : ">>$obslog
             for line in $(cat ./blist-$datatype);
             do
-                bstime=`find $line/ -path "*redata*" -o -path "*Dark*" -o -path "*DARK*" -o -path "*FLAT*"  -prune -false  -o  -type d -name  "B*" -print|xargs -I '{}' find {}/  -type f -name ''H*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1|head -n +1`
-                betime=`find $line/ -path "*redata*" -o -path "*Dark*" -o -path "*DARK*" -o -path "*FLAT*"  -prune -false  -o  -type d -name  "B*" -print|xargs -I '{}' find {}/  -type f -name ''H*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 -r|head -n +1`
-                echo " $line : $bstime         $betime"
-                echo " $line : $bstime         $betime">>$obslog
+                result=$(echo $line|grep "${bt}")
+                if [[ "$result" != "" ]]
+                then
+                    bstime=`find $line/ -path "*redata*" -o -path "*Dark*" -o -path "*DARK*" -o -path "*FLAT*"  -prune -false  -o  -type d -name  "B*" -print|xargs -I '{}' find {}/  -type f -name ''H*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1|head -n +1`
+                    betime=`find $line/ -path "*redata*" -o -path "*Dark*" -o -path "*DARK*" -o -path "*FLAT*"  -prune -false  -o  -type d -name  "B*" -print|xargs -I '{}' find {}/  -type f -name ''H*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 -r|head -n +1`
+                    echo " $line : $bstime         $betime"
+                    echo " $line : $bstime         $betime">>$obslog
+                fi
             done
         done
         for bt in $(echo "$roff");
@@ -83,10 +97,14 @@ if [ "$datatype"=="HA" ]; then
             echo "$bt : ">>$obslog
             for line in $(cat ./rlist-$datatype);
             do
-                rstime=`find $line/ -path "*redata*" -o -path "*Dark*" -o -path "*DARK*" -o -path "*FLAT*"  -prune -false  -o  -type d -name  "R*" -print|xargs -I '{}' find {}/  -type f -name ''H*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1|head -n +1`
-                retime=`find $line/ -path "*redata*" -o -path "*Dark*" -o -path "*DARK*" -o -path "*FLAT*"  -prune -false  -o  -type d -name  "R*" -print|xargs -I '{}' find {}/  -type f -name ''H*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 -r|head -n +1`
-                echo " $line : $rstime         $retime"
-                echo " $line : $rstime         $retime">>$obslog
+                result=$(echo $line|grep "${bt}")
+                if [[ "$result" != "" ]]
+                then
+                    rstime=`find $line/ -path "*redata*" -o -path "*Dark*" -o -path "*DARK*" -o -path "*FLAT*"  -prune -false  -o  -type d -name  "R*" -print|xargs -I '{}' find {}/  -type f -name ''H*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1|head -n +1`
+                    retime=`find $line/ -path "*redata*" -o -path "*Dark*" -o -path "*DARK*" -o -path "*FLAT*"  -prune -false  -o  -type d -name  "R*" -print|xargs -I '{}' find {}/  -type f -name ''H*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 -r|head -n +1`
+                    echo " $line : $rstime         $retime"
+                    echo " $line : $rstime         $retime">>$obslog
+                fi
             done
         done
     fi

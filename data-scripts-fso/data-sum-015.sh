@@ -120,8 +120,9 @@ do
 
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S` 
+  rawdatadir=$datapre/$checkyear/$checkyear$checkdate/$datatype
 	echo "$today0 $ctime : Start $checkdate $datatype  Data Summerizing @fso"
-  if [ ! -f "$homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum" ];then 
+  if [ ! -f "$homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum" -a \( -d $rawdatadir \) ];then 
     /home/chd/data-sum-daily-014.sh $datapre $checkyear $checkmonthday $datatype 0 &
     waiting "$!" "$datatype Date Summerizing on $checkdate @$device" "Summerizing $datatype Data on $checkdate @$device"
   fi
@@ -138,7 +139,7 @@ do
     ssize=`cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum|awk '{print $4}'`
     sobstime=`cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum|awk '{print $9}'`
   else
-    echo "$datatype            $checkdate   00000000              0000000.0000               0000-00-00 00:00:00.000000000                       0000-00-00 00:00:00.000000000               0000.000000" >>$suminfo
+    echo "$datatype           $checkdate   00000000              0000000.0000               0000-00-00 00:00:00.000000000                       0000-00-00 00:00:00.000000000               0000.000000" >>$suminfo
     snum=0
     ssize=0.0
     sobstime=0.0

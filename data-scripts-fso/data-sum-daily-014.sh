@@ -7,7 +7,7 @@
 #       20201025    Release 0.1.1     add observation time and revised
 #       20201028    Release 0.1.2     observation time logics revised
 #       20201108    Release 0.1.3     exclude reduced, flat and dark data from counting
-#	20201203    Release 0.1.4     add obs log
+#	      20201203    Release 0.1.4     add obs log
 
 cyear=`date  +%Y`
 today=`date  +%Y%m%d`
