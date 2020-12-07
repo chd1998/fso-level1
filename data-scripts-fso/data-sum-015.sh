@@ -97,21 +97,21 @@ today=`date  +%Y%m%d`
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
 i=0
-pver=0.1.6
+pver=0.1.5
 t0=`date +%s`
 tmpdate=$sdate
 echo " "
 echo " "
-echo "                           $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  "
+echo "                             $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  "
 echo "                                          Version $pver                                                                     "
 echo "                                         $today $ctime                  "
-echo "                      $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  ">$suminfo
+echo "                             $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  ">$suminfo
 echo "                                          Version: $pver                                                                     ">>$suminfo
 echo "                                         $today $ctime                  ">>$suminfo
 echo "**********************************************************************************************************************************************************************************"
-echo "**********************************************************************************************************************************************************************************">>$suminfo
+echo "********************************************************************************************************************************************************************************************">>$suminfo
 echo "DataType      Date       Nums.                 Size(GiB)                  StartTime                                           EndTime                                     Obs. Time(hrs)" >>$suminfo
-echo "**********************************************************************************************************************************************************************************">> $suminfo
+echo "********************************************************************************************************************************************************************************************">> $suminfo
 while [ $i -le $checkdays ]
 do
   checkdate=`date +%Y%m%d -d "+$i days $sdate"`
@@ -152,7 +152,7 @@ do
   fi
   obslog=$homepre/$checkyear/$datatype-obs-log-$checkyear$checkmonthday
   if [ ! -f "$obslog" ];then
-    /home/chd/obs-log-info-01.sh $datapre $checkyear $checkmonthday $datatype 0
+    /home/chd/obs-log-info-013.sh $datapre $checkyear $checkmonthday $datatype 0
   fi        
   let i++
   echo "                  : $i of $totaldays Day(s) Processed..."
@@ -165,7 +165,7 @@ obstime=`printf "%011.6f" $obstime`
 obsday=`printf "%04d" $obsday`
 checkdays=`echo $checkdays|awk '{ print($1+1)}'`
 checkdays=`printf "%04d" $checkdays`
-echo "******************************************************************************************************************************************************************************">> $suminfo
+echo "****************************************************************************************************************************************************************************************">> $suminfo
 
 echo "Data Type      Start         End           Nums.               Size(GiB)               Total Obs. Time(hrs)     Total Obs. Day(s)    Total Cal. Day(s)" >>$suminfo
 echo "$datatype             $syear$smonthday      $eyear$emonthday      $num            $size            $obstime              $obsday                 $checkdays" >>$suminfo
@@ -178,8 +178,8 @@ if [ $mail -eq "1" ];then
   mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" chd@ynao.ac.cn < $suminfo
   mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" xiangyy@ynao.ac.cn < $suminfo
   mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" yanxl@ynao.ac.cn < $suminfo
-  #mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" kim@ynao.ac.cn < $suminfo
-  #mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" lz@ynao.ac.cn < $suminfo
+  mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" kim@ynao.ac.cn < $suminfo
+  mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" lz@ynao.ac.cn < $suminfo
 fi
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`

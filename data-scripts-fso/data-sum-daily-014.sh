@@ -118,7 +118,7 @@ if [ -d "$targetdir" ]; then
     if [ -f "$obslog" ];then
       cat $obslog >> ./$datatype-mailtmp
     else 
-      /home/chd/obs-log-info-01.sh $progpre $year $monthday $datatype 0
+      /home/chd/obs-log-info-013.sh $progpre $year $monthday $datatype 0
       cat $obslog >> ./$datatype-mailtmp
     fi        
     mail -s "Summary of $year$monthday $datatype @$device" nvst_obs@ynao.ac.cn < ./$datatype-mailtmp

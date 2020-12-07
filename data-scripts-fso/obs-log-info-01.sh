@@ -117,4 +117,6 @@ rm -f ./rlist-$datatype
   
 if [ $mail -eq "1" ];then 
     mail -s "$datatype Obs. Log on $year$monthday @$device" chd@ynao.ac.cn < $obslog
+    mail -s "$datatype Obs. Log on $year$monthday @$device" nvst_obs@ynao.ac.cn < $obslog
+    mail -s "$datatype Obs. Log on $year$monthday @$device" xiangyy@ynao.ac.cn < $obslog
 fi
