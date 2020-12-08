@@ -207,6 +207,7 @@ rm -f $tmppre/blist-$datatype
 rm -f $tmppre/rlist-$datatype
 rm -f $tmppre/dark-$datatype
 rm -f $tmppre/flat-$datatype
+rm -f $tmppre/objlist-$datatype
   
 if [ $mail -eq "1" ];then 
     mail -s "$datatype Obs. Log on $year$monthday @$device" chd@ynao.ac.cn < $obslog
