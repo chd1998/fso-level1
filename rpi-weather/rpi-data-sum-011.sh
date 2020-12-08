@@ -30,7 +30,11 @@ mail=$6
 num=0
 size=0.0
 obsday=0
+<<<<<<< HEAD
 stddn=17280
+=======
+stddn=21600
+>>>>>>> 54bc09b7431c1f22d6fde347a26fe84db61b13a9
 
 snum=0
 ssize=0.0
@@ -43,7 +47,11 @@ progpre=/home/pi
 suminfo=$datadir/$device-$site-$syear$smonthday-$eyear$emonthday.sum
 
 if [ ! -d "$datadir" ];then
+<<<<<<< HEAD
     echo "$datadir not found @$device, pls check....."
+=======
+    echo "No $device data directory $datadir found, pls check....."
+>>>>>>> 54bc09b7431c1f22d6fde347a26fe84db61b13a9
     exit 1
 fi	
 
