@@ -37,6 +37,7 @@ obsdir=$homepre/$year
 obslog=$homepre/$year/$datatype-obs-log-$year$monthday
 targetdir=$progpre/$year/$year$monthday/$datatype
 datadir=$targetdir/
+tmppre=/home/chd/tmp
 device="lustre"
 
 if [ ! -d "$obsdir" ]; then
@@ -63,16 +64,16 @@ fi
 
 if [ $datatype == "TIO" ];then
     if [ -d "$datadir" ]; then 
-        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "FLAT*" -not -path "*redata*" -print>./flat-$datatype
-        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "dark*" -not -path "*redata*" -print>./dark-$datatype
-        ls  -I "dark" -I "FLAT*" -I "*redata*" -I "*.log" $targetdir/|cut -d " " -f 1 >./objlist-$datatype
+        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "FLAT*" -not -path "*redata*" -print>$tmppre/flat-$datatype
+        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "dark*" -not -path "*redata*" -print>$tmppre/dark-$datatype
+        ls  -I "dark" -I "FLAT*" -I "*redata*" -I "*.log" $targetdir/|cut -d " " -f 1 >$tmppre/objlist-$datatype
         #echo $flat $dark   >> $obslog
         #echo $flat $dark 
         for bt in $(echo "$flat");
         do 
             #echo "$bt : "
             #echo "$bt : ">>$obslog
-            for line in $(cat ./flat-$datatype);
+            for line in $(cat $tmppre/flat-$datatype);
             do
                 result=$(echo $line|grep "${bt}")
                 if [[ "$result" != "" ]]
@@ -88,7 +89,7 @@ if [ $datatype == "TIO" ];then
         do 
             #echo "$bt : "
             #echo "$bt : ">>$obslog
-            for line in $(cat ./dark-$datatype);
+            for line in $(cat $tmppre/dark-$datatype);
             do
                 result=$(echo $line|grep "${bt}")
                 if [[ "$result" != "" ]]
@@ -100,28 +101,28 @@ if [ $datatype == "TIO" ];then
                 fi
             done
         done
-        for line in $(cat ./objlist-$datatype);
+        for line in $(cat $tmppre/objlist-$datatype);
         do
             ostime=`find $targetdir/$line/   -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1|head -n +1`
             oetime=`find $targetdir/$line/   -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 -r|head -n +1`
-            echo " $targetdir/$line/ : $ostime         $oetime"
-            echo " $targetdir/$line/ : $ostime         $oetime">>$obslog
+            echo " $targetdir/$line : $ostime         $oetime"
+            echo " $targetdir/$line : $ostime         $oetime">>$obslog
         done  
     fi 
 fi
 
 if [ $datatype == "HA" ]; then
     if [ -d "$datadir" ]; then
-        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "CENT*" -not -path "*redata*" -print>./clist-$datatype
-        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "B*" -not -path "*redata*" -print>./blist-$datatype
-        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "R*" -not -path "*redata*" -print>./rlist-$datatype
-        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "FLAT*" -not -path "*redata*" -print>./flat-$datatype
-        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "dark*" -not -path "*redata*" -print>./dark-$datatype
+        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "CENT*" -not -path "*redata*" -print>$tmppre/clist-$datatype
+        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "B*" -not -path "*redata*" -print>$tmppre/blist-$datatype
+        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "R*" -not -path "*redata*" -print>$tmppre/rlist-$datatype
+        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "FLAT*" -not -path "*redata*" -print>$tmppre/flat-$datatype
+        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "dark*" -not -path "*redata*" -print>$tmppre/dark-$datatype
         for bt in $(echo "$flat");
         do 
             echo "$bt : "
             echo "$bt : ">>$obslog
-            for line in $(cat ./flat-$datatype);
+            for line in $(cat $tmppre/flat-$datatype);
             do
                 result=$(echo $line|grep "${bt}")
                 if [[ "$result" != "" ]]
@@ -137,7 +138,7 @@ if [ $datatype == "HA" ]; then
         do 
             echo "$bt : "
             echo "$bt : ">>$obslog
-            for line in $(cat ./dark-$datatype);
+            for line in $(cat $tmppre/dark-$datatype);
             do
                 result=$(echo $line|grep "${bt}")
                 if [[ "$result" != "" ]]
@@ -153,7 +154,7 @@ if [ $datatype == "HA" ]; then
         do 
             echo "$bt : "
             echo "$bt : ">>$obslog
-            for line in $(cat ./clist-$datatype);
+            for line in $(cat $tmppre/clist-$datatype);
             do
                 result=$(echo $line|grep "${bt}")
                 if [[ "$result" != "" ]]
@@ -169,7 +170,7 @@ if [ $datatype == "HA" ]; then
         do 
             echo "$bt : "
             echo "$bt : ">>$obslog
-            for line in $(cat ./blist-$datatype);
+            for line in $(cat $tmppre/blist-$datatype);
             do
                 result=$(echo $line|grep "${bt}"|grep -v FLAT)
                 if [[ "$result" != "" ]]
@@ -185,7 +186,7 @@ if [ $datatype == "HA" ]; then
         do 
             echo "$bt : "
             echo "$bt : ">>$obslog
-            for line in $(cat ./rlist-$datatype);
+            for line in $(cat $tmppre/rlist-$datatype);
             do
                 result=$(echo $line|grep "${bt}"|grep -v FLAT)
                 if [[ "$result" != "" ]]
@@ -201,9 +202,11 @@ if [ $datatype == "HA" ]; then
 fi 
       
 
-rm -f ./clist-$datatype
-rm -f ./blist-$datatype
-rm -f ./rlist-$datatype
+rm -f $tmppre/clist-$datatype
+rm -f $tmppre/blist-$datatype
+rm -f $tmppre/rlist-$datatype
+rm -f $tmppre/dark-$datatype
+rm -f $tmppre/flat-$datatype
   
 if [ $mail -eq "1" ];then 
     mail -s "$datatype Obs. Log on $year$monthday @$device" chd@ynao.ac.cn < $obslog
