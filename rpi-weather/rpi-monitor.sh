@@ -23,7 +23,7 @@ upper_cpuload=$2
 temp=$(/opt/vc/bin/vcgencmd measure_temp)
 day=$(date "+%Y-%m-%d %H:%M:%S")
 cpup=`top -b -n 1 | grep Cpu | awk '{print $2}' | cut -f 1 -d "%"`
-cpul=`uptime | awk '{print $11}' | cut -f 1 -d ','`
+cpul=`uptime | awk '{print $8}' | cut -f 1 -d ','`
 cputl=`vmstat -n 1 1 | sed -n 3p | awk '{print $1}'`
 
 if [ -f $lockfile ];then
@@ -50,18 +50,20 @@ do
   day=$(date "+%Y-%m-%d %H:%M:%S")
   temp=$(/opt/vc/bin/vcgencmd measure_temp)
   cpup=`top -b -n 1 | grep Cpu | awk '{print $2}' | cut -f 1 -d "%"`
-  cpul=`uptime | awk '{print $11}' | cut -f 1 -d ','`
+  cpul=`uptime | awk '{print $8}' | cut -f 1 -d ','`
   cputl=`vmstat -n 1 1 | sed -n 3p | awk '{print $1}'`
+  #dcpul=`echo $cpul $upper_cpuload|awk '{print($1-$2)'`
   echo "$day : $temp  cpu_usage=$cpup%   cpu_load=$cpul     cpu_task_length=$cputl"
-  if (echo ${cpul} $upper_cpuload | awk '!($1>$2){exit 1}') then
-  	echo "$day : PU Load is too high...Killing Processes....." 
-        /home/pi/pid-kill.sh ToSql > /dev/null 2>&1 
-	/home/pi/pid-kill.sh rtspIMG > /dev/null 
-	/home/pi/pid-kill.sh curl > /dev/null 2>&1
-	#/home/pi/pid-kill.sh temp-monitor > /dev/null 2>&1 
-	/home/pi/pid-kill.sh fso_draw > /dev/null  2>&1
-	/home/pi/pid-kill.sh stats_backuo> /dev/null 2>&1
-	/home/pi/pid-kill.sh warning> /dev/null  2>&1
+  #if [ $dcpul -gt 0 ]; then
+  if [ $(echo "$cpul > $upper_cpuload"|bc) -eq 1 ]; then
+  	echo "$day : CPU Load is too high...Killing Processes....." 
+    /home/pi/pid-kill.sh ToSql > /dev/null 2>&1 
+	  /home/pi/pid-kill.sh rtspIMG > /dev/null 
+	  /home/pi/pid-kill.sh curl > /dev/null 2>&1
+	  #/home/pi/pid-kill.sh temp-monitor > /dev/null 2>&1 
+	  /home/pi/pid-kill.sh fso_draw > /dev/null  2>&1
+	  /home/pi/pid-kill.sh stats_backuo> /dev/null 2>&1
+	  /home/pi/pid-kill.sh warning> /dev/null  2>&1
   fi
   sleep  $delaytime
 done
