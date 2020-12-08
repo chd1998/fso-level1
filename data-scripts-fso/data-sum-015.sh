@@ -9,7 +9,7 @@
 #       20201104    Release 0.1.3     add obs days
 #       20201105    Release 0.1.4     deal with multiple years
 #       20201106    Release 0.1.5     speed optimized
-#       20201202    Release 0.1.6     disp info revised
+#                                     disp info revised
 
 waiting() {
   local pid="$1"

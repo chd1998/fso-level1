@@ -177,6 +177,16 @@ do
     if [ $? -ne 0 ];then
       today=`date  +%Y%m%d`
       ctime=`date  +%H:%M:%S`
+<<<<<<< HEAD
+=======
+=======
+<<<<<<< HEAD
+      today=`date  +%Y%m%d`
+      ctime=`date  +%H:%M:%S`
+=======
+>>>>>>> cf86901cd857d36cf95ea8c944643c4cefa41f7e
+>>>>>>> 36536c6f4cb3eb0b5837cf8c683b001edd0d2edf
+>>>>>>> 97951351dc33018881f7940348c33ec4262bf938
       echo "$today $ctime : create directory $dir2 failed!"
       echo "                   please check!"
       if [ -n "$dev" ]; then
@@ -194,6 +204,17 @@ do
   else
     echo "  "
     echo "$today $ctime: $dir2 already exist!"
+<<<<<<< HEAD
+=======
+=======
+<<<<<<< HEAD
+    echo "  "
+    echo "$today $ctime: $dir2 already exist!"
+=======
+    echo "$dir2 already exist!"
+>>>>>>> cf86901cd857d36cf95ea8c944643c4cefa41f7e
+>>>>>>> 36536c6f4cb3eb0b5837cf8c683b001edd0d2edf
+>>>>>>> 97951351dc33018881f7940348c33ec4262bf938
   fi
 
   srcsize=`du -sm $srcdir|awk '{print $1}'`
@@ -204,13 +225,37 @@ do
   ctime=`date  +%H:%M:%S`
   echo " "
   echo "================================================================"
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 36536c6f4cb3eb0b5837cf8c683b001edd0d2edf
+>>>>>>> 97951351dc33018881f7940348c33ec4262bf938
   echo "$today $ctime : Archiving data from lustre to HD....."
   echo "                    From $srcdir"
   echo "                    To   $dir1 @$dev"
   echo "                    Please Wait..."
   cp -runf  $srcdir $destdir &
+<<<<<<< HEAD
   waiting "$!" " $datatype Data Archiving of $checkyear$checkdate from $srcdir to $dir1 @$dev" "Archiving $datatype Data of $checkyear$checkdate from $srcdir to $dir1 @$dev"
   
+=======
+  waiting "$!" " $datatype Data Archiving of $checkyear$checkdate from $srcdir to $dir1 @$dev" "Archiving $datatype Data of $checkyear$checkdate from $srcdir to $dir1 @$dev"
+  
+<<<<<<< HEAD
+=======
+=======
+  echo "$today $ctime: Archiving data from lustre to HD....."
+  echo "                   From: $srcdir"
+  echo "                   To  : $dir1 @$dev"
+  echo "                   Please Wait..."
+  echo "================================================================"
+  cp -rf  $srcdir $destdir &
+  waiting "$!" " $datatype Data Archiving of $checkyear$checkdate from $srcdir to $dir1 @$dev" "Archiving $datatype Data of $checkyear$checkdate from $srcdir to $dir1 @$dev"
+>>>>>>> cf86901cd857d36cf95ea8c944643c4cefa41f7e
+>>>>>>> 36536c6f4cb3eb0b5837cf8c683b001edd0d2edf
+>>>>>>> 97951351dc33018881f7940348c33ec4262bf938
   if [ $? -ne 0 ]; then
     today=`date  +%Y%m%d`
     ctime=`date  +%H:%M:%S`
@@ -267,13 +312,34 @@ fi
 today=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
 #echo "================================================================"
+<<<<<<< HEAD
 echo "$today $ctime : Succeeded in Archiving $datatype data from $sdate to $edate"
+=======
+<<<<<<< HEAD
+echo "$today $ctime : Succeeded in Archiving $datatype data from $sdate to $edate"
+=======
+echo "$today $ctime : Succeeded in Archiving:"  
+echo "             From : $today0 $ctime0"
+echo "               To : $today $ctime"
+>>>>>>> 36536c6f4cb3eb0b5837cf8c683b001edd0d2edf
+>>>>>>> 97951351dc33018881f7940348c33ec4262bf938
 echo "     Src File No. : $srcfntotal"
 echo "             Size : $srcfstotal"
 echo "    Dest File No. : $destfntotal"
 echo "             Size : $destfstotal"
+<<<<<<< HEAD
 echo "             From : $today0 $ctime0"
 echo "               To : $today $ctime"
+=======
+<<<<<<< HEAD
+echo "             From : $today0 $ctime0"
+echo "               To : $today $ctime"
+=======
+<<<<<<< HEAD
+echo "               in : $timediff secs. "
+=======
+>>>>>>> 36536c6f4cb3eb0b5837cf8c683b001edd0d2edf
+>>>>>>> 97951351dc33018881f7940348c33ec4262bf938
 echo "             Used : $timediff secs. "
 echo "================================================================="
 exit 0
