@@ -36,6 +36,7 @@ start="0000-00-00 00:00:00.000000000"
 end="0000-00-00 00:00:00.000000000"
 
 homepre=/home/chd/data-info
+tmppre=/home/chd/tmp
 targetdir=$progpre/$year/$year$monthday/$datatype
 sumdir=$homepre/$year
 suminfo=$sumdir/$datatype-$year-$monthday.sum
@@ -107,30 +108,30 @@ if [ -d "$targetdir" ]; then
   #echo "$DT           $year$monthday   $num              $size               $start                       $end               $interval " 
   if [ $mail -eq "1" ];then 
     echo "$today0 $ctime : Send Summary  for $year$monthday $datatype @$device to Users..."
-    echo "                      $datatype Data Summary - $year$monthday @fso                                  "> ./$datatype-mailtmp
-    echo "DataType      Date       Nums.                 Size(GiB)                  StartTime                                           EndTime                                     Obs. Time(hrs)" >>./$datatype-mailtmp
-    echo "******************************************************************************************************************************************************************************************">> ./$datatype-mailtmp
-    cat $suminfo >> ./$datatype-mailtmp
-    echo "******************************************************************************************************************************************************************************************">> ./$datatype-mailtmp
+    echo "                      $datatype Data Summary - $year$monthday @fso                                  "> $tmppre/$datatype-mailtmp
+    echo "DataType      Date       Nums.                 Size(GiB)                  StartTime                                           EndTime                                     Obs. Time(hrs)" >>$tmppre/$datatype-mailtmp
+    echo "******************************************************************************************************************************************************************************************">> $tmppre/$datatype-mailtmp
+    cat $suminfo >> $tmppre/$datatype-mailtmp
+    echo "******************************************************************************************************************************************************************************************">> $tmppre/$datatype-mailtmp
     today0=`date  +%Y%m%d`
     ctime=`date  +%H:%M:%S`
     echo "$today0 $ctime : Add Obs. Log..."
     if [ -f "$obslog" ];then
-      cat $obslog >> ./$datatype-mailtmp
+      cat $obslog >> $tmppre/$datatype-mailtmp
     else 
       /home/chd/obs-log-info-013.sh $progpre $year $monthday $datatype 0
-      cat $obslog >> ./$datatype-mailtmp
+      cat $obslog >> $tmppre/$datatype-mailtmp
     fi        
-    mail -s "Summary of $year$monthday $datatype @$device" nvst_obs@ynao.ac.cn < ./$datatype-mailtmp
-    mail -s "Summary of $year$monthday $datatype @$device" chd@ynao.ac.cn < ./$datatype-mailtmp
-    mail -s "Summary of $year$monthday $datatype @$device" xiangyy@ynao.ac.cn < ./$datatype-mailtmp
-    mail -s "Summary of $year$monthday $datatype @$device" yanxl@ynao.ac.cn < ./$datatype-mailtmp
-    mail -s "Summary of $year$monthday $datatype @$device" kim@ynao.ac.cn < ./$datatype-mailtmp
-    mail -s "Summary of $year$monthday $datatype @$device" lz@ynao.ac.cn < ./$datatype-mailtmp
+    mail -s "Summary of $year$monthday $datatype @$device" nvst_obs@ynao.ac.cn < $tmppre/$datatype-mailtmp
+    mail -s "Summary of $year$monthday $datatype @$device" chd@ynao.ac.cn < $tmppre/$datatype-mailtmp
+    mail -s "Summary of $year$monthday $datatype @$device" xiangyy@ynao.ac.cn < $tmppre/$datatype-mailtmp
+    mail -s "Summary of $year$monthday $datatype @$device" yanxl@ynao.ac.cn < $tmppre/$datatype-mailtmp
+    mail -s "Summary of $year$monthday $datatype @$device" kim@ynao.ac.cn < $tmppre/$datatype-mailtmp
+    mail -s "Summary of $year$monthday $datatype @$device" lz@ynao.ac.cn < $tmppre/$datatype-mailtmp
   fi
   rm -f $datatype-$year-$monthday-flist
   rm -f $datatype-$year-$monthday-flist-sorted
-  rm -f ./$datatype-mailtmp
+  rm -f $tmppre/$datatype-mailtmp
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
   t1=`date  +%Y%m%d`
