@@ -28,9 +28,6 @@ monthday=$3
 datatype=$4
 mail=$5
 
-checkmonth=${monthday:0:2}
-checkday=${monthday:2:2}
-
 pver=0.1.3
 num="00000000"
 size="0000000.0000"
@@ -39,12 +36,16 @@ start="0000-00-00 00:00:00.000000000"
 end="0000-00-00 00:00:00.000000000"
 
 homepre=/home/chd/data-info
+mypre=/home/chd
 tmppre=/home/chd/tmp
 targetdir=$progpre/$year/$year$monthday/$datatype
 sumdir=$homepre/$year
 suminfo=$sumdir/$datatype-$year-$monthday.sum
 obslog=$homepre/$year/$datatype-obs-log-$year$monthday
 filelist=$tmppre/$datatype-$year-$monthday-list
+stime=$tmppre/start-$datatype-$year$monthday-time
+etime=$tmppre/end-$datatype-$year$monthday-time
+obstime=$tmppre/obs-$datatype-$year$monthday-time
 
 device="lustre"
 site="fso"
@@ -66,47 +67,26 @@ if [ -d "$targetdir" ]; then
   fi 
   num=`find $targetdir/   -type f -name ''*.fits'' -not -path "*redata*" | wc -l`
   if [ $num -gt "0" ];then
-    size=`find $targetdir/  -type f -name ''*.fits'' -not -path "*redata*"  | xargs ls -I {} -al|awk '{sum += $5} END {print sum/(1000*1024*1024)}'` 
+    size=`find $targetdir/  -type f -name ''*.fits'' -not -path "*redata*"  | xargs ls -I {} -al|awk '{sum += $5} END {print sum/(1000*1024*1024)}'`
+    if [ -f $obstime ];then
+        interval=`cat $obstime`
+    else
+        $mypre/obs-log-info-014.sh  $progpre $year $monthday $datatype 0
+        interval=`cat $obstime`
+    fi
     num=`printf "%08d" $num`
     size=`printf "%012.4f" $size`
+    interval=`printf "%011.6f" $interval`
+    start=`cat $stime`
+    end=`cat $etime`
   else
     num="00000000"
     size="0000000.0000"
     interval="0000.000000"
-  fi
-  today0=`date  +%Y%m%d`
-  ctime=`date  +%H:%M:%S`
-  find $targetdir/   -type f -name ''*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 > $filelist
-  #echo "$today0 $ctime : Start Calculating  $year$monthday $datatype @$device Observing Time..."
-  #cd $targetdir
-  #start=`find ./   -path "*redata*" -o -path "*Dark*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name $dataprefix*.fits -print |xargs ls -ltr 2>/dev/null |head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print($2" "$3)}'`
-  #start=`find ./ -type f -name ''$dataprefix*.fits'' -not -path "*redata*"  -print |xargs ls -ltr 2>/dev/null |head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print($2" "$3)}'`
-  start=`cat $filelist |head -n +1`
-  if [ -z "$start" ]; then
-    #start="19700101 08:00:00.000"
-    #s=`date -d "$start" +%s`
-    s=0
     start="0000-00-00 00:00:00.000000000"
-  else
-    s=`date -d "$start" +%s`
-  fi
-  #end=`find ./  -path "*redata*" -o -path "*Dark*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name $dataprefix*.fits -print |xargs ls -lt 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print( $2" "$3)}'`
-  #end=`find ./ -type f -name ''$dataprefix*.fits'' -not -path "*redata*"  -print |xargs ls -lt 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print( $2" "$3)}'`
-  end=` cat $filelist |sort -r|grep $checkmonth-$checkday|head -n +1`
-  if [ -z "$end" ]; then
-    #end="19700101 08:00:00.000"
-    #e=`date -d "$end" +%s`
-    e=0
     end="0000-00-00 00:00:00.000000000"
-  else
-    e=`date -d "$end" +%s`
   fi
 
-  
-
-  interval=`echo "$s $e"|awk '{print(($2-$1)/3600)}'`
-  interval=`printf "%011.6f" $interval`
-  
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
   DATATYPE=`printf "%3s" $datatype`

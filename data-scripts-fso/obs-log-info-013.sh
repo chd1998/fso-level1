@@ -32,6 +32,9 @@ monthday=$3
 datatype=$4
 mail=$5
 
+checkmonth=${monthday:0:2}
+checkday=${monthday:2:2}
+
 homepre=/home/chd/data-info
 obsdir=$homepre/$year
 obslog=$homepre/$year/$datatype-obs-log-$year$monthday

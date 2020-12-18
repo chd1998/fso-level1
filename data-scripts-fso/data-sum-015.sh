@@ -55,8 +55,8 @@ syssep="/"
 
 if [ $# -ne 8 ];then
   echo "Usage: ./data-sum-xx.sh datadir startyear startmonthday endyear endmonthday datatype(TIO or HA) report(1-report/0-no report) mail(1 mail/0-no mail)"
-  echo "Example: ./data-sum-xx.sh  /lustre/data 2020 0928  2020 1001 TIO 1 1"
-  echo "         ./data-sum-xx.sh  /lustre/data 2020 0928  2020 1001 HA 0 0"
+  echo "Example: ./data-sum-xxx.sh  /lustre/data 2020 0928  2020 1001 TIO 1 1"
+  echo "         ./data-sum-xxx.sh  /lustre/data 2020 0928  2020 1001 HA 0 0"
   exit 1
 fi
 
@@ -165,10 +165,11 @@ obstime=`printf "%011.6f" $obstime`
 obsday=`printf "%04d" $obsday`
 checkdays=`echo $checkdays|awk '{ print($1+1)}'`
 checkdays=`printf "%04d" $checkdays`
+DATATYPE=`printf "%3s" $datatype`
 echo "****************************************************************************************************************************************************************************************">> $suminfo
 
 echo "Data Type      Start         End           Nums.               Size(GiB)               Total Obs. Time(hrs)     Total Obs. Day(s)    Total Cal. Day(s)" >>$suminfo
-echo "$datatype             $syear$smonthday      $eyear$emonthday      $num            $size            $obstime              $obsday                 $checkdays" >>$suminfo
+echo "$DATATYPE             $syear$smonthday      $eyear$emonthday      $num            $size            $obstime              $obsday                 $checkdays" >>$suminfo
 
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`

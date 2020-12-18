@@ -40,7 +40,7 @@ site=fso
 device=rpi-weather-station
 datadir=/home/pi/fso-weather-data
 progpre=/home/pi
-suminfo=$datadir/$device-$site-$syear$smonthday-$eyear$emonthday.sum
+suminfo=$datadir/$syear$smonthday-$eyear$emonthday-$device-$site.sum
 
 if [ ! -d "$datadir" ];then
     echo "No $device data directory $datadir found, pls check....."

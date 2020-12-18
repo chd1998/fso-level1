@@ -99,7 +99,7 @@ if [ -f $lockfile ];then
 else
   echo $$>$lockfile
 fi
-
+pver=1.4.0
 echo " "
 echo "=========== Welcome to FSO Data System @FSO ============="
 echo "                                                         "
@@ -147,6 +147,7 @@ done
 #wait for every wget process to end
 ctimet=`date --date='0 days ago' +%H:%M:%S`
 jobnumber=$(jobs -p | wc -l)
+#jtmp=`((jobnumber++))`
 echo "$today $ctimet: $jobnumber process(es) started!"
 echo "                   Syncing $datatype from @ $srcdir, please wait..."
 j=1
