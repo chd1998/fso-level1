@@ -117,7 +117,7 @@ do
   ctime=`date  +%H:%M:%S` 
 	echo "$today0 $ctime : Start $checkdate $datatype  Data Summerizing @fso"
   if [ ! -f "$homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum" ];then 
-    /home/chd/data-sum-daily.sh $datapre $checkyear $checkmonthday $datatype 0 &
+    /home/chd/data-sum-daily-014.sh $datapre $checkyear $checkmonthday $datatype 0 &
     waiting "$!" "$datatype Date Summerizing on $checkdate @$device" "Summerizing $datatype Data on $checkdate @$device"
   fi
   today0=`date  +%Y%m%d`
@@ -145,7 +145,7 @@ do
     obsday=`echo $obsday|awk '{print($1+1)}'`
   fi
   let i++
-  echo "                  : $i day(s) Processed..."
+  echo "                  : $i day(s) of $checkdays day(s) Processed..."
 done
 
 num=`printf "%08d" $num`

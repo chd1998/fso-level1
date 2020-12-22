@@ -147,19 +147,6 @@ echo "                   From: $srcdir "
 echo "                   To  : $destdir "
 echo "                   Please Wait..."
 
-echo "$today $ctime: Testing $server is online or not... "
-ping $server -c 5 | grep ttl >> $logpre/pingtmp
-pingres=`cat $logpre/pingtmp | wc -l`
-rm -f $logpre/pingtmp
-ctime1=`date  +%H:%M:%S`
-if [ $pingres -eq 0 ];then
-  echo "$today $ctime1: $server is offline, skip syncing remote file(s)..." 
-  exit 0
-else
-  echo "$today $ctime1: $server is online, proceed to sync remote file(s)..."
-  echo "                 : pls wait....."
-fi
-
 fn1=`ls -lR $destdir | grep "^-" | wc -l`
 fs1=`du -sm $destdir | awk '{print $1}'`
 ctime=`date  +%H:%M:%S`

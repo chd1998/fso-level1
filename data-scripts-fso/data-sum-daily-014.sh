@@ -7,7 +7,7 @@
 #       20201025    Release 0.1.1     add observation time and revised
 #       20201028    Release 0.1.2     observation time logics revised
 #       20201108    Release 0.1.3     exclude reduced, flat and dark data from counting
-#	      20201203    Release 0.1.4     add obs log
+#       20201203    Release 0.1.4     add obs log
 
 cyear=`date  +%Y`
 today=`date  +%Y%m%d`
@@ -76,12 +76,14 @@ if [ -d "$targetdir" ]; then
   fi
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
-  find $targetdir/   -type f -name ''*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 > $filelist
+  #only time before 19 on checkdate count
+  find $targetdir/   -type f -name ''*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 > $tmppre/flist.tmp
+  awk '{if($2<19)print $1" "$2 }' $tmppre/flist.tmp > $filelist
   #echo "$today0 $ctime : Start Calculating  $year$monthday $datatype @$device Observing Time..."
   #cd $targetdir
   #start=`find ./   -path "*redata*" -o -path "*Dark*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name $dataprefix*.fits -print |xargs ls -ltr 2>/dev/null |head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print($2" "$3)}'`
   #start=`find ./ -type f -name ''$dataprefix*.fits'' -not -path "*redata*"  -print |xargs ls -ltr 2>/dev/null |head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print($2" "$3)}'`
-  start=`cat $filelist |head -n +1`
+  start=`cat $filelist |grep $checkmonth-$checkday|head -n +1`
   if [ -z "$start" ]; then
     #start="19700101 08:00:00.000"
     #s=`date -d "$start" +%s`
@@ -99,6 +101,7 @@ if [ -d "$targetdir" ]; then
     e=0
     end="0000-00-00 00:00:00.000000000"
   else
+    
     e=`date -d "$end" +%s`
   fi
 
@@ -152,6 +155,13 @@ if [ -d "$targetdir" ]; then
     echo "               in : $dt secs."
   fi
 else
+  DATATYPE=`printf "%3s" $datatype`
+  num="00000000"
+  size="0000000.0000"
+  start="0000-00-00 00:00:00.000000000"
+  end="0000-00-00 00:00:00.000000000"
+  interval="0000.000000"
+  echo "$DATATYPE           $year$monthday   $num              $size               $start                       $end               $interval " > $suminfo
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
   tput rc
