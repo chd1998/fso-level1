@@ -153,6 +153,7 @@ done
 ctimet=`date  +%H:%M:%S`
 curday=`date +%Y%m%d`
 jobnumber=$(jobs -p | wc -l)
+((jobnumber++))
 echo "$curday $ctimet: $jobnumber process(es) started!"
 echo "                   Syncing $datatype from @ $srcdir, please wait..."
 j=1

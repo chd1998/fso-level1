@@ -9,7 +9,7 @@
 #       20201104    Release 0.1.3     add obs days
 #       20201105    Release 0.1.4     deal with multiple years
 #       20201106    Release 0.1.5     speed optimized
-#       20201202    Release 0.1.6     disp info revised
+#                                     disp info revised
 
 waiting() {
   local pid="$1"
@@ -55,8 +55,8 @@ syssep="/"
 
 if [ $# -ne 8 ];then
   echo "Usage: ./data-sum-xx.sh datadir startyear startmonthday endyear endmonthday datatype(TIO or HA) report(1-report/0-no report) mail(1 mail/0-no mail)"
-  echo "Example: ./data-sum-xx.sh  /lustre/data 2020 0928  2020 1001 TIO 1 1"
-  echo "         ./data-sum-xx.sh  /lustre/data 2020 0928  2020 1001 HA 0 0"
+  echo "Example: ./data-sum-xxx.sh  /lustre/data 2020 0928  2020 1001 TIO 1 1"
+  echo "         ./data-sum-xxx.sh  /lustre/data 2020 0928  2020 1001 HA 0 0"
   exit 1
 fi
 
@@ -82,6 +82,7 @@ site=fso
 device=lustre
 homepre=/home/chd/data-info
 suminfo=$homepre/$syear$smonthday-$eyear$emonthday-$datatype@fso.sum
+obslog=$homepre/$year/$datatype-obs-log-$year$monthday
 
 if [ ! -d "$homepre" ];then
     mkdir -m 777 -p $homepre
@@ -96,37 +97,33 @@ today=`date  +%Y%m%d`
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
 i=0
-pver=0.1.6
+pver=0.1.5
 t0=`date +%s`
 tmpdate=$sdate
 echo " "
 echo " "
-echo "                           $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  "
+echo "                             $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  "
 echo "                                          Version $pver                                                                     "
 echo "                                         $today $ctime                  "
-echo "                      $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  ">$suminfo
+echo "                             $datatype Data Summary $syear$smonthday to $eyear$emonthday @fso                                  ">$suminfo
 echo "                                          Version: $pver                                                                     ">>$suminfo
 echo "                                         $today $ctime                  ">>$suminfo
 echo "**********************************************************************************************************************************************************************************"
-echo "**********************************************************************************************************************************************************************************">>$suminfo
-echo "Date       Nums.                 Size(GiB)                  StartTime                                           EndTime                                     Obs. Time(hrs)" >>$suminfo
-echo "**********************************************************************************************************************************************************************************">> $suminfo
+echo "********************************************************************************************************************************************************************************************">>$suminfo
+echo "DataType      Date       Nums.                 Size(GiB)                  StartTime                                           EndTime                                     Obs. Time(hrs)" >>$suminfo
+echo "********************************************************************************************************************************************************************************************">> $suminfo
 while [ $i -le $checkdays ]
 do
   checkdate=`date +%Y%m%d -d "+$i days $sdate"`
   checkyear=${checkdate:0:4}
   checkmonthday=${checkdate:4:4}
-  if [ "$datatype"=="HA" ]; then
-    DT=" HA"
-  fi
-  if [ "$datatype"=="TIO" ]; then
-    DT=$datatype
-  fi
-	today0=`date  +%Y%m%d`
+
+  today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S` 
+  rawdatadir=$datapre/$checkyear/$checkyear$checkdate/$datatype
 	echo "$today0 $ctime : Start $checkdate $datatype  Data Summerizing @fso"
-  if [ ! -f "$homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum" ];then 
-    /home/chd/data-sum-daily.sh $datapre $checkyear $checkmonthday $datatype 0 &
+  if [ ! -f "$homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum" -a \( -d $rawdatadir \) ];then 
+    /home/chd/data-sum-daily-014.sh $datapre $checkyear $checkmonthday $datatype 0 &
     waiting "$!" "$datatype Date Summerizing on $checkdate @$device" "Summerizing $datatype Data on $checkdate @$device"
   fi
   today0=`date  +%Y%m%d`
@@ -142,7 +139,7 @@ do
     ssize=`cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum|awk '{print $4}'`
     sobstime=`cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum|awk '{print $9}'`
   else
-    echo "$DT            $checkdate   00000000              0000000.0000               0000-00-00 00:00:00.000000000                       0000-00-00 00:00:00.000000000               0000.000000" >>$suminfo
+    echo "$datatype           $checkdate   00000000              0000000.0000               0000-00-00 00:00:00.000000000                       0000-00-00 00:00:00.000000000               0000.000000" >>$suminfo
     snum=0
     ssize=0.0
     sobstime=0.0
@@ -153,8 +150,13 @@ do
     obstime=`echo $obstime $sobstime|awk '{print($1+$2)}'`
     obsday=`echo $obsday|awk '{print($1+1)}'`
   fi
+  obslog=$homepre/$checkyear/$datatype-obs-log-$checkyear$checkmonthday
+  if [ ! -f "$obslog" ];then
+    /home/chd/obs-log-info-013.sh $datapre $checkyear $checkmonthday $datatype 0
+  fi        
   let i++
   echo "                  : $i of $totaldays Day(s) Processed..."
+  echo " "
 done
 
 num=`printf "%08d" $num`
@@ -163,10 +165,11 @@ obstime=`printf "%011.6f" $obstime`
 obsday=`printf "%04d" $obsday`
 checkdays=`echo $checkdays|awk '{ print($1+1)}'`
 checkdays=`printf "%04d" $checkdays`
-echo "******************************************************************************************************************************************************************************">> $suminfo
+DATATYPE=`printf "%3s" $datatype`
+echo "****************************************************************************************************************************************************************************************">> $suminfo
 
 echo "Data Type      Start         End           Nums.               Size(GiB)               Total Obs. Time(hrs)     Total Obs. Day(s)    Total Cal. Day(s)" >>$suminfo
-echo "$DT            $syear$smonthday      $eyear$emonthday      $num            $size            $obstime              $obsday                 $checkdays" >>$suminfo
+echo "$DATATYPE             $syear$smonthday      $eyear$emonthday      $num            $size            $obstime              $obsday                 $checkdays" >>$suminfo
 
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`

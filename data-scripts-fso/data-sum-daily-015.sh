@@ -40,7 +40,11 @@ mypre=/home/chd
 tmppre=/home/chd/tmp
 targetdir=$progpre/$year/$year$monthday/$datatype
 sumdir=$homepre/$year
+<<<<<<< HEAD
 suminfo=$sumdir/$datatype-$year-$monthday.sum
+=======
+dailysuminfo=$sumdir/$datatype-$year-$monthday.sum
+>>>>>>> e2cdcc274edbf98c530b94baf959597bbbf655ad
 obslog=$homepre/$year/$datatype-obs-log-$year$monthday
 filelist=$tmppre/$datatype-$year-$monthday-list
 stime=$tmppre/start-$datatype-$year$monthday-time
@@ -90,14 +94,22 @@ if [ -d "$targetdir" ]; then
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
   DATATYPE=`printf "%3s" $datatype`
+<<<<<<< HEAD
   echo "$DATATYPE           $year$monthday   $num              $size               $start                       $end               $interval " > $suminfo
+=======
+  echo "$DATATYPE           $year$monthday   $num              $size               $start                       $end               $interval " > $dailysuminfo
+>>>>>>> e2cdcc274edbf98c530b94baf959597bbbf655ad
   #echo "$DT           $year$monthday   $num              $size               $start                       $end               $interval " 
   if [ $mail -eq "1" ];then 
     echo "$today0 $ctime : Send Summary  for $year$monthday $datatype @$device to Users..."
     echo "                      $datatype Data Summary - $year$monthday @fso                                  "> $tmppre/$datatype-mailtmp
     echo "DataType      Date       Nums.                 Size(GiB)                  StartTime                                           EndTime                                     Obs. Time(hrs)" >>$tmppre/$datatype-mailtmp
     echo "******************************************************************************************************************************************************************************************">> $tmppre/$datatype-mailtmp
+<<<<<<< HEAD
     cat $suminfo >> $tmppre/$datatype-mailtmp
+=======
+    cat $dailysuminfo >> $tmppre/$datatype-mailtmp
+>>>>>>> e2cdcc274edbf98c530b94baf959597bbbf655ad
     echo "******************************************************************************************************************************************************************************************">> $tmppre/$datatype-mailtmp
     today0=`date  +%Y%m%d`
     ctime=`date  +%H:%M:%S`

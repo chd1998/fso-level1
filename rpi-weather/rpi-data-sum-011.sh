@@ -30,7 +30,11 @@ mail=$6
 num=0
 size=0.0
 obsday=0
+<<<<<<< HEAD
 stddn=17280
+=======
+stddn=12960
+>>>>>>> e2cdcc274edbf98c530b94baf959597bbbf655ad
 
 snum=0
 ssize=0.0
@@ -40,7 +44,7 @@ site=fso
 device=rpi-weather-station
 datadir=/home/pi/fso-weather-data
 progpre=/home/pi
-suminfo=$datadir/$device-$site-$syear$smonthday-$eyear$emonthday.sum
+suminfo=$datadir/$syear$smonthday-$eyear$emonthday-$device-$site.sum
 
 if [ ! -d "$datadir" ];then
     echo "$datadir not found @$device, pls check....."
@@ -80,9 +84,21 @@ do
   
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S` 
-  echo "                  : Start $checkdate $device Data Summerizing @fso"
-  if [ -f "$datadir/$checkyear/fso-weather-$checkyear-$checkmonth-$checkday.csv" ];then 
-    num=`wc -l $datadir/$checkyear/fso-weather-$checkyear-$checkmonth-$checkday.csv|awk '{print $1}'` 
+  num=0
+  echo "$today0 $ctime : Start $checkdate $device Data Summerizing @fso"
+  if [ -f "$datadir/$checkyear/fso-weather-$checkyear-$checkmonth-$checkday.csv" ];then
+    cat $datadir/$checkyear/fso-weather-$checkyear-$checkmonth-$checkday.csv|awk '{print $2}'|cut -c2-3>./fso-weather-$checkyear-$checkmonth-$checkday-tmplist
+    for line in $(cat ./fso-weather-$checkyear-$checkmonth-$checkday-tmplist)
+    do
+      if [ $line -ge 06 ]; then
+      let num++
+      fi
+    done
+    rm -f ./fso-weather-$checkyear-$checkmonth-$checkday-tmplist
+    if [ $num -gt $stddn ]; then
+      num=$stddn
+    fi
+    #num=`wc -l $datadir/$checkyear/fso-weather-$checkyear-$checkmonth-$checkday.csv|awk '{print $1}'` 
     size=`ls -al $datadir/$checkyear/fso-weather-$checkyear-$checkmonth-$checkday.csv|awk '{sum += $5} END {print sum/(1024*1024)}'`
   else
     num=0
@@ -126,7 +142,8 @@ echo "From          To            Num(s).          Size(MiB)             Day(s) 
 echo "From          To            Num(s).          Size(MiB)             Day(s)   DataLoss(%)">>$suminfo
 echo "$sdate      $edate      $snum        $ssize          $checkdays     $tdataloss%"
 echo "$sdate      $edate      $snum        $ssize          $checkdays     $tdataloss%">>$suminfo
-
+echo "========================================================================================================"
+echo "========================================================================================================">>$suminfo
 t1=`date +%s`
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`

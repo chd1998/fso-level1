@@ -101,6 +101,7 @@ if [ -d "$targetdir" ]; then
     e=0
     end="0000-00-00 00:00:00.000000000"
   else
+    
     e=`date -d "$end" +%s`
   fi
 

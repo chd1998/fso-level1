@@ -6,4 +6,4 @@ if [ $# -ne 2 ];then
   exit 1
 fi
 find $1 -path "*proc*"  -prune -false  -o  -type f -name  "*"  -print0 | xargs -0 du -h | sort -rh | head -n 10
-#find $1 -type d \( -name *proc* -o -name *lustre* \) -prune -false  -o  -type f -name  "*"  -print0 | xargs -0 du -h | sort -rh | head -n $2
+#find $1 -type d \( -name *proc* -o -name */run/user* \) -prune -false  -o  -type f -name  "*"  -print0 | xargs -0 du -h | sort -rh | head -n $2
