@@ -1,52 +1,55 @@
 #crontest
 #*/1 * * * * /home/chd/crontest.sh
 # Winter->Spring
-*/1 8-17 * 1-3 * /home/chd/fso-sync-lftp.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40 >> /home/chd/log/fso-sync-tio-$(date +\%Y\%m\%d).log
-*/1 8-17 * 1-3 * /home/chd/fso-sync-lftp.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA 100 >> /home/chd/log/fso-sync-ha-$(date +\%Y\%m\%d).log
+*/1 9-18 * 1-3 * /home/chd/fso-sync-lftp.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40 >> /home/chd/log/fso-sync-tio-$(date +\%Y\%m\%d).log
+*/1 9-18 * 1-3 * /home/chd/fso-sync-lftp.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA 100 >> /home/chd/log/fso-sync-ha-$(date +\%Y\%m\%d).log
 #Spring->Early Autumn
-*/1 8-18 * 4-10 * /home/chd/fso-sync-lftp.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40 >> /home/chd/log/fso-sync-tio-$(date +\%Y\%m\%d).log
-*/1 8-18 * 4-10 * /home/chd/fso-sync-lftp.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA 100 >> /home/chd/log/fso-sync-ha-$(date +\%Y\%m\%d).log
+*/1 8-19 * 4-10 * /home/chd/fso-sync-lftp.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40 >> /home/chd/log/fso-sync-tio-$(date +\%Y\%m\%d).log
+*/1 8-19 * 4-10 * /home/chd/fso-sync-lftp.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA 100 >> /home/chd/log/fso-sync-ha-$(date +\%Y\%m\%d).log
 #Autumn->Winter
-*/1 8-17 * 11-12 * /home/chd/fso-sync-lftp.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40 >> /home/chd/log/fso-sync-tio-$(date +\%Y\%m\%d).log
-*/1 8-17 * 11-12 * /home/chd/fso-sync-lftp.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA 100 >> /home/chd/log/fso-sync-ha-$(date +\%Y\%m\%d).log
-#count data info 
-*/1 7-18 * * * /home/chd/fso-count-lftp.sh  192.168.111.120 21  tio ynao246135 TIO >> /home/chd/log/fso-remote-info-tio-$(date +\%Y\%m\%d).log
-*/1 7-18 * * * /home/chd/fso-count-lftp.sh  192.168.111.122 21  ha ynao246135 HA >> /home/chd/log/fso-remote-info-ha-$(date +\%Y\%m\%d).log
+*/1 9-18 * 11-12 * /home/chd/fso-sync-lftp.sh  192.168.111.120 21 /lustre/data tio ynao246135 TIO 40 >> /home/chd/log/fso-sync-tio-$(date +\%Y\%m\%d).log
+*/1 9-18 * 11-12 * /home/chd/fso-sync-lftp.sh  192.168.111.122 21 /lustre/data ha ynao246135 HA 100 >> /home/chd/log/fso-sync-ha-$(date +\%Y\%m\%d).log
+#count data info
+*/1 7-19 * * * /home/chd/fso-count-lftp.sh  192.168.111.120 21  tio ynao246135 TIO >> /home/chd/log/fso-remote-info-tio-$(date +\%Y\%m\%d).log
+*/1 7-19 * * * /home/chd/fso-count-lftp.sh  192.168.111.122 21  ha ynao246135 HA >> /home/chd/log/fso-remote-info-ha-$(date +\%Y\%m\%d).log
 #check data integrity
-#Winter->Spring 
-10,25 18 * 1-3 *  /home/chd/fso-data-check-copy-cron.sh  192.168.111.120 21 /lustre/data tio ynao246135 $(date +\%Y) $(date +\%m\%d) fits 11062080 >> /home/chd/log/check-TIO-copy-$(date +\%Y\%m\%d).log
-10,25 18 * 1-3 *  /home/chd/fso-data-check-copy-cron.sh  192.168.111.122 21 /lustre/data ha ynao246135  $(date +\%Y) $(date +\%m\%d) fits 2111040 >> /home/chd/log/check-HA-copy-$(date +\%Y\%m\%d).log
+#Winter->Spring
+10,25 19 * 1-3 *  /home/chd/fso-data-check-copy-cron.sh  192.168.111.120 21 /lustre/data tio ynao246135 $(date +\%Y) $(date +\%m\%d) fits 11062080 >> /home/chd/log/check-TIO-copy-$(date +\%Y\%m\%d).log
+10,25 19 * 1-3 *  /home/chd/fso-data-check-copy-cron.sh  192.168.111.122 21 /lustre/data ha ynao246135  $(date +\%Y) $(date +\%m\%d) fits 2111040 >> /home/chd/log/check-HA-copy-$(date +\%Y\%m\%d).log
 #Spring-Early Autumn
-10,25 19 * 4-10 *  /home/chd/fso-data-check-copy-cron.sh  192.168.111.120 21 /lustre/data tio ynao246135 $(date +\%Y) $(date +\%m\%d) fits 11062080 >> /home/chd/log/check-TIO-copy-$(date +\%Y\%m\%d).log
-10,25 19 * 4-10 *  /home/chd/fso-data-check-copy-cron.sh  192.168.111.122 21 /lustre/data ha ynao246135  $(date +\%Y) $(date +\%m\%d) fits 2111040 >> /home/chd/log/check-HA-copy-$(date +\%Y\%m\%d).log
+10,25 20 * 4-10 *  /home/chd/fso-data-check-copy-cron.sh  192.168.111.120 21 /lustre/data tio ynao246135 $(date +\%Y) $(date +\%m\%d) fits 11062080 >> /home/chd/log/check-TIO-copy-$(date +\%Y\%m\%d).log
+10,25 20 * 4-10 *  /home/chd/fso-data-check-copy-cron.sh  192.168.111.122 21 /lustre/data ha ynao246135  $(date +\%Y) $(date +\%m\%d) fits 2111040 >> /home/chd/log/check-HA-copy-$(date +\%Y\%m\%d).log
 #Autumn->Winter
-10,25 18 * 11-12 *  /home/chd/fso-data-check-copy-cron.sh  192.168.111.120 21 /lustre/data tio ynao246135 $(date +\%Y) $(date +\%m\%d) fits 11062080 >> /home/chd/log/check-TIO-copy-$(date +\%Y\%m\%d).log
-10,25 18 * 11-12 *  /home/chd/fso-data-check-copy-cron.sh  192.168.111.122 21 /lustre/data ha ynao246135  $(date +\%Y) $(date +\%m\%d) fits 2111040 >> /home/chd/log/check-HA-copy-$(date +\%Y\%m\%d).log
+10,25 19 * 11-12 *  /home/chd/fso-data-check-copy-cron.sh  192.168.111.120 21 /lustre/data tio ynao246135 $(date +\%Y) $(date +\%m\%d) fits 11062080 >> /home/chd/log/check-TIO-copy-$(date +\%Y\%m\%d).log
+10,25 19 * 11-12 *  /home/chd/fso-data-check-copy-cron.sh  192.168.111.122 21 /lustre/data ha ynao246135  $(date +\%Y) $(date +\%m\%d) fits 2111040 >> /home/chd/log/check-HA-copy-$(date +\%Y\%m\%d).log
 #vnc check
 */10 * * * * /home/chd/checkxvnc.sh >> /home/chd/log/xvnc.log
 #vsftp check
 */1 * * * * /home/chd/check-vsftpd.sh >> /home/chd/log/check-vsftpd.log
 #summerize data info daily,weekly & annually
+#obs log daily
+00 19 * * * /home/chd/obs-log-info-013.sh  /lustre/data $(date +\%Y) $(date +\%m\%d) HA 1
+05 19 * * * /home/chd/obs-log-info-013.sh  /lustre/data $(date +\%Y) $(date +\%m\%d) TIO 1
 #Winter->Spring
-05 18 * 1-3 * /home/chd/data-sum-daily.sh  /lustre/data $(date +\%Y) $(date +\%m\%d) HA 1 &
-05 18 * 1-3 * /home/chd/data-sum-daily.sh  /lustre/data $(date +\%Y) $(date +\%m\%d) TIO 1 &
-30 18 * 1-3 0 /home/chd/data-sum-015.sh /lustre/data $(date -d '-6 days' +\%Y) $(date -d '-6 days' +\%m\%d)  $(date  +\%Y) $(date +\%m\%d) HA 1 1 &
-30 18 * 1-3 0 /home/chd/data-sum-015.sh /lustre/data $(date -d '-6 days' +\%Y) $(date -d '-6 days' +\%m\%d)  $(date  +\%Y) $(date +\%m\%d) TIO 1 1 &
+10 19 * 1-3 * /home/chd/data-sum-daily-014.sh  /lustre/data $(date +\%Y) $(date +\%m\%d) HA 1 &
+15 19 * 1-3 * /home/chd/data-sum-daily-014.sh  /lustre/data $(date +\%Y) $(date +\%m\%d) TIO 1 &
+30 19 * 1-3 0 /home/chd/data-sum-015.sh /lustre/data $(date -d '-6 days' +\%Y) $(date -d '-6 days' +\%m\%d)  $(date  +\%Y) $(date +\%m\%d) HA 1 1 &
+40 19 * 1-3 0 /home/chd/data-sum-015.sh /lustre/data $(date -d '-6 days' +\%Y) $(date -d '-6 days' +\%m\%d)  $(date  +\%Y) $(date +\%m\%d) TIO 1 1 &
 #Spring->Early Autumn
-05 19 * 4-10 * /home/chd/data-sum-daily.sh  /lustre/data $(date +\%Y) $(date +\%m\%d) HA 1 &
-05 19 * 4-10 * /home/chd/data-sum-daily.sh  /lustre/data $(date +\%Y) $(date +\%m\%d) TIO 1 &
-30 19 * 4-10 0 /home/chd/data-sum-015.sh  /lustre/data $(date -d '-6 days' +\%Y) $(date -d '-6 days' +\%m\%d)  $(date  +\%Y) $(date +\%m\%d) HA 1 1 & 
-30 19 * 4-10 0 /home/chd/data-sum-015.sh  /lustre/data $(date -d '-6 days' +\%Y) $(date -d '-6 days' +\%m\%d)  $(date  +\%Y) $(date +\%m\%d) TIO 1 1 &
+05 20 * 4-10 * /home/chd/data-sum-daily-014.sh  /lustre/data $(date +\%Y) $(date +\%m\%d) HA 1 &
+10 20 * 4-10 * /home/chd/data-sum-daily-014.sh  /lustre/data $(date +\%Y) $(date +\%m\%d) TIO 1 &
+15 20 * 4-10 0 /home/chd/data-sum-015.sh  /lustre/data $(date -d '-6 days' +\%Y) $(date -d '-6 days' +\%m\%d)  $(date  +\%Y) $(date +\%m\%d) HA 1 1 &
+25 20 * 4-10 0 /home/chd/data-sum-015.sh  /lustre/data $(date -d '-6 days' +\%Y) $(date -d '-6 days' +\%m\%d)  $(date  +\%Y) $(date +\%m\%d) TIO 1 1 &
 #Winter->Spring
-05 18 * 11-12 * /home/chd/data-sum-daily.sh  /lustre/data $(date +\%Y) $(date +\%m\%d) HA 1 &
-05 18 * 11-12 * /home/chd/data-sum-daily.sh  /lustre/data $(date +\%Y) $(date +\%m\%d) TIO 1 &
-30 18 * 11-12 0 /home/chd/data-sum-015.sh /lustre/data $(date -d '-6 days' +\%Y) $(date -d '-6 days' +\%m\%d)  $(date  +\%Y) $(date +\%m\%d) HA 1 1 &
-30 18 * 11-12 0 /home/chd/data-sum-015.sh /lustre/data $(date -d '-6 days' +\%Y) $(date -d '-6 days' +\%m\%d)  $(date  +\%Y) $(date +\%m\%d) TIO 1 1 &
+05 19 * 11-12 * /home/chd/data-sum-daily-014.sh  /lustre/data $(date +\%Y) $(date +\%m\%d) HA 1 &
+10 19 * 11-12 * /home/chd/data-sum-daily-014.sh  /lustre/data $(date +\%Y) $(date +\%m\%d) TIO 1 &
+15 19 * 11-12 0 /home/chd/data-sum-015.sh /lustre/data $(date -d '-6 days' +\%Y) $(date -d '-6 days' +\%m\%d)  $(date  +\%Y) $(date +\%m\%d) HA 1 1 &
+25 19 * 11-12 0 /home/chd/data-sum-015.sh /lustre/data $(date -d '-6 days' +\%Y) $(date -d '-6 days' +\%m\%d)  $(date  +\%Y) $(date +\%m\%d) TIO 1 1 &
 #Annually
 2 0 1 1 * /home/chd/data-sum-015.sh  /lustre/data $(date  -d "last year" +\%Y) 0101  $(date  -d "last year" +\%Y) 1231 HA 1 1 &
 2 0 1 1 * /home/chd/data-sum-015.sh  /lustre/data $(date  -d "last year" +\%Y) 0101  $(date  -d "last year" +\%Y) 1231 TIO 1 1 &
 #release data space
 0 6 * * 1 rm -f /home/chd/log/*
-0 8 * * * /home/chd/clean-cache-v2.sh > /dev/null 2>&1
+0 */6 * * * /home/chd/clean-cache-v2.sh > /dev/null 2>&1
 #data certificate renew
 8 0 * * * "/root/.acme.sh"/acme.sh --cron --home "/root/.acme.sh" > /dev/null

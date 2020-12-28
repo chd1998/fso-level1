@@ -55,8 +55,8 @@ syssep="/"
 
 if [ $# -ne 8 ];then
   echo "Usage: ./data-sum-xx.sh datadir startyear startmonthday endyear endmonthday datatype(TIO or HA) report(1-report/0-no report) mail(1 mail/0-no mail)"
-  echo "Example: ./data-sum-xx.sh  /lustre/data 2020 0928  2020 1001 TIO 1 1"
-  echo "         ./data-sum-xx.sh  /lustre/data 2020 0928  2020 1001 HA 0 0"
+  echo "Example: ./data-sum-xxx.sh  /lustre/data 2020 0928  2020 1001 TIO 1 1"
+  echo "         ./data-sum-xxx.sh  /lustre/data 2020 0928  2020 1001 HA 0 0"
   exit 1
 fi
 
@@ -73,6 +73,7 @@ num=0
 size=0.0
 obstime=0.0
 obsday=0
+DATATYPE=`printf "%3s" $datatype`
 
 snum=0
 ssize=0.0
@@ -81,8 +82,8 @@ sobstime=0.0
 site=fso
 device=lustre
 homepre=/home/chd/data-info
-suminfo=$homepre/$syear$smonthday-$eyear$emonthday-$datatype@fso.sum
-obslog=$homepre/$year/$datatype-obs-log-$year$monthday
+suminfo=$homepre/$datatype-$syear$smonthday-$eyear$emonthday@fso.sum
+#obslog=$homepre/$year/$datatype-obs-log-$year$monthday
 
 if [ ! -d "$homepre" ];then
     mkdir -m 777 -p $homepre
@@ -122,38 +123,45 @@ do
   ctime=`date  +%H:%M:%S` 
   rawdatadir=$datapre/$checkyear/$checkyear$checkdate/$datatype
 	echo "$today0 $ctime : Start $checkdate $datatype  Data Summerizing @fso"
-  if [ ! -f "$homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum" -a \( -d $rawdatadir \) ];then 
-    /home/chd/data-sum-daily-014.sh $datapre $checkyear $checkmonthday $datatype 0 &
-    waiting "$!" "$datatype Date Summerizing on $checkdate @$device" "Summerizing $datatype Data on $checkdate @$device"
-  fi
+  
+  #if [ ! -d "$rawdatadir" ];then 
+  #  snum=0
+  #  ssize=0.0
+  #  sobstime=0.0
+  #  DATATYPE=`printf "%3s" $datatype`
+  #  echo "$DATATYPE           $checkdate   00000000              0000000.0000               0000-00-00 00:00:00.000000000                       0000-00-00 00:00:00.000000000               0000.000000" >>$suminfo
+  #else
+  /home/chd/data-sum-daily-014.sh $datapre $checkyear $checkmonthday $datatype 0 &
+  waiting "$!" "$datatype Data Summerizing on $checkdate @$device" "Summerizing $datatype Data on $checkdate @$device"
+  #fi
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S` 
   tput ed
   tput rc
-  echo "$today0 $ctime : Task of $datatype Date Summerizing on $checkdate @$site Has been Done..."
-  if [ -f "$homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum" ];then 
-    if [ $report -eq "1" ];then 
-      cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum >>  $suminfo
-    fi
+  echo "$today0 $ctime : Task of $datatype Data Summerizing on $checkdate @$site Has been Done..."
+  #if [ -f "$homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum" ];then 
+  if [ $report -eq "1" ];then 
+    cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum >>  $suminfo
+  fi
+  if [ -f $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum ];then
     snum=`cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum|awk '{print $3}'`
     ssize=`cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum|awk '{print $4}'`
     sobstime=`cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum|awk '{print $9}'`
   else
-    echo "$datatype           $checkdate   00000000              0000000.0000               0000-00-00 00:00:00.000000000                       0000-00-00 00:00:00.000000000               0000.000000" >>$suminfo
     snum=0
     ssize=0.0
     sobstime=0.0
   fi
   num=`echo $num $snum|awk '{print($1+$2)}'`
   size=`echo $size $ssize|awk '{print($1+$2)}'`
-  if (echo ${sobstime} 0.5 | awk '!($1>=$2){exit 1}') && (echo ${snum} 1000 | awk '!($1>$2){exit 1}') then 
+  if (echo ${sobstime} 0.5 | awk '!($1>=$2){exit 1}') && (echo ${snum} 3000 | awk '!($1>$2){exit 1}') then 
     obstime=`echo $obstime $sobstime|awk '{print($1+$2)}'`
     obsday=`echo $obsday|awk '{print($1+1)}'`
   fi
-  obslog=$homepre/$checkyear/$datatype-obs-log-$checkyear$checkmonthday
-  if [ ! -f "$obslog" ];then
-    /home/chd/obs-log-info-013.sh $datapre $checkyear $checkmonthday $datatype 0
-  fi        
+  #obslog=$homepre/$checkyear/$datatype-obs-log-$checkyear$checkmonthday
+  #if [ ! -f "$obslog" ];then
+  #  /home/chd/obs-log-info-013.sh $datapre $checkyear $checkmonthday $datatype 0
+  #fi        
   let i++
   echo "                  : $i of $totaldays Day(s) Processed..."
   echo " "
@@ -165,10 +173,11 @@ obstime=`printf "%011.6f" $obstime`
 obsday=`printf "%04d" $obsday`
 checkdays=`echo $checkdays|awk '{ print($1+1)}'`
 checkdays=`printf "%04d" $checkdays`
-echo "****************************************************************************************************************************************************************************************">> $suminfo
 
-echo "Data Type      Start         End           Nums.               Size(GiB)               Total Obs. Time(hrs)     Total Obs. Day(s)    Total Cal. Day(s)" >>$suminfo
-echo "$datatype             $syear$smonthday      $eyear$emonthday      $num            $size            $obstime              $obsday                 $checkdays" >>$suminfo
+echo "******************************************************************************************************************************************************************************************">> $suminfo
+
+echo "Data Type       Start         End           Nums.               Size(GiB)               Total Obs. Time(hrs)     Total Obs. Day(s)    Total Cal. Day(s)" >>$suminfo
+echo "$DATATYPE             $syear$smonthday      $eyear$emonthday      $num            $size            $obstime              $obsday                 $checkdays" >>$suminfo
 
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`

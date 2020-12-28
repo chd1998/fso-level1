@@ -32,11 +32,15 @@ monthday=$3
 datatype=$4
 mail=$5
 
+checkmonth=${monthday:0:2}
+checkday=${monthday:2:2}
+
 homepre=/home/chd/data-info
 obsdir=$homepre/$year
 obslog=$homepre/$year/$datatype-obs-log-$year$monthday
 targetdir=$progpre/$year/$year$monthday/$datatype
 datadir=$targetdir/
+tmppre=/home/chd/tmp
 device="lustre"
 
 if [ ! -d "$obsdir" ]; then
@@ -63,24 +67,26 @@ fi
 
 if [ $datatype == "TIO" ];then
     if [ -d "$datadir" ]; then 
-        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "FLAT*" -not -path "*redata*" -print>./flat-$datatype
-        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "dark*" -not -path "*redata*" -print>./dark-$datatype
-        ls  -I "dark" -I "FLAT*" -I "*redata*" -I "*.log" $targetdir/|cut -d " " -f 1 >./objlist-$datatype
+        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "FLAT*" -not -path "*redata*" -print>$tmppre/flat-$datatype
+        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "dark*" -not -path "*redata*" -print>$tmppre/dark-$datatype
+        ls  -I "dark" -I "FLAT*" -I "*redata*" -I "*.log" $targetdir/|cut -d " " -f 1 >$tmppre/objlist-$datatype
         #echo $flat $dark   >> $obslog
         #echo $flat $dark 
         for bt in $(echo "$flat");
         do 
             #echo "$bt : "
             #echo "$bt : ">>$obslog
-            for line in $(cat ./flat-$datatype);
+            for line in $(cat $tmppre/flat-$datatype);
             do
                 result=$(echo $line|grep "${bt}")
                 if [[ "$result" != "" ]]
                 then 
-                fstime=`find $line/   -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1|head -n +1`
-                fetime=`find $line/   -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 -r|head -n +1`
-                echo " $line : $fstime         $fetime"
-                echo " $line : $fstime         $fetime">>$obslog
+                  find $line/   -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 > $tmppre/obslist.tmp
+                  awk '{if($2<19)print $1" "$2 }' $tmppre/obslist.tmp > $tmppre/obslist
+                  fstime=`cat $tmppre/obslist |grep $checkmonth-$checkday|head -n +1`
+                  fetime=`cat $tmppre/obslist |sort -r|grep $checkmonth-$checkday|head -n +1`
+                  echo "$line : $fstime         $fetime"
+                  echo "$line : $fstime         $fetime">>$obslog
                 fi
             done
         done 
@@ -88,48 +94,60 @@ if [ $datatype == "TIO" ];then
         do 
             #echo "$bt : "
             #echo "$bt : ">>$obslog
-            for line in $(cat ./dark-$datatype);
+            for line in $(cat $tmppre/dark-$datatype);
             do
                 result=$(echo $line|grep "${bt}")
                 if [[ "$result" != "" ]]
                 then 
-                    dstime=`find $line/   -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1|head -n +1`
-                    detime=`find $line/   -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 -r|head -n +1`
-                    echo " $line : $dstime         $detime"
-                    echo " $line : $dstime         $detime">>$obslog
+                  find $line/   -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 > $tmppre/obslist.tmp
+                  awk '{if($2<19)print $1" "$2 }' $tmppre/obslist.tmp > $tmppre/obslist
+                  dstime=`cat $tmppre/obslist |grep $checkmonth-$checkday|head -n +1`
+                  detime=`cat $tmppre/obslist |sort -r|grep $checkmonth-$checkday|head -n +1`
+                  echo "$line : $dstime         $detime"
+                  echo "$line : $dstime         $detime">>$obslog
                 fi
             done
         done
-        for line in $(cat ./objlist-$datatype);
+        for line in $(cat $tmppre/objlist-$datatype);
         do
-            ostime=`find $targetdir/$line/   -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1|head -n +1`
-            oetime=`find $targetdir/$line/   -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 -r|head -n +1`
-            echo " $targetdir/$line/ : $ostime         $oetime"
-            echo " $targetdir/$line/ : $ostime         $oetime">>$obslog
+            find $targetdir/$line/ -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 > $tmppre/obslist.tmp
+            awk '{if($2<19)print $1" "$2 }' $tmppre/obslist.tmp > $tmppre/obslist
+            ostime=`cat $tmppre/obslist |grep $checkmonth-$checkday|head -n +1`
+            oetime=`cat $tmppre/obslist |sort -r|grep $checkmonth-$checkday|head -n +1`
+            #ostime=`find $targetdir/$line/   -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1|head -n +1`
+            #oetime=`find $targetdir/$line/   -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 -r|head -n +1`
+            echo "$targetdir/$line : $ostime         $oetime"
+            echo "$targetdir/$line : $ostime         $oetime">>$obslog
         done  
     fi 
+  rm -f $tmppre/dark-$datatype
+  rm -f $tmppre/flat-$datatype
+  rm -f $tmppre/objlist-$datatype
+  rm -f $tmppre/obslist*
 fi
 
 if [ $datatype == "HA" ]; then
     if [ -d "$datadir" ]; then
-        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "CENT*" -not -path "*redata*" -print>./clist-$datatype
-        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "B*" -not -path "*redata*" -print>./blist-$datatype
-        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "R*" -not -path "*redata*" -print>./rlist-$datatype
-        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "FLAT*" -not -path "*redata*" -print>./flat-$datatype
-        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "dark*" -not -path "*redata*" -print>./dark-$datatype
+        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "CENT*" -not -path "*redata*" -print>$tmppre/clist-$datatype
+        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "B*" -not -path "*redata*" -print>$tmppre/blist-$datatype
+        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "R*" -not -path "*redata*" -print>$tmppre/rlist-$datatype
+        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "FLAT*" -not -path "*redata*" -print>$tmppre/flat-$datatype
+        find $targetdir/ -path "*redata*" -prune -false  -o  -type d -name  "dark*" -not -path "*redata*" -print>$tmppre/dark-$datatype
         for bt in $(echo "$flat");
         do 
             echo "$bt : "
             echo "$bt : ">>$obslog
-            for line in $(cat ./flat-$datatype);
+            for line in $(cat $tmppre/flat-$datatype);
             do
                 result=$(echo $line|grep "${bt}")
                 if [[ "$result" != "" ]]
                 then 
-                    fstime=`find $line/ -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1|head -n +1`
-                    fetime=`find $line/ -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 -r|head -n +1`
-                    echo " $line : $fstime         $fetime"
-                    echo " $line : $fstime         $fetime">>$obslog
+                    find $line/   -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 > $tmppre/obslist.tmp
+                    awk '{if($2<19)print $1" "$2 }' $tmppre/obslist.tmp > $tmppre/obslist
+                    fstime=`cat $tmppre/obslist |grep $checkmonth-$checkday|head -n +1`
+                    fetime=`cat $tmppre/obslist |sort -r|grep $checkmonth-$checkday|head -n +1`
+                    echo "$line : $fstime         $fetime"
+                    echo "$line : $fstime         $fetime">>$obslog
                 fi
             done
         done 
@@ -137,15 +155,17 @@ if [ $datatype == "HA" ]; then
         do 
             echo "$bt : "
             echo "$bt : ">>$obslog
-            for line in $(cat ./dark-$datatype);
+            for line in $(cat $tmppre/dark-$datatype);
             do
                 result=$(echo $line|grep "${bt}")
                 if [[ "$result" != "" ]]
                 then 
-                    dstime=`find $line/ -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1|head -n +1`
-                    detime=`find $line/ -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 -r|head -n +1`
-                    echo " $line : $dstime         $detime"
-                    echo " $line : $dstime         $detime">>$obslog
+                    find $line/   -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 > $tmppre/obslist.tmp
+                    awk '{if($2<19)print $1" "$2 }' $tmppre/obslist.tmp > $tmppre/obslist
+                    dstime=`cat $tmppre/obslist |grep $checkmonth-$checkday|head -n +1`
+                    detime=`cat $tmppre/obslist |sort -r|grep $checkmonth-$checkday|head -n +1`
+                    echo "$line : $dstime         $detime"
+                    echo "$line : $dstime         $detime">>$obslog
                 fi
             done
         done   
@@ -153,15 +173,17 @@ if [ $datatype == "HA" ]; then
         do 
             echo "$bt : "
             echo "$bt : ">>$obslog
-            for line in $(cat ./clist-$datatype);
+            for line in $(cat $tmppre/clist-$datatype);
             do
                 result=$(echo $line|grep "${bt}")
                 if [[ "$result" != "" ]]
                 then 
-                    cstime=`find $line/ -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1|head -n +1`
-                    cetime=`find $line/ -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 -r|head -n +1`
-                    echo " $line : $cstime         $cetime"
-                    echo " $line : $cstime         $cetime">>$obslog
+                    find $line/   -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 > $tmppre/obslist.tmp
+                    awk '{if($2<19)print $1" "$2 }' $tmppre/obslist.tmp > $tmppre/obslist
+                    cstime=`cat $tmppre/obslist |grep $checkmonth-$checkday|head -n +1`
+                    cetime=`cat $tmppre/obslist |sort -r|grep $checkmonth-$checkday|head -n +1`
+                    echo "$line : $cstime         $cetime"
+                    echo "$line : $cstime         $cetime">>$obslog
                 fi
             done
         done 
@@ -169,13 +191,15 @@ if [ $datatype == "HA" ]; then
         do 
             echo "$bt : "
             echo "$bt : ">>$obslog
-            for line in $(cat ./blist-$datatype);
+            for line in $(cat $tmppre/blist-$datatype);
             do
                 result=$(echo $line|grep "${bt}"|grep -v FLAT)
                 if [[ "$result" != "" ]]
                 then
-                    bstime=`find $line/ -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1|head -n +1`
-                    betime=`find $line/ -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 -r|head -n +1`
+                    find $line/   -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 > $tmppre/obslist.tmp
+                    awk '{if($2<19)print $1" "$2 }' $tmppre/obslist.tmp > $tmppre/obslist
+                    bstime=`cat $tmppre/obslist |grep $checkmonth-$checkday|head -n +1`
+                    betime=`cat $tmppre/obslist |sort -r|grep $checkmonth-$checkday|head -n +1`
                     echo " $line : $bstime         $betime"
                     echo " $line : $bstime         $betime">>$obslog
                 fi
@@ -185,25 +209,28 @@ if [ $datatype == "HA" ]; then
         do 
             echo "$bt : "
             echo "$bt : ">>$obslog
-            for line in $(cat ./rlist-$datatype);
+            for line in $(cat $tmppre/rlist-$datatype);
             do
                 result=$(echo $line|grep "${bt}"|grep -v FLAT)
                 if [[ "$result" != "" ]]
                 then
-                    rstime=`find $line/ -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1|head -n +1`
-                    retime=`find $line/ -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 -r|head -n +1`
-                    echo " $line : $rstime         $retime"
-                    echo " $line : $rstime         $retime">>$obslog
+                    find $line/   -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 > $tmppre/obslist.tmp
+                    awk '{if($2<19)print $1" "$2 }' $tmppre/obslist.tmp > $tmppre/obslist
+                    rstime=`cat $tmppre/obslist |grep $checkmonth-$checkday|head -n +1`
+                    retime=`cat $tmppre/obslist |sort -r|grep $checkmonth-$checkday|head -n +1`
+                    echo "$line : $rstime         $retime"
+                    echo "$line : $rstime         $retime">>$obslog
                 fi
             done
         done
     fi
+  rm -f $tmppre/clist-$datatype
+  rm -f $tmppre/blist-$datatype
+  rm -f $tmppre/rlist-$datatype
+  rm -f $tmppre/dark-$datatype
+  rm -f $tmppre/flat-$datatype
+  rm -f $tmppre/obslist*
 fi 
-      
-
-rm -f ./clist-$datatype
-rm -f ./blist-$datatype
-rm -f ./rlist-$datatype
   
 if [ $mail -eq "1" ];then 
     mail -s "$datatype Obs. Log on $year$monthday @$device" chd@ynao.ac.cn < $obslog

@@ -30,7 +30,7 @@ mail=$6
 num=0
 size=0.0
 obsday=0
-stddn=21600
+stddn=17280
 
 snum=0
 ssize=0.0
@@ -43,7 +43,7 @@ progpre=/home/pi
 suminfo=$datadir/$device-$site-$syear$smonthday-$eyear$emonthday.sum
 
 if [ ! -d "$datadir" ];then
-    echo "No $device data directory $datadir found, pls check....."
+    echo "$datadir not found @$device, pls check....."
     exit 1
 fi	
 
