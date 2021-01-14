@@ -30,7 +30,7 @@ mail=$6
 num=0
 size=0.0
 obsday=0
-stddn=12960
+stddn=12948
 
 snum=0
 ssize=0.0

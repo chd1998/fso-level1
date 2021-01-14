@@ -85,8 +85,11 @@ if [ $datatype == "TIO" ];then
                   awk '{if($2<19)print $1" "$2 }' $tmppre/obslist.tmp > $tmppre/obslist
                   fstime=`cat $tmppre/obslist |grep $checkmonth-$checkday|head -n +1`
                   fetime=`cat $tmppre/obslist |sort -r|grep $checkmonth-$checkday|head -n +1`
-                  echo "$line : $fstime         $fetime"
-                  echo "$line : $fstime         $fetime">>$obslog
+                  s1=`date -d "$fstime" +%s`
+                  e1=`date -d "$fetime" +%s`
+                  dt=`echo $s1 $e1|awk '{print($2-$1)/3600'}`
+                  echo "$line : $fstime         $fetime         $dt"
+                  echo "$line : $fstime         $fetime         $dt">>$obslog
                 fi
             done
         done 
@@ -103,8 +106,11 @@ if [ $datatype == "TIO" ];then
                   awk '{if($2<19)print $1" "$2 }' $tmppre/obslist.tmp > $tmppre/obslist
                   dstime=`cat $tmppre/obslist |grep $checkmonth-$checkday|head -n +1`
                   detime=`cat $tmppre/obslist |sort -r|grep $checkmonth-$checkday|head -n +1`
-                  echo "$line : $dstime         $detime"
-                  echo "$line : $dstime         $detime">>$obslog
+                  s1=`date -d "$dstime" +%s`
+                  e1=`date -d "$detime" +%s`
+                  dt=`echo $s1 $e1|awk '{print($2-$1)/3600'}`
+                  echo "$line : $dstime         $detime         $dt"
+                  echo "$line : $dstime         $detime         $dt">>$obslog
                 fi
             done
         done
@@ -114,10 +120,11 @@ if [ $datatype == "TIO" ];then
             awk '{if($2<19)print $1" "$2 }' $tmppre/obslist.tmp > $tmppre/obslist
             ostime=`cat $tmppre/obslist |grep $checkmonth-$checkday|head -n +1`
             oetime=`cat $tmppre/obslist |sort -r|grep $checkmonth-$checkday|head -n +1`
-            #ostime=`find $targetdir/$line/   -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1|head -n +1`
-            #oetime=`find $targetdir/$line/   -type f -name *.fits -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 -r|head -n +1`
-            echo "$targetdir/$line : $ostime         $oetime"
-            echo "$targetdir/$line : $ostime         $oetime">>$obslog
+            s1=`date -d "$ostime" +%s`
+            e1=`date -d "$oetime" +%s`
+            dt=`echo $s1 $e1|awk '{print($2-$1)/3600'}`
+            echo "$targetdir/$line : $ostime         $oetime         $dt"
+            echo "$targetdir/$line : $ostime         $oetime         $dt">>$obslog
         done  
     fi 
   rm -f $tmppre/dark-$datatype
@@ -146,8 +153,11 @@ if [ $datatype == "HA" ]; then
                     awk '{if($2<19)print $1" "$2 }' $tmppre/obslist.tmp > $tmppre/obslist
                     fstime=`cat $tmppre/obslist |grep $checkmonth-$checkday|head -n +1`
                     fetime=`cat $tmppre/obslist |sort -r|grep $checkmonth-$checkday|head -n +1`
-                    echo "$line : $fstime         $fetime"
-                    echo "$line : $fstime         $fetime">>$obslog
+                    s1=`date -d "$fstime" +%s`
+                    e1=`date -d "$fetime" +%s`
+                    dt=`echo $s1 $e1|awk '{print($2-$1)/3600'}`
+                    echo "$line : $fstime         $fetime         $dt"
+                    echo "$line : $fstime         $fetime         $dt">>$obslog
                 fi
             done
         done 
@@ -164,8 +174,11 @@ if [ $datatype == "HA" ]; then
                     awk '{if($2<19)print $1" "$2 }' $tmppre/obslist.tmp > $tmppre/obslist
                     dstime=`cat $tmppre/obslist |grep $checkmonth-$checkday|head -n +1`
                     detime=`cat $tmppre/obslist |sort -r|grep $checkmonth-$checkday|head -n +1`
-                    echo "$line : $dstime         $detime"
-                    echo "$line : $dstime         $detime">>$obslog
+                    s1=`date -d "$dstime" +%s`
+                    e1=`date -d "$detime" +%s`
+                    dt=`echo $s1 $e1|awk '{print($2-$1)/3600'}`
+                    echo "$line : $dstime         $detime         $dt"
+                    echo "$line : $dstime         $detime         $dt">>$obslog
                 fi
             done
         done   
@@ -182,8 +195,11 @@ if [ $datatype == "HA" ]; then
                     awk '{if($2<19)print $1" "$2 }' $tmppre/obslist.tmp > $tmppre/obslist
                     cstime=`cat $tmppre/obslist |grep $checkmonth-$checkday|head -n +1`
                     cetime=`cat $tmppre/obslist |sort -r|grep $checkmonth-$checkday|head -n +1`
-                    echo "$line : $cstime         $cetime"
-                    echo "$line : $cstime         $cetime">>$obslog
+                    s1=`date -d "$cstime" +%s`
+                    e1=`date -d "$cetime" +%s`
+                    dt=`echo $s1 $e1|awk '{print($2-$1)/3600'}`
+                    echo "$line : $cstime         $cetime         $dt"
+                    echo "$line : $cstime         $cetime         $dt">>$obslog
                 fi
             done
         done 
@@ -200,8 +216,11 @@ if [ $datatype == "HA" ]; then
                     awk '{if($2<19)print $1" "$2 }' $tmppre/obslist.tmp > $tmppre/obslist
                     bstime=`cat $tmppre/obslist |grep $checkmonth-$checkday|head -n +1`
                     betime=`cat $tmppre/obslist |sort -r|grep $checkmonth-$checkday|head -n +1`
-                    echo "$line : $bstime         $betime"
-                    echo "$line : $bstime         $betime">>$obslog
+                    s1=`date -d "$bstime" +%s`
+                    e1=`date -d "$betime" +%s`
+                    dt=`echo $s1 $e1|awk '{print($2-$1)/3600'}`
+                    echo "$line : $bstime         $betime         $dt"
+                    echo "$line : $bstime         $betime         $dt">>$obslog
                 fi
             done
         done
@@ -218,8 +237,11 @@ if [ $datatype == "HA" ]; then
                     awk '{if($2<19)print $1" "$2 }' $tmppre/obslist.tmp > $tmppre/obslist
                     rstime=`cat $tmppre/obslist |grep $checkmonth-$checkday|head -n +1`
                     retime=`cat $tmppre/obslist |sort -r|grep $checkmonth-$checkday|head -n +1`
-                    echo "$line : $rstime         $retime"
-                    echo "$line : $rstime         $retime">>$obslog
+                    s1=`date -d "$rstime" +%s`
+                    e1=`date -d "$retime" +%s`
+                    dt=`echo $s1 $e1|awk '{print($2-$1)/3600'}`
+                    echo "$line : $rstime         $retime         $dt"
+                    echo "$line : $rstime         $retime         $dt">>$obslog
                 fi
             done
         done
