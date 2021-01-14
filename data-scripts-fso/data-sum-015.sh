@@ -195,8 +195,8 @@ if [ $mail -eq "1" ];then
   mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" yanxl@ynao.ac.cn < $suminfo
   mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" kim@ynao.ac.cn < $suminfo
   mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" lz@ynao.ac.cn < $suminfo
-  mail -s "Summary of $year$monthday $datatype @$device" yanglei@ynao.ac.cn < $tmppre/$datatype-mailtmp
-  mail -s "Summary of $year$monthday $datatype @$device" chjy@ynao.ac.cn < $tmppre/$datatype-mailtmp
+  mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" yanglei@ynao.ac.cn < $tmppre/$datatype-mailtmp
+  mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" chjy@ynao.ac.cn < $tmppre/$datatype-mailtmp
 fi
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
