@@ -30,7 +30,19 @@ mail=$6
 num=0
 size=0.0
 obsday=0
+<<<<<<< HEAD
 stddn=12948
+=======
+<<<<<<< HEAD
+stddn=12948
+=======
+<<<<<<< HEAD
+stddn=17280
+=======
+stddn=12960
+>>>>>>> e2cdcc274edbf98c530b94baf959597bbbf655ad
+>>>>>>> 580674a5e5aa50a8a9485e5a4ba64f8d5a134d92
+>>>>>>> 3fd0cbebf71dbd961188f928769198183c183264
 
 snum=0
 ssize=0.0

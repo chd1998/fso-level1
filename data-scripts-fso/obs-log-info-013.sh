@@ -200,8 +200,8 @@ if [ $datatype == "HA" ]; then
                     awk '{if($2<19)print $1" "$2 }' $tmppre/obslist.tmp > $tmppre/obslist
                     bstime=`cat $tmppre/obslist |grep $checkmonth-$checkday|head -n +1`
                     betime=`cat $tmppre/obslist |sort -r|grep $checkmonth-$checkday|head -n +1`
-                    echo " $line : $bstime         $betime"
-                    echo " $line : $bstime         $betime">>$obslog
+                    echo "$line : $bstime         $betime"
+                    echo "$line : $bstime         $betime">>$obslog
                 fi
             done
         done
