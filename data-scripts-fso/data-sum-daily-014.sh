@@ -79,25 +79,15 @@ if [ -d "$targetdir" ]; then
   #only time before 19 on checkdate count
   find $targetdir/   -type f -name ''*.fits'' -not -path "*redata*" -print|xargs stat 2>/dev/null|grep Modify|awk '{print($2" "$3)}'|sort --field-separator=" " --key=1 > $tmppre/flist.tmp
   awk '{if($2<19)print $1" "$2 }' $tmppre/flist.tmp > $filelist
-  #echo "$today0 $ctime : Start Calculating  $year$monthday $datatype @$device Observing Time..."
-  #cd $targetdir
-  #start=`find ./   -path "*redata*" -o -path "*Dark*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name $dataprefix*.fits -print |xargs ls -ltr 2>/dev/null |head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print($2" "$3)}'`
-  #start=`find ./ -type f -name ''$dataprefix*.fits'' -not -path "*redata*"  -print |xargs ls -ltr 2>/dev/null |head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print($2" "$3)}'`
   start=`cat $filelist |grep $checkmonth-$checkday|head -n +1`
   if [ -z "$start" ]; then
-    #start="19700101 08:00:00.000"
-    #s=`date -d "$start" +%s`
     s=0
     start="0000-00-00 00:00:00.000000000"
   else
     s=`date -d "$start" +%s`
   fi
-  #end=`find ./  -path "*redata*" -o -path "*Dark*" -o -path "*dark*" -o -path "*FLAT*"  -prune -o -type f -name $dataprefix*.fits -print |xargs ls -lt 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print( $2" "$3)}'`
-  #end=`find ./ -type f -name ''$dataprefix*.fits'' -not -path "*redata*"  -print |xargs ls -lt 2>/dev/null|head -n +1|awk '{print($9)}'|xargs stat 2>/dev/null|grep Change|awk '{print( $2" "$3)}'`
   end=` cat $filelist |sort -r|grep $checkmonth-$checkday|head -n +1`
   if [ -z "$end" ]; then
-    #end="19700101 08:00:00.000"
-    #e=`date -d "$end" +%s`
     e=0
     end="0000-00-00 00:00:00.000000000"
   else
@@ -136,16 +126,18 @@ if [ -d "$targetdir" ]; then
     if [ -f "$obslog" ];then
       cat $obslog >> $tmppre/$datatype-mailtmp
     else 
-      /home/chd/obs-log-info-013.sh $progpre $year $monthday $datatype 0
+      /home/chd/obs-log-info-015.sh $progpre $year $monthday $datatype 0
       cat $obslog >> $tmppre/$datatype-mailtmp
     fi        
     mail -s "Summary of $year$monthday $datatype @$device" nvst_obs@ynao.ac.cn < $tmppre/$datatype-mailtmp
     mail -s "Summary of $year$monthday $datatype @$device" chd@ynao.ac.cn < $tmppre/$datatype-mailtmp
     mail -s "Summary of $year$monthday $datatype @$device" xiangyy@ynao.ac.cn < $tmppre/$datatype-mailtmp
-    mail -s "Summary of $year$monthday $datatype @$device" yanxl@ynao.ac.cn < $tmppre/$datatype-mailtmp
+    mail -s "Summary of $year$monthday $datatype @$device" yan4320@126.com < $tmppre/$datatype-mailtmp
     mail -s "Summary of $year$monthday $datatype @$device" xj@ynao.ac.cn < $tmppre/$datatype-mailtmp
     mail -s "Summary of $year$monthday $datatype @$device" kim@ynao.ac.cn < $tmppre/$datatype-mailtmp
     mail -s "Summary of $year$monthday $datatype @$device" lz@ynao.ac.cn < $tmppre/$datatype-mailtmp
+    mail -s "Summary of $year$monthday $datatype @$device" yanglei@ynao.ac.cn < $tmppre/$datatype-mailtmp
+    mail -s "Summary of $year$monthday $datatype @$device" chjy@ynao.ac.cn < $tmppre/$datatype-mailtmp
   fi
   rm -f $datatype-$year-$monthday-flist
   rm -f $datatype-$year-$monthday-flist-sorted

@@ -83,6 +83,8 @@ site=fso
 device=lustre
 homepre=/home/chd/data-info
 suminfo=$homepre/$datatype-$syear$smonthday-$eyear$emonthday@fso.sum
+
+
 #obslog=$homepre/$year/$datatype-obs-log-$year$monthday
 
 if [ ! -d "$homepre" ];then
@@ -122,6 +124,7 @@ do
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S` 
   rawdatadir=$datapre/$checkyear/$checkyear$checkdate/$datatype
+  suminfodaily=$homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum
 	echo "$today0 $ctime : Start $checkdate $datatype  Data Summerizing @fso"
   
   #if [ ! -d "$rawdatadir" ];then 
@@ -131,15 +134,18 @@ do
   #  DATATYPE=`printf "%3s" $datatype`
   #  echo "$DATATYPE           $checkdate   00000000              0000000.0000               0000-00-00 00:00:00.000000000                       0000-00-00 00:00:00.000000000               0000.000000" >>$suminfo
   #else
-  /home/chd/data-sum-daily-014.sh $datapre $checkyear $checkmonthday $datatype 0 &
-  waiting "$!" "$datatype Data Summerizing on $checkdate @$device" "Summerizing $datatype Data on $checkdate @$device"
-  #fi
+  if [ ! -f $suminfodaily ];then 
+    /home/chd/data-sum-daily-014.sh $datapre $checkyear $checkmonthday $datatype 0 &
+    waiting "$!" "$datatype Data Summerizing on $checkdate @$device" "Summerizing $datatype Data on $checkdate @$device"
+    #fi
+  fi 
   today0=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S` 
   tput ed
   tput rc
   echo "$today0 $ctime : Task of $datatype Data Summerizing on $checkdate @$site Has been Done..."
   #if [ -f "$homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum" ];then 
+  
   if [ $report -eq "1" ];then 
     cat $homepre/$checkyear/$datatype-$checkyear-$checkmonthday.sum >>  $suminfo
   fi
@@ -189,6 +195,8 @@ if [ $mail -eq "1" ];then
   mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" yanxl@ynao.ac.cn < $suminfo
   mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" kim@ynao.ac.cn < $suminfo
   mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" lz@ynao.ac.cn < $suminfo
+  mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" yanglei@ynao.ac.cn < $tmppre/$datatype-mailtmp
+  mail -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" chjy@ynao.ac.cn < $tmppre/$datatype-mailtmp
 fi
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
