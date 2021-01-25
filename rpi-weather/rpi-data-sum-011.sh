@@ -34,11 +34,15 @@ obsday=0
 stddn=12948
 =======
 <<<<<<< HEAD
+stddn=12948
+=======
+<<<<<<< HEAD
 stddn=17280
 =======
 stddn=12960
 >>>>>>> e2cdcc274edbf98c530b94baf959597bbbf655ad
 >>>>>>> 580674a5e5aa50a8a9485e5a4ba64f8d5a134d92
+>>>>>>> 3fd0cbebf71dbd961188f928769198183c183264
 
 snum=0
 ssize=0.0
@@ -48,10 +52,10 @@ site=fso
 device=rpi-weather-station
 datadir=/home/pi/fso-weather-data
 progpre=/home/pi
-suminfo=$datadir/$syear$smonthday-$eyear$emonthday-$device-$site.sum
+suminfo=$datadir/$device-$site-$syear$smonthday-$eyear$emonthday.sum
 
 if [ ! -d "$datadir" ];then
-    echo "$datadir not found @$device, pls check....."
+    echo "No $device data directory $datadir found, pls check....."
     exit 1
 fi	
 
