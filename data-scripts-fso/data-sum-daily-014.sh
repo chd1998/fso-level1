@@ -129,15 +129,15 @@ if [ -d "$targetdir" ]; then
       /home/chd/obs-log-info-015.sh $progpre $year $monthday $datatype 0
       cat $obslog >> $tmppre/$datatype-mailtmp
     fi        
-    mail -s "Summary of $year$monthday $datatype @$device" nvst_obs@ynao.ac.cn < $tmppre/$datatype-mailtmp
-    mail -s "Summary of $year$monthday $datatype @$device" chd@ynao.ac.cn < $tmppre/$datatype-mailtmp
-    mail -s "Summary of $year$monthday $datatype @$device" xiangyy@ynao.ac.cn < $tmppre/$datatype-mailtmp
-    mail -s "Summary of $year$monthday $datatype @$device" yan4320@126.com < $tmppre/$datatype-mailtmp
-    mail -s "Summary of $year$monthday $datatype @$device" xj@ynao.ac.cn < $tmppre/$datatype-mailtmp
-    mail -s "Summary of $year$monthday $datatype @$device" kim@ynao.ac.cn < $tmppre/$datatype-mailtmp
-    mail -s "Summary of $year$monthday $datatype @$device" lz@ynao.ac.cn < $tmppre/$datatype-mailtmp
-    mail -s "Summary of $year$monthday $datatype @$device" yanglei@ynao.ac.cn < $tmppre/$datatype-mailtmp
-    mail -s "Summary of $year$monthday $datatype @$device" chjy@ynao.ac.cn < $tmppre/$datatype-mailtmp
+    mail -v -s "Summary of $year$monthday $datatype @$device" nvst_obs@ynao.ac.cn < $tmppre/$datatype-mailtmp
+    mail -v -s "Summary of $year$monthday $datatype @$device" chd@ynao.ac.cn < $tmppre/$datatype-mailtmp
+    mail -v -s "Summary of $year$monthday $datatype @$device" xiangyy@ynao.ac.cn < $tmppre/$datatype-mailtmp
+    mail -v -s "Summary of $year$monthday $datatype @$device" yan4320@126.com < $tmppre/$datatype-mailtmp
+    mail -v -s "Summary of $year$monthday $datatype @$device" xj@ynao.ac.cn < $tmppre/$datatype-mailtmp
+    mail -v -s "Summary of $year$monthday $datatype @$device" kim@ynao.ac.cn < $tmppre/$datatype-mailtmp
+    #mail -v -s "Summary of $year$monthday $datatype @$device" lz@ynao.ac.cn < $tmppre/$datatype-mailtmp
+    mail -v -s "Summary of $year$monthday $datatype @$device" yanglei@ynao.ac.cn < $tmppre/$datatype-mailtmp
+    mail -v -s "Summary of $year$monthday $datatype @$device" chjy@ynao.ac.cn < $tmppre/$datatype-mailtmp
   fi
   rm -f $datatype-$year-$monthday-flist
   rm -f $datatype-$year-$monthday-flist-sorted
