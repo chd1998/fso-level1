@@ -60,9 +60,9 @@ function onCtrlC(){
     exit 1
 }
 
-cyear=`date --date='0 days ago' +%Y`
-today=`date --date='0 days ago' +%Y%m%d`
-ctime=`date --date='0 days ago' +%H:%M:%S`
+cyear=`date  +%Y`
+today=`date  +%Y%m%d`
+ctime=`date  +%H:%M:%S`
 
 if [ $# -ne 9 ]  ;then
   echo "Copy specified date TIO/HA data on remote host to /lustre/data mannually"
@@ -106,7 +106,7 @@ echo "                                                         "
 echo "                 $(basename $0)                          "  
 echo "                   Release $pver                         "
 echo "                                                         "
-echo " Copy the $datatype data from remote to lustre manually  "
+#echo " Copy the $datatype data from remote to lustre manually  "
 echo "                                                         "
 echo "                $today    $ctime                         "
 echo "                                                         "
@@ -127,15 +127,15 @@ else
   echo "$destdir already exist!"
 fi
 
-ctime=`date --date='0 days ago' +%H:%M:%S`
+ctime=`date  +%H:%M:%S`
 echo "$today $ctime: Syncing $datatype data @ FSO..."
 echo "                   From: $srcdir "
 echo "                   To  : $destdir "
 #  echo ""
 #  read
 cd $destdir
-t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-
+#t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+t0=`date +%s`
 itmp=$threadnumber
 while  [ $itmp -gt 0 ]
 do
@@ -145,7 +145,7 @@ do
   itmp=$((itmp-1))
 done
 #wait for every wget process to end
-ctimet=`date --date='0 days ago' +%H:%M:%S`
+ctime1=`date +%H:%M:%S`
 jobnumber=$(jobs -p | wc -l)
 #jtmp=`((jobnumber++))`
 echo "$today $ctimet: $jobnumber process(es) started!"
@@ -168,8 +168,8 @@ done
 
 #ctimethread=`date --date='0 days ago' +%H:%M:%S`
 echo  "$today $ctimet: $threadnumber wget process(es) finished..."
-
-ctime1=`date --date='0 days ago' +%H:%M:%S`
+t1=`date +%s`
+ctime1=`date +%H:%M:%S`
 #waiting "$!" "$datatype Syncing" "Syncing $datatype Data"
 #echo "Please Wait..."
 #if [ $? -ne 0 ];then
@@ -179,14 +179,14 @@ ctime1=`date --date='0 days ago' +%H:%M:%S`
 #fi
 
 #t1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+#t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 
 
 targetdir=${destdir}
 ls -lR $targetdir | grep "^-" | wc -l > $tmpfn &
 waiting "$!" "File Number Sumerizing" "Sumerizing File Number"
 if [ $? -ne 0 ];then
-  ctime3=`date --date='0 days ago' +%H:%M:%S`
+  ctime3=`date  +%H:%M:%S`
   echo "$today $ctime3: Sumerizing File Number of $datatype Failed!"
   cd /home/chd/
   exit 1
@@ -210,24 +210,24 @@ filesize=$(cat $tmpfs)
 find $targetdir ! -perm 777 -type f -exec chmod 777 {} \; &
 find $targetdir ! -perm 777 -type d -exec chmod 777 {} \; &
 
-timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
+timediff=`echo "$t0 $t1"|awk '{print($2-$1)}'`
 if [ $timediff -le 0 ]; then
   speed=0
 else
   speed=`echo "$filesize $timediff"|awk '{print($1/$2)}'`
 fi
 
-ctime3=`date --date='0 days ago' +%H:%M:%S`
+ctime3=`date  +%H:%M:%S`
 #t3=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-t4=`echo $ctime3|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
-timediff1=`echo "$t1 $t4"|awk '{print($2-$1)}'`
+#t4=`echo $ctime3|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+#timediff1=`echo "$t1 $t4"|awk '{print($2-$1)}'`
 
 echo " " 
 echo "$today $ctime3: Succeeded in Syncing $datatype data @ FSO!"
 echo "Synced file No.  : $filenumber file(s)"
 echo "Synced data size : $filesize MB"
 echo "           Speed : $speed MB/s"
-echo "       Time Used : $timediff1 secs."
+echo "       Time Used : $timediff secs."
 #echo "       Time From : $ctime  "
 #echo "              To : $ctime3 "
 echo "======================================================================"
