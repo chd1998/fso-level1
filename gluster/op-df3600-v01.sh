@@ -1,0 +1,21 @@
+#!/bin/bash
+gluster volume set df3600 network.ping-timeout 10
+gluster volume set df3600 server.event-threads 4
+gluster volume set df3600 server.outstanding-rpc-limit  128
+gluster volume set df3600 client.event-threads 8
+gluster volume set df3600 cluster.read-hash-mode 2
+gluster volume set df3600 cluster.lookup-optimize on
+gluster volume set df3600 cluster.heal-timeout 300
+gluster volume set df3600 group metadata-cache
+gluster volume set df3600 lookup-unhashed off
+gluster volume set df3600 performance.read-ahead on
+gluster volume set df3600 performance.cache-size 512MB
+gluster volume set df3600 performance.write-behind-window-size 512MB
+gluster volume set df3600 performance.io-thread-count 32
+gluster volume set df3600 performance.client-io-threads on
+gluster volume set df3600 performance.parallel-readdir on
+gluster volume set df3600 performance.md-cache-timeout 0
+gluster volume set df3600 nfs.disable on
+gluster volume set df3600 storage.linux-aio on
+gluster volume set df3600 stat-prefetch on
+gluster volume set df3600 storage.health-check-interval 86400
