@@ -57,15 +57,15 @@ do
   #if [ $dcpul -gt 0 ]; then
   if [ $(echo "$cpul > $upper_cpuload"|bc) -eq 1 ]; then
   	echo "$day : CPU Load is too high...Killing Processes....." 
-        /home/pi/pid-kill.sh ToSql > /dev/null 2>&1 
-	/home/pi/pid-kill.sh rtspIMG > /dev/null 
-	/home/pi/pid-kill.sh curl > /dev/null 2>&1
-	#/home/pi/pid-kill.sh temp-monitor > /dev/null 2>&1 
-	/home/pi/pid-kill.sh fso_draw > /dev/null  2>&1
-	/home/pi/pid-kill.sh stats_backuo> /dev/null 2>&1
-	/home/pi/pid-kill.sh warning> /dev/null  2>&1
-  /home/pi/pid-kill.sh curl> /dev/null  2>&1
-  /home/pi/pid-kill.sh R0parse> /dev/null  2>&1
+    /home/pi/pid-kill.sh ToSql > /dev/null 2>&1 
+	  /home/pi/pid-kill.sh rtspIMG > /dev/null 
+	  /home/pi/pid-kill.sh curl > /dev/null 2>&1
+	  #/home/pi/pid-kill.sh temp-monitor > /dev/null 2>&1 
+	  /home/pi/pid-kill.sh fso_draw > /dev/null  2>&1
+	  /home/pi/pid-kill.sh stats_backuo> /dev/null 2>&1
+	  /home/pi/pid-kill.sh warning> /dev/null  2>&1
+    /home/pi/pid-kill.sh curl> /dev/null  2>&1
+    /home/pi/pid-kill.sh R0parse> /dev/null  2>&1
   fi
   sleep  $delaytime
 done
