@@ -1,11 +1,17 @@
 #!/bin/bash
 
 now=`date '+%Y-%m-%d %H:%M:%S'`
-vncstatus=`pidof Xvnc`
-if [ $vncstatus -le 0 ]; then
+pidof Xvnc > /dev/null 2>&1
+if [ $? -eq 1 ]; then
+  echo "$now : vncserver died, pls wait to restart..."
   vncserver &
   wait $!
-  echo "$now : vncserver restarted!"
+  now=`date '+%Y-%m-%d %H:%M:%S'`
+  if [ $? -eq 0 ]; then
+    echo "$now : vncserver restarted!"
+  else
+    echo "$now : vncserver restart failed!"
+  fi
 else
   echo "$now : vncserver is ok!"
 fi

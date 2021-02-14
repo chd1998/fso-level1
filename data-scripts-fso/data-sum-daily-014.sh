@@ -31,7 +31,7 @@ mail=$5
 checkmonth=${monthday:0:2}
 checkday=${monthday:2:2}
 
-pver=0.1.3
+pver=0.1.4
 num="00000000"
 size="0000000.0000"
 interval="0000.000000"
@@ -116,9 +116,10 @@ if [ -d "$targetdir" ]; then
   if [ $mail -eq "1" ];then 
     echo "$today0 $ctime : Send Summary  for $year$monthday $datatype @$device to Users..."
     echo "                      $datatype Data Summary - $year$monthday @fso                                  "> $tmppre/$datatype-mailtmp
-    echo "******************************************************************************************************************************************************************************************">> $tmppre/$datatype-mailtmp
+    echo "==========================================================================================================================================================================================">> $tmppre/$datatype-mailtmp
+    #echo "******************************************************************************************************************************************************************************************">> $tmppre/$datatype-mailtmp
     echo "DataType      Date       Nums.                 Size(GiB)                  StartTime                                           EndTime                                     Obs. Time(hrs)" >>$tmppre/$datatype-mailtmp
-    echo "******************************************************************************************************************************************************************************************">> $tmppre/$datatype-mailtmp
+    #echo "******************************************************************************************************************************************************************************************">> $tmppre/$datatype-mailtmp
     echo "==========================================================================================================================================================================================">> $tmppre/$datatype-mailtmp
     cat $suminfo >> $tmppre/$datatype-mailtmp
     echo "==========================================================================================================================================================================================">> $tmppre/$datatype-mailtmp
@@ -131,15 +132,15 @@ if [ -d "$targetdir" ]; then
       /home/chd/obs-log-info-015.sh $progpre $year $monthday $datatype 0
       cat $obslog >> $tmppre/$datatype-mailtmp
     fi        
-    mail -v -s "Summary of $year$monthday $datatype @$device" nvst_obs@ynao.ac.cn < $tmppre/$datatype-mailtmp
-    mail -v -s "Summary of $year$monthday $datatype @$device" chd@ynao.ac.cn < $tmppre/$datatype-mailtmp
-    mail -v -s "Summary of $year$monthday $datatype @$device" xiangyy@ynao.ac.cn < $tmppre/$datatype-mailtmp
-    mail -v -s "Summary of $year$monthday $datatype @$device" yan4320@126.com < $tmppre/$datatype-mailtmp
-    mail -v -s "Summary of $year$monthday $datatype @$device" xj@ynao.ac.cn < $tmppre/$datatype-mailtmp
-    mail -v -s "Summary of $year$monthday $datatype @$device" kim@ynao.ac.cn < $tmppre/$datatype-mailtmp
-    #mail -v -s "Summary of $year$monthday $datatype @$device" lz@ynao.ac.cn < $tmppre/$datatype-mailtmp
-    mail -v -s "Summary of $year$monthday $datatype @$device" yanglei@ynao.ac.cn < $tmppre/$datatype-mailtmp
-    mail -v -s "Summary of $year$monthday $datatype @$device" chjy@ynao.ac.cn < $tmppre/$datatype-mailtmp
+    mail -v -s "Summary of $year$monthday $datatype @$device" nvst_obs@ynao.ac.cn < $tmppre/$datatype-mailtmp > /dev/null 2>&1
+    mail -v -s "Summary of $year$monthday $datatype @$device" chd@ynao.ac.cn < $tmppre/$datatype-mailtmp > /dev/null 2>&1
+    mail -v -s "Summary of $year$monthday $datatype @$device" xiangyy@ynao.ac.cn < $tmppre/$datatype-mailtmp > /dev/null 2>&1
+    mail -v -s "Summary of $year$monthday $datatype @$device" yan4320@126.com < $tmppre/$datatype-mailtmp > /dev/null 2>&1
+    mail -v -s "Summary of $year$monthday $datatype @$device" xj@ynao.ac.cn < $tmppre/$datatype-mailtmp > /dev/null 2>&1
+    mail -v -s "Summary of $year$monthday $datatype @$device" kim@ynao.ac.cn < $tmppre/$datatype-mailtmp > /dev/null 2>&1
+    #mail -v -s "Summary of $year$monthday $datatype @$device" lz@ynao.ac.cn < $tmppre/$datatype-mailtmp > /dev/null 2>&1
+    mail -v -s "Summary of $year$monthday $datatype @$device" yanglei@ynao.ac.cn < $tmppre/$datatype-mailtmp > /dev/null 2>&1
+    mail -v -s "Summary of $year$monthday $datatype @$device" chjy@ynao.ac.cn < $tmppre/$datatype-mailtmp > /dev/null 2>&1
   fi
   rm -f $datatype-$year-$monthday-flist
   rm -f $datatype-$year-$monthday-flist-sorted

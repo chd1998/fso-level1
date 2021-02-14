@@ -189,14 +189,14 @@ today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
 if [ $mail -eq "1" ];then 
   echo "$today0 $ctime : Send Summary  for $year$monthday $datatype @$device to Users..."
-  mail -v -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" nvst_obs@ynao.ac.cn < $suminfo
-  mail -v -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" chd@ynao.ac.cn < $suminfo
-  mail -v -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" xiangyy@ynao.ac.cn < $suminfo
-  mail -v -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" yanxl@ynao.ac.cn < $suminfo
-  mail -v -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" kim@ynao.ac.cn < $suminfo
-  mail -v -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" lz@ynao.ac.cn < $suminfo
-  mail -v -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" yanglei@ynao.ac.cn < $suminfo
-  mail -v -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" chjy@ynao.ac.cn < $suminfo
+  mail -v -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" nvst_obs@ynao.ac.cn < $suminfo > /dev/null 2>&1
+  mail -v -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" chd@ynao.ac.cn < $suminfo > /dev/null 2>&1
+  mail -v -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" xiangyy@ynao.ac.cn < $suminfo > /dev/null 2>&1
+  mail -v -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" yanxl@ynao.ac.cn < $suminfo > /dev/null 2>&1
+  mail -v -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" kim@ynao.ac.cn < $suminfo > /dev/null 2>&1
+  mail -v -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" lz@ynao.ac.cn < $suminfo > /dev/null 2>&1
+  mail -v -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" yanglei@ynao.ac.cn < $suminfo > /dev/null 2>&1
+  mail -v -s "Summary of $datatype Data from $syear$smonthday to $eyear$emonthday @fso" chjy@ynao.ac.cn < $suminfo > /dev/null 2>&1
 fi
 today0=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`

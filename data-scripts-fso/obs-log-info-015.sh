@@ -7,7 +7,8 @@
 #       20201206    Release 0.1.1       parse offband correctly
 #       20201207    Release 0.1.2       add flat/dark info
 #                   Release 0.1.3       tio info revised      
-
+#       20201231    Release 0.1.4       time restricted
+#       20210201    Release 0.1.5       mail info revised
 
 
 cyear=`date  +%Y`
@@ -49,7 +50,7 @@ fi
 cent=" "
 boff=" "
 roff=" "
-pver=0.1.3
+pver=0.1.5
 
 today=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
@@ -255,7 +256,7 @@ if [ $datatype == "HA" ]; then
 fi 
   
 if [ $mail -eq "1" ];then 
-    mail -v -s "$datatype Obs. Log on $year$monthday @$device" chd@ynao.ac.cn < $obslog
-    mail -v -s "$datatype Obs. Log on $year$monthday @$device" nvst_obs@ynao.ac.cn < $obslog
-    mail -v -s "$datatype Obs. Log on $year$monthday @$device" xiangyy@ynao.ac.cn < $obslog
+    mail -v -s "$datatype Obs. Log on $year$monthday @$device" chd@ynao.ac.cn < $obslog > /dev/null 2>&1
+    mail -v -s "$datatype Obs. Log on $year$monthday @$device" nvst_obs@ynao.ac.cn < $obslog > /dev/null 2>&1
+    mail -v -s "$datatype Obs. Log on $year$monthday @$device" xiangyy@ynao.ac.cn < $obslog > /dev/null 2>&1
 fi
