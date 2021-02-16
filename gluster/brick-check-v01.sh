@@ -9,17 +9,26 @@ fi
 
 volname=$1
 
-gluster volume status $volname deatail|grep -E 'Brick|Online' > ./bricklist-$volname.tmp
+gluster volume status $volname detail|grep -E '{Brick|Online}' > ./brick-$volname.tmp
 
 #goodnum=`cat ./bricklist-$volname.tmp|grep Online|grep Y|wc -l`
-cat ./bricklist-$volname.tmp|grep -E 'Brick|Online|N/A'|grep Brick > ./birck-bad-$volname.tmp
+cat ./brick-$volname.tmp|grep -E '{Brick|Online|N}'|grep Brick > ./birck-bad-$volname.tmp
 
+if [ ! -f ./brick-bad-$volname.tmp ]; then
+  touch ./brick-bad-$volname.tmp
+fi
+badlist=`cat ./brick-bad-$volname.tmp|wc -l`
 today=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
-echo "                    Bad Brick(s) list"
-for brickname in $(cat ./brick-bad-$volname.tmp);
-do
-  today=`date  +%Y%m%d`
-  ctime=`date  +%H:%M:%S`
-  echo "$today $ctime : $brickname "
-done
+if [ $badlist -gt 0 ]; then
+  echo "                    Bad Brick(s) list"
+  for brickname in $(cat ./brick-bad-$volname.tmp);
+  do
+    today=`date  +%Y%m%d`
+    ctime=`date  +%H:%M:%S`
+    echo "$today $ctime : $brickname "
+  done
+else
+  echo  "$today $ctime : no bad brick(s) found in $volname..."
+fi
+rm -f ./brick-*.tmp

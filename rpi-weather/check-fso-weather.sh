@@ -6,8 +6,8 @@
 #example: ./check-fso-weather.sh 10 40 python3
 #
 #Change History: 
-#		20200705	Release 0.1 : First working prototype 
-#   20200709  Release 0.2 : logics revised!
+#		20200705	Release 0.1.0 : First working prototype 
+#   20200709  Release 0.2.0 : logics revised!
 #
 
 waiting() {
@@ -63,7 +63,7 @@ delaytime=$2
 pname=$3
 
 #Version
-pver=0.2
+pver=0.2.0
 
 datafile="/home/pi/Desktop/communication/latest.csv"
 datafile1="$src/$year/fso-weather-$day.csv"
