@@ -16,15 +16,16 @@ if [ $# -ne 1 ];then
 fi
 
 volname=$1
-pver=0.1.1
+pver=0.1.2
 
 gluster volume status $volname detail>./vol-status.tmp 2>&1
 volcheck=`cat ./vol-status.tmp|grep not|wc -l`
 if [ $volcheck -gt 0 ]; then
   today=`date  +%Y%m%d`
   ctime=`date  +%H:%M:%S`
-  echo "                    Bad Brick(s) list ($pver)  "
-  echo "                        $today $ctime "
+  echo "                    Bad Brick(s) list"
+  echo "                        Ver. $pver   "
+  echo "                     $today $ctime   "
   echo "======================================================================="
   echo "volume $volname does not exist, pls check the name of volume... "
   exit 1
@@ -43,8 +44,9 @@ fi
 badnum=`cat ./brick-bad-$volname.tmp|wc -l`
 today=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
-echo "                    Bad Brick(s) list ($pver)  "
-echo "                        $today $ctime "
+echo "                    Bad Brick(s) list"
+echo "                        Ver. $pver   "
+echo "                     $today $ctime   "
 echo "======================================================================="
 if [ $badnum -gt 0 ]; then
   awk '{print $0}' ./birck-bad-$volname.tmp
