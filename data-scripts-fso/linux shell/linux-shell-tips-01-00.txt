@@ -1,0 +1,250 @@
+\uFEFF1. pid\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u03AAlock,\uFFFD\uFFFD\u05B9\uFFFD\u0172\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u0423\uFFFD
+
+#\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u0171\uFFFD\uFFFD\u013C\uFFFD\uFFFD\uFFFD\uFFFD\u01B5\uFFFDlockfile
+lockfile=/home/chd/log/$(basename $0)_lockfile
+#\uFFFD\uFFFD\uFFFD\uFFFD\u01F7\uFFFD\uFFFD\uFFFD\uFFFDlockfile
+if [ -f $lockfile ];then
+#\uFFFD\uFFFD\uFFFD\uFFFD\uFFFDlockfile,\uFFFD\uFFFD\u0221lockfile\uFFFD\u0435\uFFFDpid
+  mypid=$(cat $lockfile)
+#\uFFFD\uFFFDpid\u03AA\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u9FF4\uFFFD\u06B4\uFFFD\uFFFD\uFFFD\uFFFD\u01F7\uFFFD\uFFFD\uFFFD\uFFFDpid\u05B5\uFFFD\u013D\uFFFD\uFFFD\uFFFD
+  ps -p $mypid | grep $mypid &>/dev/null
+# \uFFFD\uFFFD\uFFFD\uFFFD\uFFFD
+  if [ $? -eq 0 ];then
+# \uFFFD\uFFFD\u04E1\uFFFD\u047E\uFFFD\uFFFD\uFFFD\uFFFD\u0432\uFFFD\uFFFD\u02F3\uFFFD
+    echo "$todday $ctime: $(basename $0) is running" && exit 1
+  else
+# \uFFFD\uFFFD\uFFFD\u00FB\uFFFD\u0423\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u01F0\uFFFD\u0171\uFFFDpid\u05B5$$\u0434\uFFFD\uFFFDlockfile
+    echo $$>$lockfile
+  fi
+else
+# \uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFDlockfil, \uFFFD\uFFFD\uFFFD\uFFFD\u01F0\uFFFD\u0171\uFFFDpid\u05B5\u0434\uFFFD\uFFFDlockfile
+  echo $$>$lockfile
+fi
+
+2.\uFFFD\u0171\uFFFD\uFFFD\u063B\uFFFDctrl-c\uFFFD\u0436\uFFFD
+trap 'onCtrlC' INT
+function onCtrlC(){
+    echo "Ctrl-C Captured! "
+    echo "Breaking..."
+    umount $dev
+    exit 1
+}
+
+3.\uFFFD\u0433\uFFFD\uFFFD\uFFFD /dev/sda\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u04F2\uFFFD\uFFFD
+#$IFS\uFFFD\uFFFDshell\uFFFD\uFFFD\uFFFD\u05B7\uFFFD\uFFFD\u05B8\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u012C\uFFFD\uFFFD\uFFFD\u01FF\u0578\uFFFDtab\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u0437\uFFFD. $IFS\uFFFD\uFFFD\uFFFD\uFFFD\u0368\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFDread\uFFFD\uFFFD\uFFFD\uE8E8\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u036C\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u0137\u05B8\uFFFD\uFFFD\uFFFD\uFFFD, 
+#$IFS\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u05B7\uFFFD\uFFFD\uFFFD\uFFFD\u05B8\uECA2\uFFFD\uFFFD\uFFFD\u6D7D\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD
+
+#searching for all available disk devices...
+out=$(lsblk -l|grep 'sd[b-z][1-9]' | awk '{print($1)}')
+OLD_IFS="$IFS"
+IFS=" "
+hdlist=($out)
+IFS="$OLD_IFS"
+len1=0
+echo "$today $ctime: Please select target drive to archiving..."
+echo "Available devices:"
+for i in ${hdlist[@]}
+do
+  echo "$len1: $i"
+  let len1++
+done
+
+if [ $len1 -le 0 ];then
+  echo "No devices available..."
+  exit 1
+fi
+
+#!/bin/bash
+a='1|2|3|4'
+OLD_IFS="$IFS"
+IFS="|"
+arr=($a)
+IFS="$OLD_IFS"
+for s in ${arr[@]}
+do
+    echo "$s" 
+done
+
+4. \uFFFD\uFFFD\u0221\uFFFD\uFFFD\uFFFD\uFFFD\u02B1\uFFFD\u48EC\uFFFD\uFFFD\u0763\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD
+cyear=`date  +%Y`
+today=`date  +%Y%m%d`
+ctime=`date  +%H:%M:%S`
+
+5.\uFFFD\uFFFD\u0221\uFFFD\uFFFD\uFFFD\uFFFD\u013C\uFFFD\uFFFD\uFFFD\u0421\uFFFD\uFFFD\uFFFD\u073A\uFFFD
+#!/bin/bash
+du -sm /home/chd| awk '{print $1}' > sum.log
+du -sm /home/qy| awk '{print $1}' >> sum.log
+cat sum.log | awk '{a+= $0}END{print a}'
+
+6.\uFFFD\uFFFD\u0221\u0133\uFFFD\uFFFD\u013F\u00BC\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u013C\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u013F\u00BC\uFFFD\uFFFD
+6.1 using ls & grep
+#!/bin/bash
+#count the number of files under a directory including subdir
+ls -lR /lustre/data/2019/20190426/TIO | grep "^-" | wc -l
+
+	\u0373\uFFFD\u01B5\uFFFD\u01F0\u013F\u00BC\uFFFD\uFFFD\uFFFD\u013C\uFFFD\uFFFD\u0138\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u013F\u00BC\uFFFD\uFFFD
+	$ ls -l | grep "^-" | wc -l
+	1
+	\u0373\uFFFD\u01B5\uFFFD\u01F0\u013F\u00BC\uFFFD\uFFFD\uFFFD\u013C\uFFFD\uFFFD\u0138\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u013F\u00BC\uFFFD\uFFFD
+	$ ls -lR| grep "^-" | wc -l
+	1
+	\uFFFD\u9FF4\u0133\u013F\u00BC\uFFFD\uFFFD\uFFFD\u013C\uFFFD\uFFFD\uFFFD(\u013F\u00BC)\uFFFD\u0138\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u013F\u00BC\uFFFD\uFFFD
+	$ ls -lR | grep "^d" | wc -l
+
+6.2 find
+find /lustre/data/2019/20190914/TIO  -type f -name '*.fits'|wc -l
+
+7. \u02B9\uFFFD\uFFFDwget over ftp\u036C\uFFFD\uFFFD\u013F\u00BC
+wget --tries=3 --timestamping --retry-connrefused --timeout=10 --continue --inet4-only --ftp-user=tio --ftp-password=ynao246135 --no-host-directories --recursive  --level=0 --no-passive-ftp --no-glob $srcdir
+
+8. \uFFFD\uFFFD\uFFFD\uFFFD\u0133\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u0435\uFFFD\u02B1\uFFFD\uFFFD
+8.1 \u02B9\uFFFD\uFFFDbash
+#!/bin/bash
+#\uFFFD\uFFFD\uFFFD\uFFFD$pid\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u047E\uFFFD\uFFFD\uFFFD\uFFFD\u0435\uFFFD\u02B1\uFFFD\u48E8\u05EA\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uB8E9\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u78FA3-23:17:46, 3\uFFFD\uFFFD23\u0421\u02B117\uFFFD\uFFFD46\uFFFD\uFFFD
+runtime=`ps -p $pid -o etime= | tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'
+
+8.2 \u02B9\uFFFD\uFFFDawk
+ps -p $pid -o etime=|/home/chd/gettime.awk
+
+
+gettime.awk:
+#!/usr/bin/awk -f  
+BEGIN { FS = ":" }
+{
+  if (NF == 2) 
+  {
+    print $1*60 + $2
+  } 
+  else if (NF == 3) 
+  {
+    split($1, a, "-");
+    if (a[1] != "" && a[2] != "" ) 
+    {
+      print ((a[1]*24+a[2])*60 + $2) * 60 + $3;
+    } 
+    else 
+    {
+      print ($1*60 + $2) * 60 + $3;
+    }
+  }
+}
+
+8.3 example:
+
+ctime1=`date  +%H:%M:%S`
+t2=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+timediff=`echo "$t1 $t2"|awk '{print($2-$1)}'`
+
+
+9. shell\uFFFD\u043D\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD
+
+ speed=`echo "$sdata $edata $delaytime"|awk '{print(($2-$1)/$3)}'`
+ 
+10.\uFFFD\u023D\uFFFD2\uFFFD\uFFFD\uFFFD\u013C\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u04BB\uFFFD\uFFFD\uFFFD\u0423\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u04BB\uFFFD\uFFFD\u00FB\uFFFD\u0435\uFFFD\uFFFD\uFFFD\uFFFD\u0763\uFFFD
+
+#sort filelist
+sort $locallist -o $locallist
+sort $remotelist -o $remotelist
+
+#getting local missing file(s) list
+comm -23  $remotelist $locallist > $difflist &
+
+
+comm -1 A B \uFFFD\uFFFD\uFFFD\uFFFD\u02BE\uFFFD\uFFFDA\uFFFD\u013C\uFFFD\uFFFD\u0436\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD(\uFFFD\uFFFD\u02BEB\uFFFD\u013C\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD+\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u013C\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD)
+comm -2 A B \uFFFD\uFFFD\uFFFD\uFFFD\u02BE\uFFFD\uFFFDB\uFFFD\u013C\uFFFD\uFFFD\u0436\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD
+comm -3 A B \uFFFD\uFFFD\uFFFD\uFFFD\u02BE\u036C\u02B1\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u013C\uFFFD\uFFFD\u0436\uFFFD\uFFFD\uFFFD\uFFFD\u06B5\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD
+comm -12 A B \uFFFD\uFFFD\u02BEA\uFFFD\uFFFDB\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u0132\uFFFD\uFFFD\uFFFD
+comm -23 A B \uFFFD\uFFFD\u02BEA\uFFFD\uFFFD\uFFFD\u0435\uFFFD
+comm -13 A B \uFFFD\uFFFD\u02BEB\uFFFD\uFFFD\uFFFD\u0435\uFFFD
+
+11. \uFFFD\uFFFD\u0221\uFFFD\u013C\uFFFD\uFFFD\uFFFD\uFFFD\u01BA\u0374\uFFFD\u0421\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u05FC\uFFFD\uFFFD\u0421\uFFFD\u023D\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u03F5\uFFFD\uFFFD\u0431\uFFFD
+
+#cd $cdir
+#getting file name & size
+find $cdir/$datatype/ -type f -name '*.fits' -printf "%h/%f %s\n" > $listtmp &
+waiting "$!" "$datatype $fileformat file(s) info getting" "Getting $datatype $fileformat file(s) info"
+
+#getting file number
+#cat $listtmp |wc -l > $fn &
+#waiting "$!" "$datatype $fileformat file(s) number getting" "Getting $datatype $fileformat file(s) number"
+
+#remove checked files, list is error files list, listtmp is all files
+sort $listtmp -o $listtmp
+sort $list -o $list
+#grep -vwf $listtmp $list > $difflist &
+comm -23 $listtmp $list > $difflist &
+waiting "$!" "new $datatype $fileformat file(s) getting" "Getting  new $datatype $fileformat file(s) "
+
+#count error number for this round
+cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' > $curerrorlist &
+waiting "$!" "Wrong $datatype $fileformat file(s) checking" "Checking wrong $datatype $fileformat file(s)"
+curerror=`cat $curerrorlist|wc -l`
+
+#add wrongsize list to total error list
+#cat $difflist |awk '{ if ($2!='''$stdsize''') {print $1"  "$2}}' >> $totalerrorlist &
+cat $curerrorlist >> $totalerrorlist &
+waiting "$!" "Current error $datatype $fileformat file(s) list adding" "Adding error $datatype $fileformat file(s) to total error file(s) list"
+
+12. \uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD 
+#waiting pid taskname prompt
+waiting() {
+  local pid="$1"
+  taskname="$2"
+  procing "$3" &
+  local tmppid="$!"
+  wait $pid
+  tput rc
+  tput ed
+  wctime=`date  +%H:%M:%S`
+  wtoday=`date  +%Y%m%d`
+  echo "$wtoday $wctime: $2 Task Has Done!"
+  dt1=`echo $wctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
+#  echo "                   Finishing..."
+  kill -6 $tmppid >/dev/null 1>&2
+  echo "$dt1" > /home/chd/log/dtmp
+}
+
+procing() {
+  trap 'exit 0;' 6
+  tput ed
+  while [ 1 ]
+  do
+    for j in '-' '\\' '|' '/'
+    do
+      tput sc
+      ptoday=`date  +%Y%m%d`
+      pctime=`date  +%H:%M:%S`
+      echo -ne  "$ptoday $pctime: $1...   $j"
+      sleep 0.2
+      tput rc
+    done
+  done
+}
+
+13. \uFFFD\uFFFD\uFFFD\uFFFD
+
+13.1 hd write
+#!/bin/bash
+# ./hd-test.sh  1000 100K 100
+for ((i=1;i<=$1;i++));
+do
+    (
+        echo "Writing to GlusterFS...$i"
+        dd if=/dev/zero bs=$2 count=$3 of=$i-test.dat
+    )&
+done
+wait
+
+13.2 IP test
+#!/bin/bash
+for ip in $1.{1..254}
+do
+    (
+        ping $ip -c2 &> /dev/null
+        if [ $? -eq 0 ];
+        then
+            echo "$ip \uFFFD\uFFFD\uFFFD\uFFFD"
+        fi
+    )&
+done
+wait
