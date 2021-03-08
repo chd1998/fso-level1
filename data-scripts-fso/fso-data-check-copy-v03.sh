@@ -5,11 +5,11 @@
 #Example: ./fso-data-check-copy-cron.sh  192.168.111.120 21 /lustre/data tio ynao246135 2019 0918 fits 11062080
 #Example: ./fso-data-check-copy-cron.sh  192.168.111.122 21 /lustre/data ha ynao246135 2019 0918 fits 2111040
 #changlog: 
-#       20190725   Release 0.1     first working version.sh
-#                  Release 0.2     fixed some minor errors and revised display info
-#       20190914   Release 0.3     Add comparison of remote & local file(s)
-#       20191029   Release 0.31    Add more info to mail
-#       20200420   Release 0.32    Revised & Add more info to mail
+#       20190725   Release 0.1.0     first working version.sh
+#                  Release 0.2.0     fixed some minor errors and revised display info
+#       20190914   Release 0.3.0     Add comparison of remote & local file(s)
+#       20191029   Release 0.3.1    Add more info to mail
+#       20200420   Release 0.3.2    Revised & Add more info to mail
 # 
 
 #waiting pid taskname prompt
@@ -108,7 +108,7 @@ else
   echo $$>$lockfile
 fi
 
-pver=0.32
+pver=0.3.2
 pname=$(basename $0)
 ctime0=`date  +%H:%M:%S`
 #st1=`echo $ctime1|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`

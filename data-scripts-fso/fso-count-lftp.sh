@@ -4,7 +4,8 @@
 #usage:  run in crontab every 30 min.  from 08:00-20:00
 #example: none
 #changlog: 
-#       20190718    Release 0.1     first working version
+#       20190718    Release 0.1.0     first working version
+#       20210225    Release 0.1.1     add date to input
 # 
 #waiting pid taskname prompt
 waiting() {
@@ -45,9 +46,9 @@ today=`date  +%Y%m%d`
 ctime=`date  +%H:%M:%S`
 syssep="/"
 
-if [ $# -ne 5 ];then
-  echo "Usage: ./fso-count-lftp.sh ip port  user password datatype(TIO or HA)"
-  echo "Example: ./fso-count-lftp.sh  192.168.111.120 21  tio ynao246135 TIO"
+if [ $# -ne 7 ];then
+  echo "Usage: ./fso-count-lftp.sh ip port  user password inyear indate datatype(TIO or HA)"
+  echo "Example: ./fso-count-lftp.sh  192.168.111.120 21  tio ynao246135 2021 0225 TIO"
   exit 1
 fi
 server1=$1
@@ -55,14 +56,16 @@ port=$2
 #destpre0=$3
 user=$3
 password=$4
-datatype=$5
+inyear=$5
+indate=$6
+datatype=$7
 
 server=${server1}:${port}
 
 #umask 0000
 
-filenumber=/home/chd/log/$datatype-$today-$server1-filenumber.dat
-filesize=/home/chd/log/$datatype-$today-$server1-filesize.dat
+filenumber=/home/chd/log/$datatype-$inyear$indate-$server1-filenumber.dat
+filesize=/home/chd/log/$datatype-$inyeare$indate-$server1-filesize.dat
 
 lockfile=/home/chd/log/$(basename $0)-$datatype.lock
 
@@ -80,18 +83,19 @@ else
   echo $$>$lockfile
 fi
 
+pver=0.1.1
 st1=`echo $ctime|tr '-' ':' | awk -F: '{ total=0; m=1; } { for (i=0; i < NF; i++) {total += $(NF-i)*m; m *= i >= 2 ? 24 : 60 }} {print total}'`
 echo "                                                       "
 echo "======= Welcome to Data Archiving System @ FSO! ======="
 echo "                fso-count-lftp.sh                      "
-echo "          (Release 0.1 20190718 16:55)                 "
+echo "          (Release $pver 20190718 16:55)                 "
 echo "                                                       "
-echo "     Counting $datatype data @ $server1                "
+echo "     Counting $datatype data @$server1                 "
 echo "                                                       "
 echo "                $today $ctime                          "
 echo "======================================================="
 echo " "
-srcdir=${syssep}${today}${syssep}${datatype}
+srcdir=${syssep}${inyear}${indate}${syssep}${datatype}
 srcdir1=${srcpre0}
 
 ctime=`date  +%H:%M:%S`
