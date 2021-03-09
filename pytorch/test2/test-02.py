@@ -38,13 +38,15 @@ model=torch.load('test-model.pth')
 model.eval()
 to_pil = transforms.ToPILImage()
 images,labels,classes = get_random_images(5)
+#print(len(classes))
+lenclass=len(classes)
 fig=plt.figure(figsize=(10,10))
 for ii in range(len(images)):
     image = to_pil(images[ii])
     index = predict_image(image)
     sub = fig.add_subplot(1, len(images), ii+1)
-    res = int(labels[ii]) == index
-    sub.set_title(str(classes[index]) + ":" + str(res))
+    res = int(labels[ii]) == index 
+    sub.set_title(str(classes[index % lenclass]) + ":" + str(res))
     plt.axis('off')
     plt.imshow(image)
 plt.show()

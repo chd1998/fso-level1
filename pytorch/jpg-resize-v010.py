@@ -39,12 +39,21 @@ def jresize(path,savedir,tsx,tsy):
         for image in images:
             try:
                 img=Image.open(image)
+<<<<<<< HEAD
+=======
                 imgpath, imgname=os.path.split(image)
+>>>>>>> ee0729ebb33e6df1c1660fa6eae3871c36078a7b
                 new_img = img.resize((tsx, tsy), Image.BILINEAR)
                 #if new_img.mode == 'P':
                 #    new_img = new_img.convert("RGB")
                 #if new_img.mode == 'RGBA':
                 #    new_img = new_img.convert("RGB")
+<<<<<<< HEAD
+                newname=str(tsx)+"-"+str(tsy)+"-"+image
+                #print(newname)
+                new_img.save(os.path.join(savedir, os.path.basename(newname)))
+                print ('%8d : %s  %s' %(tmpnum,image,newname))
+=======
                 newname=str(tsx)+"-"+str(tsy)+"-"+imgname
                 #save_path = os.path.join(savedir, newname)
                 save_path=savedir+"\\"+newname
@@ -52,6 +61,7 @@ def jresize(path,savedir,tsx,tsy):
                 #print(newname)
                 new_img.save(save_path)
                 print ('%8d : %s to %s' %(tmpnum,image,save_path))
+>>>>>>> ee0729ebb33e6df1c1660fa6eae3871c36078a7b
             except Exception as e:
                 print(e)
 
